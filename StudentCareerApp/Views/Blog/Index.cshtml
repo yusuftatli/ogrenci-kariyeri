@@ -1,4 +1,5 @@
-﻿
+﻿@model SCA.Entity.DTO.ContentDetailForDetailPageDTO
+
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,7 +11,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <div class="single-big-img mb-30" style="background-image: url(images/news/travel/travel12.jpg)"></div>
+                <div class="single-big-img mb-30" style="background-image: url(@Model.ImagePath)"></div>
             </div>
         </div>
         <div class="row">
@@ -20,21 +21,23 @@
                     <div class="entry-header">
                         <div class="category-name-list">
                             <span>
-                                <a href="#" class="post-cat ts-green-bg">Sports</a>
-                                <a href="#" class="post-cat ts-yellow-bg">Travel</a>
+                                @foreach (var x in Model.Category.Split(","))
+                                {
+                                    <a href="@Url.Action("Index", "Category")" class="post-cat ts-green-bg">@x</a>
+                                }
                             </span>
                         </div>
-                        <h2 class="post-title lg">Swiss authorities say Uber drivers should treated as employees</h2>
+                        <h2 class="post-title lg">@Model.Header</h2>
                         <ul class="post-meta-info">
                             <li class="author">
                                 <a href="#">
-                                    <img src="images/avater/author.png" alt=""> Donald Ramos
+                                    <img src="images/avater/author.png" alt=""> @Model.Writer
                                 </a>
                             </li>
                             <li>
                                 <a href="">
                                     <i class="fa fa-clock-o"></i>
-                                    March 21, 2019
+                                    @Model.PublishDate.ToString("dd.MM.yyyy")
                                 </a>
                             </li>
                             <li>
@@ -45,7 +48,7 @@
                             </li>
                             <li class="active">
                                 <i class="icon-fire"></i>
-                                3,005
+                                @Model.ReadCount
                             </li>
                             <li class="share-post">
                                 <a href="#">
@@ -57,7 +60,8 @@
                     <!-- single post header end-->
                     <div class="post-content-area">
                         <div class="entry-content">
-                            <p>
+                            @Html.Raw(Model.ContentDescription)
+                            @*<p>
                                 <span class="tie-dropcap">A</span> farmers in the US’s South—faced with continued failure in their efforts to run on successful farms their
                                 launched a lawsuit claiming that “white racism” is to the blame for their inability to produce crop yields.
                             </p>
@@ -80,24 +84,6 @@
                             </p>
 
 
-
-                            <div class="gallery-img">
-                                <a href="images/gallery/gallery1.jpg" class="gallery-popup">
-                                    <img src="images/gallery/gallery1.jpg" alt="">
-                                </a>
-                                <a href="images/gallery/gallery2.jpg" class="gallery-popup">
-                                    <img src="images/gallery/gallery2.jpg" alt="">
-                                </a>
-                                <a href="images/gallery/gallery3.jpg" class="gallery-popup">
-                                    <img src="images/gallery/gallery3.jpg" alt="">
-                                </a>
-                                <a href="images/gallery/gallery4.jpg" class="gallery-popup">
-                                    <img src="images/gallery/gallery4.jpg" alt="">
-                                </a>
-                                <a href="images/gallery/gallery5.jpg" class="gallery-popup">
-                                    <img src="images/gallery/gallery5.jpg" alt="">
-                                </a>
-                            </div>
                             <p>
                                 Black farmers in the US’s South—
                                 <span>faced with continued failure their efforts to run successful farms</span> their launched a lawsuit claiming that
@@ -149,7 +135,7 @@
                             <p>
                                 Black farmers in the US’s South—faced with continued failure in their efforts to run successful farms their launched a lawsuit
                                 claiming that “white racism” is to blame for their inability
-                            </p>
+                            </p>*@
                         </div>
                         <!-- entry content end-->
                     </div>
@@ -157,7 +143,7 @@
                     <div class="author-box">
                         <img class="author-img" src="images/avater/author.png" alt="">
                         <div class="author-info">
-                            <h4 class="author-name">Elina Themen</h4>
+                            <h4 class="author-name">@Model.Writer</h4>
                             <div class="authors-social">
                                 <a href="#" class="ts-twitter">
                                     <i class="fa fa-twitter"></i>
@@ -298,105 +284,7 @@
                     <!-- Form end -->
                 </div>
                 <!-- comment form end-->
-                <div class="ts-grid-box mb-30">
-                    <h2 class="ts-title">Most Popular</h2>
-
-                    <div class="most-populers owl-carousel">
-                        <div class="item">
-                            <a class="post-cat ts-yellow-bg" href="#">Travel</a>
-                            <div class="ts-post-thumb">
-                                <a href="#">
-                                    <img class="img-fluid" src="images/news/travel/travel2.jpg" alt="">
-                                </a>
-                            </div>
-                            <div class="post-content">
-                                <h3 class="post-title">
-                                    <a href="#">Tourism in Dubai is booming by international tourist</a>
-                                </h3>
-                                <span class="post-date-info">
-                                    <i class="fa fa-clock-o"></i>
-                                    March 21, 2019
-                                </span>
-                            </div>
-                        </div>
-                        <!-- ts-grid-box end-->
-
-                        <div class="item">
-                            <a class="post-cat ts-blue-light-bg" href="#">Technology</a>
-                            <div class="ts-post-thumb">
-                                <a href="#">
-                                    <img class="img-fluid" src="images/news/tech/tech1.jpg" alt="">
-                                </a>
-                            </div>
-                            <div class="post-content">
-                                <h3 class="post-title">
-                                    <a href="#">Want to be more productive? Try skipping the schedule</a>
-                                </h3>
-                                <span class="post-date-info">
-                                    <i class="fa fa-clock-o"></i>
-                                    March 21, 2019
-                                </span>
-                            </div>
-                        </div>
-                        <!-- ts-grid-box end-->
-                        <div class="item">
-                            <a class="post-cat ts-pink-bg" href="#">Fashion</a>
-                            <div class="ts-post-thumb">
-                                <a href="#">
-                                    <img class="img-fluid" src="images/news/fashion/fashion1.jpg" alt="">
-                                </a>
-                            </div>
-                            <div class="post-content">
-                                <h3 class="post-title">
-                                    <a href="#">Tourism in Dubai is booming by international tourist</a>
-                                </h3>
-                                <span class="post-date-info">
-                                    <i class="fa fa-clock-o"></i>
-                                    March 21, 2019
-                                </span>
-                            </div>
-                        </div>
-                        <!-- ts-grid-box end-->
-                        <div class="item">
-                            <a class="post-cat ts-pink-bg" href="#">Music</a>
-                            <div class="ts-post-thumb">
-                                <a href="#">
-                                    <img class="img-fluid" src="images/news/music/music2.jpg" alt="">
-                                </a>
-                            </div>
-                            <div class="post-content">
-                                <h3 class="post-title">
-                                    <a href="#">Want to be more productive? Try skipping the schedule</a>
-                                </h3>
-                                <span class="post-date-info">
-                                    <i class="fa fa-clock-o"></i>
-                                    March 21, 2019
-                                </span>
-                            </div>
-                        </div>
-                        <!-- ts-grid-box end-->
-                        <div class="item">
-                            <a class="post-cat ts-pink-bg" href="#">Fashion</a>
-                            <div class="ts-post-thumb">
-                                <a href="#">
-                                    <img class="img-fluid" src="images/news/fashion/fashion2.jpg" alt="">
-                                </a>
-                            </div>
-                            <div class="post-content">
-                                <h3 class="post-title">
-                                    <a href="#">Tourism in Dubai is booming by international tourist</a>
-                                </h3>
-                                <span class="post-date-info">
-                                    <i class="fa fa-clock-o"></i>
-                                    March 21, 2019
-                                </span>
-                            </div>
-                        </div>
-                        <!-- ts-grid-box end-->
-                    </div>
-                    <!-- most-populers end-->
-                </div>
-
+                @await Component.InvokeAsync("MostPopularItems", Model.MostPopularItems)
             </div>
             <!-- col end -->
             <div class="col-lg-3">

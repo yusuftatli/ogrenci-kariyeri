@@ -25,6 +25,13 @@ namespace SCA.Services
             _contentRepo = unitofWork.GetRepository<Content>();
         }
 
+        public async Task<ContentDetailForDetailPageDTO> GetContentDetailForDetailPage(string seoUrl)
+        {
+            var contentDetail = _mapper.Map<ContentDetailForDetailPageDTO>(_contentRepo.GetAll(x=>x.SeoUrl == seoUrl).FirstOrDefault());
+            contentDetail.MostPopularItems = _mapper.Map<List<ContentForHomePageDTO>>(_contentRepo.GetAll(x => x.Category.ToString() == contentDetail.Category).OrderByDescending(x => x.ReadCount).Take(8).ToList());
+            return contentDetail;
+        }
+
         public async Task<List<ContentForHomePageDTO>> GetContentsForHomePage()
         {
             var contents = _mapper.Map<List<ContentForHomePageDTO>>(_contentRepo.GetAll(x => x.IsDeleted.Equals(false)).ToList());

@@ -9,5 +9,7 @@ namespace SCA.Services.Interface.InterfaceUI
     public interface IB2CManagerUI
     {
         Task<List<ContentForHomePageDTO>> GetContentsForHomePage();
+
+        Task<ContentDetailForDetailPageDTO> GetContentDetailForDetailPage(string seoUrl);
     }
 }

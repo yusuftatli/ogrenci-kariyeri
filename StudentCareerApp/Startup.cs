@@ -168,6 +168,7 @@ namespace StudentCareerApp
                 cfg.CreateMap<Content, ContentDto>().ReverseMap();
                 cfg.CreateMap<Content, ContentShortListDto>().ReverseMap();
                 cfg.CreateMap<Content, ContentForHomePageDTO>().ReverseMap();
+                cfg.CreateMap<Content, ContentDetailForDetailPageDTO>().ReverseMap();
                 #endregion
 
                 #region Image
