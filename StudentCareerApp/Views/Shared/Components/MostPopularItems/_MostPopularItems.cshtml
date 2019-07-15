@@ -1,0 +1,35 @@
+﻿@model List<SCA.Entity.DTO.ContentForHomePageDTO>
+
+@if (!Model.Equals(null) && Model.Count > 0)
+{
+    @* MOST POPULAR ITEMS *@
+    <div class="ts-grid-box most-populer-item">
+        <h2 class="ts-title">En Popüler</h2>
+
+        <div class="most-populers owl-carousel">
+            @foreach (var x in Model)
+            {
+                <div class="item">
+                    <a class="post-cat ts-orange-bg" href="@Url.Action("Index", "Category", new { x.SeoUrl })">@x.Category</a>
+                    <div class="ts-post-thumb">
+                        <a href="@Url.Action("Index", "Blog", new { x.SeoUrl })">
+                            <img class="img-fluid" src="@x.ImagePath" alt="Öğrenci Kariyeri: @x.Header">
+                        </a>
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title">
+                            <a href="@Url.Action("Index", "Blog", new { x.SeoUrl })">@x.Header</a>
+                        </h3>
+                        <span class="post-date-info">
+                            <i class="fa fa-clock-o"></i>
+                            @x.PublishDate.ToString("dd.MM.yyyy")
+                        </span>
+                    </div>
+                </div>
+            }
+
+        </div>
+        <!-- most-populers end-->
+    </div>
+    @* MOST POPULAR ITEMS END *@
+}

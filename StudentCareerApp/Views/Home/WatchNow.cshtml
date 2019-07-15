@@ -1,0 +1,78 @@
+﻿@model List<SCA.Entity.DTO.ContentForHomePageDTO>
+
+@if (Model.Count > 0)
+{
+    <div class="ts-grid-box watch-post mb-30">
+        <h2 class="ts-title">Video Haber</h2>
+        <div class="row">
+            <div class="col-lg-7">
+                <div class="tab-content featured-post" id="nav-tabContent">
+                    @foreach (var x in Model)
+                    {
+                        <div class="tab-pane ts-overlay-style fade @(Model.First().SeoUrl == x.SeoUrl ? "show active" : "") " id="nav-@x.SeoUrl" role="tabpanel" aria-labelledby="nav-@x.SeoUrl-tab">
+                            <div class="item" style="background-image: url(@x.ImagePath)">
+
+                                <a class="post-cat ts-orange-bg" href="@Url.Action("Index", "Category", new { x.SeoUrl })">@x.Category</a>
+                                <a href="https://www.youtube.com/watch?v=_0UO1NcheAE" class="ts-video-btn">
+                                    <i class="fa fa-play-circle-o"></i>
+                                </a>
+                                <div class="overlay-post-content">
+                                    <div class="post-content">
+                                        <h3 class="post-title md">
+                                            <a href="@Url.Action("Index", "Blog", new { x.SeoUrl })">@x.Header</a>
+                                        </h3>
+                                        <ul class="post-meta-info">
+                                            <li class="author">
+                                                <a href="@Url.Action("Editor", "Author")">
+                                                    <img src="images/avater/author1.jpg" alt="Öğrenci Kariyer Yazarı - @x.Writer"> @x.Writer
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-clock-o"></i>
+                                                @x.PublishDate.ToString("dd.MM.yyyy")
+                                            </li>
+                                            <li class="active">
+                                                <i class="icon-fire"></i>
+                                                @x.ReadCount
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- overlay post content-->
+                            </div>
+                            <!-- item end-->
+                        </div>
+                    }
+                </div>
+
+            </div>
+            <!-- col end-->
+
+            <div class="col-lg-5">
+                <div class="nav post-list-box" id="nav-tab" role="tablist">
+                    @foreach (var x in Model)
+                    {
+                        <a class="nav-item nav-link active" id="nav-@x.SeoUrl-tab" data-toggle="tab" href="#nav-@x.SeoUrl" role="tab" aria-controls="nav-@x.SeoUrl"
+                           aria-selected="true">
+                            <div class="post-content media">
+                                <img class="d-flex" src="@x.ImagePath" alt="Öğrenci Kariyeri: @x.Header">
+                                <div class="media-body align-self-center">
+                                    <h4 class="post-title">
+                                        @x.Header
+                                    </h4>
+                                    <span class="post-date-info">
+                                        <i class="fa fa-clock-o"></i>
+                                        @x.PublishDate.ToString("dd.MM.yyyy")
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <!-- watch list post end-->
+            </div>
+            <!-- col end -->
+        </div>
+        <!-- row end-->
+    </div>
+}

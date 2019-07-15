@@ -1,0 +1,42 @@
+﻿@model List<SCA.Entity.DTO.ContentForHomePageDTO>
+
+@if (!Model.Equals(null) && Model.Count > 0)
+{
+    @* NEWS WITH 2 COLUMNS *@
+    <div class="ts-grid-box clearfix ts-category-title">
+        <h2 class="ts-title float-left">Günün Haberleri</h2>
+    </div>
+    <div class="row post-col-list-item">
+        @foreach (var x in Model)
+        {
+            <div class="col-lg-6 mb-30">
+                <div class="ts-grid-box ts-grid-content">
+                    <a class="post-cat ts-green-bg" href="@Url.Action("Index", "Category")">@x.Category</a>
+                    <div class="ts-post-thumb">
+                        <a href="@Url.Action("Index", "Blog", new { x.SeoUrl })">
+                            <img class="img-fluid" src="@x.ImagePath" alt="Öğrenci Kariyeri - @x.Category: @x.Header">
+                        </a>
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title md">
+                            <a href="@Url.Action("Index", "Blog", new { x.SeoUrl })">@x.Header</a>
+                        </h3>
+                        <ul class="post-meta-info">
+                            <li class="author-name">
+                                <a href="@Url.Action("Editor", "Author")">
+                                    @x.Writer
+                                </a>
+                            </li>
+                            <li>
+                                <i class="fa fa-clock-o"></i>
+                                @x.PublishDate.ToString("dd.MM.yyyy")
+                            </li>
+                        </ul>
+                        <p>@x.Header</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    @* NEWS WITH 2 COLUMNS END *@
+}

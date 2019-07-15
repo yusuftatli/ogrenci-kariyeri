@@ -1,0 +1,77 @@
+﻿@model List<SCA.Entity.DTO.ContentForHomePageDTO>
+
+@if (!Model.Equals(null) && Model.Count > 0)
+{
+    @* HOT TOPICS *@
+    <div class="ts-grid-box category-box-item-3">
+        <h2 class="ts-title float-left">Sıcak Başlıklar</h2>
+        <a href="#" class="view-all-link float-right">Tümünü Gör</a>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="item">
+                    <div class="ts-post-thumb">
+                        <a class="post-cat ts-orange-bg" href="@Url.Action("Index", "Category")">@Model.FirstOrDefault().Category</a>
+                        <a href="@Url.Action("Index", "Blog", new { Model.FirstOrDefault().SeoUrl })">
+                            <img class="img-fluid" src="@Model.FirstOrDefault().ImagePath" alt="Öğrenci Kariyeri - @Model.FirstOrDefault().Category: @Model.FirstOrDefault().Header">
+                        </a>
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title md">
+                            <a href="@Url.Action("Index", "Blog", new { @Model.FirstOrDefault().SeoUrl })">@Model.FirstOrDefault().Header</a>
+                        </h3>
+                        <ul class="post-meta-info">
+                            <li class="author">
+                                <a href="@Url.Action("Editor", "Author")">
+                                    <img src="images/avater/author1.jpg" alt=""> @Model.FirstOrDefault().Writer
+                                </a>
+                            </li>
+                            <li>
+                                <i class="fa fa-clock-o"></i>
+                                @Model.FirstOrDefault().PublishDate.ToString("dd.MM.yyyy")
+                            </li>
+                            <li class="active">
+                                <i class="icon-fire"></i>
+                                @Model.FirstOrDefault().ReadCount
+                            </li>
+                        </ul>
+                        <p>
+                            @Model.FirstOrDefault().Header
+                        </p>
+                    </div>
+                </div>
+                <!-- ts-grid-box end-->
+            </div>
+            <!-- col end-->
+            <div class="col-lg-6">
+                <div class="row">
+                    @foreach (var x in Model.Where(y => !y.SeoUrl.Equals(Model.FirstOrDefault().SeoUrl)))
+                    {
+                        <div class="col-lg-6">
+                            <div class="item mb-20">
+                                <div class="ts-post-thumb">
+                                    <a href="@Url.Action("Index", "Blog", new { x.SeoUrl })">
+                                        <img class="img-fluid" src="@x.ImagePath" alt="Öğrenci Kariyeri - @x.Category: @x.Header">
+                                    </a>
+                                </div>
+                                <div class="post-content">
+                                    <h3 class="post-title">
+                                        <a href="@Url.Action("Index", "Blog", new { x.SeoUrl })">@x.Header</a>
+                                    </h3>
+                                    <span class="post-date-info">
+                                        <i class="fa fa-clock-o"></i>
+                                        @x.PublishDate.ToString("dd.MM.yyyy")
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+                </div>
+            </div>
+        </div>
+        <!-- row end-->
+
+    </div>
+    @* HOT TOPICS END *@
+}
