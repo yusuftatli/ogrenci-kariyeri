@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     Layout = null;
 }
 
@@ -61,8 +60,8 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <style>
-        .ts-grid-box, .post-content{
-            border-radius:6px 12px 12px 12px;
+        .ts-grid-box, .post-content {
+            border-radius: 6px 12px 12px 12px;
         }
     </style>
 </head>
@@ -654,7 +653,6 @@
         </div>
     </header>
     <!-- header nav end-->
-
     @RenderBody()
 
     <!-- footer social list start-->
@@ -785,6 +783,54 @@
             </div><!-- Back to top end -->
         </div><!-- Container end-->
     </footer>
+    <style>
+        .cookieEnable {
+            width: 100%;
+            position: fixed;
+            color: white !important;
+            background-color: rgba(35,43,56,.9);
+            font-size: 12px;
+            bottom: 0;
+            z-index: 999;
+            padding: 20px;
+        }
+
+        .btn-cookie {
+            padding: 10px 16px;
+            background: #d72924;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .fleft {
+            float: left;
+        }
+
+        .cookieEnable a {
+            cursor: pointer;
+            color: whitesmoke;
+            text-decoration: underline;
+        }
+
+            .cookieEnable a:hover {
+                color: #d72924;
+            }
+
+        .hidden, .modal-header {
+            display: none;
+        }
+    </style>
+
+    <div class="cookieEnable hidden">
+        <div class="col-md-12">
+            <div class="col-md-11 fleft">
+                Sitemizden en iyi şekilde faydalanabilmeniz için çerezler kullanılmaktadır. Bu siteye giriş yaparak çerez kullanımını kabul etmiş sayılıyorsunuz. <a href="@Url.Action("CookieEnable", "Shared")" data-size="modal-lg" id="cookieEnableDesc" class="lazyload showModal">Daha fazla bilgi edinin.</a>
+            </div>
+            <div class="col-md-1 fleft text-right">
+                <a class="btn-cookie" id="acceptCookie">x</a>
+            </div>
+        </div>
+    </div>
 
     <script type="text/template" id="loginPanel">
         <div class="white-popup">
@@ -854,7 +900,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-5 mx-auto">
-                           
+
                             <div class="ts-grid-box">
                                 <div class="reg-page">
                                     <h3 class="log-sign-title mb-25">Please Signup</h3>
@@ -948,8 +994,13 @@
     <script src="/js/smoothscroll.js"></script>
 
     <script src="/js/main.js"></script>
+    <script src="/js/MTBootstrapLazyLoad.js"></script>
 
     <script>
+        document.cookie.split(";").map(x => x.trim()).find(x => x == "acceptCookie=1") == undefined
+             ? $(".cookieEnable").removeClass("hidden")
+             : $(".cookieEnable").addClass("hidden");
+
         function openLoginMagnific() {
             $.magnificPopup.open({
                 items: {
@@ -975,8 +1026,14 @@
         $(document).on('click', '.openLoginMagnific', function () {
             openLoginMagnific();
         });
+
         $(document).on('click', '.openRegisterMagnific', function () {
             openRegisterMagnific();
+        })
+
+        $(document).on('click', '#acceptCookie', function () {
+            document.cookie = "acceptCookie=1; path=/; Expires=@DateTime.Now.AddYears(1);";
+            $(".cookieEnable").addClass("hidden");
         })
     </script>
 </body>

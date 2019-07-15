@@ -83,7 +83,7 @@ namespace SCA.UI.Controllers
                             </p>
                             <p>
                                 <a href=''>
-                                    <img class='img-fluid' src='images/banner/banner2.jpg' alt=''>
+                                    <img class='img-fluid' src='/images/banner/banner2.jpg' alt=''>
                                 </a>
                             </p>
                             <h3>

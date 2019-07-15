@@ -12,5 +12,10 @@ namespace SCA.UI.Controllers
         {
             return View();
         }
+
+        public PartialViewResult CookieEnable()
+        {
+            return PartialView();
+        }
     }
 }
