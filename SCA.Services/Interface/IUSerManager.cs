@@ -13,5 +13,18 @@ namespace SCA.Services.Interface
         Task<ServiceResult> UpdateUser(UsersDTO dto);
         Task<ServiceResult> DeleteUser(long userId);
         Task UserLog(long userId);
+        /// <summary>
+        /// Kullanıcı bilgilerini döner
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        UsersDTO GetUserInfo(long Id);
+
+        /// <summary>
+        /// verilen idlere göre kullanıcıları listeler
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        List<UserShortInforDto> GetShortUserInfo(List<long> ids);   
     }
 }

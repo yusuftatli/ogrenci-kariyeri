@@ -3,7 +3,7 @@ var _link = '';
 
 
 if (prodType === "d") {
-    _link = "https://localhost:44308/api";
+    _link = "https://localhost:44354/api";
 }
 
 var ContentType_ = "application/x-www-form-urlencoded; charset=utf-8;application/json";

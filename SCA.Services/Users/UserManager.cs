@@ -32,16 +32,55 @@ namespace SCA.Services
             _pictureManager = pictureManager;
         }
 
+
+        /// <summary>
+        /// Kullanıcı bilgilerini döner
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        public UsersDTO GetUserInfo(long Id)
+        {
+            var dataResult = _mapper.Map<UsersDTO>((_userRepo.Get(x => x.Id == Id)));
+            return dataResult;
+        }
+
+        /// <summary>
+        /// verilen idlere göre kullanıcıları listeler
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        public List<UserShortInforDto> GetShortUserInfo(List<long> ids)
+        {
+            var listData = _mapper.Map<List<UserShortInforDto>>(_userRepo.GetAll(x => ids.Contains(x.Id)).ToList());
+            return listData;
+        }
+
         public async Task<ServiceResult> CreateUser(UsersDTO dto)
         {
             if (!UserControl(dto.EmailAddress))
             {
                 Result.ReturnAsFail(AlertResource.EmailAlreadyExsist, null);
             }
+
+            //if (dto.EmailAddress.Equals(null) && dto.EmailAddress == "")
+            //{
+            //    Result.ReturnAsFail("Ad Boş Geçilemez", null);
+            //}
+
             if (dto.Equals(null))
             {
                 Result.ReturnAsFail(AlertResource.NoChanges, null);
             }
+
+            //if (dto.Name.Equals(null) && dto.Name == "")
+            //{
+            //    Result.ReturnAsFail("Ad Boş Geçilemez", null);
+            //}
+
+            //if (dto.Surname.Equals(null) && dto.Surname == "")
+            //{
+            //    Result.ReturnAsFail("Ad Boş Geçilemez", null);
+            //}
 
             if (dto.IsEmailSend)
             {
@@ -55,13 +94,17 @@ namespace SCA.Services
 
             if (!string.IsNullOrEmpty(dto.ImageData))
             {
-                _pictureManager.SaveImage("", "");
+                //_pictureManager.SaveImage(dto.ImageData, dto.Name + "-" + dto.Surname);
             }
 
-            dto.Password = Guid.NewGuid().ToString();
+            dto.HighSchoolTypeId = (dto.HighSchoolTypeId == 0) ? null : dto.HighSchoolTypeId;
+            dto.UniversityId = (dto.UniversityId == 0) ? null : dto.UniversityId;
+            dto.FacultyId = (dto.FacultyId == 0) ? null : dto.FacultyId;
+            dto.DepartmentId = (dto.DepartmentId == 0) ? null : dto.DepartmentId;
+            //dto.Password = Guid.NewGuid().ToString();
             _userRepo.Add(_mapper.Map<Users>(dto));
             var res = _unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess("Kayır işlemi Başarılı", res);
+            return Result.ReturnAsSuccess("Kayıt işlemi Başarılı", res);
         }
         public async Task<ServiceResult> UpdateUser(UsersDTO dto)
         {

@@ -30,32 +30,32 @@ namespace SCA.Entity.Model
         public DateTime BirthDate { get; set; }
 
         [ForeignKey("HighSchoolTypeId")]
-        public long HighSchoolTypeId { get; set; }
+        public long? HighSchoolTypeId { get; set; }
         public HighSchool HighSchoolType { get; set; }
 
         [ForeignKey("UniversityId")]
-        public long UniversityId { get; set; }
+        public long? UniversityId { get; set; }
         public University University { get; set; }
 
         [ForeignKey("FacultyId")]
-        public long FacultyId { get; set; }
+        public long? FacultyId { get; set; }
         public Faculty Faculty { get; set; }
 
         [ForeignKey("DepartmentId")]
-        public long DepartmentId { get; set; }
+        public long? DepartmentId { get; set; }
         public Department Department { get; set; }
 
         [ForeignKey("ClassId")]
-        public long ClassId { get; set; }
+        public long? ClassId { get; set; }
         public StudentClass ClassType { get; set; }
 
         [ForeignKey("CityId")]
-        public long CityId { get; set; }
+        public long? CityId { get; set; }
         public Cities Cities { get; set; }
 
-        [ForeignKey("DistrictId")]
-        public long DistrictId { get; set; }
-        public District District { get; set; }
+        //[ForeignKey("DistrictId")]
+        //public long DistrictId { get; set; }
+        //public District District { get; set; }
 
         //public long DefaultPageId { get; set; }
 
@@ -63,6 +63,7 @@ namespace SCA.Entity.Model
         public PlatformType EnrollPlatformTypeId { get; set; }
 
 
+        public ICollection<Comments> Comments { get; set; }
         public ICollection<UserLog> UserLog { get; set; }
         public ICollection<QuesitonAsnweByUsers> QuesitonAsnweByUsers { get; set; }
         public ICollection<ReadCountOfTestAndContent> ReadCountOfTestAndContent { get; set; }

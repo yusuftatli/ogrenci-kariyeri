@@ -22,11 +22,13 @@ namespace SCA.Services
         private readonly ITagManager _tagManager;
         private readonly IUnitofWork _unitOfWork;
         private readonly ICategoryManager _categoryManager;
+        private readonly IUserManager _userManager;
         private IGenericRepository<Content> _contentRepo;
-        public ContentManager(IUnitofWork unitOfWork, IMapper mapper, ITagManager tagManager, ICategoryManager categoryManager)
+        public ContentManager(IUnitofWork unitOfWork, IMapper mapper, ITagManager tagManager, ICategoryManager categoryManager, IUserManager userManager)
         {
             _mapper = mapper;
             _tagManager = tagManager;
+            _userManager = userManager;
             _unitOfWork = unitOfWork;
             _categoryManager = categoryManager;
             _contentRepo = unitOfWork.GetRepository<Content>();
@@ -43,9 +45,43 @@ namespace SCA.Services
             return Result.ReturnAsSuccess(null, _mapper.Map<List<ContentShortListDto>>(_contentRepo.GetAll(x => x.IsDeleted.Equals(false)).ToList()));
         }
 
+        /// <summary>
+        /// UI için makaleleri short list olarak kullanıcı bilgileri ile birlikte döner 
+        /// </summary>
+        /// <returns></returns>
         public async Task<ServiceResult> ContentShortListForUI()
         {
-            return Result.ReturnAsSuccess(null, _mapper.Map<List<ContentShortListDto>>(_contentRepo.GetAll(x => x.IsDeleted.Equals(false)).ToList()));
+            var dataList = _mapper.Map<List<ContentShortListUIDto>>(_contentRepo.GetAll(x => x.IsDeleted.Equals(false)).ToList());
+            List<long> ids = new List<long>();
+
+            foreach (ContentShortListUIDto item in dataList)
+            {
+                ids.Add(item.Id);
+            }
+
+            var users = _userManager.GetShortUserInfo(ids);
+
+            dataList.ForEach(x =>
+            {
+                x.Writer = users.Where(a => a.Id == x.CreatedUserId).Select(s => s.Name + " " + s.Surname).FirstOrDefault();
+                x.WriterImagePath = users.Where(a => a.Id == x.CreatedUserId).Select(s => s.ImagePath).FirstOrDefault();
+            });
+
+
+            return Result.ReturnAsSuccess(null, dataList);
+        }
+
+        public async Task<ServiceResult> GetContentUI(string url)
+        {
+            ContentForUIDto result = new ContentForUIDto();
+            var contentData = _mapper.Map<ContenUIDto>(_contentRepo.Get(x => x.SeoUrl == url));
+
+            var userData = _userManager.GetUserInfo(contentData.CreatedUserId);
+
+            contentData.WriterName = userData.Name + " " + userData.Surname;
+            contentData.WriterImagePath = userData.ImagePath;
+
+            return Result.ReturnAsSuccess(null, contentData);
         }
 
         public async Task<ServiceResult> GetContent(string url)
@@ -145,8 +181,6 @@ namespace SCA.Services
 
             return _unitOfWork.SaveChanges();
         }
-
-
 
     }
 }

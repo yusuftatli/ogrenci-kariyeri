@@ -8,6 +8,6 @@ namespace SCA.Services.Interface
 {
     public interface IPictureManager
     {
-        Task<ServiceResult> SaveImage(string ImgStr, string ImgName);
+        string SaveImage(string ImgStr, string ImgName);
     }
 }

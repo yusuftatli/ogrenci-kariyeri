@@ -28,5 +28,7 @@ namespace SCA.Entity.DTO
         public int InternId { get; set; }
         public int VisibleId { get; set; }
         public DateTime PublishDate { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public long CreatedUserId { get; set; }
     }
 }

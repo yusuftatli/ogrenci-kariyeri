@@ -7,40 +7,47 @@ app.controller('userCreateController', function ($scope, $http, $filter) {
     $scope.showSaveLoading = false;
     $scope.genderList = [{ id: 1, description: 'Bay' }, { id: 2, description: 'Bayan' }];
 
-    getCategories();
+    loadForm();
 
     $scope.onClikSave = function () {
-        console.log($scope.userModel);
+        saveUserData();
         $scope.showSaveLoading = true;
     };
 
     function loadForm() {
         getRoleTypeList();
-        $scope.getCities();
-        $scope.getHighScholl();
-        $scope.getEducationTypeList();
-        $scope.getUniversityList();
-        $scope.getDepartment();
-        $scope.getFaculty();
+        getCities();
+        getHighScholl();
+        getEducationTypeList();
+        getUniversityList();
+        getDepartment();
+        getFaculty();
     }
 
-    $scope.onChanageEdcationStatu = function () {
-        if ($scope.userModel.educationstatusid === 0) {
+    $scope.onChanageEdcationStatus = function () {
+        if (getEducationStatusDes($scope.userModel.educationstatusid)=== "Lise") {
             $scope.showHigSchoolType = true;
         } else {
             $scope.showHigSchoolType = false;
         }
     };
 
+    function getEducationStatusDes(x) {
+        for (var i = 0; i < $scope.educationTypeList.length; i++) {
+            if ($scope.educationTypeList[i]['id'] === x) {
+                return $scope.educationTypeList[i]['description'];
+            }
+        }
+    }
 
     function saveUserData() {
         Loading(true);
         $http(postUserData()).then(function (res) {
             if (res.data.resultCode === 200) {
-                shortMessage("Success!", "s");
+                shortMessage(res.data.message, "s");
                 $scope.showSaveLoading = false;
             } else {
-                shortMessage("There is an exception occured", "e");
+                shortMessage(res.data.message, "e");
             }
 
         });
@@ -51,6 +58,7 @@ app.controller('userCreateController', function ($scope, $http, $filter) {
         $.ajax({
             url: _link + "/Roles/role-getroletypes",
             type: "GET",
+            async: true,
             dataType: Json_,
             contentType: ContentType_,
             success: function (e) {
@@ -65,11 +73,11 @@ app.controller('userCreateController', function ($scope, $http, $filter) {
         });
     }
 
-    $scope.getEducationTypeList = function () {
+    function getEducationTypeList() {
         Loading(true);
         $.ajax({
-            url: _link + "/Roles/education-GetHighSchoolType",
-            type: "GET",
+            url: _link + "/education/education-educationstatus",
+            type: "GET", async: true,
             dataType: Json_,
             contentType: ContentType_,
             success: function (e) {
@@ -82,13 +90,13 @@ app.controller('userCreateController', function ($scope, $http, $filter) {
                 Loading(false);
             }
         });
-    };
+    }
 
-    $scope.getCities = function () {
+    function getCities() {
         Loading(true);
         $.ajax({
             url: _link + "/Address/address-getcities",
-            type: "GET",
+            type: "GET", async: true,
             dataType: Json_,
             contentType: ContentType_,
             success: function (e) {
@@ -100,13 +108,13 @@ app.controller('userCreateController', function ($scope, $http, $filter) {
                 Loading(false);
             }
         });
-    };
+    }
 
-    $scope.getHighScholl = function () {
+    function getHighScholl() {
         Loading(true);
         $.ajax({
             url: _link + "/education/education-gethighschool",
-            type: "GET",
+            type: "GET", async: true,
             dataType: Json_,
             contentType: ContentType_,
             success: function (e) {
@@ -118,13 +126,13 @@ app.controller('userCreateController', function ($scope, $http, $filter) {
                 Loading(false);
             }
         });
-    };
+    }
 
-    $scope.getUniversityList = function () {
+    function getUniversityList() {
         Loading(true);
         $.ajax({
             url: _link + "/education/education-getuniversity",
-            type: "GET",
+            type: "GET", async: true,
             dataType: Json_,
             contentType: ContentType_,
             success: function (e) {
@@ -136,14 +144,14 @@ app.controller('userCreateController', function ($scope, $http, $filter) {
                 Loading(false);
             }
         });
-    };
+    }
 
-    $scope.getDepartment = function () {
+    function getDepartment() {
         Loading(true);
         $.ajax({
             url: _link + "/education/education-getdepartment",
             type: "GET",
-            dataType: Json_,
+            dataType: Json_, async: true,
             contentType: ContentType_,
             success: function (e) {
                 if (e.resultCode === 200) {
@@ -154,13 +162,13 @@ app.controller('userCreateController', function ($scope, $http, $filter) {
                 Loading(false);
             }
         });
-    };
+    }
 
-    $scope.getFaculty = function () {
+    function getFaculty() {
         Loading(true);
         $.ajax({
             url: _link + "/education/education-getfaculty",
-            type: "GET",
+            type: "GET", async: true,
             dataType: Json_,
             contentType: ContentType_,
             success: function (e) {
@@ -174,26 +182,6 @@ app.controller('userCreateController', function ($scope, $http, $filter) {
         });
     };
 
-
-    function getData() {
-        $scope.categoyData = [
-            mainCategory : {
-                subCategory: {
-                    subCategoryDetail: {
-
-                    }
-                }
-            }
-        ];
-
-
-        for (var i = 0; i < $scope.catgoryList.length; i++) {
-            if (true) {
-
-            }
-        }
-
-    }
 
 
     function getCategories() {
@@ -224,4 +212,76 @@ app.controller('userCreateController', function ($scope, $http, $filter) {
         };
     };
 
+});
+
+app.directive("ngFileSelect", function (fileReader, $timeout) {
+    return {
+        scope: {
+            ngModel: '='
+        },
+        link: function ($scope, el) {
+            function getFile(file) {
+                fileReader.readAsDataUrl(file, $scope)
+                    .then(function (result) {
+                        $timeout(function () {
+                            $scope.ngModel = result;
+                        });
+                    });
+            }
+
+            el.bind("change", function (e) {
+                var file = (e.srcElement || e.target).files[0];
+                getFile(file);
+            });
+        }
+    };
+});
+
+
+app.factory("fileReader", function ($q, $log) {
+    var onLoad = function (reader, deferred, scope) {
+        return function () {
+            scope.$apply(function () {
+                deferred.resolve(reader.result);
+            });
+        };
+    };
+
+    var onError = function (reader, deferred, scope) {
+        return function () {
+            scope.$apply(function () {
+                deferred.reject(reader.result);
+            });
+        };
+    };
+
+    var onProgress = function (reader, scope) {
+        return function (event) {
+            scope.$broadcast("fileProgress", {
+                total: event.total,
+                loaded: event.loaded
+            });
+        };
+    };
+
+    var getReader = function (deferred, scope) {
+        var reader = new FileReader();
+        reader.onload = onLoad(reader, deferred, scope);
+        reader.onerror = onError(reader, deferred, scope);
+        reader.onprogress = onProgress(reader, scope);
+        return reader;
+    };
+
+    var readAsDataURL = function (file, scope) {
+        var deferred = $q.defer();
+
+        var reader = getReader(deferred, scope);
+        reader.readAsDataURL(file);
+
+        return deferred.promise;
+    };
+
+    return {
+        readAsDataUrl: readAsDataURL
+    };
 });

@@ -20,10 +20,10 @@ namespace SCA.Entity.DTO
         public GenderType GenderId { get; set; }
         public long EducationStatusId { get; set; }
         public DateTime BirthDate { get; set; }
-        public long HighSchoolTypeId { get; set; }
-        public long UniversityId { get; set; }
-        public long FacultyId { get; set; }
-        public long DepartmentId { get; set; }
+        public long? HighSchoolTypeId { get; set; }
+        public long? UniversityId { get; set; }
+        public long? FacultyId { get; set; }
+        public long? DepartmentId { get; set; }
         public long ClassId { get; set; }
         public long CityId { get; set; }
         public long DistrictId { get; set; }

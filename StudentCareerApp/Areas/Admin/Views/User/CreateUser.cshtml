@@ -14,9 +14,9 @@
 
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <script src="~/AdminFiles/Template/codemirror/codemirror.js"></script>
-    <link href="~/AdminFiles/Template/codemirror/codemirror.css" rel="stylesheet" />
-    <script src="~/AdminFiles/ScriptController/userCreateController.js"></script>
+    <script src="~/Template/codemirror/codemirror.js"></script>
+    <link href="~/Template/codemirror/codemirror.css" rel="stylesheet" />
+    <script src="~/ScriptController/userCreateController.js"></script>
 </head>
 
 
@@ -64,7 +64,7 @@
                             <div class="form-body">
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="control-label">Adı</label>
                                                 <input type="text" id="name" ng-model="userModel.name" class="form-control" placeholder="Adı">
@@ -72,12 +72,15 @@
                                             </div>
                                         </div>
                                         <!--/span-->
-                                        <div class="col-md-6">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="control-label">Soyad</label>
                                                 <input type="text" id="surname" ng-model="userModel.surname" class="form-control form-control-danger" placeholder="Soyad">
                                                 @*<small class="form-control-feedback"> This field has error. </small>*@
                                             </div>
+                                        </div>
+                                        <div class="col-md-3 p-l-0 p-t-20">
+                                            <input type="file" id="input-file-now-custom-3" ng-file-select="onFileSelect($files)" ng-model="userModel.imageData" class="dropify" data-height="150" />
                                         </div>
                                     </div>
                                     <div class="row">
@@ -85,6 +88,12 @@
                                             <div class="form-group">
                                                 <label class="control-label">Email</label>
                                                 <input type="text" id="EmailAddress" ng-model="userModel.EmailAddress" class="form-control" placeholder="Email">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">Şifre</label>
+                                                <input type="text" id="Password" ng-model="userModel.Password" class="form-control" placeholder="Password">
                                             </div>
                                         </div>
                                     </div>
@@ -128,7 +137,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="control-label">İl</label>
-                                                <select id="cityId" class="form-control custom-select" ng-model="userModel.cityName" name="cityId">
+                                                <select id="cityId" class="form-control custom-select" ng-model="userModel.CityId" name="cityId">
                                                     <option ng-repeat="x in cityList" value="{{x.cityId}}">{{x.cityName}}</option>
                                                 </select>
                                             </div>
@@ -154,7 +163,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="control-label">Eğitim Durumu</label>
-                                                <select id="roletypeid" class="form-control custom-select" ng-change="onChanageEdcationStatu()" ng-model="userModel.educationstatusid" name="roletypeid">
+                                                <select id="roletypeid" class="form-control custom-select" ng-change="onChanageEdcationStatus()" ng-model="userModel.educationstatusid" name="educationstatusid">
                                                     <option ng-repeat="x in educationTypeList" value="{{x.id}}">{{x.description}}</option>
                                                 </select>
                                             </div>
@@ -163,15 +172,15 @@
                                         <div class="col-md-6">
                                             <div ng-show="showHigSchoolType" class="form-group">
                                                 <label class="control-label">Okul Adı</label>
-                                                <select id="highschooltypeid" class="form-control" name="highschooltypeid" required
-                                                        ng-model="userModel.highschooltypeid"
-                                                        ng-options="x.id as x.schoolName for x in highSchollList"></select>
+                                                <select id="highschooltypeid" class="form-control custom-select" ng-model="userModel.HighSchoolTypeId" name="highschooltypeid">
+                                                    <option ng-repeat="x in highSchollList" value="{{x.id}}">{{x.schoolName}}</option>
+                                                </select>
                                             </div>
                                             <div ng-show="!showHigSchoolType" class="form-group">
                                                 <label class="control-label">Üniversite</label>
-                                                <select id="universityid" class="form-control" name="universityid" required
-                                                        ng-model="userModel.universityid"
-                                                        ng-options="x.id as x.universityName for x in universityList"></select>
+                                                <select id="universityid" class="form-control custom-select" ng-model="userModel.UniversityId" name="universityid">
+                                                    <option ng-repeat="x in universityList" value="{{x.id}}">{{x.universityName}}</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <!--/span-->
@@ -180,9 +189,8 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="control-label">Fakülte</label>
-                                                <select id="facultyid" class="form-control" name="facultyid" required
-                                                        ng-model="userModel.facultyid"
-                                                        ng-options="x.id as x.FacultyName for x in facultyList">
+                                                <select id="facultyid" class="form-control custom-select" ng-model="userModel.FacultyId" name="facultyid">
+                                                    <option ng-repeat="x in facultyList" value="{{x.id}}">{{x.facultyName}}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -190,9 +198,9 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="control-label">Bölüm</label>
-                                                <select id="cityId" class="form-control" name="departmentid" required
-                                                        ng-model="userModel.departmentid"
-                                                        ng-options="x.id as x.DepartmentName for x in departmentList"></select>
+                                                <select id="departmentid" class="form-control custom-select" ng-model="userModel.DepartmentId" name="departmentid">
+                                                    <option ng-repeat="x in departmentList" value="{{x.id}}">{{x.departmentName}}</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <!--/span-->
@@ -291,6 +299,15 @@
             <!-- ============================================================== -->
             <!-- End Container fluid  -->
             <!-- ============================================================== -->
+        </div>
+    </div>
+</div>
+
+
+            </div>
+<!-- ============================================================== -->
+<!-- End Container fluid  -->
+<!-- ============================================================== -->
         </div>
     </div>
 </div>
