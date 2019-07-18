@@ -143,6 +143,7 @@ namespace StudentCareerApp
                 cfg.CreateMap<Users, UsersDTO>().ReverseMap();
                 cfg.CreateMap<UserLog, UserLogDto>().ReverseMap();
                 cfg.CreateMap<UserCreateAnlitic, UserCreateAnliticDto>().ReverseMap();
+                cfg.CreateMap<Users, UserShortInforDto>().ReverseMap();
 
                 #endregion
 
@@ -162,13 +163,12 @@ namespace StudentCareerApp
 
                 #endregion
 
-
                 #region Content
 
                 cfg.CreateMap<Content, ContentDto>().ReverseMap();
                 cfg.CreateMap<Content, ContentShortListDto>().ReverseMap();
-                cfg.CreateMap<Content, ContentForHomePageDTO>().ReverseMap();
-                cfg.CreateMap<Content, ContentDetailForDetailPageDTO>().ReverseMap();
+                cfg.CreateMap<Content, ContentShortListUIDto>().ReverseMap();
+                cfg.CreateMap<Content, ContenUIDto>().ReverseMap();
                 #endregion
 
                 #region Image
@@ -190,13 +190,17 @@ namespace StudentCareerApp
 
                 #endregion
 
-
                 #region Menun
 
                 cfg.CreateMap<MenuList, MenuListDto>().ReverseMap();
                 cfg.CreateMap<MenuRelationWithRole, MenuRelationWithRoleDto>().ReverseMap();
 
                 #endregion
+
+                #region comment
+                cfg.CreateMap<Comments, CommentsDto>().ReverseMap();
+                #endregion
+
 
             });
             var mapper = config.CreateMapper();
