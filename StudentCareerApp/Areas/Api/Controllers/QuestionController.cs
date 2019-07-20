@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
+using SCA.Services;
 using SCA.Services.Interface;
 
 namespace SCA.Web.Api.Controllers

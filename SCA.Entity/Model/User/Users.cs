@@ -59,6 +59,7 @@ namespace SCA.Entity.Model
 
         //public long DefaultPageId { get; set; }
 
+        public bool IsActive { get; set; }
         public string ReferanceCode { get; set; }
         public PlatformType EnrollPlatformTypeId { get; set; }
 

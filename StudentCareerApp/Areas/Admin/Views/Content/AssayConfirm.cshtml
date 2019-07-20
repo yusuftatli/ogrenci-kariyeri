@@ -1,4 +1,7 @@
-﻿
+﻿@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
 <head>
     <link href="~/AdminFiles/Template/AngularComponents/treeselect/vue-treeselect.css" rel="stylesheet" />
     <link href="~/AdminFiles/Template/assets/node_modules/switchery/dist/switchery.css" rel="stylesheet" />
@@ -421,26 +424,26 @@
 
 
 @section Styles{
-    <style>
-        label.col-md-4 {
-            padding: 0;
-        }
+<style>
+    label.col-md-4 {
+        padding: 0;
+    }
 
-        .newsImage {
-            border-radius: 10px;
-            box-shadow: 0px 0px 5px 0px;
-            margin: 10px;
-            margin-right: 0;
-        }
+    .newsImage {
+        border-radius: 10px;
+        box-shadow: 0px 0px 5px 0px;
+        margin: 10px;
+        margin-right: 0;
+    }
 
-        label {
-            font-weight: 800;
-        }
-    </style>
+    label {
+        font-weight: 800;
+    }
+</style>
 }
 
 @section Scripts{
-    <script>
+<script>
         $(document).ready(function () {
             CKEDITOR.replace("ckeditorForAssayContent");
             $("#publishDate").datepicker({
@@ -454,8 +457,8 @@
             });
             //new Switchery($("#toggleHeadLine")[0], $("#toggleHeadLine").data());
         });
-    </script>
-    <script src="~/AdminFiles/Template/assets/node_modules/styleswitcher/jQuery.style.switcher.js"></script>
+</script>
+<script src="~/AdminFiles/Template/assets/node_modules/styleswitcher/jQuery.style.switcher.js"></script>
 
 
 }

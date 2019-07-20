@@ -95,7 +95,7 @@ app.controller('userCreateController', function ($scope, $http, $filter) {
     function getCities() {
         Loading(true);
         $.ajax({
-            url: _link + "/Address/address-getcities",
+            url: _link + "/Address/GetCities",
             type: "GET", async: true,
             dataType: Json_,
             contentType: ContentType_,

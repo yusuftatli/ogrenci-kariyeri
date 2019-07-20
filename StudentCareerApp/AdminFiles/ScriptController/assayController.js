@@ -31,20 +31,20 @@ app.controller("assayController", function ($scope, $http, $filter) {
     $scope.onClickDashboard = function () {
         $scope.showTable = true;
         getContentShortList();
-    }
+    };
 
     $scope.onClickContent = function () {
         getMainCategories();
         getTags();
-    }
+    };
 
     $scope.showContentDetail = function () {
 
-    }
+    };
 
     $scope.shoShortListAssay = function () {
         getContentShortList();
-    }
+    };
 
     //post assay
     $scope.postAssay = function () {
@@ -106,7 +106,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
         $scope.searchModel.EndDate = $("#EndDate").val();
         $scope.searchModel.searhCategoryIds = $("#searhCategoryIds").val();
         $http(GetContentShortListReq()).then(function (res) {
-            if (res.data.resultCode == 200) {
+            if (res.data.resultCode === 200) {
                 $scope.assayList = res.data.data;
                 paginationLoad($scope, res.data.data);
                 $scope.showTable = false;
@@ -117,7 +117,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
     //post assay
     function postAssay() {
         $http(PostAssayReq()).then(function (res) {
-            if (res.data.resultCode == 200) {
+            if (res.data.resultCode === 200) {
                 shortMessage("Kayıt İşlemi Başarılı", "s");
                 $scope.showSaveLoading = false;
             }
@@ -133,7 +133,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
         var arr = [];
         var model = $scope.MainCategories;
         model.forEach(element => {
-            if (element.parentId == id) {
+            if (element.parentId === id) {
                 var item = {
                     label: element.description,
                     id: element.id
@@ -151,7 +151,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
         var arr = [];
         var model = $scope.TagsList;
         model.forEach(element => {
-            if (element.parentId == id) {
+            if (element.parentId === id) {
                 var item = {
                     label: element.description,
                     id: element.id
@@ -217,7 +217,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
             headers: Headers,
             data: $scope.searchModel
         };
-    }
+    };
 
     //sen content for publish request
     var contentPublishProcess = function () {
@@ -227,7 +227,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
             headers: Headers,
             data: $scope.searchModel
         };
-    }
+    };
 
     //send content for un publish process
     var contentUnPublishProcess = function () {
@@ -237,7 +237,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
             headers: Headers,
             data: $scope.searchModel
         };
-    }
+    };
 
     //#endregion
     getContentShortList();

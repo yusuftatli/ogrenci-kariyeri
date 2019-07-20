@@ -53,6 +53,7 @@ app.controller('roleTypeController', function ($scope, $http, $filter) {
                 if (e.resultCode === 200) {
                     if (e.data.length > 0) {
                         $scope.roleTypeList = e.data;
+                        $scope.$apply();
                     }
                 }
                 Loading(false);

@@ -9,6 +9,7 @@ using SCA.Common.Result;
 using SCA.Entity.Dto;
 using SCA.Entity.DTO;
 using SCA.Entity.Model;
+using SCA.Services;
 using SCA.Services.Interface;
 
 namespace Armut.Web.UI.Controllers

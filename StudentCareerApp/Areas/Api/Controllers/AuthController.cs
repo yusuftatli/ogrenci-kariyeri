@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.UI.V3.Pages.Account.Internal;
 using Microsoft.AspNetCore.Mvc;
 using SCA.Common.Result;
+using SCA.Entity.DTO;
+using SCA.Services;
 using SCA.Services.Interface;
 
 namespace Armut.Web.UI.Controllers
@@ -29,35 +31,13 @@ namespace Armut.Web.UI.Controllers
         //    return await _authManager.UserLogin(dto);
         //}
 
-        //[HttpPost, Route("login")]
-        //public IActionResult Login([FromBody]LoginModel user)
-        //{
-        //    if (user == null)
-        //    {
-        //        return BadRequest("Invalid client request");
-        //    }
-
-        //    if (user.username == "1" && user.password == "1")
-        //    {
-        //        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
-        //        var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-
-        //        var tokeOptions = new JwtSecurityToken(
-        //            issuer: "http://localhost:5000",
-        //            audience: "http://localhost:5000",
-        //            claims: new List<Claim>(),
-        //            expires: DateTime.Now.AddMinutes(5),
-        //            signingCredentials: signinCredentials
-        //        );
-
-        //        var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
-        //        return Ok(new { Token = tokenString });
-        //    }
-        //    else
-        //    {
-        //        return Unauthorized();
-        //    }
-        //}
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("token")]
+        public async Task<ServiceResult> UserLogin([FromBody]LoginDto dto)
+        {
+            return await _authManager.UserLogin(dto);
+        }
 
         [HttpPost("PasswordForget/{emailAddress}")]
         public async Task<ActionResult<ServiceResult>> PasswordForget(string emailAddress)

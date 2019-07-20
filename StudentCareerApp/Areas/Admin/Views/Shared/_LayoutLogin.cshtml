@@ -1,0 +1,678 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="~/AdminFiles/Template/assets/img/ogencikariyeri.jpg">
+    <title>Öğrenci Kariyeri</title>
+    <script src="~/AdminFiles/Scripts/jquery-3.0.0.min.js"></script>
+    <script src="~/AdminFiles/Scripts/angular.min.js"></script>
+    <!-- page CSS -->
+    <link href="~/AdminFiles/Template/assets/node_modules/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/AdminFiles/Template/assets/node_modules/select2/dist/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/AdminFiles/Template/assets/node_modules/switchery/dist/switchery.min.css" rel="stylesheet" />
+    <link href="~/AdminFiles/Template/assets/node_modules/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+    <link href="~/AdminFiles/Template/assets/node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.css" rel="stylesheet" />
+    <link href="~/AdminFiles/Template/assets/node_modules/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+    <link href="~/AdminFiles/Template/assets/node_modules/multiselect/css/multi-select.css" rel="stylesheet" type="text/css" />
+    <link href="~/AdminFiles/Template/assets/node_modules/switchery/dist/switchery.min.css" rel="stylesheet" />
+    <link href="~/AdminFiles/Template/dist/css/pages/tab-page.css" rel="stylesheet">
+    <link href="~/AdminFiles/Template/assets/node_modules/chartist-js/dist/chartist.min.css" rel="stylesheet">
+    <link href="~/AdminFiles/Template/assets/node_modules/chartist-js/dist/chartist-init.css" rel="stylesheet">
+    <link href="~/AdminFiles/Template/assets/node_modules/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.css" rel="stylesheet">
+    <link href="~/AdminFiles/Template/assets/node_modules/css-chart/css-chart.css" rel="stylesheet">
+    <link href="~/AdminFiles/Template/dist/css/pages/widget-page.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/AdminFiles/Template/assets/node_modules/dropify/dist/css/dropify.min.css">
+    <link href="~/AdminFiles/Template/assets/node_modules/clockpicker/dist/jquery-clockpicker.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+    <link href="~/AdminFiles/Template/ckeditor/contents.css" rel="stylesheet" />
+    <link href="https://code.jquery.com/ui/1.12.1/themes/cupertino/jquery-ui.css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link href="~/AdminFiles/Template/dist/css/style.min.css" rel="stylesheet">
+    <link href="~/AdminFiles/Content/toastr.min.css" rel="stylesheet" />
+    <link href="~/AdminFiles/Template/style.css" rel="stylesheet" />
+
+    @RenderSection("Styles", false)
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body class="skin-default fixed-layout">
+    <div class="modalload" style="display: none">
+        <div class="center">
+            <img src="~/AdminFiles/Template/assets/images/giphy.gif" />
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- Preloader - style you can find in spinners.css -->
+    <!-- ============================================================== -->
+    <div class="preloader">
+        <div class="loader">
+            <div class="loader__figure"></div>
+            <p class="loader__label">Öğrenci Kariyeri</p>
+        </div>
+    </div>
+    <div id="main-wrapper">
+        <header class="topbar">
+            <nav class="navbar top-navbar navbar-expand-md navbar-dark">
+                <!-- ============================================================== -->
+                <!-- Logo -->
+                <!-- ============================================================== -->
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="index.html">
+                        <!-- Logo icon --><b>
+                            <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
+                            <!-- Dark Logo icon -->
+                            <img src="~/AdminFiles/Template/assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
+                            <!-- Light Logo icon -->
+                            <img width="200" height="40" src="~/AdminFiles/Template/assets/images/ögrenci-kariyeri.png" alt="homepage" class="light-logo" />
+                        </b>
+                        <!--End Logo icon -->
+                        <!-- Logo text --><span>
+                            <!-- dark Logo text -->
+                            <img src="~/AdminFiles/Template/assets/images/logo-text.png" alt="homepage" class="dark-logo" />
+                            <!-- Light Logo text -->
+                            @*<img src="~/Template/assets/images/logo-light-text.png" class="light-logo" alt="homepage" />*@
+                        </span>
+                    </a>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Logo -->
+                <!-- ============================================================== -->
+                <div class="navbar-collapse">
+                    <!-- ============================================================== -->
+                    <!-- toggle and nav items -->
+                    <!-- ============================================================== -->
+                    <ul class="navbar-nav mr-auto">
+                        <!-- This is  -->
+                        <li class="nav-item"> <a class="nav-link nav-toggler d-block d-md-none waves-effect waves-dark" href="javascript:void(0)"><i class="ti-menu"></i></a> </li>
+                        <li class="nav-item"> <a class="nav-link sidebartoggler d-none d-lg-block d-md-block waves-effect waves-dark" href="javascript:void(0)"><i class="icon-menu"></i></a> </li>
+                        <!-- ============================================================== -->
+                        <!-- Search -->
+                        <!-- ============================================================== -->
+                        <li class="nav-item">
+                            <form class="app-search d-none d-md-block d-lg-block">
+                                <input type="text" class="form-control" placeholder="Search & enter">
+                            </form>
+                        </li>
+                    </ul>
+                    <!-- ============================================================== -->
+                    <!-- User profile and search -->
+                    <!-- ============================================================== -->
+                    <ul class="navbar-nav my-lg-0">
+                        <!-- ============================================================== -->
+                        <!-- Comment -->
+                        <!-- ============================================================== -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="ti-email"></i>
+                                <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right mailbox scale-up">
+                                <ul>
+                                    <li>
+                                        <div class="drop-title">Notifications</div>
+                                    </li>
+                                    <li>
+                                        <div class="message-center">
+                                            <!-- Message -->
+                                            <a href="javascript:void(0)">
+                                                <div class="btn btn-danger btn-circle"><i class="fa fa-link"></i></div>
+                                                <div class="mail-contnet">
+                                                    <h5>Luanch Admin</h5> <span class="mail-desc">Just see the my new admin!</span> <span class="time">9:30 AM</span>
+                                                </div>
+                                            </a>
+                                            <!-- Message -->
+                                            <a href="javascript:void(0)">
+                                                <div class="btn btn-success btn-circle"><i class="ti-calendar"></i></div>
+                                                <div class="mail-contnet">
+                                                    <h5>Event today</h5> <span class="mail-desc">Just a reminder that you have event</span> <span class="time">9:10 AM</span>
+                                                </div>
+                                            </a>
+                                            <!-- Message -->
+                                            <a href="javascript:void(0)">
+                                                <div class="btn btn-info btn-circle"><i class="ti-settings"></i></div>
+                                                <div class="mail-contnet">
+                                                    <h5>Settings</h5> <span class="mail-desc">You can customize this template as you want</span> <span class="time">9:08 AM</span>
+                                                </div>
+                                            </a>
+                                            <!-- Message -->
+                                            <a href="javascript:void(0)">
+                                                <div class="btn btn-primary btn-circle"><i class="ti-user"></i></div>
+                                                <div class="mail-contnet">
+                                                    <h5>Pavan kumar</h5> <span class="mail-desc">Just see the my admin!</span> <span class="time">9:02 AM</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link text-center link" href="javascript:void(0);"> <strong>Check all notifications</strong> <i class="fa fa-angle-right"></i> </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <!-- ============================================================== -->
+                        <!-- End Comment -->
+                        <!-- ============================================================== -->
+                        <!-- ============================================================== -->
+                        <!-- Messages -->
+                        <!-- ============================================================== -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" id="2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="icon-note"></i>
+                                <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
+                            </a>
+                            <div class="dropdown-menu mailbox dropdown-menu-right scale-up" aria-labelledby="2">
+                                <ul>
+                                    <li>
+                                        <div class="drop-title">You have 4 new messages</div>
+                                    </li>
+                                    <li>
+                                        <div class="message-center">
+                                            <!-- Message -->
+                                            <a href="javascript:void(0)">
+                                                <div class="user-img"> <img src="~/AdminFiles/Template/assets/images/users/1.jpg" alt="user" class="img-circle"> <span class="profile-status online pull-right"></span> </div>
+                                                <div class="mail-contnet">
+                                                    <h5>Pavan kumar</h5> <span class="mail-desc">Just see the my admin!</span> <span class="time">9:30 AM</span>
+                                                </div>
+                                            </a>
+                                            <!-- Message -->
+                                            <a href="javascript:void(0)">
+                                                <div class="user-img"> <img src="~/AdminFiles/Template/assets/images/users/2.jpg" alt="user" class="img-circle"> <span class="profile-status busy pull-right"></span> </div>
+                                                <div class="mail-contnet">
+                                                    <h5>Sonu Nigam</h5> <span class="mail-desc">I've sung a song! See you at</span> <span class="time">9:10 AM</span>
+                                                </div>
+                                            </a>
+                                            <!-- Message -->
+                                            <a href="javascript:void(0)">
+                                                <div class="user-img"> <img src="~/AdminFiles/Template/assets/images/users/3.jpg" alt="user" class="img-circle"> <span class="profile-status away pull-right"></span> </div>
+                                                <div class="mail-contnet">
+                                                    <h5>Arijit Sinh</h5> <span class="mail-desc">I am a singer!</span> <span class="time">9:08 AM</span>
+                                                </div>
+                                            </a>
+                                            <!-- Message -->
+                                            <a href="javascript:void(0)">
+                                                <div class="user-img"> <img src="~/AdminFiles/Template/assets/images/users/4.jpg" alt="user" class="img-circle"> <span class="profile-status offline pull-right"></span> </div>
+                                                <div class="mail-contnet">
+                                                    <h5>Pavan kumar</h5> <span class="mail-desc">Just see the my admin!</span> <span class="time">9:02 AM</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link text-center link" href="javascript:void(0);"> <strong>See all e-Mails</strong> <i class="fa fa-angle-right"></i> </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <!-- ============================================================== -->
+                        <!-- End Messages -->
+                        <!-- ============================================================== -->
+                        <!-- ============================================================== -->
+                        <!-- mega menu -->
+                        <!-- ============================================================== -->
+                        <li class="nav-item dropdown mega-dropdown">
+                            <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="ti-layout-width-default"></i></a>
+                            <div class="dropdown-menu animated bounceInDown">
+                                <ul class="mega-dropdown-menu row">
+                                    <li class="col-lg-3 col-xlg-2 m-b-30">
+                                        <h4 class="m-b-20">CAROUSEL</h4>
+                                        <!-- CAROUSEL -->
+                                        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                                            <div class="carousel-inner" role="listbox">
+                                                <div class="carousel-item active">
+                                                    <div class="container"> <img class="d-block img-fluid" src="~/AdminFiles/Template/assets/images/big/img1.jpg" alt="First slide"></div>
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <div class="container"><img class="d-block img-fluid" src="~/AdminFiles/Template/assets/images/big/img2.jpg" alt="Second slide"></div>
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <div class="container"><img class="d-block img-fluid" src="~/AdminFiles/Template/assets/images/big/img3.jpg" alt="Third slide"></div>
+                                                </div>
+                                            </div>
+                                            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev"> <span class="carousel-control-prev-icon" aria-hidden="true"></span> <span class="sr-only">Previous</span> </a>
+                                            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next"> <span class="carousel-control-next-icon" aria-hidden="true"></span> <span class="sr-only">Next</span> </a>
+                                        </div>
+                                        <!-- End CAROUSEL -->
+                                    </li>
+                                    <li class="col-lg-3 m-b-30">
+                                        <h4 class="m-b-20">ACCORDION</h4>
+                                        <!-- Accordian -->
+                                        <div class="accordion" id="accordionExample">
+                                            <div class="card m-b-0">
+                                                <div class="card-header bg-white p-0" id="headingOne">
+                                                    <h5 class="mb-0">
+                                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                            Collapsible Group Item #1
+                                                        </button>
+                                                    </h5>
+                                                </div>
+
+                                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                                    <div class="card-body">
+                                                        Anim pariatur cliche reprehenderit, enim eiusmod high.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card m-b-0">
+                                                <div class="card-header bg-white p-0" id="headingTwo">
+                                                    <h5 class="mb-0">
+                                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
+                                                                aria-controls="collapseTwo">
+                                                            Collapsible Group Item #2
+                                                        </button>
+                                                    </h5>
+                                                </div>
+                                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                                                    <div class="card-body">
+                                                        Anim pariatur cliche reprehenderit, enim eiusmod high.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card m-b-0">
+                                                <div class="card-header bg-white p-0" id="headingThree">
+                                                    <h5 class="mb-0">
+                                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
+                                                                aria-controls="collapseThree">
+                                                            Collapsible Group Item #3
+                                                        </button>
+                                                    </h5>
+                                                </div>
+                                                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                                                    <div class="card-body">
+                                                        Anim pariatur cliche reprehenderit, enim eiusmod high.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="col-lg-3  m-b-30">
+                                        <h4 class="m-b-20">CONTACT US</h4>
+                                        <!-- Contact -->
+                                        <form>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" id="exampleInputname1" placeholder="Enter Name">
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="email" class="form-control" placeholder="Enter email">
+                                            </div>
+                                            <div class="form-group">
+                                                <textarea class="form-control" id="exampleTextarea" rows="3" placeholder="Message"></textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-info">Submit</button>
+                                        </form>
+                                    </li>
+                                    <li class="col-lg-3 col-xlg-4 m-b-30">
+                                        <h4 class="m-b-20">List style</h4>
+                                        <!-- List style -->
+                                        <ul class="list-style-none">
+                                            <li><a href="javascript:void(0)"><i class="fa fa-check text-success"></i> You can give link</a></li>
+                                            <li><a href="javascript:void(0)"><i class="fa fa-check text-success"></i> Give link</a></li>
+                                            <li><a href="javascript:void(0)"><i class="fa fa-check text-success"></i> Another Give link</a></li>
+                                            <li><a href="javascript:void(0)"><i class="fa fa-check text-success"></i> Forth link</a></li>
+                                            <li><a href="javascript:void(0)"><i class="fa fa-check text-success"></i> Another fifth link</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <!-- ============================================================== -->
+                        <!-- End mega menu -->
+                        <!-- ============================================================== -->
+                        <!-- ============================================================== -->
+                        <!-- User Profile -->
+                        <!-- ============================================================== -->
+                        <li class="nav-item dropdown u-pro">
+                            <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="~/AdminFiles/Template/assets/images/users/1.jpg" alt="user" class=""> <span class="hidden-md-down">Mark &nbsp;<i class="fa fa-angle-down"></i></span> </a>
+                            <div class="dropdown-menu dropdown-menu-right animated flipInY">
+                                <!-- text-->
+                                <a href="javascript:void(0)" class="dropdown-item"><i class="ti-user"></i> My Profile</a>
+                                <!-- text-->
+                                <a href="javascript:void(0)" class="dropdown-item"><i class="ti-wallet"></i> My Balance</a>
+                                <!-- text-->
+                                <a href="javascript:void(0)" class="dropdown-item"><i class="ti-email"></i> Inbox</a>
+                                <!-- text-->
+                                <div class="dropdown-divider"></div>
+                                <!-- text-->
+                                <a href="javascript:void(0)" class="dropdown-item"><i class="ti-settings"></i> Account Setting</a>
+                                <!-- text-->
+                                <div class="dropdown-divider"></div>
+                                <!-- text-->
+                                <a href="pages-login.html" class="dropdown-item"><i class="fa fa-power-off"></i> Logout</a>
+                                <!-- text-->
+                            </div>
+                        </li>
+                        <!-- ============================================================== -->
+                        <!-- End User Profile -->
+                        <!-- ============================================================== -->
+                        <li class="nav-item right-side-toggle"> <a class="nav-link  waves-effect waves-light" href="javascript:void(0)"><i class="ti-settings"></i></a></li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <aside class="left-sidebar">
+            <!-- Sidebar scroll-->
+            <div class="scroll-sidebar">
+                <!-- Sidebar navigation-->
+                <nav class="sidebar-nav">
+                    <ul id="sidebarnav">
+                        <li class="user-pro">
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><img src="~/AdminFiles/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"><span class="hide-menu">Mark Jeckson</span></a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="javascript:void(0)"><i class="ti-user"></i> My Profile</a></li>
+                                <li><a href="javascript:void(0)"><i class="ti-wallet"></i> My Balance</a></li>
+                                <li><a href="javascript:void(0)"><i class="ti-email"></i> Inbox</a></li>
+                                <li><a href="javascript:void(0)"><i class="ti-settings"></i> Account Setting</a></li>
+                                <li><a href="javascript:void(0)"><i class="fa fa-power-off"></i> Logout</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-small-cap">--- PERSONAL</li>
+                        <li>
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="icon-speedometer"></i><span class="hide-menu">Dashboard <span class="badge badge-pill badge-cyan ml-auto">4</span></span></a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="index.html">Minimal </a></li>
+                                <li><a href="index2.html">Analytical</a></li>
+                                <li><a href="index3.html">Demographical</a></li>
+                                <li><a href="index4.html">Modern</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-small-cap">--- Kullanıcılar</li>
+                        <li>
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i><span class="user-pro">Kullanıcılar</span></a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="~/Admin/User/UserList">Liste</a></li>
+                                <li><a href="~/Admin/User/CreateUser">Ekle</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-small-cap">--- İçerik</li>
+                        <li>
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i><span class="user-pro">İçerik</span></a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="~/Admin/Content/Assay">Makale</a></li>
+                                <li><a href="~/Admin/Content/AssayConfirm">Makale Onay</a></li>
+                                <li><a href="~/Admin/Content/Question">Sınav</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-small-cap">--- Tanımlar</li>
+                        <li>
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i><span class="user-pro">Ayarlar</span></a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="~/Admin/Role/Index">Yetki</a></li>
+                                <li><a href="~/Admin/Definitions/Category">Kategori</a></li>
+                                <li><a href="~/Admin/Definitions/SchollManager">Eğitim</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-small-cap">--- SUPPORT</li>
+                        <li> <a class="waves-effect waves-dark" href="../documentation/documentation.html" aria-expanded="false"><i class="far fa-circle text-danger"></i><span class="hide-menu">Documentation</span></a></li>
+                        <li> <a class="waves-effect waves-dark" href="pages-login.html" aria-expanded="false"><i class="far fa-circle text-success"></i><span class="hide-menu">Log Out</span></a></li>
+                        <li> <a class="waves-effect waves-dark" href="pages-faq.html" aria-expanded="false"><i class="far fa-circle text-info"></i><span class="hide-menu">FAQs</span></a></li>
+                    </ul>
+                </nav>
+                <!-- End Sidebar navigation -->
+            </div>
+            <!-- End Sidebar scroll-->
+        </aside>
+        @RenderBody()
+        <div id="roxyCustomPanel2" style="display: none;">
+            <iframe src="/AdminFiles/lib/fileman/index.html?integration=custom&txtFieldId=roxyField" style="width:100%;height:100%" frameborder="0"></iframe>
+        </div>
+        <footer class="footer">
+            @DateTime.Now Öğrenci Kariyeri
+        </footer>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <script src="~/AdminFiles/Template/assets/node_modules/jquery/jquery-3.2.1.min.js"></script>
+    <script src="~/AdminFiles/Template/assets/node_modules/moment/moment.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+            integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
+            crossorigin="anonymous"></script>
+
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="~/AdminFiles/Template/assets/node_modules/popper/popper.min.js"></script>
+    <script src="~/AdminFiles/Template/assets/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- slimscrollbar scrollbar JavaScript -->
+    <script src="~/AdminFiles/Template/dist/js/perfect-scrollbar.jquery.min.js"></script>
+    <!--Wave Effects -->
+    <script src="~/AdminFiles/Template/dist/js/waves.js"></script>
+    <!--Menu sidebar -->
+    <script src="~/AdminFiles/Template/dist/js/sidebarmenu.js"></script>
+    <!--stickey kit -->
+    <script src="~/AdminFiles/Template/assets/node_modules/sticky-kit-master/dist/sticky-kit.min.js"></script>
+    <script src="~/AdminFiles/Template/assets/node_modules/sparkline/jquery.sparkline.min.js"></script>
+    <script src="~/AdminFiles/Template/assets/node_modules/clockpicker/dist/jquery-clockpicker.js"></script>
+    <!--Custom JavaScript -->
+    <script src="~/AdminFiles/Template/dist/js/custom.min.js"></script>
+    <!-- ============================================================== -->
+    <!-- This page plugins -->
+    <!-- ============================================================== -->
+    <script src="~/AdminFiles/Template/assets/node_modules/switchery/dist/switchery.min.js"></script>
+    <script src="~/AdminFiles/Template/assets/node_modules/select2/dist/js/select2.full.min.js" type="text/javascript"></script>
+    <script src="~/AdminFiles/Template/assets/node_modules/bootstrap-select/bootstrap-select.min.js" type="text/javascript"></script>
+    <script src="~/AdminFiles/Template/assets/node_modules/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="~/AdminFiles/Template/assets/node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
+    <script src="~/AdminFiles/Template/assets/node_modules/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.js" type="text/javascript"></script>
+    <script src="~/AdminFiles/Template/assets/node_modules/dff/dff.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/AdminFiles/Template/assets/node_modules/multiselect/js/jquery.multi-select.js"></script>
+    <script src="~/AdminFiles/Template/assets/node_modules/switchery/dist/switchery.min.js"></script>
+    <script src="~/AdminFiles/Template/ckeditor/ckeditor.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
+    <script src="~/AdminFiles/Scripts/toastr.min.js"></script>
+
+    <script>
+        $(function () {
+            // Switchery
+            var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+            $('.js-switch').each(function () {
+                new Switchery($(this)[0], $(this).data());
+            });
+            // For select 2
+            $(".select2").select2();
+            $('.selectpicker').selectpicker();
+            //Bootstrap-TouchSpin
+            $(".vertical-spin").TouchSpin({
+                verticalbuttons: true
+            });
+            var vspinTrue = $(".vertical-spin").TouchSpin({
+                verticalbuttons: true
+            });
+            if (vspinTrue) {
+                $('.vertical-spin').prev('.bootstrap-touchspin-prefix').remove();
+            }
+            $("input[name='tch1']").TouchSpin({
+                min: 0,
+                max: 100,
+                step: 0.1,
+                decimals: 2,
+                boostat: 5,
+                maxboostedstep: 10,
+                postfix: '%'
+            });
+            $("input[name='tch2']").TouchSpin({
+                min: -1000000000,
+                max: 1000000000,
+                stepinterval: 50,
+                maxboostedstep: 10000000,
+                prefix: '$'
+            });
+            $("input[name='tch3']").TouchSpin();
+            $("input[name='tch3_22']").TouchSpin({
+                initval: 40
+            });
+            $("input[name='tch5']").TouchSpin({
+                prefix: "pre",
+                postfix: "post"
+            });
+            // For multiselect
+            $('#pre-selected-options').multiSelect();
+            $('#optgroup').multiSelect({
+                selectableOptgroup: true
+            });
+            $('#public-methods').multiSelect();
+            $('#select-all').click(function () {
+                $('#public-methods').multiSelect('select_all');
+                return false;
+            });
+            $('#deselect-all').click(function () {
+                $('#public-methods').multiSelect('deselect_all');
+                return false;
+            });
+            $('#refresh').on('click', function () {
+                $('#public-methods').multiSelect('refresh');
+                return false;
+            });
+            $('#add-option').on('click', function () {
+                $('#public-methods').multiSelect('addOption', {
+                    value: 42,
+                    text: 'test 42',
+                    index: 0
+                });
+                return false;
+            });
+            $(".ajax").select2({
+                ajax: {
+                    url: "https://api.github.com/search/repositories",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term, // search term
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        // parse the results into the format expected by Select2
+                        // since we are using custom formatting functions we do not need to
+                        // alter the remote JSON data, except to indicate that infinite
+                        // scrolling can be used
+                        params.page = params.page || 1;
+                        return {
+                            results: data.items,
+                            pagination: {
+                                more: (params.page * 30) < data.total_count
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function (markup) {
+                    return markup;
+                }, // let our custom formatter work
+                minimumInputLength: 1,
+                //templateResult: formatRepo, // omitted for brevity, see the source of this page
+                //templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+            });
+        });
+    </script>
+    @RenderSection("Scripts", false)
+</body>
+
+</html>
+
+
+
+<script src="~/AdminFiles/Template/assets/node_modules/dropify/dist/js/dropify.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script>
+    $(document).ready(function () {
+        // Basic
+        $('.dropify').dropify();
+
+        // Translated
+        $('.dropify-fr').dropify({
+            messages: {
+                default: 'Glissez-déposez un fichier ici ou cliquez',
+                replace: 'Glissez-déposez un fichier ou cliquez pour remplacer',
+                remove: 'Supprimer',
+                error: 'Désolé, le fichier trop volumineux'
+            }
+        });
+
+        // Used events
+        var drEvent = $('#input-file-events').dropify();
+
+        drEvent.on('dropify.beforeClear', function (event, element) {
+            return confirm("Do you really want to delete \"" + element.file.name + "\" ?");
+        });
+
+        drEvent.on('dropify.afterClear', function (event, element) {
+            alert('File deleted');
+        });
+
+        drEvent.on('dropify.errors', function (event, element) {
+            console.log('Has Errors');
+        });
+
+        var drDestroy = $('#input-file-to-destroy').dropify();
+        drDestroy = drDestroy.data('dropify')
+        $('#toggleDropify').on('click', function (e) {
+            e.preventDefault();
+            if (drDestroy.isDropified()) {
+                drDestroy.destroy();
+            } else {
+                drDestroy.init();
+            }
+        })
+    });
+</script>
+<script src="~/AdminFiles/Utilities/Helper.js"></script>
+
+
+<style type="text/css">
+    body {
+        font-family: Arial;
+        font-size: 10pt;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .modalload {
+        position: fixed;
+        z-index: 999;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        background-color: Black;
+        filter: alpha(opacity=60);
+        opacity: 0.6;
+        -moz-opacity: 0.8;
+    }
+
+    .center {
+        z-index: 1000;
+        margin: 300px auto;
+        padding: 10px;
+        width: 130px;
+        background-color: White;
+        border-radius: 10px;
+        filter: alpha(opacity=100);
+        opacity: 1;
+        -moz-opacity: 1;
+    }
+
+        .center img {
+            height: 128px;
+            width: 128px;
+        }
+</style>

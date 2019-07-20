@@ -3,7 +3,7 @@ var _link = '';
 
 
 if (prodType === "d") {
-    _link = "https://localhost:44354/api";
+    _link = "https://localhost:44308/api";
 }
 
 var ContentType_ = "application/x-www-form-urlencoded; charset=utf-8;application/json";
@@ -26,7 +26,7 @@ function errorData(value, type) {
 }
 
 function shortMessage(value, type) {
-    if (type == "s") {
+    if (type === "s") {
         toastr.success(value, "Başarılı!", {
             "fadeIn": 100,
             "fadeOut": 100,
@@ -34,7 +34,7 @@ function shortMessage(value, type) {
             "extendedTimeOut": 1000
         });
     }
-    else if (type == "w") {
+    else if (type === "w") {
         toastr.warning(value, "Uyarı", {
             "fadeIn": 100,
             "fadeOut": 100,
@@ -42,7 +42,7 @@ function shortMessage(value, type) {
             "extendedTimeOut": 1000
         });
     }
-    else if (type == "i") {
+    else if (type === "i") {
         toastr.info(value, "Bilgi", {
             "fadeIn": 100,
             "fadeOut": 100,
@@ -50,7 +50,7 @@ function shortMessage(value, type) {
             "extendedTimeOut": 1000
         });
     }
-    else if (type == "e") {
+    else if (type === "e") {
         toastr.error(value, "Hata", {
             "fadeIn": 100,
             "fadeOut": 100,
@@ -75,7 +75,7 @@ function canNotBeEmpty(value, type) {
 }
 
 function messageShow(msg) {
-    if (msg.length == 0) {
+    if (msg.length === 0) {
         swal(msg);
     } else {
         swal(msg[0]);
@@ -203,7 +203,7 @@ function getValuefromLocalStorage(value) {
 }
 
 function isNull(value) {
-    return (value == null && value == undefined) ? true : false;
+    return (value === null && value === undefined) ? true : false;
 }
 
 function fC_(s, p, n) {
@@ -220,13 +220,13 @@ function paginationLoad(x, x1) {
     x.setItemsPerPage = function (num) {
         x.itemsPerPage = num;
         x.currentPage = 1; //reset to first page
-    }
+    };
 }
 
 
 function TabShow(x_, y_) {
     for (var i = 1; i <= x_; i++) {
-        if (i == y_) {
+        if (i === y_) {
             $("#cardTab" + i).show();
         } else {
             $("#cardTab" + i).hide();
@@ -247,7 +247,7 @@ function setFieldValues(e, n, a) {
     if (!emptyControl(e)) {
         messageShow('Depositor için gerekli ekran dil ayarları yüklenemedi');
     } else {
-        if (Loading(!0), isOnline()) for (var s = 0; s < e.length; s++)for (var t = 0; t < e.length; t++)e[s].ID == e[t].ID && (n[a][e[t].CODE] = e[t].DESCRIPTION, n[a][e[t].CODE + "_M"] = e[t].ISMANDATORY, n[a][e[t].CODE + "_V"] = e[t].ISVISILE); else shortMessage("İnternet bağlantısı yok!", "w"); Loading(!1)
+        if (Loading(!0), isOnline()) for (var s = 0; s < e.length; s++)for (var t = 0; t < e.length; t++)e[s].ID === e[t].ID && (n[a][e[t].CODE] = e[t].DESCRIPTION, n[a][e[t].CODE + "_M"] = e[t].ISMANDATORY, n[a][e[t].CODE + "_V"] = e[t].ISVISILE); else shortMessage("İnternet bağlantısı yok!", "w"); Loading(!1)
     }
 }
 
@@ -260,9 +260,9 @@ function setFieldValues(e, n, a) {
 function ShowMessage(type_, msg_, head_) {
     let type = "";
 
-    if (type_ == true) {
+    if (type_ === true) {
         type = "success";
-    } else if (type_ == false) {
+    } else if (type_ === false) {
         type = "error";
     } else {
         type = "info";
@@ -273,7 +273,7 @@ function ShowMessage(type_, msg_, head_) {
 
 function emptyControl(value_) {
 
-    if (value_ != 'undefined' && value_ != null && value_ != '0' && value_ != "") {
+    if (value_ !== 'undefined' && value_ !== null && value_ !== '0' && value_ !== "") {
         return true;
     } else {
         return false;
@@ -283,31 +283,11 @@ var defaultPage = "data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2264%22%20
 
 
 
-function showModal(value) {
-    $("#" + value).modal("show");
-}
 
-
-function closeModal(value) {
-    $("#" + value).modal("hide");
-}
 
 function openCustomRoxy2(id) {
     $(id).dialog({ modal: true, width: 875, height: 600 });
 }
 function closeCustomRoxy2(id) {
     $(id).dialog('close');
-}
-
-function paginationLoad(x, x1) {
-    x.viewby = 10;
-    x.totalItems = x1;
-    x.currentPage = 1;
-    x.itemsPerPage = x.viewby;
-    x.maxSize = 5; //Number of pager buttons to show
-
-    x.setItemsPerPage = function (num) {
-        x.itemsPerPage = num;
-        x.currentPage = 1; //reset to first page
-    }
 }

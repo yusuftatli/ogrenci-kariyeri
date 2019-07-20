@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SCA.Entity.DTO;
-using SCA.Services.Interface.InterfaceUI;
+using SCA.Services.Interface;
 
 namespace SCA.UI.Controllers
 {

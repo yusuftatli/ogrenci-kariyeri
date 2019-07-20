@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SCA.Entity.Model;
-using SCA.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -31,7 +30,7 @@ namespace SCA.DataAccess.Context
         #region Categories
         public DbSet<Category> Category { get; set; }
         public DbSet<CategoryRelation> CategoryRelation { get; set; }
-        
+
         #endregion
 
         #region Roles
@@ -55,6 +54,12 @@ namespace SCA.DataAccess.Context
         #region Menus
         public DbSet<MenuList> MenuList { get; set; }
         public DbSet<MenuRelationWithRole> MenuRelationWithUser { get; set; }
+        #endregion
+
+        #region Comments
+
+        public DbSet<Comments> Comments { get; set; }
+
         #endregion
 
     }

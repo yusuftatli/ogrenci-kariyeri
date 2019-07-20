@@ -2,6 +2,7 @@
 using SCA.Common.Resource;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
+using SCA.Entity.Enums;
 using SCA.Entity.Model;
 using SCA.Repository.Repo;
 using SCA.Repository.UoW;
@@ -55,6 +56,72 @@ namespace SCA.Services
             return listData;
         }
 
+        public async Task CreateUserLog(UserLogDto dto)
+        {
+            await Task.Run(() =>
+            {
+                _userLogRepo.Add(_mapper.Map<UserLog>(dto));
+                _unitOfWork.SaveChanges();
+            });
+
+        }
+
+        public async Task<ServiceResult> CreateUserMobil(UsersDTO dto)
+        {
+            if (!UserControl(dto.EmailAddress))
+            {
+                Result.ReturnAsFail(AlertResource.EmailAlreadyExsist, null);
+            }
+
+            //if (dto.EmailAddress.Equals(null) && dto.EmailAddress == "")
+            //{
+            //    Result.ReturnAsFail("Ad Boş Geçilemez", null);
+            //}
+
+            if (dto.Equals(null))
+            {
+                Result.ReturnAsFail(AlertResource.NoChanges, null);
+            }
+
+            //if (dto.Name.Equals(null) && dto.Name == "")
+            //{
+            //    Result.ReturnAsFail("Ad Boş Geçilemez", null);
+            //}
+
+            //if (dto.Surname.Equals(null) && dto.Surname == "")
+            //{
+            //    Result.ReturnAsFail("Ad Boş Geçilemez", null);
+            //}
+
+            if (dto.IsEmailSend)
+            {
+                await _sender.SendEmail();
+            }
+
+            if (dto.IsPhoneSend)
+            {
+                await _sender.SendMessage("");
+            }
+
+            if (!string.IsNullOrEmpty(dto.ImageData))
+            {
+                //_pictureManager.SaveImage(dto.ImageData, dto.Name + "-" + dto.Surname);
+            }
+
+            dto.IsActive = true;
+            dto.BanCount = 0;
+            dto.EnrollPlatformTypeId = PlatformType.Mobil;
+            dto.HighSchoolTypeId = (dto.HighSchoolTypeId == 0) ? null : dto.HighSchoolTypeId;
+            dto.UniversityId = (dto.UniversityId == 0) ? null : dto.UniversityId;
+            dto.FacultyId = (dto.FacultyId == 0) ? null : dto.FacultyId;
+            dto.DepartmentId = (dto.DepartmentId == 0) ? null : dto.DepartmentId;
+            //dto.Password = Guid.NewGuid().ToString();
+            _userRepo.Add(_mapper.Map<Users>(dto));
+            var res = _unitOfWork.SaveChanges();
+            return Result.ReturnAsSuccess("Kayıt işlemi Başarılı", res);
+        }
+
+
         public async Task<ServiceResult> CreateUser(UsersDTO dto)
         {
             if (!UserControl(dto.EmailAddress))
@@ -97,6 +164,9 @@ namespace SCA.Services
                 //_pictureManager.SaveImage(dto.ImageData, dto.Name + "-" + dto.Surname);
             }
 
+            dto.IsActive = true;
+            dto.BanCount = 0;
+            dto.EnrollPlatformTypeId = PlatformType.Web;
             dto.HighSchoolTypeId = (dto.HighSchoolTypeId == 0) ? null : dto.HighSchoolTypeId;
             dto.UniversityId = (dto.UniversityId == 0) ? null : dto.UniversityId;
             dto.FacultyId = (dto.FacultyId == 0) ? null : dto.FacultyId;
@@ -124,13 +194,6 @@ namespace SCA.Services
             return null;
         }
 
-        public async Task UserLog(long userId)
-        {
-            UserLogDto data = new UserLogDto();
-            data.UserId = userId;
-            data.EnteranceDate = DateTime.Now;
-            _userLogRepo.Add(_mapper.Map<UserLog>(data));
-        }
         public bool UserControl(string emailAddress)
         {
             bool _res = false;
@@ -142,5 +205,20 @@ namespace SCA.Services
             }
             return _res;
         }
+
+        /// <summary>
+        /// üye durumunu Aktif/pasif yapar
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<ServiceResult> UpdateUserStatu(long id, bool value)
+        {
+            var data = _userRepo.Get(x => x.Id == id);
+            data.IsActive = value;
+            _userRepo.Update(_mapper.Map<Users>(data));
+            _unitOfWork.SaveChanges();
+            return Result.ReturnAsSuccess();
+        }
+
     }
 }

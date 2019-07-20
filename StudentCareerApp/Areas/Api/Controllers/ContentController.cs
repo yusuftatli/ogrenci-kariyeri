@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
 using SCA.Entity.Enums;
+using SCA.Services;
 using SCA.Services.Interface;
 
 namespace Armut.Web.UI.Controllers

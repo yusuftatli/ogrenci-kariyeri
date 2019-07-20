@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
+using SCA.Services;
 using SCA.Services.Interface;
 
 namespace Armut.Web.UI.Controllers
@@ -39,6 +40,12 @@ namespace Armut.Web.UI.Controllers
         public async Task<ActionResult<ServiceResult>> DeleteUser(long userId)
         {
             return await _userManager.DeleteUser(userId);
+        }
+
+        [HttpPost("update-user-statu")]
+        public async Task<ServiceResult> UpdateUserStatu(long id, bool value)
+        {
+            return await _userManager.UpdateUserStatu(id, value);
         }
     }
 }

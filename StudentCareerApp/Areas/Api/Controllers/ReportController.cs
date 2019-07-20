@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.UI.V3.Pages.Account.Internal;
 using Microsoft.AspNetCore.Mvc;
 using SCA.Common.Result;
+using SCA.Services;
 using SCA.Services.Interface;
 
 namespace Armut.Web.UI.Controllers

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SCA.Entity.DTO;
-using SCA.Services.Interface.InterfaceUI;
+using SCA.Services.Interface;
 
 namespace SCA.UI.Controllers
 {
@@ -19,7 +19,7 @@ namespace SCA.UI.Controllers
         #endregion
 
         #region VIEWS
-        [Route("Anasayfa"), HttpGet]
+        [Route("Home/Index"), HttpGet]
         public IActionResult Index()
         {
             var res = _b2cManager.GetContentsForHomePage().Result;

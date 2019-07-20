@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -23,17 +24,16 @@ using SCA.Entity.Model;
 using SCA.Repository.UoW;
 using SCA.Services;
 using SCA.Services.Interface;
-using SCA.Services.Interface.InterfaceUI;
 
 namespace StudentCareerApp
 {
     public class Startup
     {
-        public IConfiguration configuration { get; }
+        public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration)
         {
-            this.configuration = configuration;
+            this.Configuration = configuration;
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -52,22 +52,20 @@ namespace StudentCareerApp
             #endregion
 
             #region Authentication
-            services.AddAuthentication(options =>
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
             {
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = "https://localhost:44309/",
-                    ValidAudience = "https://localhost:44309/",
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"))
-                };
-            });
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = Configuration["Jwt:Issuer"],
+                ValidAudience = Configuration["Jwt:Issuer"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+            };
+        });
             #endregion
 
             #region Configurations
@@ -106,6 +104,7 @@ namespace StudentCareerApp
             services.AddTransient<IMenuManager, MenuManager>();
             services.AddTransient<IAnalysisManager, AnalysisManager>();
             services.AddTransient<IB2CManagerUI, B2CManagerUI>();
+            services.AddTransient<IUserValidation, UserValidation>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             #endregion
@@ -142,7 +141,6 @@ namespace StudentCareerApp
 
                 cfg.CreateMap<Users, UsersDTO>().ReverseMap();
                 cfg.CreateMap<UserLog, UserLogDto>().ReverseMap();
-                cfg.CreateMap<UserCreateAnlitic, UserCreateAnliticDto>().ReverseMap();
                 cfg.CreateMap<Users, UserShortInforDto>().ReverseMap();
 
                 #endregion
@@ -215,6 +213,7 @@ namespace StudentCareerApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+           
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -259,7 +258,7 @@ namespace StudentCareerApp
                 RequestPath = new PathString("/AdminFiles")
             });
 
-
+            app.UseAuthentication();
             app.UseSession();
 
             app.UseCors("AllowAll");
@@ -271,7 +270,8 @@ namespace StudentCareerApp
                     template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Index}");
+
             });
 
         }

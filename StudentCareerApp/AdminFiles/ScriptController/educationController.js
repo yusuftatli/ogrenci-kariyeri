@@ -54,7 +54,6 @@ app.controller('EducationManagerController', function ($scope, $http, $filter) {
             }
             Loading(false);
         });
-        $scope.$apply();
     };
 
     $scope.getClassTypeList = function () {
@@ -454,7 +453,7 @@ app.controller('EducationManagerController', function ($scope, $http, $filter) {
     $scope.getCities = function () {
         Loading(true);
         $.ajax({
-            url: _link + "/Address/address-getcities",
+            url: _link + "/Address/GetCities",
             type: "GET",
             dataType: Json_,
             contentType: ContentType_,

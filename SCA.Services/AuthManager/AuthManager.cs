@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Text;
@@ -22,39 +23,72 @@ namespace SCA.Services
     public class AuthManager : IAuthManager
     {
         private readonly IMapper _mapper;
+        private readonly IUserValidation _userValidation;
         private ISender _sender;
         private readonly IUnitofWork _unitOfWork;
         private IGenericRepository<Users> _userRepo;
         IUserManager _userManager;
         IAnalysisManager _analysisManager;
 
-        public AuthManager(IUnitofWork unitOfWork, IMapper mapper, ISender sender, IUserManager userManager, IAnalysisManager analysisManager)
+        public AuthManager(IUnitofWork unitOfWork,
+            IMapper mapper,
+            ISender sender,
+            IUserManager userManager,
+            IAnalysisManager analysisManager,
+            IUserValidation userValidation)
         {
             _mapper = mapper;
             _sender = sender;
             _unitOfWork = unitOfWork;
             _analysisManager = analysisManager;
             _userManager = userManager;
-            _userRepo = _unitOfWork.GetRepository<SCA.Entity.Model.Users>();
+            _userValidation = userValidation;
+            _userRepo = _unitOfWork.GetRepository<Users>();
         }
 
-        public async Task<ServiceResult> UserLogin(LoginModel dto)
+        public async Task<ServiceResult> UserLogin(LoginDto dto)
         {
+            ServiceResult _res = new ServiceResult();
+
             if (dto.Equals(null))
             {
                 return Result.ReturnAsFail(null, AlertResource.NoChanges);
             }
-            var loginData = _userRepo.Get(x => x.EmailAddress == dto.username && x.Password == dto.password);
 
-            SCA.Entity.Model.Users data = _mapper.Map<SCA.Entity.Model.Users>(loginData);
+            if (_userValidation.UserLoginValidation(dto).ResultCode != HttpStatusCode.OK)
+            {
+                return _res;
+            }
+
+            var loginData = _mapper.Map<UsersDTO>(_userRepo.Get(x => x.EmailAddress == dto.username && x.Password == dto.password));
+
+            if (_userValidation.UserDataValidation(loginData).ResultCode != HttpStatusCode.OK)
+            {
+                return _res;
+            }
+
+            if (loginData.IsActive == false)
+            {
+                return Result.ReturnAsFail(message: "Sisteme Giriş Yetkiniz Bulunmamaktadır.", null);
+            }
+
+            Users data = _mapper.Map<Users>(loginData);
 
             if (loginData != null)
             {
                 var requestAt = DateTime.Now;
                 var expiresIn = requestAt.Add(TimeSpan.FromMinutes(30));
                 var token = GenerateToken(data, expiresIn);
-                await _userManager.UserLog(loginData.Id);
-                await _analysisManager.LogUserCreateanalitic(PlatformType.Web);
+
+
+                UserLogDto dtoLog = new UserLogDto()
+                {
+                    UserId = loginData.Id,
+                    PlatformTypeId = PlatformType.Web,
+                    EnteraceDate = DateTime.Now
+                };
+
+                await _userManager.CreateUserLog(dtoLog);
                 return Result.ReturnAsFail(AlertResource.SuccessfulOperation, loginData);
             }
             else
@@ -97,9 +131,12 @@ namespace SCA.Services
             ClaimsIdentity identity = new ClaimsIdentity(
                 new GenericIdentity(user.EmailAddress, "token"),
                 new[] {
-                 new Claim("Id", user.EmailAddress.ToString())
+                 new Claim("UserId", user.Id.ToString()),
+                 new Claim("NameSurname", user.Name+" "+user.Surname),
+                 new Claim("EmailAddress", user.EmailAddress.ToString()),
+                 new Claim("RoleType", user.RoleTypeId.ToString())
                 }
-            );
+            ); ;
 
             var keybit = Encoding.ASCII.GetBytes("55D9BF4F187EF3F961FC87C0435ADBBC314A5AEA9841E5B0C5090BE25414016A");
             var signkey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(keybit);

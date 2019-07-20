@@ -3,7 +3,7 @@ using SCA.Entity.DTO;
 using SCA.Entity.Model;
 using SCA.Repository.Repo;
 using SCA.Repository.UoW;
-using SCA.Services.Interface.InterfaceUI;
+using SCA.Services.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;

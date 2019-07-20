@@ -17,7 +17,6 @@ namespace SCA.Services
     {
         private readonly IMapper _mapper;
         private readonly IUnitofWork _unitOfWork;
-        private IGenericRepository<UserCreateAnlitic> _userCreateAnliticRepo;
         private IGenericRepository<ReadCountOfTestAndContent> _readContentRepo;
 
         public AnalysisManager(IUnitofWork unitOfWork, IMapper mapper)
@@ -25,47 +24,6 @@ namespace SCA.Services
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _readContentRepo = unitOfWork.GetRepository<ReadCountOfTestAndContent>();
-            _userCreateAnliticRepo = unitOfWork.GetRepository<UserCreateAnlitic>();
-        }
-
-        public async Task<ServiceResult> GetUserCreateAnlitic()
-        {
-            var data = _mapper.Map<List<UserCreateAnliticDto>>(_userCreateAnliticRepo.GetAll());
-            return Result.ReturnAsSuccess(null, data);
-        }
-
-        public async Task<ServiceResult> LogUserCreateanalitic(PlatformType platformType)
-        {
-            var data = _userCreateAnliticRepo.Get(x => x.MethodTypeId == MethodType.LoginCreate);
-            if (data.Equals(null))
-            {
-                UserCreateAnlitic dto = new UserCreateAnlitic();
-                dto.MethodTypeId = MethodType.LoginCreate;
-                dto.WebCount = 1;
-                if (platformType == PlatformType.Mobil)
-                {
-                    dto.MobilCount = 1;
-                }
-                else
-                {
-                    dto.WebCount = 1;
-                }
-                _userCreateAnliticRepo.Add(_mapper.Map<UserCreateAnlitic>(dto));
-            }
-            else
-            {
-                if (platformType == PlatformType.Mobil)
-                {
-                    data.MobilCount = data.MobilCount + 1;
-                }
-                else
-                {
-                    data.WebCount = data.WebCount + 1;
-                }
-                _userCreateAnliticRepo.Update(_mapper.Map<UserCreateAnlitic>(data));
-            }
-
-            return _unitOfWork.SaveChanges();
         }
 
         public async Task<ServiceResult> LogReadTestOrContent(ReadType readType, PlatformType platformType, long id)

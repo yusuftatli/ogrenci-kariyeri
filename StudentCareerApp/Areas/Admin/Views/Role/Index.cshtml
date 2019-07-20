@@ -1,9 +1,7 @@
-﻿
-@{
-    ViewBag.Title = "Rol - Yetki Yönetimi";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+﻿@{
+    ViewBag.Title = "Rol Yetki Yönetimi";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
-
 
 <head>
     <link href="~/AdminFiles/Template/assets/node_modules/switchery/dist/switchery.css" rel="stylesheet" />
@@ -52,7 +50,7 @@
                         </ul>
                         <div class="tab-content tabcontent-border">
 
-                            <div  class="tab-pane active" id="home" role="tabpanel">
+                            <div class="tab-pane active" id="home" role="tabpanel">
                                 <div class="col-lg-6">
 
                                     <div class="row">
@@ -73,10 +71,10 @@
                                                                 <tr ng-repeat="x in roleTypeList">
                                                                     <td ng-show="false" ng-bind="x.id"></td>
                                                                     <td ng-bind="x.description"></td>
-                                                                    <td><span ng-class="(x.isActive==='false')?'label label-success':'label label-warning'" ng-bind="(x.isActive==='false')?'Aktif':'Pasif'"></span> </td>
+                                                                    <td><span ng-class="(x.isActive=='false')?'label label-success':'label label-warning'" ng-bind="(x.isActive=='false')?'Pasif':'Aktif'"></span> </td>
                                                                     <td>
                                                                         <span ng-click="showRoleType(x)" data-toggle="modal" data-target="#addRoleModal">
-                                                                            <img height="20" width="20" src="~/Template/assets/images/chose.png" />
+                                                                            <img height="20" width="20" src="~/AdminFiles/Template/assets/images/chose.png" />
                                                                         </span>
                                                                     </td>
                                                                 </tr>
@@ -152,28 +150,28 @@
                             <ul class="m-t-20 chatonline">
                                 <li><b>Chat option</b></li>
                                 <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"> <span>Varun Dhavan <small class="text-success">online</small></span></a>
+                                    <a href="javascript:void(0)"><img src="~/AdminFiles/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"> <span>Varun Dhavan <small class="text-success">online</small></span></a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/2.jpg" alt="user-img" class="img-circle"> <span>Genelia Deshmukh <small class="text-warning">Away</small></span></a>
+                                    <a href="javascript:void(0)"><img src="~/AdminFiles/Template/assets/images/users/2.jpg" alt="user-img" class="img-circle"> <span>Genelia Deshmukh <small class="text-warning">Away</small></span></a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/3.jpg" alt="user-img" class="img-circle"> <span>Ritesh Deshmukh <small class="text-danger">Busy</small></span></a>
+                                    <a href="javascript:void(0)"><img src="~/AdminFiles/Template/assets/images/users/3.jpg" alt="user-img" class="img-circle"> <span>Ritesh Deshmukh <small class="text-danger">Busy</small></span></a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/4.jpg" alt="user-img" class="img-circle"> <span>Arijit Sinh <small class="text-muted">Offline</small></span></a>
+                                    <a href="javascript:void(0)"><img src="~/AdminFiles/Template/assets/images/users/4.jpg" alt="user-img" class="img-circle"> <span>Arijit Sinh <small class="text-muted">Offline</small></span></a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/5.jpg" alt="user-img" class="img-circle"> <span>Govinda Star <small class="text-success">online</small></span></a>
+                                    <a href="javascript:void(0)"><img src="~/AdminFiles/Template/assets/images/users/5.jpg" alt="user-img" class="img-circle"> <span>Govinda Star <small class="text-success">online</small></span></a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/6.jpg" alt="user-img" class="img-circle"> <span>John Abraham<small class="text-success">online</small></span></a>
+                                    <a href="javascript:void(0)"><img src="~/AdminFiles/Template/assets/images/users/6.jpg" alt="user-img" class="img-circle"> <span>John Abraham<small class="text-success">online</small></span></a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/7.jpg" alt="user-img" class="img-circle"> <span>Hritik Roshan<small class="text-success">online</small></span></a>
+                                    <a href="javascript:void(0)"><img src="~/AdminFiles/Template/assets/images/users/7.jpg" alt="user-img" class="img-circle"> <span>Hritik Roshan<small class="text-success">online</small></span></a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/8.jpg" alt="user-img" class="img-circle"> <span>Pwandeep rajan <small class="text-success">online</small></span></a>
+                                    <a href="javascript:void(0)"><img src="~/AdminFiles/Template/assets/images/users/8.jpg" alt="user-img" class="img-circle"> <span>Pwandeep rajan <small class="text-success">online</small></span></a>
                                 </li>
                             </ul>
                         </div>
