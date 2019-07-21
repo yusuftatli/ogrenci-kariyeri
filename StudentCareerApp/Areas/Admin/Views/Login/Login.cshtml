@@ -28,27 +28,27 @@
         <div class="login-register" style="background-image:url(../../AdminFiles/Template/assets/images/background/login-register.jpg);">
             <div class="login-box card">
                 <div class="card-body">
-                    <div id="loginform">
+                    <div id="loginform" >
                         <h3 class="text-center m-b-20">Giriş Yap</h3>
                         <div class="form-group ">
                             <div class="col-xs-12">
-                                <input class="form-control" type="text" ng-model="userModel.username" id="username" required="" placeholder="Kullanıc Email">
+                                <input ng-disabled="showSaveLoading" class="form-control" type="text" ng-model="userModel.username" id="username" required="" placeholder="Kullanıc Email">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-xs-12">
-                                <input class="form-control" type="password" ng-model="userModel.password" id="password" required="" placeholder="Kullanıcı Şifre">
+                                <input ng-disabled="showSaveLoading" class="form-control" type="password" ng-model="userModel.password" id="password" required="" placeholder="Kullanıcı Şifre">
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <div class="d-flex no-block align-items-center">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" ng-model="userModel.RememberMe" id="customCheck1">
+                                        <input ng-disabled="showSaveLoading" type="checkbox" class="custom-control-input" ng-model="userModel.RememberMe" id="customCheck1">
                                         <label class="custom-control-label" for="customCheck1">Beni Hatırla</label>
                                     </div>
-                                    <div class="ml-auto">
-                                        <a href="javascript:void(0)" id="to-recover" class="text-muted"><i class="fas fa-lock m-r-5"></i> Şifremi Unuttum</a>
+                                    <div   class="ml-auto">
+                                        <button ng-disabled="showSaveLoading" class="btn btn-block btn-lg btn-info btn-rounded">Şifremi Unuttum</button>
                                     </div>
                                 </div>
                             </div>
@@ -63,15 +63,15 @@
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 m-t-10 text-center">
                                 @*<div class="social">
-                                    <button class="btn  btn-facebook" data-toggle="tooltip" title="Login with Facebook"> <i aria-hidden="true" class="fab fa-facebook-f"></i> </button>
-                                    <button class="btn btn-googleplus" data-toggle="tooltip" title="Login with Google"> <i aria-hidden="true" class="fab fa-google-plus-g"></i> </button>
-                                </div>*@
+                                        <button class="btn  btn-facebook" data-toggle="tooltip" title="Login with Facebook"> <i aria-hidden="true" class="fab fa-facebook-f"></i> </button>
+                                        <button class="btn btn-googleplus" data-toggle="tooltip" title="Login with Google"> <i aria-hidden="true" class="fab fa-google-plus-g"></i> </button>
+                                    </div>*@
                             </div>
                         </div>
                         <div class="form-group m-b-0">
                             @*<div class="col-sm-12 text-center">
-                                Don't have an account? <a href="pages-register.html" class="text-info m-l-5"><b>Sign Up</b></a>
-                            </div>*@
+                                    Don't have an account? <a href="pages-register.html" class="text-info m-l-5"><b>Sign Up</b></a>
+                                </div>*@
                         </div>
                     </div>
                     <div id="recoverform">
@@ -155,7 +155,25 @@
             function postLogin() {
                 $http(userPostModel()).then(function (res) {
                     if (res.data.resultCode == 200) {
+                        localStorage.setItem("token", res.data.data.token);
+                        localStorage.setItem("nameSurname", res.data.data.name + " " + res.data.data.surname);
+                        localStorage.setItem("roleTypeId", res.data.data.roleTypeId);
+
+                        toastr.warning(res.data.message, "Bilgi", {
+                            "fadeIn": 100,
+                            "fadeOut": 100,
+                            "timeOut": 3000,
+                            "extendedTimeOut": 1000
+                        });
+                    } else if (res.data.resultCode == 400) {
+                        toastr.warning(res.data.message, "Hata", {
+                            "fadeIn": 100,
+                            "fadeOut": 100,
+                            "timeOut": 3000,
+                            "extendedTimeOut": 1000
+                        });
                     }
+                    $scope.showSaveLoading = false;
                 });
             }
 

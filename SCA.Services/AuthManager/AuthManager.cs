@@ -28,7 +28,6 @@ namespace SCA.Services
         private readonly IUnitofWork _unitOfWork;
         private IGenericRepository<Users> _userRepo;
         IUserManager _userManager;
-        IAnalysisManager _analysisManager;
 
         public AuthManager(IUnitofWork unitOfWork,
             IMapper mapper,
@@ -40,7 +39,6 @@ namespace SCA.Services
             _mapper = mapper;
             _sender = sender;
             _unitOfWork = unitOfWork;
-            _analysisManager = analysisManager;
             _userManager = userManager;
             _userValidation = userValidation;
             _userRepo = _unitOfWork.GetRepository<Users>();
@@ -55,47 +53,34 @@ namespace SCA.Services
                 return Result.ReturnAsFail(null, AlertResource.NoChanges);
             }
 
-            if (_userValidation.UserLoginValidation(dto).ResultCode != HttpStatusCode.OK)
+            _res = _userValidation.UserLoginValidation(dto);
+            if (_res.ResultCode != HttpStatusCode.OK)
             {
                 return _res;
             }
 
             var loginData = _mapper.Map<UsersDTO>(_userRepo.Get(x => x.EmailAddress == dto.username && x.Password == dto.password));
 
-            if (_userValidation.UserDataValidation(loginData).ResultCode != HttpStatusCode.OK)
+            _res = _userValidation.UserDataValidation(loginData);
+            if (_res.ResultCode != HttpStatusCode.OK)
             {
                 return _res;
             }
 
-            if (loginData.IsActive == false)
+            UsersResultDTO data = _mapper.Map<UsersResultDTO>(loginData);
+            data.Token = GenerateToken(loginData);
+
+            UserLogDto dtoLog = new UserLogDto()
             {
-                return Result.ReturnAsFail(message: "Sisteme Giriş Yetkiniz Bulunmamaktadır.", null);
-            }
+                UserId = loginData.Id,
+                PlatformTypeId = PlatformType.Web,
+                EnteraceDate = DateTime.Now
+            };
 
-            Users data = _mapper.Map<Users>(loginData);
-
-            if (loginData != null)
-            {
-                var requestAt = DateTime.Now;
-                var expiresIn = requestAt.Add(TimeSpan.FromMinutes(30));
-                var token = GenerateToken(data, expiresIn);
-
-
-                UserLogDto dtoLog = new UserLogDto()
-                {
-                    UserId = loginData.Id,
-                    PlatformTypeId = PlatformType.Web,
-                    EnteraceDate = DateTime.Now
-                };
-
-                await _userManager.CreateUserLog(dtoLog);
-                return Result.ReturnAsFail(AlertResource.SuccessfulOperation, loginData);
-            }
-            else
-            {
-                return Result.ReturnAsUnAuth(AlertResource.UserNameOrPasswordIsInCorrect, null);
-            }
+            await _userManager.CreateUserLog(dtoLog);
+            return Result.ReturnAsSuccess(message: "Giriş Başarılı", data);
         }
+
         public async Task<ServiceResult> PasswordForget(string emailAddress)
         {
             var userData = _userRepo.GetAll(x => x.EmailAddress == emailAddress);
@@ -124,34 +109,25 @@ namespace SCA.Services
                 return Result.ReturnAsSuccess(null, newData);
             }
         }
-        private string GenerateToken(SCA.Entity.Model.Users user, DateTime expires)
+        private string GenerateToken(UsersDTO user)
         {
-            var handler = new JwtSecurityTokenHandler();
+            var someClaims = new Claim[]{
+                new Claim(JwtRegisteredClaimNames.UniqueName,user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Email,user.EmailAddress),
+                new Claim(JwtRegisteredClaimNames.GivenName,user.Name+" " +user.Surname),
+                new Claim(JwtRegisteredClaimNames.Typ,user.RoleTypeId.ToString())
+            };
 
-            ClaimsIdentity identity = new ClaimsIdentity(
-                new GenericIdentity(user.EmailAddress, "token"),
-                new[] {
-                 new Claim("UserId", user.Id.ToString()),
-                 new Claim("NameSurname", user.Name+" "+user.Surname),
-                 new Claim("EmailAddress", user.EmailAddress.ToString()),
-                 new Claim("RoleType", user.RoleTypeId.ToString())
-                }
-            ); ;
+            SecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("ogrenciKariyerikey"));
+            var token = new JwtSecurityToken(
+                issuer: "ogrenciKariyeri1",
+                audience: "ogrenciKariyeri",
+                claims: someClaims,
+                expires: DateTime.Now.AddMinutes(3),
+                signingCredentials: new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256)
+            );
 
-            var keybit = Encoding.ASCII.GetBytes("55D9BF4F187EF3F961FC87C0435ADBBC314A5AEA9841E5B0C5090BE25414016A");
-            var signkey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(keybit);
-
-            var securityToken = handler.CreateToken(new SecurityTokenDescriptor
-            {
-
-                Issuer = "Issuer",
-                Audience = "Audience",
-                SigningCredentials = new SigningCredentials(signkey, SecurityAlgorithms.HmacSha256),
-                Subject = identity,
-                Expires = expires,
-                NotBefore = DateTime.Now.Subtract(TimeSpan.FromMinutes(30))
-            });
-            return handler.WriteToken(securityToken);
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

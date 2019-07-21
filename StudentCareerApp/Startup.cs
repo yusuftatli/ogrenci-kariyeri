@@ -4,8 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -39,47 +42,60 @@ namespace StudentCareerApp
         public void ConfigureServices(IServiceCollection services)
         {
 
-            #region Cors
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowAll", builder =>
-                {
-                    builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
-                });
-            });
-            #endregion
 
-            #region Authentication
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        .AddJwtBearer(options =>
-        {
-            options.TokenValidationParameters = new TokenValidationParameters
+
+            services.AddAuthentication(options =>
             {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = Configuration["Jwt:Issuer"],
-                ValidAudience = Configuration["Jwt:Issuer"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
-            };
-        });
-            #endregion
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }
+             )
+             .AddJwtBearer(options =>
+             {
+                 options.TokenValidationParameters = new TokenValidationParameters
+                 {
+                     ValidateAudience = true,
+                     ValidAudience = "ogrenciKariyeri",
+                     ValidateIssuer = true,
+                     ValidIssuer = "ogrenciKariyeri1",
+                     ValidateLifetime = true,
+                     ValidateIssuerSigningKey = true,
+                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("ogrenciKariyerikey"))
+                 };
+
+                 options.Events = new JwtBearerEvents
+                 {
+                     OnTokenValidated = ctx =>
+                     {
+                         //Gerekirse burada gelen token içerisindeki çeşitli bilgilere göre doğrulam yapılabilir.
+                         return Task.CompletedTask;
+                     },
+                     OnAuthenticationFailed = ctx =>
+                     {
+                         Console.WriteLine("Exception:{0}", ctx.Exception.Message);
+                         return Task.CompletedTask;
+                     }
+                 };
+             });
 
             #region Configurations
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
+            //services.Configure<CookiePolicyOptions>(options =>
+            //{
+            //    options.CheckConsentNeeded = context => true;
+            //    options.MinimumSameSitePolicy = SameSiteMode.None;
+            //});
 
-            services.Configure<MvcOptions>(options =>
-            {
-                options.Filters.Add(new CorsAuthorizationFilterFactory("AllowAll"));
-            });
+            //services.Configure<MvcOptions>(options =>
+            //{
+            //    options.Filters.Add(new CorsAuthorizationFilterFactory("AllowAll"));
+            //});
             #endregion
+
+            //    services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //.AddCookie(options =>
+            //{
+            //    options.LoginPath = "/Admin/Login/Login/";
+            //});
 
             #region Database
             services.AddEntityFrameworkNpgsql()
@@ -142,6 +158,8 @@ namespace StudentCareerApp
                 cfg.CreateMap<Users, UsersDTO>().ReverseMap();
                 cfg.CreateMap<UserLog, UserLogDto>().ReverseMap();
                 cfg.CreateMap<Users, UserShortInforDto>().ReverseMap();
+                cfg.CreateMap<Users, UsersResultDTO>().ReverseMap();
+                cfg.CreateMap<UsersDTO, UsersResultDTO>().ReverseMap();
 
                 #endregion
 
@@ -213,66 +231,32 @@ namespace StudentCareerApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-           
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseExceptionHandler(appBuilder =>
-            {
-                appBuilder.Use(async (context, next) =>
-                {
-                    var error = context.Features[typeof(IExceptionHandlerFeature)] as IExceptionHandlerFeature;
-
-                    if (error != null && error.Error is SecurityTokenExpiredException)
-                    {
-                        context.Response.StatusCode = 401;
-                        context.Response.ContentType = "application/json";
-                        await context.Response.WriteAsync(JsonConvert.SerializeObject(new
-                        {
-                            State = "Unauthorized",
-                            Msg = "token expired"
-                        }));
-                    }
-                    else if (error != null && error.Error != null)
-                    {
-                        context.Response.StatusCode = 500;
-                        context.Response.ContentType = "application/json";
-                        await context.Response.WriteAsync(JsonConvert.SerializeObject(new
-                        {
-                            State = "Internal State Error",
-                            Msg = error.Error.Message
-                        }));
-                    }
-                    else
-                        await next();
-                });
-            });
-
             app.UseStaticFiles();
-
+            app.UseAuthentication();
             app.UseStaticFiles(new StaticFileOptions()
             {
                 FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "AdminFiles")),
                 RequestPath = new PathString("/AdminFiles")
             });
 
-            app.UseAuthentication();
-            app.UseSession();
-
-            app.UseCors("AllowAll");
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "areas",
-                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-                routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}");
-
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+
+
+
+
+
 
         }
     }

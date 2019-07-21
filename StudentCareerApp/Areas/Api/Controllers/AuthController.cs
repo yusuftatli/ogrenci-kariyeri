@@ -14,8 +14,7 @@ using SCA.Services.Interface;
 namespace Armut.Web.UI.Controllers
 {
 
-    [Area("Api")]
-    [Route("[area]/[controller]")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {

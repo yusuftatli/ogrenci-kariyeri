@@ -71,7 +71,7 @@ app.controller('categoryController', function ($scope, $http, $filter) {
         $scope.categoryCrateModel.IsActive = 1;
         Loading(true);
         $http(MainCategoryCreateReq()).then(function (res) {
-            res.data.resultCode == 200 ? ($scope.categoryCrateModel.id = res.data.data)
+            res.data.resultCode === 200 ? ($scope.categoryCrateModel.id = res.data.data)
                 && $scope.category.mainCategoryList.push($scope.categoryCrateModel)
                 && ($scope.categoryCrateModel = {})
                 && shortMessage("Success!", "s")
@@ -84,7 +84,7 @@ app.controller('categoryController', function ($scope, $http, $filter) {
         Loading(true);
         $scope.subCategoryCreateModel.IsActive = 1;
         $http(SubCategoryCreateReq()).then(function (res) {
-            res.data.resultCode == 200 ? ($scope.subCategoryCreateModel.id = res.data.data)
+            res.data.resultCode === 200 ? ($scope.subCategoryCreateModel.id = res.data.data)
                 && $scope.category.subCategoryList.push($scope.subCategoryCreateModel)
                 && console.log($scope.subCategoryCreateModel)
                 && ($scope.subCategoryCreateModel = { parentId: $scope.subCategoryCreateModel.parentId })
@@ -98,14 +98,14 @@ app.controller('categoryController', function ($scope, $http, $filter) {
         Loading(true);
         $scope.subCategoryDetailCreateModel.IsActive = 1;
         $http(SubCategoryDetailCreateReq()).then(function (res) {
-            res.data.resultCode == 200 ? ($scope.subCategoryDetailCreateModel.Id = res.data.data)
+            res.data.resultCode === 200 ? ($scope.subCategoryDetailCreateModel.Id = res.data.data)
                 && $scope.category.subCategoryDetailList.push($scope.subCategoryDetailCreateModel)
                 && ($scope.subCategoryDetailCreateModel = { parentId: $scope.subCategoryDetailCreateModel.parentId })
                 && shortMessage("Success!", "s")
                 : shortMessage("There is an exception occured", "e");
             Loading(false);
 
-        })
+        });
     }
 
     $scope.onClickMainCategoryIsActive = function (id, state) {
@@ -114,31 +114,47 @@ app.controller('categoryController', function ($scope, $http, $filter) {
         $scope.updateCategoryIsActiveModel.state = state;
         $http(updateCategoryIsActive()).then(function (res) {
             console.log(res.data.resultCode);
-            res.data.resultCode == 200 ? shortMessage("Güncelleme Başarılı!", "s")
+            res.data.resultCode === 200 ? shortMessage("Güncelleme Başarılı!", "s")
                 : shortMessage("There is an exception occured", "e");
             $("#spin_" + id).addClass("hidden");
         });
-    }
+    };
     //#endregion
 
     //#region LIST FUNCTIONS
 
+
+    var Headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("token")
+    };
+
     function MainCategoryList() {
-        Loading(true);
+
+        let Header = {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + localStorage.getItem("token")
+        };
+
         $.ajax({
             url: _link + "/Category/MainCategoryList",
-            type: "GET",
-            dataType: Json_,
-            contentType: ContentType_,
+            type: 'GET',
+            contentType: 'application/json',
+            headers: Header,
             success: function (e) {
-                if (e.resultCode == 200) {
+                if (e.resultCode === 200) {
                     $scope.category.mainCategoryList = e.data;
                     // $scope.switcher(100);
                 }
                 $scope.$apply();
+            },
+            error: function (error) {
+                if (error.status === 401) {
+                    window.location.href = 'https://localhost:44308/admin/Login/Login';
+                }
             }
         });
-        Loading(false);
+
     }
 
     function SubCategoryList(id) {
@@ -150,7 +166,7 @@ app.controller('categoryController', function ($scope, $http, $filter) {
             dataType: Json_,
             contentType: ContentType_,
             success: function (e) {
-                if (e.resultCode == 200) {
+                if (e.resultCode === 200) {
                     $scope.category.subCategoryList = e.data;
                 }
                 $scope.$apply();
@@ -168,7 +184,7 @@ app.controller('categoryController', function ($scope, $http, $filter) {
             dataType: Json_,
             contentType: ContentType_,
             success: function (e) {
-                if (e.resultCode == 200) {
+                if (e.resultCode === 200) {
                     $scope.category.subCategoryDetailList = e.data;
                 }
                 $scope.$apply();
@@ -185,22 +201,20 @@ app.controller('categoryController', function ($scope, $http, $filter) {
             new Switchery($(elm)[0], $(elm).data());
             document.querySelector(elm).onchange = function (e) {
                 $scope.onClickMainCategoryIsActive(elm.split('_').reverse()[0], e.target.checked);
-            }
+            };
         }, s);
-    }
+    };
     //#endregion
 
     //#region REQUESTS
-    var Headers = {
-        "Content-Type": "application/json"
-    }
+
     var MainCategoryCreateReq = function () {
         return {
             method: "post",
             url: _link + "/Category/MainCategoryCreate",
             headers: Headers,
             data: $scope.categoryCrateModel
-        }
+        };
     };
 
     var SubCategoryCreateReq = function () {
@@ -209,8 +223,8 @@ app.controller('categoryController', function ($scope, $http, $filter) {
             url: _link + "/Category/MainCategoryCreate",
             headers: Headers,
             data: $scope.subCategoryCreateModel
-        }
-    }
+        };
+    };
 
     var SubCategoryDetailCreateReq = function () {
         return {
@@ -218,16 +232,16 @@ app.controller('categoryController', function ($scope, $http, $filter) {
             url: _link + "/Category/MainCategoryCreate",
             headers: Headers,
             data: $scope.subCategoryDetailCreateModel
-        }
-    }
+        };
+    };
 
     var updateCategoryIsActive = function () {
         return {
             method: "post",
             url: _link + `/Category/MainCategoryStatusUpdate?id=${$scope.updateCategoryIsActiveModel.id}&state=${$scope.updateCategoryIsActiveModel.state}`,
             headers: Headers
-        }
-    }
+        };
+    };
 
     //#endregion
 

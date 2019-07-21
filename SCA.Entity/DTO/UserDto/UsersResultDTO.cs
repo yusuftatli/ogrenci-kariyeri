@@ -11,7 +11,6 @@ namespace SCA.Entity.DTO
         public string Name { get; set; }
         public string Surname { get; set; }
         public string EmailAddress { get; set; }
-        public string Password { get; set; }
         public string Category { get; set; }
         public long RoleTypeId { get; set; }
         public string ImagePath { get; set; }
@@ -25,10 +24,7 @@ namespace SCA.Entity.DTO
         public long? DepartmentId { get; set; }
         public long ClassId { get; set; }
         public long CityId { get; set; }
-        public long DistrictId { get; set; }
         public string ReferanceCode { get; set; }
-        public PlatformType EnrollPlatformTypeId { get; set; }
-        public bool IsEmailSend { get; set; }
-        public bool IsPhoneSend { get; set; }
+        public string Token { get; set; }
     }
 }

@@ -35,9 +35,9 @@ namespace SCA.Services
         {
             ServiceResult _res = Result.ReturnAsSuccess();
 
-            if (dto.IsActive == false)
+            if (dto.IsActive == true)
             {
-                _res = Result.ReturnAsFail(message: "Sisteme Girişiniz Yetkiniz Bulunmamaktadır.", null);
+                _res = Result.ReturnAsFail(message:"Sisteme Girişiniz Yetkiniz Bulunmamaktadır.", null);
             }
 
             return _res;

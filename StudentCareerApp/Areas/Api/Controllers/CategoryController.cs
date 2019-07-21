@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SCA.Common.Result;
@@ -14,7 +16,6 @@ using SCA.Services.Interface;
 
 namespace Armut.Web.UI.Controllers
 {
-
     [Area("Api")]
     [Route("[area]/[controller]")]
     [ApiController]
@@ -28,18 +29,21 @@ namespace Armut.Web.UI.Controllers
 
         #region Category
 
+        [Authorize()]
         [HttpGet("MainCategoryListWithParents")]
         public async Task<ServiceResult> MainCategoryListWithParents()
         {
             return await _categoryManager.MainCategoryListWithParents();
         }
 
+        [Authorize()]
         [HttpGet("MainCategoryList")]
         public async Task<ServiceResult> MainCategoryList(long? parentId)
         {
             return await _categoryManager.MainCategoryList(parentId);
         }
 
+        [Authorize()]
         [HttpPost("MainCategoryCreate")]
         public async Task<ServiceResult> MainCategoryCreate([FromBody]MainCategoryDto dto)
         {
