@@ -9,9 +9,9 @@ namespace SCA.Entity.Model
     {
         public string Description { get; set; }
         public bool IsActive { get; set; }
+        public string Menus { get; set; }
 
         public ICollection<RolePermission> RolePermission { get; set; }
         public ICollection<Users> Users { get; set; }
-        public ICollection<MenuRelationWithRole> MenuRelationWithRole { get; set; }
     }
 }

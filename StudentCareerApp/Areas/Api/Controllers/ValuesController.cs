@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace SCA.Web.Api.Controllers
+namespace StudentCareerApp.Areas.Api.Controller
 {
     [Area("Api")]
     [Route("[area]/[controller]")]

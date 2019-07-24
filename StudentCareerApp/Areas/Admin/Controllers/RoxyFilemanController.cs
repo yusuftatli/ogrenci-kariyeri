@@ -11,11 +11,9 @@ using System.IO;
 using System.IO.Compression;
 using System.Text.RegularExpressions;
 
-/* Note: graphics manipulation not yet available in ASP.NET Core so no thumbnails or image sizes */
 
-namespace SCA.UI.Controllers
+namespace StudentCareerApp.Areas.Admin.Controllers
 {
-    // [Authorize] // Important: uncomment this in production to prevent huge security risk!
     [Area("Admin")]
     [Route("[area]/[controller]/[action]"), Produces("application/json")]
     public class RoxyFilemanController : Controller

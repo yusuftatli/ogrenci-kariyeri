@@ -10,5 +10,6 @@ namespace SCA.Entity.DTO
         public string Description { get; set; }
         public bool IsActive { get; set; }
         public bool isActiveVal { get; set; }
+        public string Menus { get; set; }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Newtonsoft.Json;
+using SCA.Common.Resource;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
 using SCA.Entity.Model;
@@ -16,28 +18,108 @@ namespace SCA.Services
     {
         private readonly IMapper _mapper;
         private readonly IUnitofWork _unitOfWork;
-        private IGenericRepository<MenuList> _menuListRepo;
+        private readonly IRoleManager _roleManager;
+        private IGenericRepository<ScreenMaster> _screenMasterRepo;
+        private IGenericRepository<ScreenDetail> _screenDetailRepo;
 
-        public MenuManager(IUnitofWork unitOfWork, IMapper mapper)
+        public MenuManager(IUnitofWork unitOfWork, IMapper mapper, IRoleManager roleManager)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
-            _menuListRepo = unitOfWork.GetRepository<MenuList>();
+            _roleManager = roleManager;
+            _screenMasterRepo = unitOfWork.GetRepository<ScreenMaster>();
+            _screenDetailRepo = unitOfWork.GetRepository<ScreenDetail>();
         }
 
+        //public async Task<ServiceResult> GetSuperUser(long roleId)
+        //{
+        //    var roleData = _roleManager.GetRoleTypeDataRow(roleId);
+        //    ScreenListWithRolesTypeDto menuData = JsonConvert.DeserializeObject<ScreenListWithRolesTypeDto>(roleData.Menus);
 
-        public async Task<ServiceResult> AddMasterMenu(MenuListDto dto)
+        //}
+
+        //public async Task<ServiceResult> GetScreensForSuperUser()
+        //{
+
+        //}
+
+
+
+
+        #region ScreenMaster CRUD
+
+        public async Task<ServiceResult> CreateScreenMaster(ScreenMaster dto)
         {
+            string resultMessage = "";
             if (dto.Equals(null))
             {
-                return Result.ReturnAsFail();
+                Result.ReturnAsFail();
             }
 
-            _menuListRepo.Add(_mapper.Map<MenuList>(dto));
-            return _unitOfWork.SaveChanges();
+            dto.IsActive = false;
+            dto.IsSuperUser = false;
+
+            if (dto.Id == 0)
+            {
+                _screenMasterRepo.Add(_mapper.Map<ScreenMaster>(dto));
+                resultMessage = AlertResource.CreateIsOk;
+            }
+            else
+            {
+                _screenMasterRepo.Update(_mapper.Map<ScreenMaster>(dto));
+                resultMessage = AlertResource.UpdateIsOk;
+            }
+            _unitOfWork.SaveChanges();
+            return Result.ReturnAsSuccess(message: resultMessage, null);
         }
 
+        public async Task<ServiceResult> ScreenMasterState(long id, bool state)
+        {
+            var data = _screenMasterRepo.Get(x => x.Id == id);
+            data.IsActive = state;
+            _screenMasterRepo.Update(_mapper.Map<ScreenMaster>(data));
+            return Result.ReturnAsSuccess(message: "Veri Güncelleme İşlemi Başarılı", null);
+        }
 
+        #endregion
+
+
+        #region ScreenDetail CRUD
+
+        public async Task<ServiceResult> CreateScreenDetail(ScreenDetailDto dto)
+        {
+            string resultMessage = "";
+            if (dto.Equals(null))
+            {
+                Result.ReturnAsFail();
+            }
+
+            dto.IsActive = false;
+            dto.IsSuperUser = false;
+
+            if (dto.Id == 0)
+            {
+                _screenDetailRepo.Add(_mapper.Map<ScreenDetail>(dto));
+                resultMessage = AlertResource.CreateIsOk;
+            }
+            else
+            {
+                _screenDetailRepo.Update(_mapper.Map<ScreenDetail>(dto));
+                resultMessage = AlertResource.UpdateIsOk;
+            }
+            _unitOfWork.SaveChanges();
+            return Result.ReturnAsSuccess(message: resultMessage, null);
+        }
+
+        public async Task<ServiceResult> ScreenDetailState(long id, bool state)
+        {
+            var data = _screenDetailRepo.Get(x => x.Id == id);
+            data.IsActive = state;
+            _screenDetailRepo.Update(_mapper.Map<ScreenDetail>(data));
+            return Result.ReturnAsSuccess(message: "Veri Güncelleme İşlemi Başarılı", null);
+        }
+
+        #endregion
 
     }
 }

@@ -158,7 +158,7 @@
                         localStorage.setItem("token", res.data.data.token);
                         localStorage.setItem("nameSurname", res.data.data.name + " " + res.data.data.surname);
                         localStorage.setItem("roleTypeId", res.data.data.roleTypeId);
-
+                        window.location.href = "/admin/definitions/category"
                         toastr.warning(res.data.message, "Bilgi", {
                             "fadeIn": 100,
                             "fadeOut": 100,

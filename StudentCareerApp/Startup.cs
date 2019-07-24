@@ -206,15 +206,16 @@ namespace StudentCareerApp
 
                 #endregion
 
-                #region Menun
-
-                cfg.CreateMap<MenuList, MenuListDto>().ReverseMap();
-                cfg.CreateMap<MenuRelationWithRole, MenuRelationWithRoleDto>().ReverseMap();
-
-                #endregion
 
                 #region comment
                 cfg.CreateMap<Comments, CommentsDto>().ReverseMap();
+                #endregion
+
+                #region Screen
+
+                cfg.CreateMap<ScreenMaster, ScreenMasterDto>().ReverseMap();
+                cfg.CreateMap<ScreenDetail, ScreenDetailDto>().ReverseMap();
+
                 #endregion
 
 

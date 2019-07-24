@@ -8,24 +8,18 @@ using SCA.Entity.DTO;
 using SCA.Services;
 using SCA.Services.Interface;
 
-namespace SCA.Web.Api.Controllers
+namespace StudentCareerApp.Areas.Api.Controller
 {
     [Area("Api")]
     [Route("[area]/[controller]")]
     [ApiController]
-    public class QuestionController : Controller
+    public class QuestionController : ControllerBase
     {
         IQuestionManager _questionManager;
 
         public QuestionController(IQuestionManager questionManager)
         {
             _questionManager = questionManager;
-        }
-
-        [HttpGet("GetTests")]
-        public IActionResult GetTests()
-        {
-            return View();
         }
 
         [HttpPost("CreateTest")]

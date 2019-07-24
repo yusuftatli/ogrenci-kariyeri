@@ -89,6 +89,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
         $http(MainCategoriesReq()).then(function (res) {
             $scope.MainCategories = res.data.data;
             $scope.options = $scope.NestedCategory();
+            console.log($scope.options);
         });
     }
 
@@ -166,6 +167,9 @@ app.controller("assayController", function ($scope, $http, $filter) {
     };
 
     $scope.RegexSeo = function (link) {
+        if (link == undefined) {
+            link = "-";
+        }
         for (var key in trMap) {
             link = link.replace(new RegExp("[" + key + "]", "g"), trMap[key]);
         }

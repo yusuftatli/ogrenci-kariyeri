@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace SCA.DataAccess.Migrations
 {
-    public partial class first : Migration
+    public partial class firsst : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -536,6 +536,7 @@ namespace SCA.DataAccess.Migrations
                     ClassId = table.Column<long>(nullable: true),
                     ClassTypeId = table.Column<long>(nullable: true),
                     CityId = table.Column<long>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false),
                     ReferanceCode = table.Column<string>(nullable: true),
                     EnrollPlatformTypeId = table.Column<int>(nullable: false),
                     DistrictId = table.Column<long>(nullable: true)

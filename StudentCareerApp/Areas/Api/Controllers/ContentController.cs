@@ -11,7 +11,7 @@ using SCA.Entity.Enums;
 using SCA.Services;
 using SCA.Services.Interface;
 
-namespace Armut.Web.UI.Controllers
+namespace StudentCareerApp.Areas.Api.Controller
 {
 
     [Area("Api")]

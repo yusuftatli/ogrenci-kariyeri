@@ -10,8 +10,8 @@ using SCA.DataAccess.Context;
 namespace SCA.DataAccess.Migrations
 {
     [DbContext(typeof(PostgreDbContext))]
-    [Migration("20190720215745_r4r4")]
-    partial class r4r4
+    [Migration("20190724154739_firsst")]
+    partial class firsst
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

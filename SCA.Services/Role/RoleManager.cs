@@ -32,6 +32,11 @@ namespace SCA.Services
 
         #region RoleType
 
+        public RoleTypeDto GetRoleTypeDataRow(long roleId)
+        {
+            var data = _mapper.Map<RoleTypeDto>(_roleTypeRepo.Get(x => x.Id == roleId));
+            return data;
+        }
 
         public async Task<ServiceResult> GetRoleTypes()
         {

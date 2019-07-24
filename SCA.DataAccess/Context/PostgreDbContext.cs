@@ -9,9 +9,10 @@ namespace SCA.DataAccess.Context
     public class PostgreDbContext : DbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-               => optionsBuilder.UseNpgsql("Host=localhost;Database=StudentDb;Username=postgres;Password=postgres;Port=5432");
+               => optionsBuilder.UseNpgsql("Host=localhost;Database=StudentDb;Username=postgres;Password=yt@12345;Port=5432");
 
-
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //       => optionsBuilder.UseNpgsql("Host=167.71.46.71;Database=StudentDb;Username=postgres;Password=og123456;Port=5432");
         #region Address
         public DbSet<Cities> Cities { get; set; }
         public DbSet<District> District { get; set; }
@@ -51,14 +52,16 @@ namespace SCA.DataAccess.Context
         public DbSet<TagRelation> TagRelation { get; set; }
         #endregion
 
-        #region Menus
-        public DbSet<MenuList> MenuList { get; set; }
-        public DbSet<MenuRelationWithRole> MenuRelationWithUser { get; set; }
-        #endregion
-
         #region Comments
 
         public DbSet<Comments> Comments { get; set; }
+
+        #endregion
+
+        #region Screns
+
+        public DbSet<ScreenMaster> ScreenMaster { get; set; }
+        public DbSet<ScreenDetail> ScreenDetail { get; set; }
 
         #endregion
 

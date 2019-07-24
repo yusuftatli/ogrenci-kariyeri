@@ -14,7 +14,7 @@ using SCA.Entity.Model;
 using SCA.Services;
 using SCA.Services.Interface;
 
-namespace Armut.Web.UI.Controllers
+namespace StudentCareerApp.Areas.Api.Controller
 {
     [Area("Api")]
     [Route("[area]/[controller]")]
@@ -29,21 +29,21 @@ namespace Armut.Web.UI.Controllers
 
         #region Category
 
-        [Authorize()]
+        //[Authorize()]
         [HttpGet("MainCategoryListWithParents")]
         public async Task<ServiceResult> MainCategoryListWithParents()
         {
             return await _categoryManager.MainCategoryListWithParents();
         }
 
-        [Authorize()]
+        //[Authorize()]
         [HttpGet("MainCategoryList")]
         public async Task<ServiceResult> MainCategoryList(long? parentId)
         {
             return await _categoryManager.MainCategoryList(parentId);
         }
 
-        [Authorize()]
+        //[Authorize()]
         [HttpPost("MainCategoryCreate")]
         public async Task<ServiceResult> MainCategoryCreate([FromBody]MainCategoryDto dto)
         {

@@ -10,7 +10,7 @@ namespace SCA.Services
     public interface IRoleManager
     {
         #region Role Types
-
+        RoleTypeDto GetRoleTypeDataRow(long roleId);
         Task<ServiceResult> GetRoleTypes();
         Task<ServiceResult> CreateRoleType(RoleTypeDto dto);
 
