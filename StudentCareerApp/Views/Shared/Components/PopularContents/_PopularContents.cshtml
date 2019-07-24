@@ -1,0 +1,45 @@
+﻿@model List<SCA.Entity.DTO.ContentForHomePageDTO>
+
+@if (Model != null && Model.Count > 0)
+{
+    @* POPULAR CONTENTS START *@
+    <div class="widgets ts-grid-box  widgets-populer-post">
+        <h3 class="widget-title">En Popülerler</h3>
+        <div class="ts-overlay-style">
+            <div class="item">
+                <div class="ts-post-thumb">
+                    <a href="@Url.Action("Index", "Blog", new { SeoUrl = Model.First().SeoUrl})">
+                        <img class="img-fluid" src="@Model.First().ImagePath" alt="Öğrenci Kariyeri - En popülerler - @Model.First().Header">
+                    </a>
+                </div>
+                <div class="overlay-post-content">
+                    <div class="post-content">
+                        <h3 class="post-title">
+                            <a href="@Url.Action("Index", "Blog", new { SeoUrl = Model.First().SeoUrl})">@Model.First().Header</a>
+                        </h3>
+                        <ul class="post-meta-info">
+                            <li>
+                                <i class="fa fa-clock-o"></i>
+                                @Model.First().PublishDate.ToString("dd.MM.yyyy")
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ts-overlay-style  end-->
+
+        @foreach (var x in Model.Skip(1))
+        {
+            <div class="post-content media">
+                <img class="d-flex sidebar-img" src="@x.ImagePath" alt="Öğrenci Kariyeri - En popülerler - @x.Header">
+                <div class="media-body align-self-center">
+                    <h4 class="post-title">
+                        <a href="@Url.Action("Index", "Blog", new { SeoUrl = x.SeoUrl})">@x.Header</a>
+                    </h4>
+                </div>
+            </div>
+        }
+    </div>
+    @* POPULAR CONTENTS END *@
+}

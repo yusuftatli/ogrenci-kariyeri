@@ -1,35 +1,25 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using SCA.Entity.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using SCA.Entity.DTO;
-using SCA.Services.Interface;
 
-namespace SCA.UI.Controllers
+namespace StudentCareerApp.Components.SidebarComponents.PopularContents
 {
-    [Route("[controller]/[action]")]
-    public class HomeController : Controller
+    public class PopularContentsViewComponent : ViewComponent
     {
-        #region INTERFACES & CONSTRUCTOR
-        private readonly IB2CManagerUI _b2cManager;
-        public HomeController(IB2CManagerUI b2cManager)
+        public IViewComponentResult Invoke(List<ContentForHomePageDTO> model = null)
         {
-            _b2cManager = b2cManager;
+            if (model == null)
+            {
+                var res = FakeData().OrderBy(x => x.ReadCount).Take(4).ToList();
+                return View("_PopularContents", res);
+            }
+            return View("_PopularContents", model);
         }
-        #endregion
 
-        #region VIEWS
-        [HttpGet]
-        public IActionResult Index()
-        {
-            var res = _b2cManager.GetContentsForHomePage().Result;
-            var fakeData = FakeContentList();
-            return View(fakeData);
-        }
-        #endregion
-
-        public List<ContentForHomePageDTO> FakeContentList()
+        public List<ContentForHomePageDTO> FakeData()
         {
             return new List<ContentForHomePageDTO>
             {
@@ -130,6 +120,7 @@ namespace SCA.UI.Controllers
                     Writer = "Göksu Deniz"
                 }
             };
+
         }
     }
 }

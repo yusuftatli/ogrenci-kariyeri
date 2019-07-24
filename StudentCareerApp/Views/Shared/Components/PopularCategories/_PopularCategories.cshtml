@@ -1,0 +1,22 @@
+﻿@model List<SCA.Entity.DTO.PopularCategoriesDto>
+
+@if (Model != null && Model.Count > 0)
+{
+    @* POPULAR CATEGORIES START *@
+    <div class="ts-grid-box widgets category-list-item">
+        <h2 class="widget-title">Kategoriler</h2>
+        <ul class="category-list">
+            @foreach (var x in Model)
+            {
+                <li>
+                    <a href="@Url.Action("Index", "Category", new { categorySeoUrl = x.SeoUrl })">
+                        @x.Description
+                        <span class="ts-green-bg">@x.UsingCount</span>
+                    </a>
+                </li>
+            }
+
+        </ul>
+    </div>
+    @* POPULAR CATEGORIES END *@
+}

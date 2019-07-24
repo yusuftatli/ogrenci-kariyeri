@@ -905,6 +905,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\Shared\Components\SidebarComponents\" />
     <Folder Include="wwwroot\AdminFiles\CMS\Temp\" />
   </ItemGroup>
 
