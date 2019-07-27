@@ -220,6 +220,13 @@ namespace StudentCareerApp
 
 
             });
+
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "/wwwroot";
+                configuration.RootPath = "/wwwroot/AdminFiles/Template/assets/node_modules"; 
+            });
+
             var mapper = config.CreateMapper();
             services.AddSingleton(mapper);
             #endregion
@@ -235,8 +242,11 @@ namespace StudentCareerApp
 
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+               // app.UseDeveloperExceptionPage();
             }
+
+            app.UseStaticFiles(new StaticFileOptions() { FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot")) });
+
 
             app.UseStaticFiles();
             app.UseAuthentication();
@@ -252,10 +262,6 @@ namespace StudentCareerApp
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-
-
-
 
 
 
