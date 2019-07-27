@@ -40,125 +40,149 @@ namespace SCA.Services
 
         public async Task<ServiceResult> GetTestShortList()
         {
-            //var res = (from _test in _testRepo.GetAll().Where(x => x.IsDeleted.Equals(false) && x.PublishState == PublishState.Publish)
-            //           join
-            //           select new TestShortListDto
-            //           {
-            //               Id = _test.Id,
-            //               Url = _test.Url,
-            //               Header = _test.Header,
-            //               Count = _analysisManager.GetCountValue(ReadType.Test, _test.Id)
-            //           }).ToList();
+            ServiceResult _res = new ServiceResult();
+            Task t = new Task(() =>
+            {
+                //var res = (from _test in _testRepo.GetAll().Where(x => x.IsDeleted.Equals(false) && x.PublishState == PublishState.Publish)
+                //           join
+                //           select new TestShortListDto
+                //           {
+                //               Id = _test.Id,
+                //               Url = _test.Url,
+                //               Header = _test.Header,
+                //               Count = _analysisManager.GetCountValue(ReadType.Test, _test.Id)
+                //           }).ToList();
 
-            return Result.ReturnAsSuccess(null, null);
+                _res = Result.ReturnAsSuccess(null, null);
+            });
+            t.Start();
+            return _res;
         }
 
         public async Task<ServiceResult> GetQuesitons(QuestionCrudDto dto)
         {
-            var res = (from _test in _testRepo.GetAll().Where(x => x.IsDeleted.Equals(false) && x.PublishState == PublishState.Publish)
-                       select new QuestionCrudDto
-                       {
-                           Id = _test.Id,
-                           Url = _test.Url,
-                           Header = _test.Header,
-                           Topic = _test.Topic,
-                           PublishData = _test.PublishData,
-                           ImagePath = _test.ImagePath,
-                           Label = _test.Label,
-                           Readed = _test.Readed,
-                           QuestionList = _questionsRepo.GetAll().Where(a => a.IsDeleted.Equals(false) && _test.Id == a.TestId).Select(s => new QuestionsDto
+            ServiceResult _res = new ServiceResult();
+            Task t = new Task(() =>
+            {
+                var res = (from _test in _testRepo.GetAll().Where(x => x.IsDeleted.Equals(false) && x.PublishState == PublishState.Publish)
+                           select new QuestionCrudDto
                            {
-                               Id = s.Id,
-                               TestId = s.TestId,
-                               ImagePath = s.ImagePath,
-                               Description = s.Description,
-                               QuestionOptionList = _questionOptionsRepo.GetAll().Where(d => d.IsDeleted.Equals(false) && d.Id == s.Id).Select(sq => new QuestionOptionsDto
+                               Id = _test.Id,
+                               Url = _test.Url,
+                               Header = _test.Header,
+                               Topic = _test.Topic,
+                               PublishData = _test.PublishData,
+                               ImagePath = _test.ImagePath,
+                               Label = _test.Label,
+                               Readed = _test.Readed,
+                               QuestionList = _questionsRepo.GetAll().Where(a => a.IsDeleted.Equals(false) && _test.Id == a.TestId).Select(s => new QuestionsDto
                                {
-                                   Id = sq.Id,
-                                   QuestionId = sq.QuestionId,
-                                   CheckOption = sq.CheckOption,
-                                   Description = sq.Description,
-                                   ImagePath = sq.ImagePath,
-                                   FreeText = sq.FreeText,
-                                   Answer = sq.Answer
+                                   Id = s.Id,
+                                   TestId = s.TestId,
+                                   ImagePath = s.ImagePath,
+                                   Description = s.Description,
+                                   QuestionOptionList = _questionOptionsRepo.GetAll().Where(d => d.IsDeleted.Equals(false) && d.Id == s.Id).Select(sq => new QuestionOptionsDto
+                                   {
+                                       Id = sq.Id,
+                                       QuestionId = sq.QuestionId,
+                                       CheckOption = sq.CheckOption,
+                                       Description = sq.Description,
+                                       ImagePath = sq.ImagePath,
+                                       FreeText = sq.FreeText,
+                                       Answer = sq.Answer
+                                   }).ToList()
                                }).ToList()
-                           }).ToList()
-                       }).ToList();
-            return Result.ReturnAsSuccess(null, res);
+                           }).ToList();
+                _res = Result.ReturnAsSuccess(null, res);
+            });
+            t.Start();
+            return _res;
         }
 
         public async Task<ServiceResult> CreateQuestion(QuestionCrudDto dto)
         {
-            TestsDto test = new TestsDto();
-            test.Url = dto.Url;
-            test.Header = dto.Header;
-            test.Topic = dto.Topic;
-            test.PublishData = dto.PublishData;
-            test.ImagePath = dto.ImagePath;
-            test.Label = dto.Label;
-            test.Readed = dto.Readed;
-
-            var testId = _testRepo.Add((_mapper.Map<Tests>(test)));
-            _unitOfWork.SaveChanges();
-            foreach (QuestionsDto item in dto.QuestionList)
+            ServiceResult _res = new ServiceResult();
+            Task t = new Task(() =>
             {
-                item.TestId = testId.Id;
-                var quesitonId = _questionsRepo.Add((_mapper.Map<Questions>(item)));
+                TestsDto test = new TestsDto();
+                test.Url = dto.Url;
+                test.Header = dto.Header;
+                test.Topic = dto.Topic;
+                test.PublishData = dto.PublishData;
+                test.ImagePath = dto.ImagePath;
+                test.Label = dto.Label;
+                test.Readed = dto.Readed;
+
+                var testId = _testRepo.Add((_mapper.Map<Tests>(test)));
                 _unitOfWork.SaveChanges();
-                foreach (QuestionOptionsDto options in item.QuestionOptionList)
+                foreach (QuestionsDto item in dto.QuestionList)
                 {
-                    options.QuestionId = quesitonId.Id;
-                    _questionOptionsRepo.Add((_mapper.Map<QuestionOptions>(options)));
-                }
+                    item.TestId = testId.Id;
+                    var quesitonId = _questionsRepo.Add((_mapper.Map<Questions>(item)));
+                    _unitOfWork.SaveChanges();
+                    foreach (QuestionOptionsDto options in item.QuestionOptionList)
+                    {
+                        options.QuestionId = quesitonId.Id;
+                        _questionOptionsRepo.Add((_mapper.Map<QuestionOptions>(options)));
+                    }
 
-                foreach (TestValueDto value in dto.TestValues)
-                {
-                    value.TestId = testId.Id;
-                    _testValueRepo.Add((_mapper.Map<TestValue>(value)));
-                }
+                    foreach (TestValueDto value in dto.TestValues)
+                    {
+                        value.TestId = testId.Id;
+                        _testValueRepo.Add((_mapper.Map<TestValue>(value)));
+                    }
 
-            }
-            _unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess(AlertResource.SuccessfulOperation, null);
+                }
+                _unitOfWork.SaveChanges();
+                _res = Result.ReturnAsSuccess(AlertResource.SuccessfulOperation, null);
+            });
+            t.Start();
+            return _res;
         }
 
         public async Task<ServiceResult> UpdateQuestion(QuestionCrudDto dto)
         {
-            TestsDto test = _mapper.Map<TestsDto>(_testRepo.Get(x => x.Id == dto.Id));
-            test.Url = dto.Url;
-            test.Header = dto.Header;
-            test.Topic = dto.Topic;
-            test.PublishData = dto.PublishData;
-            test.ImagePath = dto.ImagePath;
-            test.Label = dto.Label;
-            test.Readed = dto.Readed;
-
-            _testRepo.Update((_mapper.Map<Tests>(test)));
-
-            foreach (QuestionsDto item in dto.QuestionList)
+            ServiceResult _res = new ServiceResult();
+            Task t = new Task(() =>
             {
-                QuestionsDto question = _mapper.Map<QuestionsDto>(_questionsRepo.Get(x => x.Id == item.Id));
-                question.ImagePath = item.ImagePath;
-                question.Description = item.Description;
+                TestsDto test = _mapper.Map<TestsDto>(_testRepo.Get(x => x.Id == dto.Id));
+                test.Url = dto.Url;
+                test.Header = dto.Header;
+                test.Topic = dto.Topic;
+                test.PublishData = dto.PublishData;
+                test.ImagePath = dto.ImagePath;
+                test.Label = dto.Label;
+                test.Readed = dto.Readed;
 
-                _questionsRepo.Update((_mapper.Map<Questions>(question)));
+                _testRepo.Update((_mapper.Map<Tests>(test)));
 
-                foreach (QuestionOptionsDto options in item.QuestionOptionList)
+                foreach (QuestionsDto item in dto.QuestionList)
                 {
-                    QuestionOptionsDto questionOption = _mapper.Map<QuestionOptionsDto>(_questionsRepo.Get(x => x.Id == options.Id));
-                    questionOption.CheckOption = options.CheckOption;
-                    questionOption.Description = options.Description;
-                    questionOption.ImagePath = options.ImagePath;
-                    questionOption.FreeText = options.FreeText;
-                    questionOption.Answer = options.Answer;
+                    QuestionsDto question = _mapper.Map<QuestionsDto>(_questionsRepo.Get(x => x.Id == item.Id));
+                    question.ImagePath = item.ImagePath;
+                    question.Description = item.Description;
 
-                    _questionOptionsRepo.Update((_mapper.Map<QuestionOptions>(questionOption)));
+                    _questionsRepo.Update((_mapper.Map<Questions>(question)));
+
+                    foreach (QuestionOptionsDto options in item.QuestionOptionList)
+                    {
+                        QuestionOptionsDto questionOption = _mapper.Map<QuestionOptionsDto>(_questionsRepo.Get(x => x.Id == options.Id));
+                        questionOption.CheckOption = options.CheckOption;
+                        questionOption.Description = options.Description;
+                        questionOption.ImagePath = options.ImagePath;
+                        questionOption.FreeText = options.FreeText;
+                        questionOption.Answer = options.Answer;
+
+                        _questionOptionsRepo.Update((_mapper.Map<QuestionOptions>(questionOption)));
+                    }
                 }
-            }
 
-            var res = _unitOfWork.SaveChanges();
+                var res = _unitOfWork.SaveChanges();
 
-            return Result.ReturnAsSuccess(AlertResource.SuccessfulOperation, null);
+                _res = Result.ReturnAsSuccess(AlertResource.SuccessfulOperation, null);
+            });
+            t.Start();
+            return _res;
         }
 
     }

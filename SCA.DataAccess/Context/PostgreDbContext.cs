@@ -9,7 +9,7 @@ namespace SCA.DataAccess.Context
     public class PostgreDbContext : DbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-               => optionsBuilder.UseNpgsql("Host=localhost;Database=StudentDb;Username=postgres;Password=yt@12345;Port=5432");
+               => optionsBuilder.UseNpgsql("Host=167.71.46.71;Database=StudentDb;Username=postgres;Password=og123456;Port=5432");
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //       => optionsBuilder.UseNpgsql("Host=167.71.46.71;Database=StudentDb;Username=postgres;Password=og123456;Port=5432");

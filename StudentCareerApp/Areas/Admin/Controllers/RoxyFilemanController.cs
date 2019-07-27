@@ -30,17 +30,17 @@ namespace StudentCareerApp.Areas.Admin.Controllers
             // Setup CMS paths to suit your environment (we usually inject settings for these)
             _systemRootPath = env.ContentRootPath.Split("\\bin")[0];
             _tempPath = _systemRootPath + "\\AdminFiles\\CMS\\Temp";
-            _filesRootPath = "/AdminFiles/CMS/Content";
-            _filesRootVirtual = "/AdminFiles/CMS/Content";
+            _filesRootPath = "/CMS/Content";
+            _filesRootVirtual = "/CMS/Content";
             // Load Fileman settings
             LoadSettings();
         }
 
         private void LoadSettings()
         {
-            _settings = JsonConvert.DeserializeObject<Dictionary<string, string>>(System.IO.File.ReadAllText(_systemRootPath + "/AdminFiles/lib/fileman/conf.json"));
-            string langFile = _systemRootPath + "/AdminFiles/lib/fileman/lang/" + GetSetting("LANG") + ".json";
-            if (!System.IO.File.Exists(langFile)) langFile = _systemRootPath + "/AdminFiles/lib/fileman/lang/en.json";
+            _settings = JsonConvert.DeserializeObject<Dictionary<string, string>>(System.IO.File.ReadAllText(_systemRootPath + "/wwwroot/lib/fileman/conf.json"));
+            string langFile = _systemRootPath + "/wwwroot/lib/fileman/lang/" + GetSetting("LANG") + ".json";
+            if (!System.IO.File.Exists(langFile)) langFile = _systemRootPath + "/wwwroot/lib/fileman/lang/en.json";
             _lang = JsonConvert.DeserializeObject<Dictionary<string, string>>(System.IO.File.ReadAllText(langFile));
         }
 

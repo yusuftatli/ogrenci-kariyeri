@@ -10,8 +10,8 @@ using SCA.DataAccess.Context;
 namespace SCA.DataAccess.Migrations
 {
     [DbContext(typeof(PostgreDbContext))]
-    [Migration("20190724154739_firsst")]
-    partial class firsst
+    [Migration("20190727151242_first")]
+    partial class first
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -369,80 +369,6 @@ namespace SCA.DataAccess.Migrations
                     b.ToTable("ImageModel");
                 });
 
-            modelBuilder.Entity("SCA.Entity.Model.MenuList", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<long>("CreatedUserId");
-
-                    b.Property<DateTime>("DeletedDate");
-
-                    b.Property<long>("DeletedUserId");
-
-                    b.Property<string>("Description");
-
-                    b.Property<string>("Icon");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<long?>("ParentId");
-
-                    b.Property<DateTime>("UpdatedDate");
-
-                    b.Property<long>("UpdatedUserId");
-
-                    b.Property<string>("Url");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MenuList");
-                });
-
-            modelBuilder.Entity("SCA.Entity.Model.MenuRelationWithRole", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<long>("CreatedUserId");
-
-                    b.Property<DateTime>("DeletedDate");
-
-                    b.Property<long>("DeletedUserId");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<long>("MenuId");
-
-                    b.Property<long?>("MenuListId");
-
-                    b.Property<long>("RoleId");
-
-                    b.Property<long?>("RoleTypeId");
-
-                    b.Property<DateTime>("UpdatedDate");
-
-                    b.Property<long>("UpdatedUserId");
-
-                    b.Property<long?>("UsersId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MenuListId");
-
-                    b.HasIndex("RoleTypeId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("MenuRelationWithUser");
-                });
-
             modelBuilder.Entity("SCA.Entity.Model.QuesitonAsnweByUsers", b =>
                 {
                     b.Property<long>("Id")
@@ -652,6 +578,8 @@ namespace SCA.DataAccess.Migrations
 
                     b.Property<bool>("IsDeleted");
 
+                    b.Property<string>("Menus");
+
                     b.Property<DateTime>("UpdatedDate");
 
                     b.Property<long>("UpdatedUserId");
@@ -659,6 +587,78 @@ namespace SCA.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RoleType");
+                });
+
+            modelBuilder.Entity("SCA.Entity.Model.ScreenDetail", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<long>("CreatedUserId");
+
+                    b.Property<DateTime>("DeletedDate");
+
+                    b.Property<long>("DeletedUserId");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Icon");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<bool>("IsSuperUser");
+
+                    b.Property<long?>("ScreenMasterId");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.Property<long>("UpdatedUserId");
+
+                    b.Property<string>("Url");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ScreenMasterId");
+
+                    b.ToTable("ScreenDetail");
+                });
+
+            modelBuilder.Entity("SCA.Entity.Model.ScreenMaster", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<long>("CreatedUserId");
+
+                    b.Property<DateTime>("DeletedDate");
+
+                    b.Property<long>("DeletedUserId");
+
+                    b.Property<string>("Icon");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<bool>("IsSuperUser");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.Property<long>("UpdatedUserId");
+
+                    b.Property<string>("Url");
+
+                    b.Property<string>("description");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ScreenMaster");
                 });
 
             modelBuilder.Entity("SCA.Entity.Model.StudentClass", b =>
@@ -1016,21 +1016,6 @@ namespace SCA.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("SCA.Entity.Model.MenuRelationWithRole", b =>
-                {
-                    b.HasOne("SCA.Entity.Model.MenuList", "MenuList")
-                        .WithMany("MenuRelationWithUser")
-                        .HasForeignKey("MenuListId");
-
-                    b.HasOne("SCA.Entity.Model.RoleType", "RoleType")
-                        .WithMany("MenuRelationWithRole")
-                        .HasForeignKey("RoleTypeId");
-
-                    b.HasOne("SCA.Entity.Model.Users")
-                        .WithMany("MenuRelationWithUser")
-                        .HasForeignKey("UsersId");
-                });
-
             modelBuilder.Entity("SCA.Entity.Model.QuesitonAsnweByUsers", b =>
                 {
                     b.HasOne("SCA.Entity.Model.Tests", "Tests")
@@ -1073,6 +1058,13 @@ namespace SCA.DataAccess.Migrations
                         .WithMany("RolePermission")
                         .HasForeignKey("RoleTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SCA.Entity.Model.ScreenDetail", b =>
+                {
+                    b.HasOne("SCA.Entity.Model.ScreenMaster", "ScreenMaster")
+                        .WithMany("ScreenDetail")
+                        .HasForeignKey("ScreenMasterId");
                 });
 
             modelBuilder.Entity("SCA.Entity.Model.TagRelation", b =>

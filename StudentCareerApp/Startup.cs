@@ -240,11 +240,11 @@ namespace StudentCareerApp
 
             app.UseStaticFiles();
             app.UseAuthentication();
-            app.UseStaticFiles(new StaticFileOptions()
-            {
-                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "AdminFiles")),
-                RequestPath = new PathString("/AdminFiles")
-            });
+            //app.UseStaticFiles(new StaticFileOptions()
+            //{
+            //    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "AdminFiles")),
+            //    RequestPath = new PathString("/AdminFiles")
+            //});
 
             app.UseMvc(routes =>
             {

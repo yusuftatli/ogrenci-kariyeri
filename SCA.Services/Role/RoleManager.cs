@@ -40,8 +40,18 @@ namespace SCA.Services
 
         public async Task<ServiceResult> GetRoleTypes()
         {
-            var dataList = _mapper.Map<List<RoleTypeDto>>(_roleTypeRepo.GetAll(x => x.IsDeleted.Equals(false)));
-            return Result.ReturnAsSuccess(null, dataList);
+            try
+            {
+                var dataList = _mapper.Map<List<RoleTypeDto>>(_roleTypeRepo.GetAll(x => x.IsDeleted.Equals(false)));
+                return Result.ReturnAsSuccess(null, dataList);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+           
         }
 
         public async Task<ServiceResult> CreateRoleType(RoleTypeDto dto)

@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace SCA.DataAccess.Migrations
 {
-    public partial class firsst : Migration
+    public partial class first : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -170,30 +170,6 @@ namespace SCA.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MenuList",
-                columns: table => new
-                {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    CreatedUserId = table.Column<long>(nullable: false),
-                    UpdatedDate = table.Column<DateTime>(nullable: false),
-                    UpdatedUserId = table.Column<long>(nullable: false),
-                    DeletedDate = table.Column<DateTime>(nullable: false),
-                    DeletedUserId = table.Column<long>(nullable: false),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    Description = table.Column<string>(nullable: true),
-                    Url = table.Column<string>(nullable: true),
-                    IsActive = table.Column<bool>(nullable: false),
-                    Icon = table.Column<string>(nullable: true),
-                    ParentId = table.Column<long>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MenuList", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "RoleType",
                 columns: table => new
                 {
@@ -207,11 +183,36 @@ namespace SCA.DataAccess.Migrations
                     DeletedUserId = table.Column<long>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    IsActive = table.Column<bool>(nullable: false)
+                    IsActive = table.Column<bool>(nullable: false),
+                    Menus = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RoleType", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ScreenMaster",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    CreatedUserId = table.Column<long>(nullable: false),
+                    UpdatedDate = table.Column<DateTime>(nullable: false),
+                    UpdatedUserId = table.Column<long>(nullable: false),
+                    DeletedDate = table.Column<DateTime>(nullable: false),
+                    DeletedUserId = table.Column<long>(nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    IsSuperUser = table.Column<bool>(nullable: false),
+                    Icon = table.Column<string>(nullable: true),
+                    description = table.Column<string>(nullable: true),
+                    Url = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ScreenMaster", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -415,6 +416,37 @@ namespace SCA.DataAccess.Migrations
                         principalTable: "RoleType",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ScreenDetail",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    CreatedUserId = table.Column<long>(nullable: false),
+                    UpdatedDate = table.Column<DateTime>(nullable: false),
+                    UpdatedUserId = table.Column<long>(nullable: false),
+                    DeletedDate = table.Column<DateTime>(nullable: false),
+                    DeletedUserId = table.Column<long>(nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    ScreenMasterId = table.Column<long>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false),
+                    IsSuperUser = table.Column<bool>(nullable: false),
+                    Icon = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    Url = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ScreenDetail", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ScreenDetail_ScreenMaster_ScreenMasterId",
+                        column: x => x.ScreenMasterId,
+                        principalTable: "ScreenMaster",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -664,48 +696,6 @@ namespace SCA.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MenuRelationWithUser",
-                columns: table => new
-                {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    CreatedUserId = table.Column<long>(nullable: false),
-                    UpdatedDate = table.Column<DateTime>(nullable: false),
-                    UpdatedUserId = table.Column<long>(nullable: false),
-                    DeletedDate = table.Column<DateTime>(nullable: false),
-                    DeletedUserId = table.Column<long>(nullable: false),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    MenuId = table.Column<long>(nullable: false),
-                    MenuListId = table.Column<long>(nullable: true),
-                    RoleId = table.Column<long>(nullable: false),
-                    RoleTypeId = table.Column<long>(nullable: true),
-                    UsersId = table.Column<long>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MenuRelationWithUser", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_MenuRelationWithUser_MenuList_MenuListId",
-                        column: x => x.MenuListId,
-                        principalTable: "MenuList",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_MenuRelationWithUser_RoleType_RoleTypeId",
-                        column: x => x.RoleTypeId,
-                        principalTable: "RoleType",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_MenuRelationWithUser_Users_UsersId",
-                        column: x => x.UsersId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "QuesitonAsnweByUsers",
                 columns: table => new
                 {
@@ -832,21 +822,6 @@ namespace SCA.DataAccess.Migrations
                 column: "CityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MenuRelationWithUser_MenuListId",
-                table: "MenuRelationWithUser",
-                column: "MenuListId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MenuRelationWithUser_RoleTypeId",
-                table: "MenuRelationWithUser",
-                column: "RoleTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MenuRelationWithUser_UsersId",
-                table: "MenuRelationWithUser",
-                column: "UsersId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_QuesitonAsnweByUsers_TestsId",
                 table: "QuesitonAsnweByUsers",
                 column: "TestsId");
@@ -880,6 +855,11 @@ namespace SCA.DataAccess.Migrations
                 name: "IX_RolePermission_RoleTypeId",
                 table: "RolePermission",
                 column: "RoleTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ScreenDetail_ScreenMasterId",
+                table: "ScreenDetail",
+                column: "ScreenMasterId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TagRelation_TagsId",
@@ -962,9 +942,6 @@ namespace SCA.DataAccess.Migrations
                 name: "ImageModel");
 
             migrationBuilder.DropTable(
-                name: "MenuRelationWithUser");
-
-            migrationBuilder.DropTable(
                 name: "QuesitonAsnweByUsers");
 
             migrationBuilder.DropTable(
@@ -975,6 +952,9 @@ namespace SCA.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "RolePermission");
+
+            migrationBuilder.DropTable(
+                name: "ScreenDetail");
 
             migrationBuilder.DropTable(
                 name: "TagRelation");
@@ -989,10 +969,10 @@ namespace SCA.DataAccess.Migrations
                 name: "Category");
 
             migrationBuilder.DropTable(
-                name: "MenuList");
+                name: "Questions");
 
             migrationBuilder.DropTable(
-                name: "Questions");
+                name: "ScreenMaster");
 
             migrationBuilder.DropTable(
                 name: "Tags");

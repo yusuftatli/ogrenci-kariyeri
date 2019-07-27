@@ -66,6 +66,8 @@ app.controller('userCreateController', function ($scope, $http, $filter) {
                     if (e.data.length > 0) {
                         $scope.roleTypeList = e.data;
                     }
+                } else {
+                    console.log(e);
                 }
                 $scope.$apply();
                 Loading(false);

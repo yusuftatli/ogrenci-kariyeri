@@ -1,7 +1,7 @@
 ﻿@charset "UTF-8";
 @import url(https://fonts.googleapis.com/css?family=Poppins:400,500,300,600,700);
-@import "spinners.css";
-@import "icons/material-design-iconic-font/css/material-design-iconic-font.min.css";
+@import url('../less/spinners.css');
+@import url('../less/icons/material-design-iconic-font2/css/material-design-iconic-font.min.css');
 
 .preloader {
     width: 100%;
@@ -8304,6 +8304,10 @@ ul.list-icons {
     src: url(../less/icons/themify-icons/fonts/themify.eot?#iefix-fvbane) format('embedded-opentype'),url(../less/icons/themify-icons/fonts/themify.woff?-fvbane) format('woff'),url(../less/icons/themify-icons/fonts/themify.ttf?-fvbane) format('truetype'),url(../less/icons/themify-icons/fonts/themify.svg?-fvbane#themify) format('svg');
     font-weight: 400;
     font-style: normal
+}
+@font-face {
+    font-family: 'themify';
+    src: url('../less/icons/themify-icons/fonts/themify.ttf') format('truetype');
 }
 
 [class*=" ti-"], [class^=ti-] {
@@ -19110,10 +19114,10 @@ a.btn:not([href]):not([tabindex]) {
     cursor: pointer
 }
 
-/*.btn {
+.btn {
     font-size: 14px;
     padding: .8rem 1.2rem
-}*/
+}
 
 a.btn-default:not([href]):not([tabindex]) {
     color: #686868
