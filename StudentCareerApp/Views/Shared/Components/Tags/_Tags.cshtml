@@ -1,0 +1,16 @@
+﻿@model List<SCA.Entity.DTO.TagDto>
+
+@if (Model != null && Model.Count > 0)
+{
+    <div class="ts-grid-box widgets tag-list">
+        <h3 class="widget-title">Etiketler</h3>
+        <ul>
+            @foreach (var x in Model)
+            {
+                <li>
+                    <a href="#">@x.Description</a>
+                </li>
+            }
+        </ul>
+    </div>
+}
