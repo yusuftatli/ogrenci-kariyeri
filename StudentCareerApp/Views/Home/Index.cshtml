@@ -118,21 +118,10 @@
             </div>
             <div class="col-lg-3">
                 <div class="right-sidebar">
-
-                    <div class="widgets widget-banner">
-                        <a href="#">
-                            <img class="img-fluid" src="images/banner/sidebar-banner4.jpg" alt="">
-                        </a>
-                    </div>
-                    <!-- widgets end-->
+                    @await Component.InvokeAsync("Banner", new { url = "#", imagePath = "images/banner/sidebar-banner4.jpg"})
                     @await Component.InvokeAsync("RecentAndFavorites")
-                    <!-- widgets end-->
                     @await  Component.InvokeAsync("Tags")
-                    <div class="widgets widget-banner">
-                        <a href="#">
-                            <img class="img-fluid" src="images/banner/sidebar-banner1.jpg" alt="">
-                        </a>
-                    </div>
+                    @await  Component.InvokeAsync("Banner", new { url = "#", imagePath = "images/banner/sidebar-banner1.jpg"})
                 </div>
             </div>
         </div>
