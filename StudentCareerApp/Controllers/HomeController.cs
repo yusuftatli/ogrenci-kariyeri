@@ -8,7 +8,6 @@ using SCA.Services.Interface;
 
 namespace SCA.UI.Controllers
 {
-    [Route("[controller]/[action]")]
     public class HomeController : Controller
     {
         #region INTERFACES & CONSTRUCTOR
@@ -20,7 +19,6 @@ namespace SCA.UI.Controllers
         #endregion
 
         #region VIEWS
-        [HttpGet]
         public IActionResult Index()
         {
             var res = _b2cManager.GetContentsForHomePage().Result;
