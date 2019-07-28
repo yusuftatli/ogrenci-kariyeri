@@ -1,0 +1,659 @@
+﻿@model List<SCA.Entity.DTO.ContentForHomePageDTO>
+@{
+    ViewData["Title"] = "Company";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .ts-title.full-size-ts::before {
+        left: 0;
+    }
+
+    .full-size-ts > span {
+        padding-left: 20px;
+    }
+
+    .ts-single-inst img {
+        height: 190px !important;
+    }
+
+    .ts-social-list-item ul {
+        margin:0 !important;
+        text-align:center;
+    }
+    .pb-110{
+        padding-bottom:110px;
+    }
+</style>
+
+<link rel="stylesheet" href="/css/jquery.mCustomScrollbar.css">
+
+
+<!-- start blog wrapper -->
+<section class="block-wrapper featured-section-item pt-110 pb-110 banner-area" style="background:url(/images/turkcell-banner.png);background-size:cover;background-position:center">
+        <div class="offset-lg-9 col-lg-3">
+            <div class="ts-grid-box widgets ts-social-list-item" style="box-shadow: -6px 6px 40px 4px black;">
+                <h2 class="text-center p-b-20">Turkcell Platinium</h2>
+                <h3 class="ts-title float-left">Web Site:</h3>
+                <a href="http://www.turkcell.com.tr" class="view-all-link float-right">www.turkcell.com.tr</a>
+                <div class="clearfix"></div>
+                <h3 class="ts-title float-left">Telefon:</h3>
+                <a href="tel:+902125320000" class="view-all-link float-right">0212 532 0000</a>
+                <div class="clearfix"></div>
+                <h3 class="ts-title float-left">Mail:</h3>
+                <a href="mailto:info@turkcell.com.tr" class="view-all-link float-right">info@turkcell.com.tr</a>
+                <div class="clearfix"></div>
+                <ul>
+                    <li class="ts-facebook">
+                        <a href="http://www.facebook.com/ogrenci-kariyeri" target="_blank">
+                            <i class="fa fa-facebook"></i>
+                            <b>5.5k</b>
+                            <span>Beğeni</span>
+                        </a>
+                    </li>
+                    <li class="ts-twitter">
+                        <a href="http://www.twitter.com/ogrenci-kariyeri" target="_blank">
+                            <i class="fa fa-twitter"></i>
+                            <b>2.3k</b>
+                            <span>Takipçi</span>
+                        </a>
+                    </li>
+                    <li class="ts-instragram">
+                        <a href="http://www.instagram.com/ogrenci-kariyeri" target="_blank">
+                            <i class="fa fa-instagram"></i>
+                            <b>7.4k</b>
+                            <span>Takipçi</span>
+                        </a>
+                    </li>
+                    <li class="ts-youtube">
+                        <a href="http://www.youtube.com/ogrenci-kariyeri" target="_blank">
+                            <i class="fa fa-youtube"></i>
+                            <b>12.7k</b>
+                            <span>Abone</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    <!-- container end-->
+</section>
+<!-- end  blog wrapper -->
+
+<section class="instagramPhoto">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md p-0">
+                <div class="ts-single-inst">
+                    <a href="#" class="">
+                        <img src="/images/kampanya-1.jpg" alt="">
+                    </a>
+                </div>
+                <!-- ts single inst-->
+            </div>
+            <!-- col end-->
+            <div class="col-md p-0">
+                <div class="ts-single-inst">
+                    <a href="#" class="">
+                        <img src="/images/kampanya-2.jpg" alt="">
+                    </a>
+                </div>
+                <!-- ts single inst-->
+            </div>
+            <!-- col end-->
+            <div class="col-md p-0">
+                <div class="ts-single-inst">
+                    <a href="#" class="">
+                        <img src="/images/kampanya-3.jpg" alt="">
+                    </a>
+                </div>
+                <!-- ts single inst-->
+            </div>
+            <!-- col end-->
+            <div class="col-md p-0">
+                <div class="ts-single-inst">
+                    <a href="#" class="">
+                        <img src="/images/kampanya-4.png" alt="">
+                    </a>
+                </div>
+                <!-- ts single inst-->
+            </div>
+            <!-- col end-->
+            <div class="col-md p-0">
+                <div class="ts-single-inst">
+                    <a href="#" class="">
+                        <img src="/images/kampanya-5.png" alt="">
+                    </a>
+                </div>
+                <!-- ts single inst-->
+            </div>
+            <!-- col end-->
+            <div class="col-md p-0">
+                <div class="ts-single-inst">
+                    <a href="#" class="">
+                        <img src="/images/kampanya-6.jpg" alt="">
+                    </a>
+                </div>
+                <!-- ts single inst-->
+            </div>
+            <!-- col end-->
+            @*<a href="#" class="view-link-btn">
+                    <span>Follow On Instagram</span>
+                </a>*@
+        </div>
+        <!-- row end-->
+    </div>
+    <!-- container end-->
+</section>
+
+<section class="block-wrapper block-wrapper-1 p-50 mb-40 bg-white info-area">
+    <div class="container">
+        <div class="row post-overflow-style">
+            <div class="col-lg-12">
+                <h2 class="ts-title full-size-ts">
+                    <span>Duyurular</span>
+                </h2>
+                <!-- ts title item end-->
+                <div class="owl-carousel" id="post-slider1">
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <div class="ts-post-thumb">
+                                <a href="#">
+                                    <img class="img-fluid" src="/images/news/travel/travel5.jpg" alt="">
+                                </a>
+                            </div>
+                        </div>
+                        <!-- col end-->
+                        <div class="col-lg-10">
+                            <div class="post-content post-content-item">
+                                <h3 class="post-title large">Theye back Kennedy Darlings return</h3>
+                                <p>
+                                    Black farmers in the US’s South faced with continued failure in their
+                                </p>
+                                <ul class="post-meta-info">
+                                    <li>
+                                        <i class="fa fa-clock-o"></i>
+                                        March 21, 2019
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <div class="ts-post-thumb">
+                                <a href="#">
+                                    <img class="img-fluid" src="/images/news/travel/travel5.jpg" alt="">
+                                </a>
+                            </div>
+                        </div>
+                        <!-- col end-->
+                        <div class="col-lg-10">
+                            <div class="post-content post-content-item">
+                                <h3 class="post-title large">Theye back Kennedy Darlings return</h3>
+                                <p>
+                                    Black farmers in the US’s South faced with continued failure in their
+                                </p>
+                                <ul class="post-meta-info">
+                                    <li>
+                                        <i class="fa fa-clock-o"></i>
+                                        March 21, 2019
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- col end-->
+        </div>
+        <!-- row end-->
+    </div>
+    <!-- container end-->
+</section>
+
+
+<!-- post wraper start-->
+<section class="block-wrapper mt-15">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <div class="ts-grid-box">
+                    <div class="author-box author-box-item">
+                        <img class="author-img" src="~/images/turkcell-company.jpg" alt="Öğrenci Kariyeri - Şirket Bilgileri - Turkcell">
+                        <div class="author-info">
+                            <div class="author-name">
+                                <h4>Turkcell Platinum</h4>
+                            </div>
+
+                            <div class="clearfix"></div>
+                            <p>
+                                1500'lerden beri kullanılan standart Lorem Ipsum pasajı
+                                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+                            </p>
+
+                            <p>
+                                M.Ö. 45 tarihinde Çiçero tarafından yazılan 'de Finibus Bonorum et Malorum'un 1.10.32 sayılı bölümü
+                                'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?'
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- row end-->
+    </div>
+    <!-- container end-->
+</section>
+<!-- post wraper end-->
+
+<section class="block-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 pr-0">
+
+                <div class="tab-content clearfix">
+                    <div class="tab-pane fade in active" id="1a">
+                        <div class="video-item" style="background-image: url(/images/news/sports/sports4.jpg)">
+                            <div class="post-video">
+                                <a href="https://www.youtube.com/watch?v=_0UO1NcheAE" class="ts-play-btn">
+                                    <i class="fa fa-play" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end tab pane-->
+                    <div class="tab-pane fade" id="2a">
+                        <div class="video-item" style="background-image: url(/images/news/sports/sports2.jpg)">
+                            <div class="post-video">
+                                <a href="https://www.youtube.com/watch?v=_0UO1NcheAE" class="ts-play-btn">
+                                    <i class="fa fa-play" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end tab pane-->
+                    <div class="tab-pane fade" id="3a">
+                        <div class="video-item" style="background-image: url(/images/news/sports/sports3.jpg)">
+                            <div class="post-video">
+                                <a href="https://www.youtube.com/watch?v=_0UO1NcheAE" class="ts-play-btn">
+                                    <i class="fa fa-play" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end tab pane-->
+                    <div class="tab-pane fade" id="4a">
+                        <div class="video-item" style="background-image: url(/images/news/sports/sports1.jpg)">
+                            <div class="post-video">
+                                <a href="https://www.youtube.com/watch?v=_0UO1NcheAE" class="ts-play-btn">
+                                    <i class="fa fa-play" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end tab pane-->
+                    <div class="tab-pane fade" id="5a">
+                        <div class="video-item" style="background-image: url(/images/news/health/health1.jpg)">
+                            <div class="post-video">
+                                <a href="https://www.youtube.com/watch?v=_0UO1NcheAE" class="ts-play-btn">
+                                    <i class="fa fa-play" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end tab pane-->
+                    <div class="tab-pane fade" id="6a">
+                        <div class="video-item" style="background-image: url(/images/news/health/health2.jpg)">
+                            <div class="post-video">
+                                <a href="https://www.youtube.com/watch?v=_0UO1NcheAE" class="ts-play-btn">
+                                    <i class="fa fa-play" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end tab pane-->
+                    <div class="tab-pane fade" id="7a">
+                        <div class="video-item" style="background-image: url(/images/news/health/health3.jpg)">
+                            <div class="post-video">
+                                <a href="https://www.youtube.com/watch?v=_0UO1NcheAE" class="ts-play-btn">
+                                    <i class="fa fa-play" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end tab pane-->
+                    <div class="tab-pane fade" id="8a">
+                        <div class="video-item" style="background-image: url(/images/news/health/health4.jpg)">
+                            <div class="post-video">
+                                <a href="https://www.youtube.com/watch?v=_0UO1NcheAE" class="ts-play-btn">
+                                    <i class="fa fa-play" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end tab pane-->
+                    <div class="tab-pane fade" id="9a">
+                        <div class="video-item" style="background-image: url(/images/news/health/health6.jpg)">
+                            <div class="post-video">
+                                <a href="https://www.youtube.com/watch?v=_0UO1NcheAE" class="ts-play-btn">
+                                    <i class="fa fa-play" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end tab pane-->
+                    <div class="tab-pane fade" id="10a">
+                        <div class="video-item" style="background-image: url(/images/news/health/health7.jpg)">
+                            <div class="post-video">
+                                <a href="https://www.youtube.com/watch?v=_0UO1NcheAE" class="ts-play-btn">
+                                    <i class="fa fa-play" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end tab pane-->
+                    <div class="tab-pane fade" id="11a">
+                        <div class="video-item" style="background-image: url(/images/news/health/health8.jpg)">
+                            <div class="post-video">
+                                <a href="https://www.youtube.com/watch?v=_0UO1NcheAE" class="ts-play-btn">
+                                    <i class="fa fa-play" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end tab pane-->
+                    <div class="tab-pane fade" id="12a">
+                        <div class="video-item" style="background-image: url(/images/news/health/health9.jpg)">
+                            <div class="post-video">
+                                <a href="https://www.youtube.com/watch?v=_0UO1NcheAE" class="ts-play-btn">
+                                    <i class="fa fa-play" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end tab pane-->
+                </div>
+                <!-- tab content end-->
+            </div>
+            <!-- end col-->
+            <div class="col-lg-4 pl-0">
+                <div class="video-tab-list bg-dark-item" id="video-tab-scrollbar">
+                    <ul class="nav nav-pills post-tab-list">
+                        <li class="active">
+                            <a href="#1a" data-toggle="tab">
+                                <div class="post-content media">
+                                    <img class="d-flex sidebar-img" src="/images/news/sports/sports4.jpg" alt="">
+                                    <div class="media-body align-self-center">
+                                        <h4 class="post-title">
+                                            Tourism in Dubai tourist favorite place
+                                        </h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <!-- end li-->
+                        <li>
+                            <a href="#2a" data-toggle="tab">
+                                <div class="post-content media">
+                                    <img class="d-flex sidebar-img" src="/images/news/sports/sports2.jpg" alt="">
+                                    <div class="media-body align-self-center">
+                                        <h4 class="post-title">
+                                            Tesla just lost its head of global finance
+                                        </h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <!-- end li-->
+                        <li>
+                            <a href="#3a" data-toggle="tab">
+                                <div class="post-content media">
+                                    <img class="d-flex sidebar-img" src="/images/news/sports/sports3.jpg" alt="">
+                                    <div class="media-body align-self-center">
+                                        <h4 class="post-title">
+                                            The clock is ticking for e-cig companies users
+                                        </h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <!-- end li-->
+                        <li>
+                            <a href="#4a" data-toggle="tab">
+                                <div class="post-content media">
+                                    <img class="d-flex sidebar-img" src="/images/news/sports/sports1.jpg" alt="">
+                                    <div class="media-body align-self-center">
+                                        <h4 class="post-title">
+                                            critical Zuckerberg’s security manifesto
+                                        </h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <!-- end li-->
+                        <li>
+                            <a href="#5a" data-toggle="tab">
+                                <div class="post-content media">
+                                    <img class="d-flex sidebar-img" src="/images/news/health/health1.jpg" alt="">
+                                    <div class="media-body align-self-center">
+                                        <h4 class="post-title">
+                                            10 critical points from Zuckerberg’s epic
+                                        </h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <!-- end li-->
+                        <li>
+                            <a href="#6a" data-toggle="tab">
+                                <div class="post-content media">
+                                    <img class="d-flex sidebar-img" src="/images/news/health/health2.jpg" alt="">
+                                    <div class="media-body align-self-center">
+                                        <h4 class="post-title">
+                                            Tesla just lost its head of global finance
+                                        </h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <!-- end li-->
+                        <li>
+                            <a href="#7a" data-toggle="tab">
+                                <div class="post-content media">
+                                    <img class="d-flex sidebar-img" src="/images/news/health/health3.jpg" alt="">
+                                    <div class="media-body align-self-center">
+                                        <h4 class="post-title">
+                                            Hands on with the Apple Watch Series 4
+                                        </h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <!-- end li-->
+                        <li>
+                            <a href="#8a" data-toggle="tab">
+                                <div class="post-content media">
+                                    <img class="d-flex sidebar-img" src="/images/news/health/health4.jpg" alt="">
+                                    <div class="media-body align-self-center">
+                                        <h4 class="post-title">
+                                            easy teriyaki chicken with broccoli
+                                        </h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <!-- end li-->
+                        <li>
+                            <a href="#9a" data-toggle="tab">
+                                <div class="post-content media">
+                                    <img class="d-flex sidebar-img" src="/images/news/health/health6.jpg" alt="">
+                                    <div class="media-body align-self-center">
+                                        <h4 class="post-title">
+                                            10 critical points from Zuckerberg’s epic security manifesto
+                                        </h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <!-- end li-->
+                        <li>
+                            <a href="#10a" data-toggle="tab">
+                                <div class="post-content media">
+                                    <img class="d-flex sidebar-img" src="/images/news/health/health7.jpg" alt="">
+                                    <div class="media-body align-self-center">
+                                        <h4 class="post-title">
+                                            ticking for e-cig companies to block underage users
+                                        </h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <!-- end li-->
+                        <li>
+                            <a href="#11a" data-toggle="tab">
+                                <div class="post-content media">
+                                    <img class="d-flex sidebar-img" src="/images/news/health/health8.jpg" alt="">
+                                    <div class="media-body align-self-center">
+                                        <h4 class="post-title">
+                                            Beats did announce something today, after all
+                                        </h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <!-- end li-->
+                        <li>
+                            <a href="#12a" data-toggle="tab">
+                                <div class="post-content media">
+                                    <img class="d-flex sidebar-img" src="/images/news/health/health9.jpg" alt="">
+                                    <div class="media-body align-self-center">
+                                        <h4 class="post-title">
+                                            easy teriyaki chicken with broccoli
+                                        </h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <!-- end li-->
+                    </ul>
+
+                </div>
+                <!-- end video tab list-->
+            </div>
+            <!-- col end-->
+        </div>
+        <!-- row end-->
+    </div>
+    <!-- container end-->
+</section>
+
+<section class="block-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="ts-grid-box">
+                    <h2 class="ts-title float-left">
+                        Haberlerimiz
+                    </h2>
+                    <div class="clearfix"></div>
+                    <div class="post-list">
+                        @foreach (var x in Model)
+                        {
+                            <div class="row mb-10">
+                                <div class="col-md-3">
+                                    <div class="ts-post-thumb">
+                                        <a href="@Url.Action("Index", "Blog", new { SeoUrl = x.SeoUrl})">
+                                            <img class="img-fluid" src="@x.ImagePath" alt="">
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- col lg end-->
+                                <div class="col-md-9">
+                                    <div class="post-content">
+                                        <h3 class="post-title md">
+                                            <a href="@Url.Action("Index", "Blog", new { SeoUrl = x.SeoUrl})">@x.Header</a>
+                                        </h3>
+                                        <ul class="post-meta-info">
+                                            <li>
+                                                <a href="">@x.Writer</a>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-clock-o"></i>
+                                                @x.PublishDate.ToString("dd.MM.yyyy HH:mm")
+                                            </li>
+                                        </ul>
+                                        <p>
+                                            @x.Header
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="right-sidebar">
+                    @await Component.InvokeAsync("SocialMedia")
+                    @await Component.InvokeAsync("PopularContents")
+                    @await Component.InvokeAsync("PopularCategories")
+                    @await Component.InvokeAsync("NewsletterForm")
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="block-wrapper hot-topics-item">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+
+
+                <!-- row end-->
+                <div class="ts-pagination text-center mb-20">
+                    <ul class="pagination">
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-angle-double-left"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        </li>
+                        <li class="active">
+                            <a href="#">1</a>
+                        </li>
+                        <li>
+                            <a href="#">2</a>
+                        </li>
+                        <li>
+                            <a href="#">3</a>
+                        </li>
+                        <li>
+                            <a href="#">4</a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-angle-double-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
