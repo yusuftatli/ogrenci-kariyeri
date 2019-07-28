@@ -1,0 +1,39 @@
+﻿@model SCA.Entity.DTO.WriterForUIDto
+@using StudentCareerApp.Helpers;
+
+
+<div class="ts-grid-box">
+    <div class="author-box author-box-item">
+        <img class="author-img" src="@Model.ImagePath" alt="Öğrenci Kariyeri Yazar ve Editörleri">
+        <div class="author-info">
+            <div class="author-name">
+                <h4>@Model.Name</h4>
+            </div>
+
+            <div class="authors-social">
+                @foreach (var x in Model.SocialMedias)
+                {
+                    <a href="@x.Url" class="ts-@x.SocialMediaType.GetDescription().Split(",")[0].Trim()">
+                        <i class="fa fa-@x.SocialMediaType.GetDescription().Split(",")[1].Trim()"></i>
+                    </a>
+                }
+            </div>
+            <div class="clearfix"></div>
+            @Html.Raw(Model.Description)
+        </div>
+        <ul class="post-meta-info">
+            <li>
+                <a href="#">
+                    @Model.PostCount Gönderi
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-comments"></i>
+                    @Model.CommentCount Yorum
+                </a>
+            </li>
+
+        </ul>
+    </div>
+</div>
