@@ -31,33 +31,6 @@ namespace StudentCareerApp.Components.EditorInformation
                 Name = "Göksu Deniz",
                 ImagePath = "/images/news/user1.png",
                 PostCount = 22,
-                SocialMedias = new List<SocialMediaDto>
-                {
-                    new SocialMediaDto
-                    {
-                        FollowerCount = null,
-                        SocialMediaType = SCA.Entity.Enums.SocialMediaType.Facebook,
-                        Url = "https://www.facebook.com/goksu-deniz"
-                    },
-                    new SocialMediaDto
-                    {
-                        FollowerCount = null,
-                        SocialMediaType = SCA.Entity.Enums.SocialMediaType.Instagram,
-                        Url = "https://www.instagram.com/goksudnz"
-                    },
-                    new SocialMediaDto
-                    {
-                        FollowerCount = null,
-                        SocialMediaType = SCA.Entity.Enums.SocialMediaType.Linkedin,
-                        Url = "https://www.linkedin.com/goksudnz"
-                    },
-                    new SocialMediaDto
-                    {
-                        FollowerCount = null,
-                        SocialMediaType = SCA.Entity.Enums.SocialMediaType.Twitter,
-                        Url = "https://www.twitter.com/goksudnz"
-                    }
-                }
             };
         }
     }
