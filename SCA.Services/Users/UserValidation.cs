@@ -1,5 +1,8 @@
 ﻿using SCA.Common.Result;
 using SCA.Entity.DTO;
+using SCA.Entity.Model;
+using SCA.Repository.Repo;
+using SCA.Repository.UoW;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,9 +12,12 @@ namespace SCA.Services
 {
     public class UserValidation : IUserValidation
     {
-        public UserValidation()
+        private IGenericRepository<Users> _userRepo;
+        private readonly IUnitofWork _unitOfWork;
+        public UserValidation(IUnitofWork unitOfWork)
         {
-
+            _unitOfWork = unitOfWork;
+            _userRepo = _unitOfWork.GetRepository<Users>();
         }
 
         public ServiceResult UserLoginValidation(LoginDto dto)
@@ -37,7 +43,7 @@ namespace SCA.Services
 
             if (dto.IsActive == true)
             {
-                _res = Result.ReturnAsFail(message:"Sisteme Girişiniz Yetkiniz Bulunmamaktadır.", null);
+                _res = Result.ReturnAsFail(message: "Sisteme Girişiniz Yetkiniz Bulunmamaktadır.", null);
             }
 
             return _res;

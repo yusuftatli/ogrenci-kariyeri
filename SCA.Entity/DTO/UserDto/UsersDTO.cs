@@ -34,5 +34,6 @@ namespace SCA.Entity.DTO
         public PlatformType EnrollPlatformTypeId { get; set; }
         public bool IsEmailSend { get; set; }
         public bool IsPhoneSend { get; set; }
+        public List<SocialMediaDto> SocialMedia { get; set; }
     }
 }

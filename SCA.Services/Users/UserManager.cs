@@ -22,6 +22,7 @@ namespace SCA.Services
         private readonly IUnitofWork _unitOfWork;
         private IGenericRepository<Users> _userRepo;
         private IGenericRepository<UserLog> _userLogRepo;
+        private IGenericRepository<SocialMedia> _socialMediaRepo;
         private IPictureManager _pictureManager;
         public UserManager(IUnitofWork unitOfWork, IMapper mapper, ISender sender, IPictureManager pictureManager)
         {
@@ -30,9 +31,25 @@ namespace SCA.Services
             _unitOfWork = unitOfWork;
             _userRepo = _unitOfWork.GetRepository<Users>();
             _userLogRepo = _unitOfWork.GetRepository<UserLog>();
+            _socialMediaRepo = _unitOfWork.GetRepository<SocialMedia>();
             _pictureManager = pictureManager;
         }
 
+        public async Task<ServiceResult> CreateUserByMobil(UserMobilDto dto)
+        {
+            if (dto.Equals(null))
+            {
+                Result.ReturnAsFail();
+            }
+
+            var user = _mapper.Map<Users>(dto);
+            user.IsActive = true;
+            user.IsStudent = true;
+
+            _userRepo.Add(user);
+            return _unitOfWork.SaveChanges();
+
+        }
 
         /// <summary>
         /// Kullanıcı bilgilerini döner
@@ -66,64 +83,14 @@ namespace SCA.Services
 
         }
 
-        public async Task<ServiceResult> CreateUserMobil(UsersDTO dto)
-        {
-            if (!UserControl(dto.EmailAddress))
-            {
-                Result.ReturnAsFail(AlertResource.EmailAlreadyExsist, null);
-            }
-
-            //if (dto.EmailAddress.Equals(null) && dto.EmailAddress == "")
-            //{
-            //    Result.ReturnAsFail("Ad Boş Geçilemez", null);
-            //}
-
-            if (dto.Equals(null))
-            {
-                Result.ReturnAsFail(AlertResource.NoChanges, null);
-            }
-
-            //if (dto.Name.Equals(null) && dto.Name == "")
-            //{
-            //    Result.ReturnAsFail("Ad Boş Geçilemez", null);
-            //}
-
-            //if (dto.Surname.Equals(null) && dto.Surname == "")
-            //{
-            //    Result.ReturnAsFail("Ad Boş Geçilemez", null);
-            //}
-
-            if (dto.IsEmailSend)
-            {
-                await _sender.SendEmail();
-            }
-
-            if (dto.IsPhoneSend)
-            {
-                await _sender.SendMessage("");
-            }
-
-            if (!string.IsNullOrEmpty(dto.ImageData))
-            {
-                //_pictureManager.SaveImage(dto.ImageData, dto.Name + "-" + dto.Surname);
-            }
-
-            dto.IsActive = true;
-            dto.BanCount = 0;
-            dto.EnrollPlatformTypeId = PlatformType.Mobil;
-            dto.HighSchoolTypeId = (dto.HighSchoolTypeId == 0) ? null : dto.HighSchoolTypeId;
-            dto.UniversityId = (dto.UniversityId == 0) ? null : dto.UniversityId;
-            dto.FacultyId = (dto.FacultyId == 0) ? null : dto.FacultyId;
-            dto.DepartmentId = (dto.DepartmentId == 0) ? null : dto.DepartmentId;
-            //dto.Password = Guid.NewGuid().ToString();
-            _userRepo.Add(_mapper.Map<Users>(dto));
-            var res = _unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess("Kayıt işlemi Başarılı", res);
-        }
-
-
+        /// <summary>
+        /// Kullanıcı kayıt (editör,admin vb)
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         public async Task<ServiceResult> CreateUser(UsersDTO dto)
         {
+            string resultMessage = "";
             if (!UserControl(dto.EmailAddress))
             {
                 Result.ReturnAsFail(AlertResource.EmailAlreadyExsist, null);
@@ -138,16 +105,6 @@ namespace SCA.Services
             {
                 Result.ReturnAsFail(AlertResource.NoChanges, null);
             }
-
-            //if (dto.Name.Equals(null) && dto.Name == "")
-            //{
-            //    Result.ReturnAsFail("Ad Boş Geçilemez", null);
-            //}
-
-            //if (dto.Surname.Equals(null) && dto.Surname == "")
-            //{
-            //    Result.ReturnAsFail("Ad Boş Geçilemez", null);
-            //}
 
             if (dto.IsEmailSend)
             {
@@ -164,27 +121,60 @@ namespace SCA.Services
                 //_pictureManager.SaveImage(dto.ImageData, dto.Name + "-" + dto.Surname);
             }
 
-            dto.IsActive = true;
-            dto.BanCount = 0;
-            dto.EnrollPlatformTypeId = PlatformType.Web;
-            dto.HighSchoolTypeId = (dto.HighSchoolTypeId == 0) ? null : dto.HighSchoolTypeId;
-            dto.UniversityId = (dto.UniversityId == 0) ? null : dto.UniversityId;
-            dto.FacultyId = (dto.FacultyId == 0) ? null : dto.FacultyId;
-            dto.DepartmentId = (dto.DepartmentId == 0) ? null : dto.DepartmentId;
-            //dto.Password = Guid.NewGuid().ToString();
-            _userRepo.Add(_mapper.Map<Users>(dto));
-            var res = _unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess("Kayıt işlemi Başarılı", res);
-        }
-        public async Task<ServiceResult> UpdateUser(UsersDTO dto)
-        {
-            if (dto.Equals(null))
+            Users _user = null;
+            if (dto.Id == 0)
             {
-                return Result.ReturnAsFail(null, AlertResource.NoChanges);
+                dto.IsActive = true;
+                dto.BanCount = 0;
+                dto.EnrollPlatformTypeId = PlatformType.Web;
+                dto.HighSchoolTypeId = (dto.HighSchoolTypeId == 0) ? null : dto.HighSchoolTypeId;
+                dto.UniversityId = (dto.UniversityId == 0) ? null : dto.UniversityId;
+                dto.FacultyId = (dto.FacultyId == 0) ? null : dto.FacultyId;
+                dto.DepartmentId = (dto.DepartmentId == 0) ? null : dto.DepartmentId;
+                //dto.Password = Guid.NewGuid().ToString();
+                _user = _userRepo.Add(_mapper.Map<Users>(dto));
+                resultMessage = "Kayıt İşlemi Başarılı";
             }
-            _userRepo.Update(_mapper.Map<Users>(dto));
-            var result = _unitOfWork.SaveChanges();
-            return null;
+            else
+            {
+                _userRepo.Update(_mapper.Map<Users>(dto));
+                resultMessage = "Güncelleme İşlemi Başarılı";
+            }
+
+            var res = _unitOfWork.SaveChanges();
+
+            if (dto.SocialMedia.Count > 0)
+            {
+                var _socialMedia = _mapper.Map<List<SocialMedia>>(dto.SocialMedia);
+                if (dto.Id == 0)
+                {
+                    foreach (var item in _socialMedia)
+                    {
+                        item.Id = _user.Id;
+                    }
+                    _socialMediaRepo.AddRange(_socialMedia);
+                }
+                else
+                {
+                    List<SocialMedia> socailData = _socialMediaRepo.GetAll(x => x.Id == dto.Id).ToList();
+                    foreach (var _item in socailData)
+                    {
+                        foreach (var _dto in _socialMedia)
+                        {
+                            if (_item.SocialMediaType == _dto.SocialMediaType)
+                            {
+                                _item.Id = _dto.Id;
+                                _item.Url = _dto.Url;
+                                _item.IsActive = _dto.IsActive;
+                                _socialMediaRepo.Update(_mapper.Map<SocialMedia>(_item));
+                            }
+                        }
+                        _unitOfWork.SaveChanges();
+                    }
+                }
+            }
+
+            return Result.ReturnAsSuccess(message: resultMessage, null);
         }
         public async Task<ServiceResult> DeleteUser(long userId)
         {

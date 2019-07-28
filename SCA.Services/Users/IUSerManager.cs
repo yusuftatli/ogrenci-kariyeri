@@ -11,8 +11,8 @@ namespace SCA.Services
     {
         Task CreateUserLog(UserLogDto dto);
         Task<ServiceResult> CreateUser(UsersDTO dto);
-        Task<ServiceResult> UpdateUser(UsersDTO dto);
         Task<ServiceResult> DeleteUser(long userId);
+        Task<ServiceResult> CreateUserByMobil(UserMobilDto dto);
         /// <summary>
         /// Kullanıcı bilgilerini döner
         /// </summary>

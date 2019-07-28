@@ -65,5 +65,11 @@ namespace SCA.DataAccess.Context
 
         #endregion
 
+        #region Social Meadia
+
+        public DbSet<SocialMedia> SocialMedia { get; set; }
+
+        #endregion
+
     }
 }

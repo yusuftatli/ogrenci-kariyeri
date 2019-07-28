@@ -48,6 +48,9 @@ namespace SCA.Entity.Model
         [ForeignKey("ClassId")]
         public long? ClassId { get; set; }
         public StudentClass ClassType { get; set; }
+        public bool IsStudent { get; set; }
+
+        public string Biography { get; set; }
 
         [ForeignKey("CityId")]
         public long? CityId { get; set; }
@@ -58,6 +61,7 @@ namespace SCA.Entity.Model
         //public District District { get; set; }
 
         //public long DefaultPageId { get; set; }
+
 
         public bool IsActive { get; set; }
         public string ReferanceCode { get; set; }

@@ -30,12 +30,6 @@ namespace StudentCareerApp.Areas.Api.Controller
             return await _userManager.CreateUser(dto);
         }
 
-        [HttpPut("UpdateUser")]
-        public async Task<ActionResult<ServiceResult>> UpdateUser([FromBody]UsersDTO dto)
-        {
-            return await _userManager.UpdateUser(dto);
-        }
-
         [HttpDelete("DeleteUser/{userId}")]
         public async Task<ActionResult<ServiceResult>> DeleteUser(long userId)
         {
@@ -46,6 +40,17 @@ namespace StudentCareerApp.Areas.Api.Controller
         public async Task<ServiceResult> UpdateUserStatu(long id, bool value)
         {
             return await _userManager.UpdateUserStatu(id, value);
+        }
+
+        /// <summary>
+        /// mobil kullanıcı kayıt
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPost("mobil-createuser")]
+        public async Task<ServiceResult> CreateUserByMobil(UserMobilDto dto)
+        {
+            return await _userManager.CreateUserByMobil(dto);
         }
     }
 }
