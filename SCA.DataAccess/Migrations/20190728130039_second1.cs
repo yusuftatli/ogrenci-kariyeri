@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace SCA.DataAccess.Migrations
 {
-    public partial class first : Migration
+    public partial class second1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -183,6 +183,7 @@ namespace SCA.DataAccess.Migrations
                     DeletedUserId = table.Column<long>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Description = table.Column<string>(nullable: true),
+                    Prefix = table.Column<string>(nullable: true),
                     IsActive = table.Column<bool>(nullable: false),
                     Menus = table.Column<string>(nullable: true)
                 },
@@ -213,6 +214,28 @@ namespace SCA.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ScreenMaster", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SocialMedia",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    CreatedUserId = table.Column<long>(nullable: false),
+                    UpdatedDate = table.Column<DateTime>(nullable: false),
+                    UpdatedUserId = table.Column<long>(nullable: false),
+                    DeletedDate = table.Column<DateTime>(nullable: false),
+                    DeletedUserId = table.Column<long>(nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    Url = table.Column<string>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false),
+                    SocialMediaType = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SocialMedia", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -567,6 +590,8 @@ namespace SCA.DataAccess.Migrations
                     DepartmentId = table.Column<long>(nullable: true),
                     ClassId = table.Column<long>(nullable: true),
                     ClassTypeId = table.Column<long>(nullable: true),
+                    IsStudent = table.Column<bool>(nullable: false),
+                    Biography = table.Column<string>(nullable: true),
                     CityId = table.Column<long>(nullable: true),
                     IsActive = table.Column<bool>(nullable: false),
                     ReferanceCode = table.Column<string>(nullable: true),
@@ -955,6 +980,9 @@ namespace SCA.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "ScreenDetail");
+
+            migrationBuilder.DropTable(
+                name: "SocialMedia");
 
             migrationBuilder.DropTable(
                 name: "TagRelation");

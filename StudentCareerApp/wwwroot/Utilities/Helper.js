@@ -3,6 +3,8 @@ var _link = '';
 
 
 if (prodType === "d") {
+    _link = "https://localhost:44308/api";
+} else {
     _link = "https://localhost:5000/api";
 }
 

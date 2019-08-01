@@ -8,6 +8,7 @@ namespace SCA.Entity.Model
     public class RoleType : BaseEntities
     {
         public string Description { get; set; }
+        public string Prefix { get; set; }
         public bool IsActive { get; set; }
         public string Menus { get; set; }
 

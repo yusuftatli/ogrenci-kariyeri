@@ -10,8 +10,8 @@ using SCA.DataAccess.Context;
 namespace SCA.DataAccess.Migrations
 {
     [DbContext(typeof(PostgreDbContext))]
-    [Migration("20190727151242_first")]
-    partial class first
+    [Migration("20190728130039_second1")]
+    partial class second1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -580,6 +580,8 @@ namespace SCA.DataAccess.Migrations
 
                     b.Property<string>("Menus");
 
+                    b.Property<string>("Prefix");
+
                     b.Property<DateTime>("UpdatedDate");
 
                     b.Property<long>("UpdatedUserId");
@@ -659,6 +661,36 @@ namespace SCA.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ScreenMaster");
+                });
+
+            modelBuilder.Entity("SCA.Entity.Model.SocialMedia", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<long>("CreatedUserId");
+
+                    b.Property<DateTime>("DeletedDate");
+
+                    b.Property<long>("DeletedUserId");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<int>("SocialMediaType");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.Property<long>("UpdatedUserId");
+
+                    b.Property<string>("Url");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SocialMedia");
                 });
 
             modelBuilder.Entity("SCA.Entity.Model.StudentClass", b =>
@@ -904,6 +936,8 @@ namespace SCA.DataAccess.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Biography");
+
                     b.Property<DateTime>("BirthDate");
 
                     b.Property<string>("Category");
@@ -943,6 +977,8 @@ namespace SCA.DataAccess.Migrations
                     b.Property<bool>("IsActive");
 
                     b.Property<bool>("IsDeleted");
+
+                    b.Property<bool>("IsStudent");
 
                     b.Property<string>("Name");
 
