@@ -4,7 +4,7 @@
 .post-title a:hover,
 .ts-overlay-style .overlay-post-content .post-meta-info li.active,
 .navbar-standerd .nav-menu > li > a:hover{
-   color: #d72924 !important;
+   color: #1a3458 !important;
 }
 
 /* primary background color*/
@@ -18,7 +18,7 @@
 .topic-list,
 .ts-newslatter .newsletter-form .ts-submit-btn .btn:hover,
 #breaking_slider .owl-nav .owl-prev:hover, #breaking_slider .owl-nav .owl-next:hover{
-    background: #d72924;
+    background: #1a3458;
 }
 
 /* header middle*/

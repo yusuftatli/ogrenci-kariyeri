@@ -10,7 +10,7 @@
 .nav-menu .megamenu-lists .megamenu-list > li > a:hover,
 .view-all-link:hover,
 .post-meta-info li.active{
-    color: #d72924;
+    color: #1a3458;
 }
 /*--- default primary background set----*/
 .top-bar .ts-date-item,
@@ -29,7 +29,7 @@
 .nav-menu > li > a:hover,
 .ts-title:before,
 .top-bar .top-social li.ts-subscribe{
-    background: #d72924;
+    background: #1a3458;
 }
 
 /*--- primary  dark color ---*/

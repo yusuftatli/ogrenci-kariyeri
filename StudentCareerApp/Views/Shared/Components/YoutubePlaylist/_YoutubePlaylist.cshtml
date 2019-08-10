@@ -1,0 +1,58 @@
+﻿@model List<SCA.Entity.DTO.YoutubeVideo>
+
+@if (!Model.Equals(null) && Model.Count > 0)
+{
+    <section class="block-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 pr-0">
+
+                    <div class="tab-content clearfix">
+                        @foreach (var x in Model)
+                        {
+                            <div class="tab-pane fade @(x.Equals(Model.First()) ? "in active" : "") " id="1a">
+                                <div class="video-item" style="background-image: url(@x.ImagePath)">
+                                    <div class="post-video">
+                                        <a href="@x.VideoLink" class="ts-play-btn">
+                                            <i class="fa fa-play" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <!-- end tab pane-->
+                    </div>
+                    <!-- tab content end-->
+                </div>
+                <!-- end col-->
+                <div class="col-lg-4 pl-0">
+                    <div class="video-tab-list bg-dark-item" id="video-tab-scrollbar">
+                        <ul class="nav nav-pills post-tab-list">
+                            @foreach (var x in Model)
+                            {
+                                <li @(x.Equals(Model.First()) ? "class='active'" : "") class="active">
+                                    <a href="#1a" data-toggle="tab">
+                                        <div class="post-content media">
+                                            <img class="d-flex sidebar-img" src="@x.ImagePath" alt="">
+                                            <div class="media-body align-self-center">
+                                                <h4 class="post-title">
+                                                    @x.Title
+                                                </h4>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+
+                    </div>
+                    <!-- end video tab list-->
+                </div>
+                <!-- col end-->
+            </div>
+            <!-- row end-->
+        </div>
+        <!-- container end-->
+    </section>
+}
+
