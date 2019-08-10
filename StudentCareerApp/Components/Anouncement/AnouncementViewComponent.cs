@@ -9,7 +9,7 @@ namespace StudentCareerApp.Components.Anouncement
 {
     public class AnouncementViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke(List<AnouncementDto> model)
+        public IViewComponentResult Invoke(List<AnouncementDto> model = null)
         {
             var returnModel = model ?? FakeData();
             return View("_Anouncement", returnModel);

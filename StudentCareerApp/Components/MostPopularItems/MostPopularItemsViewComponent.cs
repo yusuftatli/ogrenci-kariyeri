@@ -1,15 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SCA.Entity.DTO;
+using SCA.Entity.Enums;
+using SCA.Services;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace StudentCareerApp.Components.MostPopularItems
 {
     public class MostPopularItemsViewComponent : ViewComponent
     {
-        public MostPopularItemsViewComponent() { }
+        private readonly IContentManager _contentManager;
 
-        public IViewComponentResult Invoke(List<ContentForHomePageDTO> model)
+        public MostPopularItemsViewComponent(IContentManager contentManager)
         {
+            _contentManager = contentManager;
+        }
+
+        public async Task<IViewComponentResult> Invoke(int count, List<ContentForHomePageDTO> model = null)
+        {
+            var res = model ?? await _contentManager.GetContentForHomePage(HitTypes.MostPopuler, count);
             return View("_MostPopularItems", model);
         }
     }
