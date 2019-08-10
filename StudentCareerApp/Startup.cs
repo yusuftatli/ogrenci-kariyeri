@@ -209,7 +209,6 @@ namespace StudentCareerApp
 
                 #endregion
 
-
                 #region comment
                 cfg.CreateMap<Comments, CommentsDto>().ReverseMap();
                 #endregion
@@ -227,12 +226,23 @@ namespace StudentCareerApp
 
                 #endregion
 
-                #region Screen
+                #region Sector
 
                 cfg.CreateMap<SectorDto, Sector>().ReverseMap();
 
                 #endregion
 
+                #region ScreenAnouncement
+
+                cfg.CreateMap<AnouncementDto, Anouncement>().ReverseMap();
+
+                #endregion
+
+                #region ScreenAnouncement
+
+                cfg.CreateMap<ImageGaleryDto, ImageGalery>().ReverseMap();
+
+                #endregion
 
             });
 

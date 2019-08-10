@@ -13,7 +13,8 @@ namespace SCA.Entity.Model
         public string Sector { get; set; }
 
 
-
         public ICollection<SocialMedia> SocialMedia { get; set; }
+        public ICollection<ImageGalery> ImageGalery { get; set; }
+        
     }
 }

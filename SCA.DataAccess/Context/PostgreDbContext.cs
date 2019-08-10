@@ -77,5 +77,17 @@ namespace SCA.DataAccess.Context
 
         #endregion
 
+        #region Anouncement
+
+        public DbSet<Anouncement> Anouncement { get; set; }
+
+        #endregion
+
+        #region Anouncement
+
+        public DbSet<ImageGalery> ImageGalery { get; set; }
+
+        #endregion
+
     }
 }

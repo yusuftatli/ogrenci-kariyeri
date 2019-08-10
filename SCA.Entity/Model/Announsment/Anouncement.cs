@@ -1,10 +1,11 @@
-﻿using System;
+﻿using SCA.Model;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SCA.Entity.DTO
+namespace SCA.Entity.Model
 {
-    public class AnouncementDto
+    public class Anouncement : BaseEntities
     {
         public string ImagePath { get; set; }
 
@@ -13,7 +14,7 @@ namespace SCA.Entity.DTO
         public string Title { get; set; }
 
         public string Description { get; set; }
+
         public DateTime EndDate { get; set; }
-        public DateTime CreatedDate { get; set; }
     }
 }

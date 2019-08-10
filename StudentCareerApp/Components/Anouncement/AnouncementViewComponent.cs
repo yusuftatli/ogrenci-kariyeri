@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SCA.Entity.DTO.Anouncement;
+using SCA.Entity.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +21,7 @@ namespace StudentCareerApp.Components.Anouncement
             {
                 new AnouncementDto
                 {
-                    CreateDate = DateTime.Now.AddDays(-12),
+                    CreatedDate = DateTime.Now.AddDays(-12),
                     EndDate = DateTime.Now.AddDays(30),
                     Description = "Black farmers in the US’s South faced with continued failure in their",
                     ImagePath = "/images/news/travel/travel5.jpg",
@@ -30,7 +30,7 @@ namespace StudentCareerApp.Components.Anouncement
                 },
                 new AnouncementDto
                 {
-                    CreateDate = DateTime.Now.AddDays(-7),
+                    CreatedDate = DateTime.Now.AddDays(-7),
                     EndDate = DateTime.Now.AddDays(7),
                     Description = "Black farmers in the US’s South faced with continued failure in their 2",
                     ImagePath = "/images/news/travel/travel5.jpg",
@@ -39,7 +39,7 @@ namespace StudentCareerApp.Components.Anouncement
                 },
                 new AnouncementDto
                 {
-                    CreateDate = DateTime.Now.AddDays(-5),
+                    CreatedDate = DateTime.Now.AddDays(-5),
                     EndDate = DateTime.Now.AddDays(2),
                     Description = "Black farmers in the US’s South faced with continued failure in their 3",
                     ImagePath = "/images/news/travel/travel5.jpg",

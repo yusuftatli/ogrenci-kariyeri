@@ -6,6 +6,8 @@ namespace SCA.Entity.DTO
 {
     public class ImageGaleryDto
     {
+        public long Id { get; set; }
         public string ImagePath { get; set; }
+        public bool IsActive { get; set; }
     }
 }
