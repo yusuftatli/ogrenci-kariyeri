@@ -16,9 +16,9 @@ namespace StudentCareerApp.Components.MostPopularItems
             _contentManager = contentManager;
         }
 
-        public async Task<IViewComponentResult> Invoke(int count, List<ContentForHomePageDTO> model = null)
+        public IViewComponentResult Invoke(int count = 10, List<ContentForHomePageDTO> model = null)
         {
-            var res = model ?? await _contentManager.GetContentForHomePage(HitTypes.MostPopuler, count);
+            var res = model ?? _contentManager.GetContentForHomePage(HitTypes.MostPopuler, count).Result;
             return View("_MostPopularItems", model);
         }
     }
