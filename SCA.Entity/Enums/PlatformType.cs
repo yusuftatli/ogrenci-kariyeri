@@ -8,5 +8,7 @@ namespace SCA.Entity.Enums
         Mobil = 1,
         [Display(Name = "Web")]
         Web = 2,
+        [Display(Name = "WebMobil")]
+        WebMobil = 2,
     }
 }

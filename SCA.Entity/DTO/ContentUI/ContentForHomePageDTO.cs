@@ -14,8 +14,9 @@ namespace SCA.Entity.DTO
         public bool IsHeadLine { get; set; }
         public bool IsManset { get; set; }
         public string Writer { get; set; }
+        public string WriterImage { get; set; }
         public long ReadCount { get; set; }
     }
 
-    
+
 }

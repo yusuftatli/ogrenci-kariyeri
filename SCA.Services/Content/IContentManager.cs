@@ -46,5 +46,13 @@ namespace SCA.Services
 
         Task<ServiceResult> UpdateContentPublish(long id, PublishState publishState);
         Task<ServiceResult> ContentShortListForUI();
+
+        /// <summary>
+        /// makaleleri short list döner 
+        /// </summary>
+        /// <param name="hitTypes"></param>
+        /// <param name="count"></param>
+        /// <returns>List<ContentForHomePageDTO></returns>
+        Task<List<ContentForHomePageDTO>> GetContentForHomePage(HitTypes hitTypes, int count);
     }
 }

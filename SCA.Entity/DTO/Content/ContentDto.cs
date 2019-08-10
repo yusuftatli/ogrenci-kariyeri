@@ -10,6 +10,7 @@ namespace SCA.Entity.DTO
         public long Id { get; set; }
         public string Tags { get; set; }
         public string Category { get; set; }
+        public PlatformType PlatformType { get; set; }
         public PublishState PublishStateType { get; set; }
         public long ReadCount { get; set; }
         public string ImagePath { get; set; }

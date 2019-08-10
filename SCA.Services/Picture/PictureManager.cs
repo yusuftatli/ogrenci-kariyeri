@@ -23,10 +23,8 @@ namespace SCA.Services
             string imagePath = "";
             try
             {
-
                 var webRoot = "";
                 var PathWithFolderName = System.IO.Path.Combine(webRoot, "UserPhotos");
-
 
                 if (!Directory.Exists(PathWithFolderName))
                 {
@@ -43,9 +41,6 @@ namespace SCA.Services
 
                 throw;
             }
-
-
-
             return imagePath;
         }
 

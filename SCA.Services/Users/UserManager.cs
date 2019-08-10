@@ -42,6 +42,8 @@ namespace SCA.Services
                 Result.ReturnAsFail();
             }
 
+
+
             var user = _mapper.Map<Users>(dto);
             user.IsActive = true;
             user.IsStudent = true;
@@ -118,7 +120,7 @@ namespace SCA.Services
 
             if (!string.IsNullOrEmpty(dto.ImageData))
             {
-                //_pictureManager.SaveImage(dto.ImageData, dto.Name + "-" + dto.Surname);
+               _pictureManager.SaveImage(dto.ImageData, dto.Name + "-" + dto.Surname);
             }
 
             Users _user = null;

@@ -182,5 +182,11 @@ namespace SCA.Services
             return _unitOfWork.SaveChanges();
         }
 
+        public async Task<List<ContentForHomePageDTO>> GetContentForHomePage(HitTypes hitTypes, int count)
+        {
+            return ComtentFake.FakeContentList();
+        }
+
+
     }
 }
