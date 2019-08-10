@@ -14,7 +14,7 @@
 .icon-user-female,
 .icon-user-follow,
 .icon-user-following,
-.icon-user-unfollow,
+.icon-user-unfollowSimple-Line-Icons.ttf?-i3a2kk
 .icon-login,
 .icon-logout,
 .icon-emotsmile,
@@ -192,16 +192,16 @@
 .icon-social-stumbleupon,
 .icon-social-youtube,
 .icon-social-dropbox {
-  font-family: 'simple-line-icons';
-  speak: none;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  /* Better Font Rendering =========== */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    font-family: 'simple-line-icons';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 .icon-user:before {
   content: "\e005";
