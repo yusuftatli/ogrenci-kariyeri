@@ -167,7 +167,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
     };
 
     $scope.RegexSeo = function (link) {
-        if (link == undefined) {
+        if (link === undefined) {
             link = "-";
         }
         for (var key in trMap) {

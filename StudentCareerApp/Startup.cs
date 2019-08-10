@@ -121,6 +121,8 @@ namespace StudentCareerApp
             services.AddTransient<IAnalysisManager, AnalysisManager>();
             services.AddTransient<IB2CManagerUI, B2CManagerUI>();
             services.AddTransient<IUserValidation, UserValidation>();
+            services.AddTransient<ISyncManager, SyncManager>();
+            services.AddTransient<IApiManager, ApiManager>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             #endregion
