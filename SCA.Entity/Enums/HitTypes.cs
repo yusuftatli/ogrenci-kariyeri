@@ -16,5 +16,7 @@ namespace SCA.Entity.Enums
         DailyMostPopuler = 5,
         [Display(Name = "ConstantMainMenu")]
         ConstantMainMenu = 7,
+        [Display(Name = "LastAssay")]
+        LastAssay = 7,
     }
 }
