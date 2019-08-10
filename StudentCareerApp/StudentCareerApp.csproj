@@ -4,6 +4,13 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Views\Shared\Components\SidebarComponents\**" />
+    <Content Remove="Views\Shared\Components\SidebarComponents\**" />
+    <EmbeddedResource Remove="Views\Shared\Components\SidebarComponents\**" />
+    <None Remove="Views\Shared\Components\SidebarComponents\**" />
+  </ItemGroup>
   
   <ItemGroup>
     <Content Include="wwwroot\AdminFiles\Template\assets\node_modules\bootstrap-datepicker\bootstrap-datepicker.min.css" />
@@ -905,7 +912,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Shared\Components\SidebarComponents\" />
     <Folder Include="wwwroot\AdminFiles\CMS\Temp\" />
   </ItemGroup>
 
