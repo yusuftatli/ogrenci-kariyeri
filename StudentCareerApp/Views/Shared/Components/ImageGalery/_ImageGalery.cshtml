@@ -1,0 +1,22 @@
+﻿@model List<SCA.Entity.DTO.ImageGaleryDto>
+
+<section class="instagramPhoto">
+    <div class="container-fluid">
+        <div class="row">
+            @foreach (var x in Model)
+            {
+                <div class="col-md p-0">
+                    <div class="ts-single-inst">
+                        <a href="#" class="">
+                            <img src="@x.ImagePath" alt="">
+                        </a>
+                    </div>
+                    <!-- ts single inst-->
+                </div>
+            }
+            <!-- col end-->
+        </div>
+        <!-- row end-->
+    </div>
+    <!-- container end-->
+</section>

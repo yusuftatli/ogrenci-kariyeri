@@ -88,7 +88,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
     function getMainCategories() {
         $http(MainCategoriesReq()).then(function (res) {
             $scope.MainCategories = res.data.data;
-            $scope.options = $scope.NestedCategory();
+            $scope.options = $scope.NestedCategory(null);
             console.log($scope.options);
         });
     }

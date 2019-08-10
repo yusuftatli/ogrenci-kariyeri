@@ -151,7 +151,7 @@ ul {
     width: 3px;
     height: 100%;
     content: '';
-    background: #d72924; }
+    background: #1a3458; }
 
 .post-title {
   font-size: 15px;
@@ -163,7 +163,7 @@ ul {
   .post-title a {
     color: #232323; }
     .post-title a:hover {
-      color: #d72924; }
+      color: #1a3458; }
 
 #featured-slider .owl-nav {
   position: absolute;

@@ -8,7 +8,7 @@
 .nav-menu > li .nav-dropdown li a:hover,
 .nav-menu .megamenu-tabs-nav > li.active a,
 .widgets ul li a:hover{
-    color: #d72924;
+    color: #1a3458;
 }
 /*--- default primary background set----*/
 .top-bar .ts-date-item,
@@ -20,7 +20,7 @@
 .widgets-title:after,
 .widgets .ts-widget-newsletter,
 .ts-newslatter .newsletter-form .ts-submit-btn .btn:hover{
-    background: #d72924;
+    background: #1a3458;
 }
 /*--- menu background primary derk color---*/
 .header-standerd .nav-menu > li.active > a,

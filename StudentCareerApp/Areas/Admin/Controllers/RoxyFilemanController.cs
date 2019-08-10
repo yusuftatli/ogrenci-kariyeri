@@ -29,9 +29,9 @@ namespace StudentCareerApp.Areas.Admin.Controllers
         {
             // Setup CMS paths to suit your environment (we usually inject settings for these)
             _systemRootPath = env.ContentRootPath.Split("\\bin")[0];
-            _tempPath = _systemRootPath + "\\AdminFiles\\CMS\\Temp";
-            _filesRootPath = "/CMS/Content";
-            _filesRootVirtual = "/CMS/Content";
+            _tempPath = _systemRootPath + "\\wwwroot\\AdminFiles\\CMS\\Temp";
+            _filesRootPath = "/wwwroot/AdminFiles/CMS/Content";
+            _filesRootVirtual = "/AdminFiles/CMS/Content";
             // Load Fileman settings
             LoadSettings();
         }

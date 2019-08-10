@@ -271,6 +271,8 @@ namespace StudentCareerApp
             //    RequestPath = new PathString("/AdminFiles")
             //});
 
+            app.UseSession();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
