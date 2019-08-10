@@ -143,36 +143,36 @@ namespace SCA.Services
 
             var res = _unitOfWork.SaveChanges();
 
-            if (dto.SocialMedia.Count > 0)
-            {
-                var _socialMedia = _mapper.Map<List<SocialMedia>>(dto.SocialMedia);
-                if (dto.Id == 0)
-                {
-                    foreach (var item in _socialMedia)
-                    {
-                        item.Id = _user.Id;
-                    }
-                    _socialMediaRepo.AddRange(_socialMedia);
-                }
-                else
-                {
-                    List<SocialMedia> socailData = _socialMediaRepo.GetAll(x => x.Id == dto.Id).ToList();
-                    foreach (var _item in socailData)
-                    {
-                        foreach (var _dto in _socialMedia)
-                        {
-                            if (_item.SocialMediaType == _dto.SocialMediaType)
-                            {
-                                _item.Id = _dto.Id;
-                                _item.Url = _dto.Url;
-                                _item.IsActive = _dto.IsActive;
-                                _socialMediaRepo.Update(_mapper.Map<SocialMedia>(_item));
-                            }
-                        }
-                        _unitOfWork.SaveChanges();
-                    }
-                }
-            }
+            //if (dto.SocialMedia.Count > 0)
+            //{
+            //    var _socialMedia = _mapper.Map<List<SocialMedia>>(dto.SocialMedia);
+            //    if (dto.Id == 0)
+            //    {
+            //        foreach (var item in _socialMedia)
+            //        {
+            //            item.Id = _user.Id;
+            //        }
+            //        _socialMediaRepo.AddRange(_socialMedia);
+            //    }
+            //    else
+            //    {
+            //        List<SocialMedia> socailData = _socialMediaRepo.GetAll(x => x.Id == dto.Id).ToList();
+            //        foreach (var _item in socailData)
+            //        {
+            //            foreach (var _dto in _socialMedia)
+            //            {
+            //                if (_item.SocialMediaType == _dto.SocialMediaType)
+            //                {
+            //                    _item.Id = _dto.Id;
+            //                    _item.Url = _dto.Url;
+            //                    _item.IsActive = _dto.IsActive;
+            //                    _socialMediaRepo.Update(_mapper.Map<SocialMedia>(_item));
+            //                }
+            //            }
+            //            _unitOfWork.SaveChanges();
+            //        }
+            //    }
+            //}
 
             return Result.ReturnAsSuccess(message: resultMessage, null);
         }

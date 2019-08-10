@@ -12,6 +12,7 @@ namespace SCA.Entity.DTO
         public string Name { get; set; }
         public string Surname { get; set; }
         public string EmailAddress { get; set; }
+        public string Biography { get; set; }
         public string Category { get; set; }
         public long RoleTypeId { get; set; }
         public int BanCount { get; set; }
@@ -34,6 +35,6 @@ namespace SCA.Entity.DTO
         public PlatformType EnrollPlatformTypeId { get; set; }
         public bool IsEmailSend { get; set; }
         public bool IsPhoneSend { get; set; }
-        public List<SocialMediaDto> SocialMedia { get; set; }
+        //public List<SocialMediaDto> SocialMedia { get; set; }
     }
 }

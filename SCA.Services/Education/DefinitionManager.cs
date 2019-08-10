@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace SCA.Services
 {
-    public class EducationManager : IEducationManager
+    public class DefinitionManager : IDefinitionManager
     {
         private readonly IMapper _mapper;
         private readonly IUnitofWork _unitOfWork;
@@ -26,7 +26,8 @@ namespace SCA.Services
         private IGenericRepository<HighSchool> _highSchoolTypeRepo;
         private IGenericRepository<StudentClass> _classTypeRepo;
         private IGenericRepository<University> _universityRepo;
-        public EducationManager(IUnitofWork unitOfWork, IMapper mapper, IAddressManager addressManager)
+        private IGenericRepository<Sector> _sectorRepo;
+        public DefinitionManager(IUnitofWork unitOfWork, IMapper mapper, IAddressManager addressManager)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
@@ -37,6 +38,7 @@ namespace SCA.Services
             _classTypeRepo = unitOfWork.GetRepository<StudentClass>();
             _universityRepo = unitOfWork.GetRepository<University>();
             _addressManager = addressManager;
+            _sectorRepo = unitOfWork.GetRepository<Sector>();
 
         }
 
@@ -305,6 +307,36 @@ namespace SCA.Services
             return Result.ReturnAsSuccess(resultMessage, null);
         }
 
+        #endregion
+
+        #region Sector
+        public async Task<ServiceResult> GetAllSector()
+        {
+            var data = _sectorRepo.GetAll();
+            return Result.ReturnAsSuccess(null, data);
+        }
+
+        public async Task<ServiceResult> CreateSector(SectorDto dto)
+        {
+            string resultMessage = "";
+            if (dto.Equals(null))
+            {
+                return Result.ReturnAsFail(AlertResource.OperationFailed, null);
+            }
+
+            if (dto.Id == 0)
+            {
+                _sectorRepo.Add(_mapper.Map<Sector>(dto));
+                resultMessage = "Kayıt İşlemi Başarılı";
+            }
+            else
+            {
+                _sectorRepo.Update(_mapper.Map<Sector>(dto));
+                resultMessage = "Güncelleme İşlemi Başarılı";
+            }
+            _unitOfWork.SaveChanges();
+            return Result.ReturnAsSuccess(message: resultMessage, null);
+        } 
         #endregion
 
     }

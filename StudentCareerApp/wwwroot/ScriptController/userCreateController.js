@@ -16,16 +16,16 @@ app.controller('userCreateController', function ($scope, $http, $filter) {
 
     function loadForm() {
         getRoleTypeList();
-        getCities();
-        getHighScholl();
-        getEducationTypeList();
-        getUniversityList();
-        getDepartment();
-        getFaculty();
+        // getCities();
+        //getHighScholl();
+        //getEducationTypeList();
+        //getUniversityList();
+        //getDepartment();
+        //getFaculty();
     }
 
     $scope.onChanageEdcationStatus = function () {
-        if (getEducationStatusDes($scope.userModel.educationstatusid)=== "Lise") {
+        if (getEducationStatusDes($scope.userModel.educationstatusid) === "Lise") {
             $scope.showHigSchoolType = true;
         } else {
             $scope.showHigSchoolType = false;

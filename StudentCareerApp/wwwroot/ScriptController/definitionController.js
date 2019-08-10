@@ -1,6 +1,6 @@
 ﻿var app = angular.module("MyApp", ["ui.bootstrap"]);
 
-app.controller('EducationManagerController', function ($scope, $http, $filter) {
+app.controller('DefinitonManagerController', function ($scope, $http, $filter) {
     "use strict";
 
 
@@ -38,7 +38,7 @@ app.controller('EducationManagerController', function ($scope, $http, $filter) {
     var ClassTypePost = function () {
         return {
             method: "post",
-            url: _link + "/Education/education-createstudentclass",
+            url: _link + "/Definition/education-createstudentclass",
             headers: Headers,
             data: $scope.classTypeModel
         };
@@ -59,7 +59,7 @@ app.controller('EducationManagerController', function ($scope, $http, $filter) {
     $scope.getClassTypeList = function () {
         Loading(true);
         $.ajax({
-            url: _link + "/Education/education-getstudentclass",
+            url: _link + "/Definition/education-getstudentclass",
             type: "GET",
             dataType: Json_,
             contentType: ContentType_,
@@ -99,7 +99,7 @@ app.controller('EducationManagerController', function ($scope, $http, $filter) {
     var EducationTypePost = function () {
         return {
             method: "post",
-            url: _link + "/Education/education-createeducationstatus",
+            url: _link + "/Definition/education-createeducationstatus",
             headers: Headers,
             data: $scope.educationTypeModel
         };
@@ -121,7 +121,7 @@ app.controller('EducationManagerController', function ($scope, $http, $filter) {
     $scope.getEducationStatusList = function () {
         Loading(true);
         $.ajax({
-            url: _link + "/Education/education-educationstatus",
+            url: _link + "/Definition/education-educationstatus",
             type: "GET",
             dataType: Json_,
             contentType: ContentType_,
@@ -163,7 +163,7 @@ app.controller('EducationManagerController', function ($scope, $http, $filter) {
     var highSchoolPost = function () {
         return {
             method: "post",
-            url: _link + "/Education/education-createhighschool",
+            url: _link + "/Definition/education-createhighschool",
             headers: Headers,
             data: $scope.highSchoolModel
         };
@@ -201,7 +201,7 @@ app.controller('EducationManagerController', function ($scope, $http, $filter) {
     $scope.gethighSchollList = function () {
         Loading(true);
         $.ajax({
-            url: _link + "/Education/education-gethighschool",
+            url: _link + "/Definition/education-gethighschool",
             type: "GET",
             dataType: Json_,
             contentType: ContentType_,
@@ -246,7 +246,7 @@ app.controller('EducationManagerController', function ($scope, $http, $filter) {
     var universityPost = function () {
         return {
             method: "post",
-            url: _link + "/Education/education-createuniversity",
+            url: _link + "/Definition/education-createuniversity",
             headers: Headers,
             data: $scope.universityModel
         };
@@ -279,7 +279,7 @@ app.controller('EducationManagerController', function ($scope, $http, $filter) {
     $scope.universityList = function () {
         Loading(true);
         $.ajax({
-            url: _link + "/Education/education-getuniversity",
+            url: _link + "/Definition/education-getuniversity",
             type: "GET",
             dataType: Json_,
             contentType: ContentType_,
@@ -298,7 +298,7 @@ app.controller('EducationManagerController', function ($scope, $http, $filter) {
     var updataStatuUniversity = function () {
         return {
             method: "post",
-            url: _link + "/Education/education-Update-UniversityIsActive",
+            url: _link + "/Definition/education-Update-UniversityIsActive",
             headers: Headers,
             data: {
                 Id: x,
@@ -343,7 +343,7 @@ app.controller('EducationManagerController', function ($scope, $http, $filter) {
     var facultyPost = function () {
         return {
             method: "post",
-            url: _link + "/Education/education-createfaculty",
+            url: _link + "/Definition/education-createfaculty",
             headers: Headers,
             data: $scope.facultyModel
         };
@@ -365,7 +365,7 @@ app.controller('EducationManagerController', function ($scope, $http, $filter) {
     $scope.facultyList = function (x) {
         Loading(true);
         $.ajax({
-            url: _link + "/education/education-getfaculty",
+            url: _link + "/Definition/education-getfaculty",
             type: "GET",
             dataType: Json_,
             contentType: ContentType_,
@@ -411,7 +411,7 @@ app.controller('EducationManagerController', function ($scope, $http, $filter) {
     var departmentPost = function () {
         return {
             method: "post",
-            url: _link + "/education/education-cretadepartment",
+            url: _link + "/Definition/education-cretadepartment",
             headers: Headers,
             data: $scope.departmentModel
         };
@@ -432,7 +432,7 @@ app.controller('EducationManagerController', function ($scope, $http, $filter) {
     $scope.departmentList = function (x) {
         Loading(true);
         $.ajax({
-            url: _link + "/education/education-getdepartment",
+            url: _link + "/Definition/education-getdepartment",
             type: "GET",
             dataType: Json_,
             contentType: ContentType_,
@@ -449,6 +449,70 @@ app.controller('EducationManagerController', function ($scope, $http, $filter) {
             }
         });
     };
+
+    //Sector
+    $scope.sectorModel = {};
+    $scope.sectorModel.sectorCreateButtonName = "Kaydet";
+
+
+    $scope.onClicksectorTab = function () {
+        $scope.sectorList();
+    };
+
+    $scope.opensectorModal = function () {
+        $scope.sectorModel = {};
+        $scope.sectorModel.sectorCreateButtonName = "Kaydet";
+        focus('sectorModal');
+    };
+
+    $scope.showSector= function (x) {
+        $scope.sectorModel.sectorCreateButtonName = "Güncelle";
+        $scope.sectorModel.id = x.id;
+        $scope.sectorModel.description = x.description;
+    };
+
+    var sectorPost = function () {
+        return {
+            method: "post",
+            url: _link + "/Definition/createsektor",
+            headers: Headers,
+            data: $scope.sectorModel
+        };
+    };
+
+    $scope.postsector = function () {
+        Loading(true);
+        $http(sectorPost()).then(function (res) {
+            if (res.data.resultCode === 200) {
+                $scope.sectorList();
+                shortMessage(res.data.message, "s");
+                closeModal("sectorModal");
+            }
+            Loading(false);
+        });
+    };
+
+    $scope.sectorList = function (x) {
+        Loading(true);
+        $.ajax({
+            url: _link + "/Definition/getallsector",
+            type: "GET",
+            dataType: Json_,
+            contentType: ContentType_,
+            success: function (e) {
+                if (e.resultCode === 200) {
+                    if (e.data.length > 0) {
+                        $scope.sectorModel.sectorList = e.data;
+                    } else {
+                        $scope.sectorModel.sectorList = {};
+                    }
+                    $scope.$apply();
+                    Loading(false);
+                }
+            }
+        });
+    };
+
 
     $scope.getCities = function () {
         Loading(true);

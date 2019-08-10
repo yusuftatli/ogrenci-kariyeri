@@ -19,6 +19,7 @@ namespace SCA.Services
         private readonly IUnitofWork _unitOfWork;
         private IGenericRepository<Cities> _citiesRepo;
         private IGenericRepository<District> _districtRepo;
+        
 
         public AddressManager(IUnitofWork unitOfWork, IMapper mapper)
         {
@@ -26,6 +27,7 @@ namespace SCA.Services
             _unitOfWork = unitOfWork;
             _citiesRepo = unitOfWork.GetRepository<Cities>();
             _districtRepo = unitOfWork.GetRepository<District>();
+            
         }
         public async Task<ServiceResult> GetCities()
         {
@@ -48,6 +50,7 @@ namespace SCA.Services
         {
             return _mapper.Map<List<CitiesDto>>(_citiesRepo.GetAll());
         }
+       
 
     }
 }

@@ -106,7 +106,7 @@ namespace StudentCareerApp
             #region Service Register
             services.AddTransient<IUnitofWork, UnitofWork>();
             services.AddTransient<IAddressManager, AddressManager>();
-            services.AddTransient<IEducationManager, EducationManager>();
+            services.AddTransient<IDefinitionManager, DefinitionManager>();
             services.AddTransient<ICategoryManager, CategoryManager>();
             services.AddTransient<ISender, SenderManager>();
             services.AddTransient<IAuthManager, AuthManager>();
@@ -227,13 +227,19 @@ namespace StudentCareerApp
 
                 #endregion
 
+                #region Screen
+
+                cfg.CreateMap<SectorDto, Sector>().ReverseMap();
+
+                #endregion
+
 
             });
 
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "/wwwroot";
-                configuration.RootPath = "/wwwroot/AdminFiles/Template/assets/node_modules"; 
+                configuration.RootPath = "/wwwroot/AdminFiles/Template/assets/node_modules";
             });
 
             var mapper = config.CreateMapper();
@@ -251,7 +257,7 @@ namespace StudentCareerApp
 
             if (env.IsDevelopment())
             {
-               // app.UseDeveloperExceptionPage();
+                // app.UseDeveloperExceptionPage();
             }
 
             app.UseStaticFiles(new StaticFileOptions() { FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot")) });

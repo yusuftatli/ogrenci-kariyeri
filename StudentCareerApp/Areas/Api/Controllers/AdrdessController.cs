@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SCA.Common.Result;
+using SCA.Entity.DTO;
 using SCA.Services;
 using SCA.Services.Interface;
 
@@ -33,5 +34,7 @@ namespace StudentCareerApp.Areas.Api.Controller
         {
             return await _addressManager.GetDistrict(cityId);
         }
+
+       
     }
 }

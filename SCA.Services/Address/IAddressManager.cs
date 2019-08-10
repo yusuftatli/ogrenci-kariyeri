@@ -12,5 +12,6 @@ namespace SCA.Services
         List<CitiesDto> CityList();
         Task<ServiceResult> GetCities();
         Task<ServiceResult> GetDistrict(int cityId);
+        
     }
 }

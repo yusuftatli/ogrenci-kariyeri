@@ -72,6 +72,7 @@ namespace SCA.Entity.Model
         public ICollection<UserLog> UserLog { get; set; }
         public ICollection<QuesitonAsnweByUsers> QuesitonAsnweByUsers { get; set; }
         public ICollection<ReadCountOfTestAndContent> ReadCountOfTestAndContent { get; set; }
+        public ICollection<SocialMedia> SocialMedia { get; set; }
 
     }
 }

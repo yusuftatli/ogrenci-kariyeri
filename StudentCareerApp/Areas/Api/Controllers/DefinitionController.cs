@@ -16,12 +16,12 @@ namespace StudentCareerApp.Areas.Api.Controller
     [Area("Api")]
     [Route("[area]/[controller]")]
     [ApiController]
-    public class EducationController : ControllerBase
+    public class DefinitionController : ControllerBase
     {
-        IEducationManager _educationManager;
-        public EducationController(IEducationManager educationManager)
+        IDefinitionManager _definitionManager;
+        public DefinitionController(IDefinitionManager definitionManager)
         {
-            _educationManager = educationManager;
+            _definitionManager = definitionManager;
         }
 
 
@@ -29,19 +29,19 @@ namespace StudentCareerApp.Areas.Api.Controller
         [HttpGet, Route("education-getdepartment")]
         public async Task<ServiceResult> GetDepartment()
         {
-            return await _educationManager.GetDepartment();
+            return await _definitionManager.GetDepartment();
         }
 
         [HttpPost, Route("education-cretadepartment")]
         public async Task<ServiceResult> CreateDepartment([FromBody] DepartmentDto dto)
         {
-            return await _educationManager.CreateDepartment(dto);
+            return await _definitionManager.CreateDepartment(dto);
         }
 
         [HttpPost, Route("education-Update-DepartmentIsActive")]
         public async Task<ServiceResult> UpdateDepartmentIsActive(long Id, bool IsActive)
         {
-            return await _educationManager.UpdateDepartmentIsActive(Id, IsActive);
+            return await _definitionManager.UpdateDepartmentIsActive(Id, IsActive);
         }
         #endregion
 
@@ -49,19 +49,19 @@ namespace StudentCareerApp.Areas.Api.Controller
         [HttpGet, Route("education-educationstatus")]
         public async Task<ServiceResult> GetEducationStatus()
         {
-            return await _educationManager.GetEducationStatus();
+            return await _definitionManager.GetEducationStatus();
         }
 
         [HttpPost, Route("education-createeducationstatus")]
         public async Task<ServiceResult> CreateEducationStatus(EducationStatusDto dto)
         {
-            return await _educationManager.CreateEducationStatus(dto);
+            return await _definitionManager.CreateEducationStatus(dto);
         }
 
         [HttpPost, Route("education-Update-EducationStatusIsActive")]
         public async Task<ServiceResult> UpdateEducationStatusIsActive(long Id, bool IsActive)
         {
-            return await _educationManager.UpdateEducationStatusIsActive(Id, IsActive);
+            return await _definitionManager.UpdateEducationStatusIsActive(Id, IsActive);
         }
         #endregion
 
@@ -69,19 +69,19 @@ namespace StudentCareerApp.Areas.Api.Controller
         [HttpGet, Route("education-getfaculty")]
         public async Task<ServiceResult> GetFaculty()
         {
-            return await _educationManager.GetFaculty();
+            return await _definitionManager.GetFaculty();
         }
 
         [HttpPost, Route("education-createfaculty")]
         public async Task<ServiceResult> CreateFaculty(FacultyDto dto)
         {
-            return await _educationManager.CreateFaculty(dto);
+            return await _definitionManager.CreateFaculty(dto);
         }
 
         [HttpPost, Route("education-Update-FacultIsActive")]
         public async Task<ServiceResult> UpdateFacultIsActive(long Id, bool IsActive)
         {
-            return await _educationManager.UpdateFacultIsActive(Id, IsActive);
+            return await _definitionManager.UpdateFacultIsActive(Id, IsActive);
         }
         #endregion
 
@@ -89,19 +89,19 @@ namespace StudentCareerApp.Areas.Api.Controller
         [HttpGet, Route("education-gethighschool")]
         public async Task<ServiceResult> GetHighSchool()
         {
-            return await _educationManager.GetHighSchool();
+            return await _definitionManager.GetHighSchool();
         }
 
         [HttpPost, Route("education-createhighschool")]
         public async Task<ServiceResult> CreateHighSchool([FromBody]HighSchoolDto dto)
         {
-            return await _educationManager.CreateHighSchool(dto);
+            return await _definitionManager.CreateHighSchool(dto);
         }
 
         [HttpPost, Route("education-Update-highSchoolIsActive")]
         public async Task<ServiceResult> UpdatehighSchoolIsActive(long Id, bool IsActive)
         {
-            return await _educationManager.UpdatehighSchoolIsActive(Id, IsActive);
+            return await _definitionManager.UpdatehighSchoolIsActive(Id, IsActive);
         }
         #endregion
 
@@ -109,19 +109,19 @@ namespace StudentCareerApp.Areas.Api.Controller
         [HttpGet, Route("education-getstudentclass")]
         public async Task<ServiceResult> GetStudentClass()
         {
-            return await _educationManager.GetStudentClass();
+            return await _definitionManager.GetStudentClass();
         }
 
         [HttpPost, Route("education-createstudentclass")]
         public async Task<ServiceResult> CreateStudentClass(StudentClassDto dto)
         {
-            return await _educationManager.CreateStudentClass(dto);
+            return await _definitionManager.CreateStudentClass(dto);
         }
 
         [HttpPost, Route("education-Update-StudentClassIsActive")]
         public async Task<ServiceResult> UpdateStudentClassIsActive(long Id, bool IsActive)
         {
-            return await _educationManager.UpdateStudentClassIsActive(Id, IsActive);
+            return await _definitionManager.UpdateStudentClassIsActive(Id, IsActive);
         }
         #endregion
 
@@ -129,19 +129,33 @@ namespace StudentCareerApp.Areas.Api.Controller
         [HttpGet, Route("education-getuniversity")]
         public async Task<ServiceResult> GetUniversity()
         {
-            return await _educationManager.GetUniversity();
+            return await _definitionManager.GetUniversity();
         }
 
         [HttpPost, Route("education-createuniversity")]
         public async Task<ServiceResult> CreateUniversity(UniversityDto dto)
         {
-            return await _educationManager.CreateUniversity(dto);
+            return await _definitionManager.CreateUniversity(dto);
         }
 
         [HttpPost, Route("education-Update-UniversityIsActive")]
         public async Task<ServiceResult> UpdateUniversityIsActive(long Id, bool IsActive)
         {
-            return await _educationManager.UpdateUniversityIsActive(Id, IsActive);
+            return await _definitionManager.UpdateUniversityIsActive(Id, IsActive);
+        }
+        #endregion
+
+        #region Sector
+        [HttpGet, Route("getallsector")]
+        public async Task<ServiceResult> GetAllSector()
+        {
+            return await _definitionManager.GetAllSector();
+        }
+
+        [HttpPost, Route("createsektor")]
+        public async Task<ServiceResult> CreateSector(SectorDto dto)
+        {
+            return await _definitionManager.CreateSector(dto);
         }
         #endregion
 

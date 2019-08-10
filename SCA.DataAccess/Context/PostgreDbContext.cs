@@ -71,5 +71,11 @@ namespace SCA.DataAccess.Context
 
         #endregion
 
+        #region Sector
+
+        public DbSet<Sector> Sector { get; set; }
+
+        #endregion
+
     }
 }

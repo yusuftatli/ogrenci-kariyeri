@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SCA.DataAccess.Context;
@@ -9,9 +10,10 @@ using SCA.DataAccess.Context;
 namespace SCA.DataAccess.Migrations
 {
     [DbContext(typeof(PostgreDbContext))]
-    partial class PostgreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190810142039_sector")]
+    partial class sector
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -689,34 +691,6 @@ namespace SCA.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ScreenMaster");
-                });
-
-            modelBuilder.Entity("SCA.Entity.Model.Sector", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<long>("CreatedUserId");
-
-                    b.Property<DateTime>("DeletedDate");
-
-                    b.Property<long>("DeletedUserId");
-
-                    b.Property<string>("Description");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<byte>("SectorTypeId");
-
-                    b.Property<DateTime>("UpdatedDate");
-
-                    b.Property<long>("UpdatedUserId");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Sector");
                 });
 
             modelBuilder.Entity("SCA.Entity.Model.SocialMedia", b =>

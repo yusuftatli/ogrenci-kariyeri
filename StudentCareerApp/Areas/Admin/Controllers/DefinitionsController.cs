@@ -18,8 +18,8 @@ namespace StudentCareerApp.Areas.Admin.Controllers
             return View();
         }
 
-        [HttpGet("SchollManager")]
-        public IActionResult SchollManager()
+        [HttpGet("Index")]
+        public IActionResult Index()
         {
             return View();
         }

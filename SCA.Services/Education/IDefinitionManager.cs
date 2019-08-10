@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SCA.Services
 {
-    public interface IEducationManager
+    public interface IDefinitionManager
     {
         Task<ServiceResult> GetDepartment();
         Task<ServiceResult> CreateDepartment(DepartmentDto dto);
@@ -32,6 +32,9 @@ namespace SCA.Services
         Task<ServiceResult> GetUniversity();
         Task<ServiceResult> CreateUniversity(UniversityDto dto);
         Task<ServiceResult> UpdateUniversityIsActive(long Id, bool IsActive);
+
+        Task<ServiceResult> GetAllSector();
+        Task<ServiceResult> CreateSector(SectorDto dto);
 
     }
 }
