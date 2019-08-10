@@ -5,9 +5,9 @@ namespace SCA.Entity.Enums
     public enum HitTypes : byte
     {
         [Display(Name = "HeadLine")]
-        Man = 1,
+        HeadLine = 1,
         [Display(Name = "Manset")]
-        Woman = 2,
+        Manset = 2,
         [Display(Name = "MostPopuler")]
         MostPopuler = 3,
         [Display(Name = "MainMenu")]
