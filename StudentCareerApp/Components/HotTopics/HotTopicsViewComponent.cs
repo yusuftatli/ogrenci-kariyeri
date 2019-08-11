@@ -18,7 +18,7 @@ namespace StudentCareerApp.Components.HotTopics
             _contentManager = contentManager;
         }
 
-        public async Task<IViewComponentResult> Invoke(int count, List<ContentForHomePageDTO> model = null)
+        public async Task<IViewComponentResult> InvokeAsync(int count, List<ContentForHomePageDTO> model = null)
         {
             var returnModel = model ?? await _contentManager.GetContentForHomePage(HitTypes.DailyMostPopuler, count);
             return View("_HotTopics", returnModel);

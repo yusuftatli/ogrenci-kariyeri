@@ -5,8 +5,8 @@ namespace SCA.Entity.Enums
     public enum CompanyClupType : byte
     {
         [Display(Name = "Company")]
-        Man = 1,
+        Company = 1,
         [Display(Name = "Club")]
-        Woman = 2,
+        Club = 2
     }
 }
