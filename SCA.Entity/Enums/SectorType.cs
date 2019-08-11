@@ -5,8 +5,8 @@ namespace SCA.Entity.Enums
     public enum SectorType : byte
     {
         [Display(Name = "Public")]
-        Man = 1,
+        Public = 1,
         [Display(Name = "Special")]
-        Woman = 2,
+        Special = 2
     }
 }
