@@ -1,12 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace SCA.Entity.Enums
 {
     public enum SectorType : byte
     {
-        [Display(Name = "Public")]
+        [Description("Kamu")]
         Man = 1,
-        [Display(Name = "Special")]
+        [Description("Özel Sektör")]
         Woman = 2,
     }
 }

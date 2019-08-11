@@ -1,12 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace SCA.Entity.Enums
 {
     public enum GenderType : byte
     {
-        [Display(Name = "Bay")]
+        [Description("Bay")]
         Man = 1,
-        [Display(Name = "Bayan")]
+        [Description("Bayan")]
         Woman = 2,
     }
 }

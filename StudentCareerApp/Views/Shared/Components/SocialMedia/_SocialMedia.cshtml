@@ -1,23 +1,23 @@
 ﻿@model List<SCA.Entity.DTO.SocialMediaDto>
-@using StudentCareerApp.Helpers;
+    @using SCA.Common;
 
-@if (Model != null && Model.Count > 0)
-{
+    @if (Model != null && Model.Count > 0)
+    {
     @* SOCIAL MEDIA START *@
     <div class="ts-grid-box widgets ts-social-list-item">
         <h3 class="ts-title">Takipte Kalın!</h3>
         <ul>
             @foreach (var x in Model)
             {
-                <li class="ts-@x.SocialMediaType.GetDescription().Split(",")[0].Trim()">
-                    <a href="@x.Url" target="_blank">
-                        <i class="fa fa-@x.SocialMediaType.GetDescription().Split(",")[1].Trim()"></i>
-                        @*<b>@x.FollowerCount</b>*@
-                        <span>@x.SocialMediaType.GetDescription().Split(",")[2].Trim()</span>
-                    </a>
-                </li>
+            <li class="ts-@x.SocialMediaType.GetDescription().Split(" ,")[0].Trim()">
+                <a href="@x.Url" target="_blank">
+                    <i class="fa fa-@x.SocialMediaType.GetDescription().Split(" ,")[1].Trim()"></i>
+                    @*<b>@x.FollowerCount</b>*@
+                    <span>@x.SocialMediaType.GetDescription().Split(",")[2].Trim()</span>
+                </a>
+            </li>
             }
         </ul>
     </div>
     @* SOCIAL MEDIA END *@
-}
+    }

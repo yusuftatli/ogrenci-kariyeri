@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SCA.Common;
 using SCA.Common.Resource;
 using SCA.Common.Result;
 using SCA.Entity.Dto;
@@ -42,7 +43,9 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> ContentShortList(ContentSearchDto dto)
         {
-            return Result.ReturnAsSuccess(null, _mapper.Map<List<ContentShortListDto>>(_contentRepo.GetAll(x => x.IsDeleted.Equals(false)).ToList()));
+            var data = _mapper.Map<List<ContentShortListDto>>(_contentRepo.GetAll(x => x.IsDeleted.Equals(false)).ToList());
+            data.ForEach(x => { x.PublishStateTypeDes = x.PublishStateType.GetDescription(); });
+            return Result.ReturnAsSuccess(null, data);
         }
 
         /// <summary>
@@ -127,24 +130,39 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> ContentCreate(ContentDto dto)
         {
+            string resultMessage = "";
             if (dto == null)
             {
                 Result.ReturnAsFail(AlertResource.NoChanges, null);
             }
-            dto.ReadCount = 0;
-            dto.Writer = "yusuf";
             if (dto.IsSendConfirm == true)
             {
                 dto.PublishStateType = (dto.IsSendConfirm == true) ? PublishState.PublishProcess : PublishState.Taslak;
             }
 
-            var res = _contentRepo.Add(_mapper.Map<Content>(dto));
+            Content res = null;
+            if (dto.Id == 0)
+            {
+                dto.ReadCount = 0;
+                dto.Writer = "Yusuf Can TATLI";
+                dto.PublishStateType = PublishState.Taslak;
+                var data = _mapper.Map<Content>(dto);
+                res = _contentRepo.Add(data);
+                resultMessage = (dto.IsSendConfirm) ? "Makale Yönetici Tarafına Onaya Gönderildi." : "Makale Taslak Olarak Kayıt Edildi.";
+            }
+            else
+            {
+                var updateData = _mapper.Map<Content>(dto);
+                _contentRepo.Update(updateData);
+                resultMessage = (dto.IsSendConfirm) ? "Makale Yönetici Tarafına Onaya Gönderildi." : "Makale Taslak Olarak Güncellendi.";
+            }
+
             _unitOfWork.SaveChanges();
 
             await _tagManager.CreateTag(dto.Tags, res.Id, ReadType.Content);
             await _categoryManager.CreateCategoryRelation(_categoryManager.GetCategoryRelation(dto.Category, res.Id, ReadType.Content));
 
-            return Result.ReturnAsSuccess(null, null);
+            return Result.ReturnAsSuccess(message: resultMessage, null);
         }
 
         /// <summary>

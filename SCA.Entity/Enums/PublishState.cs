@@ -1,16 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace SCA.Entity.Enums
 {
     public enum PublishState : byte
     {
-        [Display(Name = "Taslak")]
+        [Description("Taslak")]
         Taslak = 1,
-        [Display(Name = "PublishProcess")]
+        [Description("Yayın Aşamasında")]
         PublishProcess = 2,
-        [Display(Name = "UnPublish")]
+        [Description("Yayında Değil")]
         UnPublish = 3,
-        [Display(Name = "Publish")]
+        [Description("Yayında")]
         Publish = 4
     }
 }

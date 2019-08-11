@@ -16,7 +16,7 @@ namespace SCA.Entity.Model
         public string Writer { get; set; }
         public long ConfirmUserId { get; set; }
         public string ConfirmUserName { get; set; }
-        public int Category { get; set; }
+        public string Category { get; set; }
         public string ContentDescription { get; set; }
         public PlatformType PlatformType { get; set; }
         public bool IsHeadLine { get; set; }

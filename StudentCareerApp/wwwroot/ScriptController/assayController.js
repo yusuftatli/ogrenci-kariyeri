@@ -49,7 +49,11 @@ app.controller("assayController", function ($scope, $http, $filter) {
     //post assay
     $scope.postAssay = function () {
         $scope.assayCreate.ContentDescription = CKEDITOR.instances.ckeditorForAssayContent.getData();
-        $scope.assayCreate.HeadLine = $("#toggleHeadLine")[0].checked;
+        $scope.assayCreate.isHeadLine = $("#togglwPublish")[0].checked;
+        $scope.assayCreate.isManset = $("#toggleManset")[0].checked;
+        $scope.assayCreate.isMainMenu = $("#toggleMainMenu")[0].checked;
+        $scope.assayCreate.isConstantMainMenu = $("#toggleisConstantMainMenu")[0].checked;
+        $scope.assayCreate.IsSendConfirm = $("#toggleisSendConfirm")[0].checked;
         $scope.assayCreate.ImagePath = $("#roxyField").val();
         $scope.assayCreate.SeoUrl = $("#seoUrl").val();
         $scope.assayCreate.Tags = $("#multipleTags").val();
@@ -109,6 +113,8 @@ app.controller("assayController", function ($scope, $http, $filter) {
         $http(GetContentShortListReq()).then(function (res) {
             if (res.data.resultCode === 200) {
                 $scope.assayList = res.data.data;
+
+
                 paginationLoad($scope, res.data.data);
                 $scope.showTable = false;
             }

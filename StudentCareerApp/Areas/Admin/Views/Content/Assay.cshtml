@@ -1,7 +1,4 @@
-﻿
-
-
-@{
+﻿@{
     ViewBag.Title = "Dashboard";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
@@ -11,20 +8,20 @@
     var a = 1;
 
 }
-    <head>
-        <link href="~/Template/AngularComponents/treeselect/vue-treeselect.css" rel="stylesheet" />
-        <link href="~/Template/assets/node_modules/switchery/dist/switchery.css" rel="stylesheet" />
-        <script src="~/Template/AngularComponents/treeselect/vue.js"></script>
-        <script src="~/Template/AngularComponents/treeselect/vue-treeselect.js"></script>
-        <script src="~/Template/AngularComponents/treeselect/index.js"></script>
-        <script src="~/ScriptController/assayController.js"></script>
-        <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <script src="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.js"></script>
-        <link href="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.css" rel="stylesheet" />
+<head>
+    <link href="~/Template/AngularComponents/treeselect/vue-treeselect.css" rel="stylesheet" />
+    <link href="~/Template/assets/node_modules/switchery/dist/switchery.css" rel="stylesheet" />
+    <script src="~/Template/AngularComponents/treeselect/vue.js"></script>
+    <script src="~/Template/AngularComponents/treeselect/vue-treeselect.js"></script>
+    <script src="~/Template/AngularComponents/treeselect/index.js"></script>
+    <script src="~/ScriptController/assayController.js"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <script src="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.js"></script>
+    <link href="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.css" rel="stylesheet" />
 
-    </head>
+</head>
 
 
 <div class="page-wrapper" ng-app="MyApp" ng-controller="assayController">
@@ -203,7 +200,7 @@
                                                                 <td ng-show="false" ng-bind="x.id"></td>
                                                                 <td ng-bind="x.header"></td>
                                                                 <td ng-bind="x.writer"></td>
-                                                                <td ng-bind="x.publishStateType"></td>
+                                                                <td ng-bind="x.publishStateTypeDes"></td>
                                                                 <td ng-bind="x.readCount"></td>
                                                                 <td ng-bind="x.createdDate"></td>
                                                                 <td ng-bind="x.publishDate"></td>
@@ -269,7 +266,7 @@
                                                     <div class="form-group">
                                                         <label>Yayınlansın mı?</label>
                                                         <br />
-                                                        <input id="toggleHeadLine" type="checkbox" ng-checked="{{assayCreate.isHeadLine}}" class="js-switch" data-color="#00c292" />
+                                                        <input id="togglwPublish" type="checkbox" ng-checked="{{assayCreate.isHeadLine}}" class="js-switch" data-color="#00c292" />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
@@ -290,14 +287,14 @@
                                                     <div class="form-group">
                                                         <label>Ana Menüde Sabitlensin mi?</label>
                                                         <br />
-                                                        <input id="toggleMainMenu" type="checkbox" ng-checked="{{assayCreate.isConstantMainMenu}}" class="js-switch" data-color="#00c292" />
+                                                        <input id="toggleisConstantMainMenu" type="checkbox" ng-checked="{{assayCreate.isConstantMainMenu}}" class="js-switch" data-color="#00c292" />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>Onaya Gönderilsin mi?</label>
                                                         <br />
-                                                        <input id="toggleMainMenu" type="checkbox" ng-checked="{{assayCreate.isSendConfirm}}" class="js-switch" data-color="#00c292" />
+                                                        <input id="toggleisSendConfirm" type="checkbox" ng-checked="{{assayCreate.isSendConfirm}}" class="js-switch" data-color="#00c292" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -439,46 +436,46 @@
 
 
 @section Styles{
-    <style>
-        label.col-md-4 {
-            padding: 0;
-        }
+<style>
+    label.col-md-4 {
+        padding: 0;
+    }
 
-        .newsImage {
-            border-radius: 10px;
-            box-shadow: 0px 0px 5px 0px;
-            margin: 10px;
-            margin-right: 0;
-        }
+    .newsImage {
+        border-radius: 10px;
+        box-shadow: 0px 0px 5px 0px;
+        margin: 10px;
+        margin-right: 0;
+    }
 
-        label {
-            font-weight: 800;
-        }
-    </style>
+    label {
+        font-weight: 800;
+    }
+</style>
 }
 
 @section Scripts{
-    <script>
-        $(document).ready(function () {
-            CKEDITOR.replace("ckeditorForAssayContent");
-            $("#publishDate").datepicker({
-                format: 'dd.mm.yyyy'
-            });
-            $("#publishHour").clockpicker({
-                placement: 'top',
-                align: 'left',
-                autoclose: true,
-                'default': 'now'
-            });
-            $("#endDate").datepicker({
-                format: 'dd.mm.yyyy'
-            });
-            $("#startDate").datepicker({
-                format: 'dd.mm.yyyy'
-            })
+<script>
+    $(document).ready(function () {
+        CKEDITOR.replace("ckeditorForAssayContent");
+        $("#publishDate").datepicker({
+            format: 'dd.mm.yyyy'
         });
-    </script>
-    <script src="~/Template/assets/node_modules/styleswitcher/jQuery.style.switcher.js"></script>
+        $("#publishHour").clockpicker({
+            placement: 'top',
+            align: 'left',
+            autoclose: true,
+            'default': 'now'
+        });
+        $("#endDate").datepicker({
+            format: 'dd.mm.yyyy'
+        });
+        $("#startDate").datepicker({
+            format: 'dd.mm.yyyy'
+        })
+    });
+</script>
+<script src="~/Template/assets/node_modules/styleswitcher/jQuery.style.switcher.js"></script>
 
 
 }
