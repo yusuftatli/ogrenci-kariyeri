@@ -18,10 +18,10 @@ namespace StudentCareerApp.Components.NewsWith2Columns
             _contentManager = contentManager;
         }
 
-        public async Task<IViewComponentResult> Invoke(int count, List<ContentForHomePageDTO> model = null)
+        public async Task<IViewComponentResult> InvokeAsync(int count, List<ContentForHomePageDTO> model = null)
         {
             var res = model ?? await _contentManager.GetContentForHomePage(HitTypes.LastAssay, count);
-            return View("_NewsWith2Columns", model);
+            return View("_NewsWith2Columns", res);
         }
     }
 }

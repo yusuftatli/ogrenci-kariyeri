@@ -18,10 +18,10 @@ namespace StudentCareerApp.Components.NewsWithSlider
             _contentManager = contentManager;
         }
 
-        public async Task<IViewComponentResult> Invoke(int count, List<ContentForHomePageDTO> model = null)
+        public async Task<IViewComponentResult> InvokeAsync(int count, List<ContentForHomePageDTO> model = null)
         {
             var res = model ?? await _contentManager.GetContentForHomePage(HitTypes.HeadLine, count);
-            return View("_NewsWithSlider", model);
+            return View("_NewsWithSlider", res);
         }
     }
 }
