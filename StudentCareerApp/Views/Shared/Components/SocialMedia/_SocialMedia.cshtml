@@ -1,7 +1,6 @@
 ﻿@using SCA.Common;
 
 @model List<SCA.Entity.DTO.SocialMediaDto>
-@using SCA.Common;
 
 @if (Model != null && Model.Count > 0)
 {
@@ -11,9 +10,9 @@
         <ul>
             @foreach (var x in Model)
             {
-                <li class="ts-@x.SocialMediaType.GetDescription().Split(" ,")[0].Trim()">
+                <li class="ts-@x.SocialMediaType.GetDescription().Split(",")[0].Trim()">
                     <a href="@x.Url" target="_blank">
-                        <i class="fa fa-@x.SocialMediaType.GetDescription().Split(" ,")[1].Trim()"></i>
+                        <i class="fa fa-@x.SocialMediaType.GetDescription().Split(",")[1].Trim()"></i>
                         @*<b>@x.FollowerCount</b>*@
                         <span>@x.SocialMediaType.GetDescription().Split(",")[2].Trim()</span>
                     </a>

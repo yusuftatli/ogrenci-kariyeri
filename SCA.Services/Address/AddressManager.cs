@@ -45,8 +45,7 @@ namespace SCA.Services
             return Result.ReturnAsSuccess(null, data);
         }
 
-
-        public List<CitiesDto> CityList()
+        public async Task<List<CitiesDto>> CityList()
         {
             return _mapper.Map<List<CitiesDto>>(_citiesRepo.GetAll());
         }

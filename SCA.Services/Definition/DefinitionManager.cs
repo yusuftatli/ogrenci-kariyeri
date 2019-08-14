@@ -48,6 +48,11 @@ namespace SCA.Services
             return Result.ReturnAsSuccess(null, _mapper.Map<List<DepartmentDto>>(_departmentRepo.GetAll().ToList()));
         }
 
+        public async Task<List<DepartmentDto>> GetDepartmentForUI()
+        {
+            return _mapper.Map<List<DepartmentDto>>(_departmentRepo.GetAll().ToList());
+        }
+
         public async Task<ServiceResult> CreateDepartment(DepartmentDto dto)
         {
             string resultMessage = "";
@@ -88,6 +93,11 @@ namespace SCA.Services
         public async Task<ServiceResult> GetEducationStatus()
         {
             return Result.ReturnAsSuccess(null, _mapper.Map<List<EducationStatusDto>>(_educationStatusRepo.GetAll().ToList()));
+        }
+
+        public async Task<List<EducationStatusDto>> GetEducationStatusForUI()
+        {
+            return _mapper.Map<List<EducationStatusDto>>(_educationStatusRepo.GetAll().ToList());
         }
 
         public async Task<ServiceResult> CreateEducationStatus(EducationStatusDto dto)
@@ -132,6 +142,12 @@ namespace SCA.Services
             return Result.ReturnAsSuccess(null, dataList);
         }
 
+        public async Task<List<FacultyDto>> GetFacultyForUI()
+        {
+            var dataList = _mapper.Map<List<FacultyDto>>(_facultyRepo.GetAll().ToList());
+            return dataList;
+        }
+
         public async Task<ServiceResult> CreateFaculty(FacultyDto dto)
         {
             string resultMessage = "";
@@ -173,12 +189,23 @@ namespace SCA.Services
         public async Task<ServiceResult> GetHighSchool()
         {
             var dataList = _mapper.Map<List<HighSchoolDto>>(_highSchoolTypeRepo.GetAll().ToList());
-            var cityList = _addressManager.CityList();
+            var cityList = await _addressManager.CityList();
             dataList.ForEach(x =>
             {
                 x.CityName = cityList.Where(a => a.CityId == x.CityId).Select(s => s.CityName).FirstOrDefault();
             });
             return Result.ReturnAsSuccess(null, dataList);
+        }
+
+        public async Task<List<HighSchoolDto>> GetHighSchoolForUI()
+        {
+            var dataList = _mapper.Map<List<HighSchoolDto>>(_highSchoolTypeRepo.GetAll().ToList());
+            var cityList = await _addressManager.CityList();
+            dataList.ForEach(x =>
+            {
+                x.CityName = cityList.Where(a => a.CityId == x.CityId).Select(s => s.CityName).FirstOrDefault();
+            });
+            return dataList;
         }
 
         public async Task<ServiceResult> CreateHighSchool(HighSchoolDto dto)
@@ -224,6 +251,11 @@ namespace SCA.Services
             return Result.ReturnAsSuccess(null, _mapper.Map<List<StudentClassDto>>(_classTypeRepo.GetAll().ToList()));
         }
 
+        public async Task<List<StudentClassDto>> GetStudentClassForUI()
+        {
+            return _mapper.Map<List<StudentClassDto>>(_classTypeRepo.GetAll().ToList());
+        }
+
         public async Task<ServiceResult> CreateStudentClass(StudentClassDto dto)
         {
             string resultMessage = "";
@@ -264,12 +296,23 @@ namespace SCA.Services
         public async Task<ServiceResult> GetUniversity()
         {
             var dataList = _mapper.Map<List<UniversityDto>>(_universityRepo.GetAll().ToList());
-            var cityList = _addressManager.CityList();
+            var cityList = await _addressManager.CityList();
             dataList.ForEach(x =>
             {
                 x.CityName = cityList.Where(a => a.CityId == x.CityId).Select(s => s.CityName).FirstOrDefault();
             });
             return Result.ReturnAsSuccess(null, dataList);
+        }
+
+        public async Task<List<UniversityDto>> GetUniversityForUI()
+        {
+            var dataList = _mapper.Map<List<UniversityDto>>(_universityRepo.GetAll().ToList());
+            var cityList = await _addressManager.CityList();
+            dataList.ForEach(x =>
+            {
+                x.CityName = cityList.Where(a => a.CityId == x.CityId).Select(s => s.CityName).FirstOrDefault();
+            });
+            return dataList;
         }
 
         public async Task<ServiceResult> CreateUniversity(UniversityDto dto)
@@ -314,6 +357,12 @@ namespace SCA.Services
         {
             var data = _sectorRepo.GetAll();
             return Result.ReturnAsSuccess(null, data);
+        }
+
+        public async Task<List<Sector>> GetAllSectorForUI()
+        {
+            var data = _sectorRepo.GetAll().ToList();
+            return data;
         }
 
         public async Task<ServiceResult> CreateSector(SectorDto dto)

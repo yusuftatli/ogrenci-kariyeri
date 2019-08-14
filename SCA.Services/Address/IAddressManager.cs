@@ -9,7 +9,7 @@ namespace SCA.Services
 {
     public interface IAddressManager
     {
-        List<CitiesDto> CityList();
+        Task<List<CitiesDto>> CityList();
         Task<ServiceResult> GetCities();
         Task<ServiceResult> GetDistrict(int cityId);
         

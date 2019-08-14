@@ -1,6 +1,6 @@
 ﻿
 @{
-    
+
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -89,15 +89,15 @@
         <div class="row">
             <div class="col-lg-9">
                 @await Component.InvokeAsync("MostPopularItems", new { count = 10 });
-                @await  Component.InvokeAsync("WatchNow", new { count = 4})
-                @await  Component.InvokeAsync("HotTopics", new { count = 5})
+                @await Component.InvokeAsync("WatchNow", new { count = 4 })
+                @await Component.InvokeAsync("HotTopics", new { count = 5 })
             </div>
             <div class="col-lg-3">
                 <div class="right-sidebar">
-                    @await  Component.InvokeAsync("SocialMedia")
-                    @await  Component.InvokeAsync("PopularContents")
-                    @await  Component.InvokeAsync("PopularCategories")
-                    @await  Component.InvokeAsync("NewsletterForm")
+                    @await Component.InvokeAsync("SocialMedia")
+                    @await Component.InvokeAsync("PopularContents")
+                    @await Component.InvokeAsync("PopularCategories")
+                    @await Component.InvokeAsync("NewsletterForm")
                 </div>
             </div>
             <!-- col end-->
@@ -117,10 +117,10 @@
             </div>
             <div class="col-lg-3">
                 <div class="right-sidebar">
-                    @await Component.InvokeAsync("Banner", new { url = "#", imagePath = "images/banner/sidebar-banner4.jpg"})
+                    @await Component.InvokeAsync("Banner", new { url = "#", imagePath = "images/banner/sidebar-banner4.jpg" })
                     @await Component.InvokeAsync("RecentAndFavorites")
-                    @await  Component.InvokeAsync("Tags")
-                    @await  Component.InvokeAsync("Banner", new { url = "#", imagePath = "images/banner/sidebar-banner1.jpg"})
+                    @await Component.InvokeAsync("Tags")
+                    @await Component.InvokeAsync("Banner", new { url = "#", imagePath = "images/banner/sidebar-banner1.jpg" })
                 </div>
             </div>
         </div>

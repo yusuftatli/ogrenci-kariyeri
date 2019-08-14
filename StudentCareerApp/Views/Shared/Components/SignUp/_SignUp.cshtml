@@ -1,0 +1,177 @@
+﻿@using SCA.Entity.Enums;
+@using SCA.Common;
+
+@model SCA.Entity.DTO.AllUniversityInformationDto
+
+<section class="block-wrapper" id="vue-sign-up">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+
+                <div class="ts-grid-box">
+                    <div class="reg-page">
+                        <h3 class="log-sign-title mb-25">Kayıt Ol!</h3>
+                        
+                        @using (Html.BeginForm("Register", "Shared", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    <label>İsim</label>
+                                    <input name="Name" type="text" class="form-control" placeholder="" required>
+                                </div> <!-- form-group end.// -->
+                                <div class="col form-group">
+                                    <label>Soyisim</label>
+                                    <input name="Surname" type="text" class="form-control" placeholder="" required>
+                                </div> <!-- form-group end.// -->
+                                <div class="col form-group">
+                                    <label>Kullanıcı adı</label>
+                                    <input name="Username" type="text" class="form-control" placeholder="" required/>
+                                </div>
+                            </div> <!-- form-row end.// -->
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    <label>Şehir</label>
+                                    <select class="form-control" name="CityId" required>
+                                        <option value="">Seçiniz...</option>
+                                        @foreach (var x in Model.Cities)
+                                        {
+                                            <option value="@x.CityId">@x.CityName</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col form-group">
+                                    <label>Email</label>
+                                    <input name="EmailAddress" type="email" class="form-control" placeholder="" required>
+                                </div> <!-- form-group end.// -->
+                                <div class="form-group col">
+                                    <label>Cinsiyet</label>
+                                    <select id="inputState" class="form-control" name="GenderId" required>
+                                        <option value="">Seçim yapınız...</option>
+                                        <option value="@GenderType.Woman">@GenderType.Woman.GetDescription()</option>
+                                        <option value="@GenderType.Man">@GenderType.Man.GetDescription()</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <label>Eğitim Durumu</label>
+                                    <select id="educationType" class="form-control" required>
+                                        <option value="">Seçim yapınız...</option>
+                                        @foreach (var x in Model.EducationTypes)
+                                        {
+                                            <option value="@((int)Enum.Parse(typeof(EducationType), x.Id.ToString()))">@x.Description</option>
+                                        }
+                                    </select>
+                                </div> <!-- form-group end.// -->
+                                <!-- form-group end.// -->
+                            </div> <!-- form-row.// -->
+                            <div class="template-selected-highschool hidden">
+                                <div class="form-row">
+                                    <div class="form-group col">
+                                        <label>Lise</label>
+                                        <select class="form-control" name="HighSchoolTypeId">
+                                            <option value="">Seçiniz...</option>
+                                            @foreach (var x in Model.HighSchools)
+                                            {
+                                                <option value="@x.Id">@x.SchoolName</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="template-selected-university hidden">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label>Üniversite</label>
+                                        <select class="form-control" name="UniversityId">
+                                            <option value="">Seçiniz...</option>
+                                            @foreach (var x in Model.Universities)
+                                            {
+                                                <option value="@x.Id">@x.UniversityName</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Fakülte</label>
+                                        <select class="form-control" name="FacultyId">
+                                            <option value="">Seçiniz...</option>
+                                            @foreach (var x in Model.Faculties)
+                                            {
+                                                <option value="@x.Id">@x.FacultyName</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label>Bölüm</label>
+                                        <select class="form-control" name="DepartmentId">
+                                            <option value="">Seçiniz...</option>
+                                            @foreach (var x in Model.Departments)
+                                            {
+                                                <option value="@x.Id">@x.DepartmentName</option>
+                                            }
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="form-row template-still-student hidden">
+                                <div class="form-group col-md-6">
+                                    <label>Hala öğrenci misiniz?</label><br />
+                                    <input name="IsStudent" type="checkbox" id="stillStudent" class="js-switch stillStudent" data-color="#00c292" />
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <div class="showClasses hidden">
+                                        <label>Sınıf</label>
+                                        <select class="form-control" name="ClassId">
+                                            <option value="">Seçiniz...</option>
+                                            @foreach (var x in Model.Classes)
+                                            {
+                                                <option value="@x.Id">@x.Description</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <label>Doğum Tarihi</label>
+                                    <input type="date" name="BirthDate" class="form-control" required />
+                                </div>
+                                <div class="form-group col">
+                                    <label>Referans Kodu</label>
+                                    <input name="ReferanceCode" class="form-control" type="text">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <label>Şifre</label>
+                                    <input name="Password" class="form-control" type="password" required>
+                                </div> <!-- form-group end.// -->
+                                <div class="form-group col">
+                                    <label>Şifreni onayla</label>
+                                    <input name="RetypePassword" class="form-control" type="password" required>
+                                </div> <!-- form-group end.// -->
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" id="registerSubmit" class="btn btn-primary btn-block">Kayıt Ol</button>
+                            </div> <!-- form-group// -->
+                            <small class="text-muted">Kayıt ol butonuna tıklayarak kullanım ve gizlilik şartlarını kabul etmiş sayılırsınız.</small>
+                        }
+                        <div class="border-top card-body text-center">Hesabınız var mı? <a href="#" class="openLoginMagnific">Giriş yap!</a></div>
+                    </div> <!-- card.// -->
+
+                </div><!-- grid box end -->
+            </div>
+            <!-- col end-->
+
+        </div>
+        <!-- row end-->
+    </div>
+    <!-- container end-->
+</section>
+
+@section  Scripts{ 
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
