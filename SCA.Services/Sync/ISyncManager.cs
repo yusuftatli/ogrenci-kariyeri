@@ -9,5 +9,6 @@ namespace SCA.Services
   public  interface ISyncManager
     {
         Task<ServiceResult> SyncAssay();
+        Task<ServiceResult> SyncDiger();
     }
 }

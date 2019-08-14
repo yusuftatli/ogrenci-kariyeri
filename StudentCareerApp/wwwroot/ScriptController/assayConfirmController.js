@@ -1,4 +1,5 @@
-﻿var app = angular.module("MyApp", ["ui.bootstrap", "ngVue"]);
+﻿
+var app = angular.module("MyApp", ["ui.bootstrap", "ngVue"]);
 
 app.controller("assayConfirmController", function ($scope, $http, $filter) {
     "use strict";
@@ -31,20 +32,20 @@ app.controller("assayConfirmController", function ($scope, $http, $filter) {
     $scope.onClickDashboard = function () {
         $scope.showTable = true;
         getContentShortList();
-    }
+    };
 
     $scope.onClickContent = function () {
         getMainCategories();
         getTags();
-    }
+    };
 
     $scope.showContentDetail = function () {
 
-    }
+    };
 
     $scope.shoShortListAssay = function () {
         getContentShortList();
-    }
+    };
 
     //post assay
     $scope.postAssay = function () {
@@ -78,6 +79,31 @@ app.controller("assayConfirmController", function ($scope, $http, $filter) {
         }
     };
 
+    function pagin() {
+        $scope.currentPage = 0;
+        $scope.pageSize = 20;
+        $scope.data = [];
+
+        $scope.getData = function () {
+            return $filter('filter')($scope.assayList, $scope.search);
+        };
+
+        $scope.numberOfPages = function () {
+            return Math.ceil($scope.getData().length / $scope.pageSize);
+        };
+
+        for (var i = 0; i < 50; i++) {
+            $scope.data.push("Item " + i);
+        };
+
+        $scope.$watch('search', function (newValue, oldValue) {
+            if (oldValue !== newValue) {
+                $scope.currentPage = 0;
+            }
+        }, true);
+
+    }
+
     //#region GET && POST METHODS
 
     //get main categories
@@ -102,9 +128,12 @@ app.controller("assayConfirmController", function ($scope, $http, $filter) {
         $scope.searchModel.EndDate = $("#EndDate").val();
         $scope.searchModel.searhCategoryIds = $("#searhCategoryIds").val();
         $http(GetContentShortListReq()).then(function (res) {
-            if (res.data.resultCode == 200) {
+            if (res.data.resultCode === 200) {
                 $scope.assayList = res.data.data;
-                paginationLoad($scope, res.data.data);
+                pagin();
+                $scope.showTable = false;
+            } else {
+                shortMessage(res.data.message, "e");
                 $scope.showTable = false;
             }
         });
@@ -113,8 +142,8 @@ app.controller("assayConfirmController", function ($scope, $http, $filter) {
     //post assay
     function postAssay() {
         $http(PostAssayReq()).then(function (res) {
-            if (res.data.resultCode == 200) {
-                shortMessage("Kayıt İşlemi Başarılı", "s");
+            if (res.data.resultCode === 200) {
+                shortMessage(res.data.message, "s");
                 $scope.showSaveLoading = false;
             }
         });
@@ -129,7 +158,7 @@ app.controller("assayConfirmController", function ($scope, $http, $filter) {
         var arr = [];
         var model = $scope.MainCategories;
         model.forEach(element => {
-            if (element.parentId == id) {
+            if (element.parentId === id) {
                 var item = {
                     label: element.description,
                     id: element.id
@@ -147,7 +176,7 @@ app.controller("assayConfirmController", function ($scope, $http, $filter) {
         var arr = [];
         var model = $scope.TagsList;
         model.forEach(element => {
-            if (element.parentId == id) {
+            if (element.parentId === id) {
                 var item = {
                     label: element.description,
                     id: element.id
@@ -236,3 +265,9 @@ app.directive("treeselect", createVueComponent =>
 );
 
 
+app.filter('startFrom', function () {
+    return function (input, start) {
+        start = +start;
+        return input.slice(start);
+    }
+});

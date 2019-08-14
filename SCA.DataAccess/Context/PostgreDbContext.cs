@@ -6,6 +6,7 @@ using System.Text;
 
 namespace SCA.DataAccess.Context
 {
+
     public class PostgreDbContext : DbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -86,6 +87,12 @@ namespace SCA.DataAccess.Context
         #region Anouncement
 
         public DbSet<ImageGalery> ImageGalery { get; set; }
+
+        #endregion
+
+        #region Errors
+
+        public DbSet<Errors> Errors { get; set; }
 
         #endregion
 

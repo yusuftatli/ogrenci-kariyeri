@@ -4,19 +4,18 @@ app.controller("syncController", function ($scope, $http, $filter) {
     "use strict";
 
 
-    $scope.syncAssay = function () {
-        $http(SyncRequest()).then(function (res) {
-        });
+
+    $scope.syncAssay1 = function () {
+        alert("test");
     };
 
-
-
-    var SyncRequest = function () {
-        return {
-            method: "get",
+    $scope.syncAssay = function () {
+        $.ajax({
             url: _link + "/Sync/SyncAssay",
-            headers: Headers
-        };
+            type: "GET",
+            dataType: Json_,
+            contentType: ContentType_
+        });
     };
 
 });

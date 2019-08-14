@@ -7,21 +7,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PresentationLayer", "Presen
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{72164DE3-BF69-4B15-A63A-EC9D8F137683}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCA.Common", "SCA.Common\SCA.Common.csproj", "{EF59BE91-7A22-4988-926B-18AA7A511C57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCA.Common", "SCA.Common\SCA.Common.csproj", "{EF59BE91-7A22-4988-926B-18AA7A511C57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCA.Entity", "SCA.Entity\SCA.Entity.csproj", "{A3F52800-8D16-4597-9E65-92553BD924F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCA.Entity", "SCA.Entity\SCA.Entity.csproj", "{A3F52800-8D16-4597-9E65-92553BD924F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCA.DataAccess", "SCA.DataAccess\SCA.DataAccess.csproj", "{493C2747-33DA-4C10-9A9D-3ADF5DB9A909}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCA.DataAccess", "SCA.DataAccess\SCA.DataAccess.csproj", "{493C2747-33DA-4C10-9A9D-3ADF5DB9A909}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCA.Repository", "SCA.Repository\SCA.Repository.csproj", "{B4B9B48C-D71B-477D-BAA9-A0339C190242}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCA.Repository", "SCA.Repository\SCA.Repository.csproj", "{B4B9B48C-D71B-477D-BAA9-A0339C190242}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataAccessLayer", "DataAccessLayer", "{2A7AE860-B332-42A7-93DB-0801934335E3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BusinessLayer", "BusinessLayer", "{3129FBD1-D202-4C5F-9ACF-253342E7B4D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCA.Services", "SCA.Services\SCA.Services.csproj", "{35C2113F-A3CD-4946-A98D-76C34B8FAACE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCA.Services", "SCA.Services\SCA.Services.csproj", "{35C2113F-A3CD-4946-A98D-76C34B8FAACE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentCareerApp", "StudentCareerApp\StudentCareerApp.csproj", "{13FFA031-C70D-4D53-BBB4-FB2E7FB35CE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentCareerApp", "StudentCareerApp\StudentCareerApp.csproj", "{13FFA031-C70D-4D53-BBB4-FB2E7FB35CE7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

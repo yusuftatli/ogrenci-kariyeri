@@ -68,5 +68,11 @@ namespace StudentCareerApp.Areas.Api.Controller
         {
             return await _contentManager.UpdateContentPublish(id, publishState);
         }
+
+        [HttpGet("getContentbyid")]
+        public async Task<ServiceResult> GetContent(long id)
+        {
+            return await _contentManager.GetContent(id);
+        }
     }
 }

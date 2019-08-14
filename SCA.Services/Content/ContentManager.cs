@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Dapper;
+using Npgsql;
 using SCA.Common;
 using SCA.Common.Resource;
 using SCA.Common.Result;
@@ -11,6 +13,7 @@ using SCA.Repository.UoW;
 using SCA.Services.Interface;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,14 +27,16 @@ namespace SCA.Services
         private readonly IUnitofWork _unitOfWork;
         private readonly ICategoryManager _categoryManager;
         private readonly IUserManager _userManager;
+        private readonly IErrorManagement _errorManagement;
         private IGenericRepository<Content> _contentRepo;
-        public ContentManager(IUnitofWork unitOfWork, IMapper mapper, ITagManager tagManager, ICategoryManager categoryManager, IUserManager userManager)
+        public ContentManager(IUnitofWork unitOfWork, IMapper mapper, ITagManager tagManager, ICategoryManager categoryManager, IUserManager userManager, IErrorManagement errorManagement)
         {
             _mapper = mapper;
             _tagManager = tagManager;
             _userManager = userManager;
             _unitOfWork = unitOfWork;
             _categoryManager = categoryManager;
+            _errorManagement = errorManagement;
             _contentRepo = unitOfWork.GetRepository<Content>();
         }
 
@@ -43,9 +48,44 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> ContentShortList(ContentSearchDto dto)
         {
-            var data = _mapper.Map<List<ContentShortListDto>>(_contentRepo.GetAll(x => x.IsDeleted.Equals(false)).ToList());
-            data.ForEach(x => { x.PublishStateTypeDes = x.PublishStateType.GetDescription(); });
-            return Result.ReturnAsSuccess(null, data);
+            ServiceResult _res = new ServiceResult();
+            try
+            {
+                IDbConnection dbConnection = new NpgsqlConnection("Host=167.71.46.71;Database=StudentDb;Username=postgres;Password=og123456;Port=5432");
+                string query = "SELECT * FROM public.\"Content\"";
+                var result = await dbConnection.QueryAsync<ContentShortListDto>(query);
+
+                string dadata = "";
+
+            }
+            catch (Exception ex1)
+            {
+
+                string errr1 = ex1.ToString();
+                _res = Result.ReturnAsFail(message: errr1, null);
+            }
+
+
+
+
+
+            //string error = "";
+            //try
+            //{
+            //    var data = _mapper.Map<List<ContentShortListDto>>(_contentRepo.GetAll(x => x.IsDeleted.Equals(false)).ToList());
+            //    data.ForEach(x =>
+            //    {
+            //        x.PublishStateTypeDes = x.PublishStateType.GetDescription();
+            //        x.PlatformTypeDes = x.PlatformType.GetDescription();
+            //    });
+            //    return Result.ReturnAsSuccess(message: AlertResource.SuccessfulOperation, data);
+            //}
+            //catch (Exception _ex)
+            //{
+            //    string res = await _errorManagement.SaveError(_ex.ToString());
+            //    _res = Result.ReturnAsFail(message: res, null);
+            //}
+            return _res;
         }
 
         /// <summary>
@@ -85,6 +125,12 @@ namespace SCA.Services
             contentData.WriterImagePath = userData.ImagePath;
 
             return Result.ReturnAsSuccess(null, contentData);
+        }
+
+        public async Task<ServiceResult> GetContent(long id)
+        {
+            var listData = _mapper.Map<ContentDto>(_contentRepo.Get(x => x.Id == id));
+            return Result.ReturnAsSuccess(null, listData);
         }
 
         public async Task<ServiceResult> GetContent(string url)

@@ -17,6 +17,8 @@ namespace SCA.Entity.DTO
         public DateTime PublishDate { get; set; }
         public PublishState PublishStateType { get; set; }
         public string PublishStateTypeDes { get; set; }
+        public PlatformType PlatformType { get; set; }
+        public string PlatformTypeDes { get; set; }
         public long ConfirmUserId { get; set; }
         public string ConfirmUserName { get; set; }
         public string Tags { get; set; }

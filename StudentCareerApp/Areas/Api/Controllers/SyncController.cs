@@ -27,12 +27,15 @@ namespace StudentCareerApp.Areas.Api.Controller
             _syncManager = syncManager;
         }
 
-        [HttpGet,Route("SyncAssay")]
+        [HttpGet, Route("SyncAssay")]
         public async Task<ServiceResult> SyncAssay()
         {
             return await _syncManager.SyncAssay();
         }
 
-
+        public async Task<ServiceResult> SyncDiger()
+        {
+            return await _syncManager.SyncDiger();
+        }
     }
 }

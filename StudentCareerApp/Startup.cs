@@ -23,6 +23,7 @@ using Newtonsoft.Json;
 using SCA.DataAccess.Context;
 using SCA.Entity.Dto;
 using SCA.Entity.DTO;
+using SCA.Entity.DTO.ErrorDb;
 using SCA.Entity.Model;
 using SCA.Repository.UoW;
 using SCA.Services;
@@ -98,9 +99,9 @@ namespace StudentCareerApp
             //});
 
             #region Database
-            services.AddEntityFrameworkNpgsql()
-            .AddDbContext<PostgreDbContext>()
-            .BuildServiceProvider();
+
+            services.AddEntityFrameworkNpgsql().AddDbContext<PostgreDbContext>().BuildServiceProvider();
+
             #endregion
 
             #region Service Register
@@ -125,6 +126,7 @@ namespace StudentCareerApp
             services.AddTransient<IApiManager, ApiManager>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IErrorManagement, ErrorManagement>();
             #endregion
 
             #region Auto Mapper
@@ -241,6 +243,12 @@ namespace StudentCareerApp
                 #region ScreenAnouncement
 
                 cfg.CreateMap<ImageGaleryDto, ImageGalery>().ReverseMap();
+
+                #endregion
+
+                #region Errors
+
+                cfg.CreateMap<ErrorDto, Errors>().ReverseMap();
 
                 #endregion
 
