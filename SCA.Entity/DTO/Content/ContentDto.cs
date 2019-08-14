@@ -8,7 +8,9 @@ namespace SCA.Entity.DTO
     public class ContentDto
     {
         public long Id { get; set; }
+        public long UserId { get; set; }
         public string Tags { get; set; }
+        public long SycnId { get; set; }
         public string Category { get; set; }
         public PlatformType PlatformType { get; set; }
         public PublishState PublishStateType { get; set; }
@@ -29,6 +31,7 @@ namespace SCA.Entity.DTO
         public int InternId { get; set; }
         public int VisibleId { get; set; }
         public DateTime PublishDate { get; set; }
+        public string PlatformTypeDes { get; set; }
         public DateTime CreatedDate { get; set; }
         public long CreatedUserId { get; set; }
     }

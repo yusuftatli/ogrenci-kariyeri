@@ -58,53 +58,49 @@ namespace SCA.Services
         public async Task<ServiceResult> CreateTag(string tags, long tagContentId, ReadType ReadType)
         {
             ServiceResult _res = new ServiceResult();
-            Task t = new Task(() =>
+            List<long> resultdata = new List<long>();
+            List<TagRelationDto> tagRelationList = new List<TagRelationDto>();
+
+            string[] _tags = tags.Replace("[", "").Replace("]", "").Replace("\"", "").Replace("\"", "").Split(',');
+
+            PostgreDbContext db = new PostgreDbContext();
+
+            foreach (var item in _tags)
             {
-                List<long> resultdata = new List<long>();
-                List<TagRelationDto> tagRelationList = new List<TagRelationDto>();
-
-                string[] _tags = tags.Replace("[", "").Replace("]", "").Replace("\"", "").Replace("\"", "").Split(',');
-
-                PostgreDbContext db = new PostgreDbContext();
-
-                foreach (var item in _tags)
+                TagRelation relation = new TagRelation();
+                if (IsInteger(item))
                 {
-                    TagRelation relation = new TagRelation();
-                    if (IsInteger(item))
+                    var relationData = new TagRelationDto()
                     {
-                        var relationData = new TagRelationDto()
-                        {
-                            TagId = Convert.ToInt64(item),
-                            TagContentId = tagContentId,
-                            ReadType = ReadType
-                        };
-                        tagRelationList.Add(relationData);
-                    }
-                    else
-                    {
-                        var data = new Tags()
-                        {
-                            Id = 0,
-                            Description = item,
-                            Hit = 1
-                        };
-
-                        db.Tags.Add(data);
-                        db.SaveChanges();
-
-                        var relationData = new TagRelationDto()
-                        {
-                            TagId = data.Id,
-                            TagContentId = tagContentId,
-                            ReadType = ReadType
-                        };
-                        tagRelationList.Add(relationData);
-                    }
-                    CreateTagRelation(tagRelationList);
+                        TagId = Convert.ToInt64(item),
+                        TagContentId = tagContentId,
+                        ReadType = ReadType
+                    };
+                    tagRelationList.Add(relationData);
                 }
-                _res = Result.ReturnAsSuccess("", _mapper.Map<List<TagDto>>(_tagRepo.GetAll()));
-            });
-            t.Start();
+                else
+                {
+                    var data = new Tags()
+                    {
+                        Id = 0,
+                        Description = item,
+                        Hit = 1
+                    };
+
+                    db.Tags.Add(data);
+                    db.SaveChanges();
+
+                    var relationData = new TagRelationDto()
+                    {
+                        TagId = data.Id,
+                        TagContentId = tagContentId,
+                        ReadType = ReadType
+                    };
+                    tagRelationList.Add(relationData);
+                }
+                CreateTagRelation(tagRelationList);
+            }
+            _res = Result.ReturnAsSuccess("", _mapper.Map<List<TagDto>>(_tagRepo.GetAll()));
             return _res;
         }
 

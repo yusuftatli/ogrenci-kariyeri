@@ -7,6 +7,7 @@ using System.Text;
 
 namespace SCA.Entity.Model
 {
+    [Table("UserLog", Schema = "public")]
     public class UserLog : BaseEntities
     {
         [ForeignKey("UserId")]

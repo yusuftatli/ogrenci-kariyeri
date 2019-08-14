@@ -1,14 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace SCA.Entity.Enums
 {
     public enum PlatformType
     {
-        [Display(Name = "Mobil")]
+        [Description("Mobil")]
         Mobil = 1,
-        [Display(Name = "Web")]
+        [Description("Web")]
         Web = 2,
-        [Display(Name = "WebMobil")]
-        WebMobil = 2,
+        [Description("Web-Mobil")]
+        WebMobil = 3,
     }
 }

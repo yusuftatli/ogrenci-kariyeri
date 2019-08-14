@@ -1,4 +1,5 @@
-﻿var app = angular.module("MyApp", ["ui.bootstrap", "ngVue"]);
+﻿
+var app = angular.module("MyApp", ["ui.bootstrap", "ngVue"]);
 
 app.controller("assayController", function ($scope, $http, $filter) {
     "use strict";
@@ -23,6 +24,8 @@ app.controller("assayController", function ($scope, $http, $filter) {
         öÖ: "o"
     };
 
+  
+
     $scope.MainCategories = [];
     $scope.options = [];
     $scope.tagOptions = [];
@@ -36,10 +39,6 @@ app.controller("assayController", function ($scope, $http, $filter) {
     $scope.onClickContent = function () {
         getMainCategories();
         getTags();
-    };
-
-    $scope.showContentDetail = function () {
-
     };
 
     $scope.shoShortListAssay = function () {
@@ -60,7 +59,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
         $scope.assayCreate.Category = $("#categoryIds").val();
         $scope.assayCreate.PublishDate = moment($("#publishDate").val() + " " + $("#publishHour").val(), 'DD.MM.YYYY HH:mm');
 
-        if ($scope.assayCreate.Header !== null && $scope.assayCreate.Header !== undefined && $scope.assayCreate.Header !== "") {
+        if ($scope.assayCreate.header !== null && $scope.assayCreate.header !== undefined && $scope.assayCreate.header !== "") {
             if ($scope.assayCreate.Category !== null && $scope.assayCreate.Category !== undefined && $scope.assayCreate.Category !== "") {
                 if ($scope.assayCreate.Tags !== null && $scope.assayCreate.Tags !== undefined && $scope.assayCreate.Tags !== "") {
                     if ($scope.assayCreate.ContentDescription !== null && $scope.assayCreate.ContentDescription !== undefined && $scope.assayCreate.ContentDescription !== "") {
@@ -113,10 +112,57 @@ app.controller("assayController", function ($scope, $http, $filter) {
         $http(GetContentShortListReq()).then(function (res) {
             if (res.data.resultCode === 200) {
                 $scope.assayList = res.data.data;
-
-
                 paginationLoad($scope, res.data.data);
                 $scope.showTable = false;
+            }
+        });
+    }
+
+    $scope.showContentDetail = function (x) {
+        getContentById(x);
+    };
+
+
+
+
+    function changeSwitchery(element, checked) {
+        if ((element.is(':checked') && checked === false) || (!element.is(':checked') && checked === true)) {
+            element.parent().find('.switchery').trigger('click');
+        }
+    }
+
+
+    //get content by id
+    function getContentById(x) {
+        changeSwitchery($("#togglwPublish"), $scope.assayCreate.isHeadLine);
+        $.ajax({
+            url: _link + "/Content/getContentbyid",
+            type: "GET",
+            data: { id: x },
+            dataType: Json_,
+            contentType: ContentType_,
+            success: function (e) {
+                if (e.resultCode === 200) {
+                    getMainCategories();
+                    getTags();
+                    console.log($scope.assayCreate);
+
+
+                    changeSwitchery($("#togglwPublish"), e.data.isHeadLine);
+                    changeSwitchery($("#toggleManset"), e.data.isManset);
+                    changeSwitchery($("#toggleMainMenu"), e.data.isMainMenu);
+                    changeSwitchery($("#toggleisConstantMainMenu"), e.data.isConstantMainMenu);
+                    $("#roxyField").val(e.data.imagePath);
+                    $("#publishDate").val(e.data.publishDate);
+                    $("#img_roxyField").val(e.data.imagePath);
+
+                    //$scope.assayCreate.eventId = $scope.events[0];
+
+                    $("#AssayCreate").show();
+                    $("#home").hide();
+                } else {
+                    shortMessage("Hata Meydana Geldi", "e");
+                }
             }
         });
     }
@@ -229,6 +275,8 @@ app.controller("assayController", function ($scope, $http, $filter) {
         };
     };
 
+
+
     //sen content for publish request
     var contentPublishProcess = function () {
         return {
@@ -258,5 +306,3 @@ app.controller("assayController", function ($scope, $http, $filter) {
 app.directive("treeselect", createVueComponent =>
     createVueComponent(Vue.component("treeselect", VueTreeselect.Treeselect))
 );
-
-

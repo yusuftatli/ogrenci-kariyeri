@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SCA.DataAccess.Context;
@@ -9,9 +10,10 @@ using SCA.DataAccess.Context;
 namespace SCA.DataAccess.Migrations
 {
     [DbContext(typeof(PostgreDbContext))]
-    partial class PostgreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190814130144_dberror")]
+    partial class dberror
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -362,32 +364,6 @@ namespace SCA.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("EducationStatus");
-                });
-
-            modelBuilder.Entity("SCA.Entity.Model.Errors", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<long>("CreatedUserId");
-
-                    b.Property<DateTime>("DeletedDate");
-
-                    b.Property<long>("DeletedUserId");
-
-                    b.Property<string>("Error");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<DateTime>("UpdatedDate");
-
-                    b.Property<long>("UpdatedUserId");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Errors");
                 });
 
             modelBuilder.Entity("SCA.Entity.Model.Faculty", b =>

@@ -11,8 +11,9 @@ namespace StudentCareerApp.Areas.Admin.Controllers
     public class ContentController : Controller
     {
         [HttpGet("Assay")]
-        public IActionResult Assay()
+        public IActionResult Assay(long id)
         {
+            ViewBag.assayId = id;
             return View();
         }
 

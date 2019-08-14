@@ -2,18 +2,31 @@
 using SCA.Model;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace SCA.Entity.Model
 {
+    [Table("Users", Schema = "public")]
     public class Users : BaseEntities
     {
+        [MaxLength(50)]
         public string Name { get; set; }
+
+        [MaxLength(50)]
         public string Surname { get; set; }
+
+        [MaxLength(50)]
         public string EmailAddress { get; set; }
+
+        [MaxLength(50)]
         public string Password { get; set; }
+
+        [MaxLength(50)]
         public string Category { get; set; }
+
+        [MaxLength(800)]
         public string ImagePath { get; set; }
 
         [ForeignKey("RoleTypeId")]
@@ -50,6 +63,7 @@ namespace SCA.Entity.Model
         public StudentClass ClassType { get; set; }
         public bool IsStudent { get; set; }
 
+        [MaxLength(500)]
         public string Biography { get; set; }
 
         [ForeignKey("CityId")]
@@ -69,7 +83,6 @@ namespace SCA.Entity.Model
 
 
         public ICollection<CompanyClubs> CompanyClubs { get; set; }
-        public ICollection<Comments> Comments { get; set; }
         public ICollection<UserLog> UserLog { get; set; }
         public ICollection<QuesitonAsnweByUsers> QuesitonAsnweByUsers { get; set; }
         public ICollection<ReadCountOfTestAndContent> ReadCountOfTestAndContent { get; set; }

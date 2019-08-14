@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SCA.DataAccess.Context;
@@ -9,9 +10,10 @@ using SCA.DataAccess.Context;
 namespace SCA.DataAccess.Migrations
 {
     [DbContext(typeof(PostgreDbContext))]
-    partial class PostgreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190814075328_sycnId")]
+    partial class sycnId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -138,8 +140,6 @@ namespace SCA.DataAccess.Migrations
                     b.Property<bool>("Approved");
 
                     b.Property<long>("ArticleId");
-
-                    b.Property<string>("Comment");
 
                     b.Property<DateTime>("CreatedDate");
 
@@ -362,32 +362,6 @@ namespace SCA.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("EducationStatus");
-                });
-
-            modelBuilder.Entity("SCA.Entity.Model.Errors", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<long>("CreatedUserId");
-
-                    b.Property<DateTime>("DeletedDate");
-
-                    b.Property<long>("DeletedUserId");
-
-                    b.Property<string>("Error");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<DateTime>("UpdatedDate");
-
-                    b.Property<long>("UpdatedUserId");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Errors");
                 });
 
             modelBuilder.Entity("SCA.Entity.Model.Faculty", b =>
@@ -868,8 +842,7 @@ namespace SCA.DataAccess.Migrations
 
                     b.Property<long>("UpdatedUserId");
 
-                    b.Property<string>("Url")
-                        .HasMaxLength(300);
+                    b.Property<string>("Url");
 
                     b.Property<long?>("UserId");
 
@@ -881,7 +854,7 @@ namespace SCA.DataAccess.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("SocialMedia","public");
+                    b.ToTable("SocialMedia");
                 });
 
             modelBuilder.Entity("SCA.Entity.Model.StudentClass", b =>
@@ -972,7 +945,7 @@ namespace SCA.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags","public");
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("SCA.Entity.Model.TestValue", b =>
@@ -1119,7 +1092,7 @@ namespace SCA.DataAccess.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("UserLog","public");
+                    b.ToTable("UserLog");
                 });
 
             modelBuilder.Entity("SCA.Entity.Model.Users", b =>
@@ -1127,13 +1100,11 @@ namespace SCA.DataAccess.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Biography")
-                        .HasMaxLength(500);
+                    b.Property<string>("Biography");
 
                     b.Property<DateTime>("BirthDate");
 
-                    b.Property<string>("Category")
-                        .HasMaxLength(50);
+                    b.Property<string>("Category");
 
                     b.Property<long?>("CityId");
 
@@ -1155,8 +1126,7 @@ namespace SCA.DataAccess.Migrations
 
                     b.Property<long>("EducationStatusId");
 
-                    b.Property<string>("EmailAddress")
-                        .HasMaxLength(50);
+                    b.Property<string>("EmailAddress");
 
                     b.Property<int>("EnrollPlatformTypeId");
 
@@ -1166,8 +1136,7 @@ namespace SCA.DataAccess.Migrations
 
                     b.Property<long?>("HighSchoolTypeId");
 
-                    b.Property<string>("ImagePath")
-                        .HasMaxLength(800);
+                    b.Property<string>("ImagePath");
 
                     b.Property<bool>("IsActive");
 
@@ -1175,11 +1144,9 @@ namespace SCA.DataAccess.Migrations
 
                     b.Property<bool>("IsStudent");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(50);
+                    b.Property<string>("Name");
 
-                    b.Property<string>("Password")
-                        .HasMaxLength(50);
+                    b.Property<string>("Password");
 
                     b.Property<string>("ReferanceCode");
 
@@ -1187,8 +1154,7 @@ namespace SCA.DataAccess.Migrations
 
                     b.Property<long>("RoleTypeId");
 
-                    b.Property<string>("Surname")
-                        .HasMaxLength(50);
+                    b.Property<string>("Surname");
 
                     b.Property<long?>("UniversityId");
 
@@ -1216,7 +1182,7 @@ namespace SCA.DataAccess.Migrations
 
                     b.HasIndex("UniversityId");
 
-                    b.ToTable("Users","public");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("SCA.Entity.Model.CategoryRelation", b =>

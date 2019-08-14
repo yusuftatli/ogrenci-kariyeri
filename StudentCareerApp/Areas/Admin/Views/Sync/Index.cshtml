@@ -3,13 +3,13 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-    <head>
-        <link href="~/Template/assets/node_modules/switchery/dist/switchery.css" rel="stylesheet" />
-        <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <script src="~/ScriptController/syncController.js"></script>
-    </head>
+<head>
+    <link href="~/Template/assets/node_modules/switchery/dist/switchery.css" rel="stylesheet" />
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <script src="~/ScriptController/syncController.js"></script>
+</head>
 
 
 <div class="page-wrapper" ng-app="MyApp" ng-controller="syncController">
@@ -48,7 +48,7 @@
                             <li class="nav-item "> <a class="nav-link active" data-toggle="tab" href="#Role" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span ng-click="onClickRoleTab()" class="hidden-xs-down">Rol Tanım</span></a> </li>
                             <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#RolePermission" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span ng-click="onClickRolePermissionTab()" class="hidden-xs-down">Rol Yetki</span></a> </li>
                         </ul>
-                        <button ng-click="syncAssay()" type="button" class="btn btn-primary">Makale Asyn</button>
+                        <button ng-click="syncAssay1()" type="button" class="btn btn-primary">Makale Asyn</button>
                     </div>
 
 

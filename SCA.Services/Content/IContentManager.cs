@@ -54,5 +54,7 @@ namespace SCA.Services
         /// <param name="count"></param>
         /// <returns>List<ContentForHomePageDTO></returns>
         Task<List<ContentForHomePageDTO>> GetContentForHomePage(HitTypes hitTypes, int count);
+
+        Task<ServiceResult> GetContent(long id);
     }
 }

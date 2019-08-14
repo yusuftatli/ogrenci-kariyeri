@@ -1,4 +1,5 @@
 ﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -399,13 +400,19 @@
                             </ul>
                         </li>
 
-                        <li class="nav-small-cap">--- İçerik</li>
                         <li>
                             <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i><span class="user-pro">İçerik</span></a>
                             <ul aria-expanded="false" class="collapse">
-                                <li><a href="~/Admin/Content/Assay">Makale</a></li>
-                                <li><a href="~/Admin/Content/AssayConfirm">Makale Onay</a></li>
-                                <li><a href="~/Admin/Content/Question">Sınav</a></li>
+                                <li><a href="~/Admin/Content/Question">Ekle</a></li>
+                                <li><a href="~/Admin/Content/Question">Liste</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i><span class="user-pro">Makale</span></a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="~/Admin/Content/Assay">Ekle</a></li>
+                                <li><a href="~/Admin/Content/AssayConfirm">Liste</a></li>
                             </ul>
                         </li>
 
@@ -443,9 +450,9 @@
         <div id="roxyCustomPanel2" style="display: none;">
             <iframe src="/lib/fileman/index.html?integration=custom&txtFieldId=roxyField" style="width:100%;height:100%" frameborder="0"></iframe>
         </div>
-        <footer class="footer">
+        @*<footer class="footer">
             @DateTime.Now Öğrenci Kariyeri
-        </footer>
+        </footer>*@
     </div>
     <!-- ============================================================== -->
     <!-- End Wrapper -->

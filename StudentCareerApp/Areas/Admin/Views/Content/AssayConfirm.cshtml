@@ -2,18 +2,24 @@
     ViewBag.Title = "Dashboard";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
+
+
+@{
+    var a = 1;
+
+}
 <head>
-    <link href="~/AdminFiles/Template/AngularComponents/treeselect/vue-treeselect.css" rel="stylesheet" />
-    <link href="~/AdminFiles/Template/assets/node_modules/switchery/dist/switchery.css" rel="stylesheet" />
-    <script src="~/AdminFiles/Template/AngularComponents/treeselect/vue.js"></script>
-    <script src="~/AdminFiles/Template/AngularComponents/treeselect/vue-treeselect.js"></script>
-    <script src="~/AdminFiles/Template/AngularComponents/treeselect/index.js"></script>
-    <script src="~/AdminFiles/ScriptController/assayConfirmController.js"></script>
+    <link href="~/Template/AngularComponents/treeselect/vue-treeselect.css" rel="stylesheet" />
+    <link href="~/Template/assets/node_modules/switchery/dist/switchery.css" rel="stylesheet" />
+    <script src="~/Template/AngularComponents/treeselect/vue.js"></script>
+    <script src="~/Template/AngularComponents/treeselect/vue-treeselect.js"></script>
+    <script src="~/Template/AngularComponents/treeselect/index.js"></script>
+    <script src="~/ScriptController/assayConfirmController.js"></script>
     <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <script src="~/AdminFiles/Template/codemirror/codemirror.js"></script>
-    <link href="~/AdminFiles/Template/codemirror/codemirror.css" rel="stylesheet" />
+    <script src="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.js"></script>
+    <link href="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.css" rel="stylesheet" />
 
 </head>
 
@@ -28,13 +34,13 @@
         <!-- ============================================================== -->
         <div class="row page-titles">
             <div class="col-md-5 align-self-center">
-                <h4 class="text-themecolor">Makale Onay</h4>
+                <h4 class="text-themecolor">Makale Yönetimi</h4>
             </div>
             <div class="col-md-7 align-self-center text-right">
                 <div class="d-flex justify-content-end align-items-center">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Soru Makale Yönetimi</a></li>
-                        <li class="breadcrumb-item active">Soru Yönetimi</li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Makale Yönetimi</a></li>
+                        <li class="breadcrumb-item active">Makale  Yönetimi</li>
                     </ol>
                 </div>
             </div>
@@ -52,7 +58,7 @@
                     <div class="card-body">
                         <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item" ng-click="onClickDashboard()"> <a class="nav-link active" data-toggle="tab" href="#home" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">DashBoard</span></a> </li>
-                            <li class="nav-item" ng-click="onClickContent" ()> <a class="nav-link" data-toggle="tab" href="#profile" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Makale Ekle</span></a> </li>
+                            <li class="nav-item" ng-click="onClickContent" ()> <a class="nav-link" data-toggle="tab" href="#AssayCreate" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Makale Ekle</span></a> </li>
                         </ul>
                         <div class="tab-content tabcontent-border">
 
@@ -138,21 +144,23 @@
                                 </div>
                                 <br />
                                 <br />
-
-                                <div class="row">
+                                <div class="center" ng-show="showTable">
+                                    <span><i class="fa fa-spinner fa-spin"></i></span>
+                                </div>
+                                <div class="row" ng-show="!showTable">
                                     <div class="col-lg-12">
 
                                         <div class="row">
                                             <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label>Başlangıç Tarihi</label>
-                                                    <input id="StartDate" type="text" class="form-control" placeholder="dd.mm.yyyy" />
+                                                    <input id="startDate" type="text" class="form-control" placeholder="dd.mm.yyyy" />
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label>Bitiş Tarihi</label>
-                                                    <input id="EndDate" type="text" class="form-control" placeholder="dd.mm.yyyy" />
+                                                    <input id="endDate" type="text" class="form-control" placeholder="dd.mm.yyyy" />
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -164,44 +172,62 @@
                                             </div>
                                             <div class="col-md-2">
                                                 <div class="form-group">
+                                                    <label><span></span></label>
                                                     <button ng-click="shoShortListAssay()" type="button" class="btn btn-primary">Ara</button>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="card">
+
                                             <div class="card-body">
                                                 <h4 class="card-title">Makaleler Listesi</h4>
                                                 <h6 class="card-subtitle">Makale Sayısı : <code><span ng-bind="assayList.length"></span></code></h6>
+                                                <h4><input type="text" class="form-control" name="site-search" id="getData" ng-model="search" ng-keypress="getData($event)" placeholder="Search..."></h4>
+                                                <table>
+                                                    <tr>
+                                                        <td>
+                                                            <button class="btn btn-block btn-primary" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">Önceki </button>
+                                                        </td>
+                                                        <td>
+                                                            &nbsp;{{currentPage+1}}/{{numberOfPages()}}&nbsp;
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-block btn-primary" ng-disabled="currentPage >= getData().length/pageSize - 1" ng-click="currentPage=currentPage+1"> Sonraki</button>
+                                                        </td>
+                                                        @*
+                                                        <td>
+                                                            &nbsp;<select name="UnitID" ng-model="pageCount_" ng-change="onChangePage(obj.ID)" ng-options="obj.ID as obj.Name for obj in pageCount" class="btn btn-primary dropdown-toggle"></select>
+                                                        </td>*@
+                                                    </tr>
+                                                </table>
                                                 <div class="table-responsive">
-                                                    <div class="center" ng-show="showTable">
-                                                        <span><i class="fa fa-spinner fa-spin"></i></span>
-                                                    </div>
-                                                    <table ng-show="!showTable" class="table">
+
+                                                    <table class="table">
                                                         <thead>
                                                             <tr>
                                                                 <th>Başlık</th>
                                                                 <th>Yazar</th>
                                                                 <th>Yayınlanma Durumu</th>
+                                                                <th>Platform</th>
                                                                 <th>Okunma</th>
-                                                                <th>Onaylayan</th>
                                                                 <th>Oluşturma Tarihi</th>
                                                                 <th>Yayınlanma Tarihi</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr ng-repeat="x in assayList.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))">
+                                                            <tr ng-repeat="x in assayList| filter:search | startFrom:currentPage*pageSize | limitTo:pageSize" )">
                                                                 <td ng-show="false" ng-bind="x.id"></td>
                                                                 <td ng-bind="x.header"></td>
                                                                 <td ng-bind="x.writer"></td>
-                                                                <td ng-bind="x.publishStateType"></td>
+                                                                <td ng-bind="x.publishStateTypeDes"></td>
+                                                                <td ng-bind="x.platformTypeDes"></td>
                                                                 <td ng-bind="x.readCount"></td>
-                                                                <td ng-bind="x.confirmUserName"></td>
-                                                                <td ng-bind="x.createdDate"></td>
-                                                                <td ng-bind="x.publishDate"></td>
+                                                                <td ng-bind="x.createdDate | date:'MM/dd/yyyy HH:mm:ss'"></td>
+                                                                <td ng-bind="x.publishDate | date:'MM/dd/yyyy HH:mm:ss'"></td>
                                                                 <td>
                                                                     <div class="btn-group">
-                                                                        <button ng-click="showContentDetail(x)" type="button" class="btn btn-primary">Aç</button>
+                                                                        <button ng-click="showContentDetail(x.id)" type="button" class="btn btn-primary">Aç</button>
                                                                         <button data-toggle="modal" @*data-target="#addSubCategoryModal" *@ type="button" class="btn btn-primary">Diğer</button>
                                                                     </div>
                                                                 </td>
@@ -216,7 +242,7 @@
 
                             </div>
 
-                            <div ng-disabled="showSaveLoading" class="tab-pane  p-20" id="profile" role="tabpanel">
+                            <div ng-disabled="showSaveLoading" class="tab-pane  p-20" id="AssayCreate" role="tabpanel">
                                 <div class="row">
                                     <div class="col-md-12">
 
@@ -226,13 +252,13 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label>Makale Başlığı</label>
-                                                        <input type="text" class="form-control" ng-model="assayCreate.Header">
+                                                        <input type="text" class="form-control" ng-model="assayCreate.header">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label>Seo Link</label>
-                                                        <input type="text" id="seoUrl" ng-disabled="true" class="form-control" placeholder="Seo Link" value="{{RegexSeo(assayCreate.Header)}}" />
+                                                        <input type="text" id="seoUrl" ng-disabled="true" class="form-control" placeholder="Seo Link" value="{{RegexSeo(assayCreate.header)}}" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -240,7 +266,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label>Makale Başlık Resim</label>
-                                                        <input type="text" class="form-control" id="roxyField" onclick="openCustomRoxy2('#roxyCustomPanel2')" />
+                                                        <input type="text" class="form-control" ng-model="{{assayCreate.imagePath}}" id="roxyField" onclick="openCustomRoxy2('#roxyCustomPanel2')" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -261,28 +287,35 @@
                                                     <div class="form-group">
                                                         <label>Yayınlansın mı?</label>
                                                         <br />
-                                                        <input id="toggleHeadLine" type="checkbox" ng-checked="{{assayCreate.IsHeadLine}}" class="js-switch" data-color="#00c292" />
+                                                        <input id="togglwPublish" type="checkbox" ng-checked="{{assayCreate.isHeadLine}}" class="js-switch" data-color="#00c292" />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>Manşet mi?</label>
                                                         <br />
-                                                        <input id="toggleManset" type="checkbox" ng-checked="{{assayCreate.IsManset}}" class="js-switch" data-color="#00c292" />
+                                                        <input id="toggleManset" type="checkbox" ng-checked="{{assayCreate.isManset}}" class="js-switch" data-color="#00c292" />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>Ana Menü?</label>
                                                         <br />
-                                                        <input id="toggleMainMenu" type="checkbox" ng-checked="{{assayCreate.IsMainMenu}}" class="js-switch" data-color="#00c292" />
+                                                        <input id="toggleMainMenu" type="checkbox" ng-checked="{{assayCreate.isMainMenu}}" class="js-switch" data-color="#00c292" />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>Ana Menüde Sabitlensin mi?</label>
                                                         <br />
-                                                        <input id="toggleMainMenu" type="checkbox" ng-checked="{{assayCreate.IsConstantMainMenu}}" class="js-switch" data-color="#00c292" />
+                                                        <input id="toggleisConstantMainMenu" type="checkbox" ng-checked="{{assayCreate.isConstantMainMenu}}" class="js-switch" data-color="#00c292" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label>Onaya Gönderilsin mi?</label>
+                                                        <br />
+                                                        <input id="toggleisSendConfirm" type="checkbox" ng-checked="{{assayCreate.isSendConfirm}}" class="js-switch" data-color="#00c292" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -290,7 +323,7 @@
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label class="control-label">Ekinlikler</label>
-                                                        <select id="roletypeid" class="form-control custom-select" ng-model="assayCreate.EventId" name="roletypeid">
+                                                        <select id="roletypeid" class="form-control custom-select" ng-model="assayCreate.eventId" name="eventId">
                                                             <option ng-repeat="x in events" value="{{x.id}}">{{x.description}}</option>
                                                         </select>
                                                     </div>
@@ -298,7 +331,7 @@
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label class="control-label">Stajlar</label>
-                                                        <select id="roletypeid" class="form-control custom-select" ng-model="assayCreate.InternId" name="roletypeid">
+                                                        <select id="roletypeid" class="form-control custom-select" ng-model="assayCreate.internId" name="internId">
                                                             <option ng-repeat="x in internList" value="{{x.id}}">{{x.description}}</option>
                                                         </select>
                                                     </div>
@@ -306,7 +339,7 @@
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label class="control-label">Görünürlük</label>
-                                                        <select id="roletypeid" class="form-control custom-select" ng-model="assayCreate.VisibleId" name="roletypeid">
+                                                        <select id="roletypeid" class="form-control custom-select" ng-model="assayCreate.visibleId" name="visibleId">
                                                             <option ng-repeat="x in visibleList" value="{{x.id}}">{{x.description}}</option>
                                                         </select>
                                                     </div>
@@ -424,26 +457,26 @@
 
 
 @section Styles{
-<style>
-    label.col-md-4 {
-        padding: 0;
-    }
+    <style>
+        label.col-md-4 {
+            padding: 0;
+        }
 
-    .newsImage {
-        border-radius: 10px;
-        box-shadow: 0px 0px 5px 0px;
-        margin: 10px;
-        margin-right: 0;
-    }
+        .newsImage {
+            border-radius: 10px;
+            box-shadow: 0px 0px 5px 0px;
+            margin: 10px;
+            margin-right: 0;
+        }
 
-    label {
-        font-weight: 800;
-    }
-</style>
+        label {
+            font-weight: 800;
+        }
+    </style>
 }
 
 @section Scripts{
-<script>
+    <script>
         $(document).ready(function () {
             CKEDITOR.replace("ckeditorForAssayContent");
             $("#publishDate").datepicker({
@@ -455,10 +488,15 @@
                 autoclose: true,
                 'default': 'now'
             });
-            //new Switchery($("#toggleHeadLine")[0], $("#toggleHeadLine").data());
+            $("#endDate").datepicker({
+                format: 'dd.mm.yyyy'
+            });
+            $("#startDate").datepicker({
+                format: 'dd.mm.yyyy'
+            })
         });
-</script>
-<script src="~/AdminFiles/Template/assets/node_modules/styleswitcher/jQuery.style.switcher.js"></script>
+    </script>
+    <script src="~/Template/assets/node_modules/styleswitcher/jQuery.style.switcher.js"></script>
 
 
 }

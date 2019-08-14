@@ -8,7 +8,9 @@ namespace SCA.Entity.Model
 {
     public class Content : BaseEntities
     {
+        public long UserId { get; set; }
         public PublishState PublishStateType { get; set; }
+        public long SycnId { get; set; }
         public long ReadCount { get; set; }
         public string ImagePath { get; set; }
         public string SeoUrl { get; set; }
@@ -27,6 +29,7 @@ namespace SCA.Entity.Model
         public int InternId { get; set; }
         public int VisibleId { get; set; }
         public DateTime PublishDate { get; set; }
+
 
     }
 }

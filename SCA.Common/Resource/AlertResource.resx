@@ -141,6 +141,9 @@
   <data name="SuccessfulOperation" xml:space="preserve">
     <value>Operasyon başarılı</value>
   </data>
+  <data name="SystemError" xml:space="preserve">
+    <value>Sistemde hata meydana geldi</value>
+  </data>
   <data name="UpdateIsOk" xml:space="preserve">
     <value>Kayıt Güncelleme İşleme Başarılı</value>
   </data>
