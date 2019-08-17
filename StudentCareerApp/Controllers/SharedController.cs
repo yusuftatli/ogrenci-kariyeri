@@ -56,7 +56,7 @@ namespace SCA.UI.Controllers
                     Password = Request.Form["Password"].ToString(),
                     Surname = Request.Form["Surname"].ToString(),
                     UniversityId = (educationType == Entity.Enums.EducationType.University || educationType == Entity.Enums.EducationType.Master) ? int.Parse(Request.Form["UniversityId"].ToString()) : 0,
-                    Username = Request.Form["Username"].ToString(),
+                    UserName = Request.Form["Username"].ToString(),
                     SubscribeNewsletter = Request.Form["SubscribeNewsletter"].ToString() == "on",
                     ReferanceCode = Request.Form["ReferanceCode"].ToString()
                 };
