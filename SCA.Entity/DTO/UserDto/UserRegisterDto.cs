@@ -10,7 +10,7 @@ namespace SCA.Entity.DTO
     {
         public string Name { get; set; }
         public string Surname { get; set; }
-        public string Username { get; set; }
+        public string UserName { get; set; }
         public string EmailAddress { get; set; }
         public GenderType GenderId { get; set; }
         public EducationType EducationStatusId { get; set; }

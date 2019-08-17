@@ -10,6 +10,7 @@ using SCA.Services.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,7 +25,9 @@ namespace SCA.Services
         private IGenericRepository<UserLog> _userLogRepo;
         private IGenericRepository<SocialMedia> _socialMediaRepo;
         private IPictureManager _pictureManager;
-        public UserManager(IUnitofWork unitOfWork, IMapper mapper, ISender sender, IPictureManager pictureManager)
+        private IUserValidation _userValidation;
+        private readonly IErrorManagement _errorManagement;
+        public UserManager(IUnitofWork unitOfWork, IMapper mapper, ISender sender, IPictureManager pictureManager, IErrorManagement errorManagement, IUserValidation userValidation)
         {
             _mapper = mapper;
             _sender = sender;
@@ -32,7 +35,9 @@ namespace SCA.Services
             _userRepo = _unitOfWork.GetRepository<Users>();
             _userLogRepo = _unitOfWork.GetRepository<UserLog>();
             _socialMediaRepo = _unitOfWork.GetRepository<SocialMedia>();
+            _errorManagement = errorManagement;
             _pictureManager = pictureManager;
+            _userValidation = userValidation;
         }
 
         public async Task<ServiceResult> CreateUserByMobil(UserMobilDto dto)
@@ -41,8 +46,6 @@ namespace SCA.Services
             {
                 Result.ReturnAsFail();
             }
-
-
 
             var user = _mapper.Map<Users>(dto);
             user.IsActive = true;
@@ -62,6 +65,35 @@ namespace SCA.Services
         {
             var dataResult = _mapper.Map<UsersDTO>((_userRepo.Get(x => x.Id == Id)));
             return dataResult;
+        }
+
+
+        public async Task<ServiceResult> RegisterUser(UserRegisterDto dto)
+        {
+            if (dto.Equals(null))
+            {
+                Result.ReturnAsFail(AlertResource.NoChanges, null);
+            }
+
+            ServiceResult _res = new ServiceResult();
+            string resultMessage = "";
+
+            _res = _userValidation.UserRegisterValidation(dto);
+            if (HttpStatusCode.OK != _res.ResultCode)
+            {
+                return _res;
+            }
+
+            var userData = _mapper.Map<Users>(dto);
+            userData.IsStudent = true;
+            userData.RoleExpiresDate = DateTime.Now.AddYears(20);
+            userData.RoleType = null;
+            userData.IsActive = false;
+
+            _userRepo.Add(_mapper.Map<Users>(dto));
+
+            _unitOfWork.SaveChanges();
+            return Result.ReturnAsFail(null, null);
         }
 
         /// <summary>
@@ -92,20 +124,19 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> CreateUser(UsersDTO dto)
         {
-            string resultMessage = "";
-            if (!UserControl(dto.EmailAddress))
-            {
-                Result.ReturnAsFail(AlertResource.EmailAlreadyExsist, null);
-            }
-
-            //if (dto.EmailAddress.Equals(null) && dto.EmailAddress == "")
-            //{
-            //    Result.ReturnAsFail("Ad Boş Geçilemez", null);
-            //}
-
             if (dto.Equals(null))
             {
                 Result.ReturnAsFail(AlertResource.NoChanges, null);
+            }
+
+
+            ServiceResult _res = new ServiceResult();
+            string resultMessage = "";
+
+            _res = _userValidation.CreateUserValidation(dto);
+            if (HttpStatusCode.OK != _res.ResultCode)
+            {
+                return _res;
             }
 
             if (dto.IsEmailSend)
@@ -120,7 +151,7 @@ namespace SCA.Services
 
             if (!string.IsNullOrEmpty(dto.ImageData))
             {
-               _pictureManager.SaveImage(dto.ImageData, dto.Name + "-" + dto.Surname);
+                _pictureManager.SaveImage(dto.ImageData, dto.Name + "-" + dto.Surname);
             }
 
             Users _user = null;
@@ -133,7 +164,8 @@ namespace SCA.Services
                 dto.UniversityId = (dto.UniversityId == 0) ? null : dto.UniversityId;
                 dto.FacultyId = (dto.FacultyId == 0) ? null : dto.FacultyId;
                 dto.DepartmentId = (dto.DepartmentId == 0) ? null : dto.DepartmentId;
-                //dto.Password = Guid.NewGuid().ToString();
+                dto.CityId = (dto.CityId == 0) ? null : dto.CityId;
+                dto.EducationStatusId = (dto.EducationStatusId == 0) ? null : dto.EducationStatusId;
                 _user = _userRepo.Add(_mapper.Map<Users>(dto));
                 resultMessage = "Kayıt İşlemi Başarılı";
             }
@@ -143,40 +175,35 @@ namespace SCA.Services
                 resultMessage = "Güncelleme İşlemi Başarılı";
             }
 
-            var res = _unitOfWork.SaveChanges();
+            var result = _unitOfWork.SaveChanges();
+            long _userId = _user.Id;
 
-            //if (dto.SocialMedia.Count > 0)
-            //{
-            //    var _socialMedia = _mapper.Map<List<SocialMedia>>(dto.SocialMedia);
-            //    if (dto.Id == 0)
-            //    {
-            //        foreach (var item in _socialMedia)
-            //        {
-            //            item.Id = _user.Id;
-            //        }
-            //        _socialMediaRepo.AddRange(_socialMedia);
-            //    }
-            //    else
-            //    {
-            //        List<SocialMedia> socailData = _socialMediaRepo.GetAll(x => x.Id == dto.Id).ToList();
-            //        foreach (var _item in socailData)
-            //        {
-            //            foreach (var _dto in _socialMedia)
-            //            {
-            //                if (_item.SocialMediaType == _dto.SocialMediaType)
-            //                {
-            //                    _item.Id = _dto.Id;
-            //                    _item.Url = _dto.Url;
-            //                    _item.IsActive = _dto.IsActive;
-            //                    _socialMediaRepo.Update(_mapper.Map<SocialMedia>(_item));
-            //                }
-            //            }
-            //            _unitOfWork.SaveChanges();
-            //        }
-            //    }
-            //}
+            if (dto.Id != 0)
+            {
+                var sData = _socialMediaRepo.GetAll(x => x.UserId == _userId).ToList();
+                _socialMediaRepo.Delete(_mapper.Map<SocialMedia>(sData));
+                _unitOfWork.SaveChanges();
+            }
 
-            return Result.ReturnAsSuccess(message: resultMessage, null);
+            List<SocialMediaDto> socialData = new List<SocialMediaDto>();
+            socialData.Add(new SocialMediaDto { CompanyClupId = null, IsActive = true, SocialMediaType = SocialMediaType.Facebook, Url = dto.Facebook, UserId = _userId });
+            socialData.Add(new SocialMediaDto { CompanyClupId = null, IsActive = true, SocialMediaType = SocialMediaType.Linkedin, Url = dto.Linkedin, UserId = _userId });
+            socialData.Add(new SocialMediaDto { CompanyClupId = null, IsActive = true, SocialMediaType = SocialMediaType.Instagram, Url = dto.Instagram, UserId = _userId });
+
+            _socialMediaRepo.AddRange(_mapper.Map<List<SocialMedia>>(socialData));
+            _unitOfWork.SaveChanges();
+
+            if (result.ResultCode != HttpStatusCode.OK)
+            {
+                await _errorManagement.SaveError(result.Message);
+                _res = Result.ReturnAsFail(message: AlertResource.AnErrorOccurredWhenProcess, null);
+            }
+            else
+            {
+                _res = Result.ReturnAsSuccess(message: resultMessage, _userId);
+            }
+
+            return _res;
         }
         public async Task<ServiceResult> DeleteUser(long userId)
         {

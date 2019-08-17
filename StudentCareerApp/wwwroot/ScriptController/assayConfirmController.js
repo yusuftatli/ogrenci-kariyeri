@@ -37,6 +37,7 @@ app.controller("assayConfirmController", function ($scope, $http, $filter) {
     $scope.onClickContent = function () {
         getMainCategories();
         getTags();
+        $scope.showSaveLoading = false;
     };
 
     $scope.showContentDetail = function () {
@@ -124,13 +125,13 @@ app.controller("assayConfirmController", function ($scope, $http, $filter) {
     //content list
     function getContentShortList() {
         $scope.showTable = true;
-        $scope.searchModel.StartDate = $("#StartDate").val();
-        $scope.searchModel.EndDate = $("#EndDate").val();
-        $scope.searchModel.searhCategoryIds = $("#searhCategoryIds").val();
+        $scope.searchModel.StartDate = moment($("#searchStartDate").val());
+        $scope.searchModel.EndDate = moment($("#searchEndDate").val());
+        $scope.searchModel.Category = $("#searhCategoryIds").val();
         $http(GetContentShortListReq()).then(function (res) {
             if (res.data.resultCode === 200) {
                 $scope.assayList = res.data.data;
-                pagin();
+               // pagin();
                 $scope.showTable = false;
             } else {
                 shortMessage(res.data.message, "e");

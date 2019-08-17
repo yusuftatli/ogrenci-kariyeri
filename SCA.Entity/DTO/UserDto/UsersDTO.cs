@@ -22,20 +22,22 @@ namespace SCA.Entity.DTO
         public string ImageData { get; set; }
         public DateTime RoleExpiresDate { get; set; }
         public GenderType GenderId { get; set; }
-        public long EducationStatusId { get; set; }
+        public long? EducationStatusId { get; set; }
         public DateTime BirthDate { get; set; }
         public long? HighSchoolTypeId { get; set; }
         public long? UniversityId { get; set; }
         public long? FacultyId { get; set; }
         public long? DepartmentId { get; set; }
         public long ClassId { get; set; }
-        public long CityId { get; set; }
+        public long? CityId { get; set; }
         public long DistrictId { get; set; }
         public string ReferanceCode { get; set; }
         public long DefaultPageId { get; set; }
         public PlatformType EnrollPlatformTypeId { get; set; }
         public bool IsEmailSend { get; set; }
         public bool IsPhoneSend { get; set; }
-        //public List<SocialMediaDto> SocialMedia { get; set; }
+        public string Facebook { get; set; }
+        public string Linkedin { get; set; }
+        public string Instagram { get; set; }
     }
 }

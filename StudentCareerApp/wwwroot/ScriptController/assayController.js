@@ -24,7 +24,30 @@ app.controller("assayController", function ($scope, $http, $filter) {
         öÖ: "o"
     };
 
-  
+    function pagin() {
+        $scope.currentPage = 0;
+        $scope.pageSize = 20;
+        $scope.data = [];
+
+        $scope.getData = function () {
+            return $filter('filter')($scope.assayList, $scope.search);
+        };
+
+        $scope.numberOfPages = function () {
+            return Math.ceil($scope.getData().length / $scope.pageSize);
+        };
+
+        for (var i = 0; i < 50; i++) {
+            $scope.data.push("Item " + i);
+        };
+
+        $scope.$watch('search', function (newValue, oldValue) {
+            if (oldValue !== newValue) {
+                $scope.currentPage = 0;
+            }
+        }, true);
+
+    }
 
     $scope.MainCategories = [];
     $scope.options = [];
@@ -105,14 +128,16 @@ app.controller("assayController", function ($scope, $http, $filter) {
 
     //content list
     function getContentShortList() {
-        $scope.showTable = true;
-        $scope.searchModel.StartDate = $("#StartDate").val();
-        $scope.searchModel.EndDate = $("#EndDate").val();
+        $scope.searchModel.startDate =$("#searchStartDate").val();
+        $scope.searchModel.endDate = $("#searchEndDate").val();
         $scope.searchModel.searhCategoryIds = $("#searhCategoryIds").val();
         $http(GetContentShortListReq()).then(function (res) {
             if (res.data.resultCode === 200) {
                 $scope.assayList = res.data.data;
-                paginationLoad($scope, res.data.data);
+                // pagin();
+                $scope.showTable = false;
+            } else {
+                shortMessage(res.data.message, "e");
                 $scope.showTable = false;
             }
         });
@@ -152,9 +177,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
                     changeSwitchery($("#toggleManset"), e.data.isManset);
                     changeSwitchery($("#toggleMainMenu"), e.data.isMainMenu);
                     changeSwitchery($("#toggleisConstantMainMenu"), e.data.isConstantMainMenu);
-                    $("#roxyField").val(e.data.imagePath);
                     $("#publishDate").val(e.data.publishDate);
-                    $("#img_roxyField").val(e.data.imagePath);
 
                     //$scope.assayCreate.eventId = $scope.events[0];
 
@@ -306,3 +329,10 @@ app.controller("assayController", function ($scope, $http, $filter) {
 app.directive("treeselect", createVueComponent =>
     createVueComponent(Vue.component("treeselect", VueTreeselect.Treeselect))
 );
+
+app.filter('startFrom', function () {
+    return function (input, start) {
+        start = +start;
+        return input.slice(start);
+    }
+});

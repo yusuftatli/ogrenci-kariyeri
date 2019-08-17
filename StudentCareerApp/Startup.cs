@@ -264,7 +264,9 @@ namespace StudentCareerApp
             services.AddSingleton(mapper);
             #endregion
 
-            services.AddSession();
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+            });
             services.AddDistributedMemoryCache();
             services.AddMvc();
         }

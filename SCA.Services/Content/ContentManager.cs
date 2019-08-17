@@ -29,6 +29,7 @@ namespace SCA.Services
         private readonly IUserManager _userManager;
         private readonly IErrorManagement _errorManagement;
         private IGenericRepository<Content> _contentRepo;
+        private readonly IDbConnection _db = new NpgsqlConnection("Host=167.71.46.71;Database=StudentDb;Username=postgres;Password=og123456;Port=5432");
         public ContentManager(IUnitofWork unitOfWork, IMapper mapper, ITagManager tagManager, ICategoryManager categoryManager, IUserManager userManager, IErrorManagement errorManagement)
         {
             _mapper = mapper;
@@ -39,9 +40,6 @@ namespace SCA.Services
             _errorManagement = errorManagement;
             _contentRepo = unitOfWork.GetRepository<Content>();
         }
-
-
-
         /// <summary>
         /// makale kısa açıklamalarını listeler
         /// </summary>
@@ -51,43 +49,32 @@ namespace SCA.Services
             ServiceResult _res = new ServiceResult();
             try
             {
-                IDbConnection dbConnection = new NpgsqlConnection("Host=167.71.46.71;Database=StudentDb;Username=postgres;Password=og123456;Port=5432");
-                string query = "SELECT * FROM public.\"Content\"";
-                var result = await dbConnection.QueryAsync<ContentShortListDto>(query);
+                DateTime startDate = (string.IsNullOrEmpty(dto.StartDate)) ? DateTime.Now.AddDays(-30) : Convert.ToDateTime(dto.StartDate);
+                DateTime endDate = (string.IsNullOrEmpty(dto.EndDate)) ? DateTime.Now.AddDays(30) : Convert.ToDateTime(dto.EndDate);
 
-                string dadata = "";
+                string query = "SELECT \"Id\",\"Header\",\"Writer\",\"ReadCount\", \"Category\",\"CreatedDate\",\"PublishDate\",\"PublishStateType\",\"PlatformType\",\"ConfirmUserName\" " +
+                               "FROM public.\"Content\"  where \"PublishDate\" <= '" + startDate + "' and \"PublishDate\" >= '" + endDate + "'";
 
+
+                var dataList = _db.Query<ContentShortListDto>(query).ToList();
+                if (dataList.Count>0)
+                {
+                    dataList.ForEach(x =>
+                    {
+                        x.PublishStateTypeDes = x.PublishStateType.GetDescription();
+                        x.PlatformTypeDes = x.PlatformType.GetDescription();
+                    });
+                }
+
+                return Result.ReturnAsSuccess(message: AlertResource.SuccessfulOperation, dataList);
             }
-            catch (Exception ex1)
+            catch (Exception _ex)
             {
-
-                string errr1 = ex1.ToString();
-                _res = Result.ReturnAsFail(message: errr1, null);
+                string res = await _errorManagement.SaveError(_ex.ToString());
+                _res = Result.ReturnAsFail(message: res, null);
             }
-
-
-
-
-
-            //string error = "";
-            //try
-            //{
-            //    var data = _mapper.Map<List<ContentShortListDto>>(_contentRepo.GetAll(x => x.IsDeleted.Equals(false)).ToList());
-            //    data.ForEach(x =>
-            //    {
-            //        x.PublishStateTypeDes = x.PublishStateType.GetDescription();
-            //        x.PlatformTypeDes = x.PlatformType.GetDescription();
-            //    });
-            //    return Result.ReturnAsSuccess(message: AlertResource.SuccessfulOperation, data);
-            //}
-            //catch (Exception _ex)
-            //{
-            //    string res = await _errorManagement.SaveError(_ex.ToString());
-            //    _res = Result.ReturnAsFail(message: res, null);
-            //}
             return _res;
         }
-
         /// <summary>
         /// UI için makaleleri short list olarak kullanıcı bilgileri ile birlikte döner 
         /// </summary>
@@ -113,7 +100,6 @@ namespace SCA.Services
 
             return Result.ReturnAsSuccess(null, dataList);
         }
-
         public async Task<ServiceResult> GetContentUI(string url)
         {
             ContentForUIDto result = new ContentForUIDto();
@@ -126,19 +112,16 @@ namespace SCA.Services
 
             return Result.ReturnAsSuccess(null, contentData);
         }
-
         public async Task<ServiceResult> GetContent(long id)
         {
             var listData = _mapper.Map<ContentDto>(_contentRepo.Get(x => x.Id == id));
             return Result.ReturnAsSuccess(null, listData);
         }
-
         public async Task<ServiceResult> GetContent(string url)
         {
             var listData = _mapper.Map<ContentDto>(_contentRepo.Get(x => x.SeoUrl == url));
             return Result.ReturnAsSuccess(null, listData);
         }
-
         public async Task<ServiceResult> UpdateContentPublish(long id, PublishState publishState)
         {
             if (publishState.Equals(PublishState.Publish))
@@ -159,7 +142,6 @@ namespace SCA.Services
             }
             return Result.ReturnAsSuccess();
         }
-
         /// <summary>
         /// Makaleleri içerikleri ile birlikte listeler
         /// </summary>
@@ -168,7 +150,6 @@ namespace SCA.Services
         {
             return Result.ReturnAsSuccess(null, _mapper.Map<List<ContentDto>>(_contentRepo.GetAll(x => x.IsDeleted.Equals(false)).ToList()));
         }
-
         /// <summary>
         /// makale ekler
         /// </summary>
@@ -202,15 +183,11 @@ namespace SCA.Services
                 _contentRepo.Update(updateData);
                 resultMessage = (dto.IsSendConfirm) ? "Makale Yönetici Tarafına Onaya Gönderildi." : "Makale Taslak Olarak Güncellendi.";
             }
-
             _unitOfWork.SaveChanges();
-
             await _tagManager.CreateTag(dto.Tags, res.Id, ReadType.Content);
             await _categoryManager.CreateCategoryRelation(_categoryManager.GetCategoryRelation(dto.Category, res.Id, ReadType.Content));
-
             return Result.ReturnAsSuccess(message: resultMessage, null);
         }
-
         /// <summary>
         /// makale siler
         /// </summary>
@@ -225,7 +202,6 @@ namespace SCA.Services
             var deleteData = _contentRepo.Get(x => x.Id == Id);
             return _unitOfWork.SaveChanges();
         }
-
         /// <summary>
         /// makalelerin yayınlanma durumunu günceller
         /// </summary>
@@ -238,19 +214,14 @@ namespace SCA.Services
             {
                 Result.ReturnAsFail(AlertResource.NoChanges, null);
             }
-
             var data = _contentRepo.Get(x => x.Id.Equals(Id) && x.IsDeleted.Equals(false));
             data.PublishStateType = publishState;
             _contentRepo.Update(_mapper.Map<Content>(data));
-
             return _unitOfWork.SaveChanges();
         }
-
         public async Task<List<ContentForHomePageDTO>> GetContentForHomePage(HitTypes hitTypes, int count)
         {
             return ComtentFake.FakeContentList();
         }
-
-
     }
 }

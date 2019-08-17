@@ -30,7 +30,7 @@ namespace SCA.Services
                 data.Error = value;
 
                 _errorRepo.Add(data);
-                _unitOfWork.SaveChanges();
+                var res = _unitOfWork.SaveChanges();
             }
             catch (Exception ex)
             {

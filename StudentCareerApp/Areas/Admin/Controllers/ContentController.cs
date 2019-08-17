@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,10 @@ namespace StudentCareerApp.Areas.Admin.Controllers
     public class ContentController : Controller
     {
         [HttpGet("Assay")]
-        public IActionResult Assay(long id)
+        public IActionResult Assay()
         {
-            ViewBag.assayId = id;
+            HttpContext.Session.SetString("name", "Jignesh Trivedi");
+            ViewBag.name= HttpContext.Session.GetString("name");
             return View();
         }
 

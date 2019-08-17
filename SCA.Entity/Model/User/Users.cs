@@ -18,6 +18,9 @@ namespace SCA.Entity.Model
         public string Surname { get; set; }
 
         [MaxLength(50)]
+        public string UserName { get; set; }
+
+        [MaxLength(50)]
         public string EmailAddress { get; set; }
 
         [MaxLength(50)]
@@ -37,7 +40,7 @@ namespace SCA.Entity.Model
         public GenderType GenderId { get; set; }
 
         [ForeignKey("EducationStatusId")]
-        public long EducationStatusId { get; set; }
+        public long? EducationStatusId { get; set; }
         public EducationStatus EducationStatus { get; set; }
 
         public DateTime BirthDate { get; set; }

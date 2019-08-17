@@ -29,10 +29,7 @@ namespace SCA.Services
             _categoryRepo = unitOfWork.GetRepository<Category>();
             _categoryRelationRepo = unitOfWork.GetRepository<CategoryRelation>();
         }
-
-
         #region MainCategory
-
         /// <summary>
         /// Kategorileri listeler, parent'a göre filtrelenmiş
         /// </summary>
@@ -41,7 +38,6 @@ namespace SCA.Services
         {
             return Result.ReturnAsSuccess(null, _mapper.Map<List<MainCategoryDto>>(_categoryRepo.GetAll(x => x.IsDeleted.Equals(false) && x.ParentId.Equals(id)).ToList()));
         }
-
         /// <summary>
         /// Kategorileri listeler, parenttan bağımsız tüm kategoriler
         /// </summary>
@@ -50,7 +46,6 @@ namespace SCA.Services
         {
             return Result.ReturnAsSuccess(null, _mapper.Map<List<MainCategoryDto>>(_categoryRepo.GetAll(x => x.IsDeleted.Equals(false))));
         }
-
         /// <summary>
         /// Kategori ekler
         /// </summary>
@@ -67,7 +62,6 @@ namespace SCA.Services
             res.Data = entity.Id;
             return res;
         }
-
         /// <summary>
         /// kategori bilgileri güncellenir
         /// </summary>
@@ -82,7 +76,6 @@ namespace SCA.Services
             _categoryRepo.Update(_mapper.Map<Category>(dto));
             return _unitOfWork.SaveChanges();
         }
-
         /// <summary>
         /// Kategori siler
         /// </summary>
@@ -94,7 +87,6 @@ namespace SCA.Services
             var result = _unitOfWork.SaveChanges();
             return result;
         }
-
         /// <summary>
         /// Kategori durumunu aktif pasif yapar
         /// </summary>
@@ -109,21 +101,16 @@ namespace SCA.Services
             var result = _unitOfWork.SaveChanges();
             return result;
         }
-
         #endregion
-
-
         public async Task<ServiceResult> CreateCategoryRelation(List<CategoryRelationDto> listData)
         {
             _categoryRelationRepo.AddRange(_mapper.Map<List<CategoryRelation>>(listData));
             return _unitOfWork.SaveChanges();
         }
-
         public List<CategoryRelationDto> GetCategoryRelation(string data, long Id, ReadType readType)
         {
             List<CategoryRelationDto> listData = new List<CategoryRelationDto>();
             string[] data_ = data.Replace("[", "").Replace("]", "").Replace("\"", "").Replace("\"", "").Split(',');
-
             foreach (var item in data_)
             {
                 var relationData = new CategoryRelationDto()

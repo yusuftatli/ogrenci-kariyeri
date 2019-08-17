@@ -11,5 +11,7 @@ namespace SCA.Services
     {
         ServiceResult UserLoginValidation(LoginDto dto);
         ServiceResult UserDataValidation(UsersDTO dto);
+        ServiceResult CreateUserValidation(UsersDTO dto);
+        ServiceResult UserRegisterValidation(UserRegisterDto dto);
     }
 }

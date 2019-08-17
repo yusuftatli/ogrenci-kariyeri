@@ -11,7 +11,6 @@ app.controller('userCreateController', function ($scope, $http, $filter) {
 
     $scope.onClikSave = function () {
         saveUserData();
-        $scope.showSaveLoading = true;
     };
 
     function loadForm() {
@@ -41,13 +40,14 @@ app.controller('userCreateController', function ($scope, $http, $filter) {
     }
 
     function saveUserData() {
-        Loading(true);
+        $scope.showSaveLoading = true;
         $http(postUserData()).then(function (res) {
             if (res.data.resultCode === 200) {
                 shortMessage(res.data.message, "s");
                 $scope.showSaveLoading = false;
             } else {
                 shortMessage(res.data.message, "e");
+                $scope.showSaveLoading = false;
             }
 
         });

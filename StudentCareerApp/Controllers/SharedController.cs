@@ -60,7 +60,6 @@ namespace SCA.UI.Controllers
                     Username = Request.Form["Username"].ToString()
                 };
             }
-            _userManager.CreateUser()
             return View();
         }
 

@@ -154,13 +154,13 @@
                                             <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label>Başlangıç Tarihi</label>
-                                                    <input id="startDate" type="text" class="form-control" placeholder="dd.mm.yyyy" />
+                                                    <input id="searchStartDate" type="text" class="form-control" placeholder="dd.mm.yyyy" />
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label>Bitiş Tarihi</label>
-                                                    <input id="endDate" type="text" class="form-control" placeholder="dd.mm.yyyy" />
+                                                    <input id="searchEndDate" type="text" class="form-control" placeholder="dd.mm.yyyy" />
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -195,10 +195,6 @@
                                                         <td>
                                                             <button class="btn btn-block btn-primary" ng-disabled="currentPage >= getData().length/pageSize - 1" ng-click="currentPage=currentPage+1"> Sonraki</button>
                                                         </td>
-                                                        @*
-                                                        <td>
-                                                            &nbsp;<select name="UnitID" ng-model="pageCount_" ng-change="onChangePage(obj.ID)" ng-options="obj.ID as obj.Name for obj in pageCount" class="btn btn-primary dropdown-toggle"></select>
-                                                        </td>*@
                                                     </tr>
                                                 </table>
                                                 <div class="table-responsive">
@@ -266,7 +262,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label>Makale Başlık Resim</label>
-                                                        <input type="text" class="form-control" ng-model="{{assayCreate.imagePath}}" id="roxyField" onclick="openCustomRoxy2('#roxyCustomPanel2')" />
+                                                        <input type="text" class="form-control"  id="roxyField" onclick="openCustomRoxy2('#roxyCustomPanel2')" />
                                                     </div>
                                                 </div>
                                             </div>

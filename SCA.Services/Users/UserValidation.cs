@@ -1,5 +1,6 @@
 ﻿using SCA.Common.Result;
 using SCA.Entity.DTO;
+using SCA.Entity.DTO.ErrorDb;
 using SCA.Entity.Model;
 using SCA.Repository.Repo;
 using SCA.Repository.UoW;
@@ -23,15 +24,21 @@ namespace SCA.Services
         public ServiceResult UserLoginValidation(LoginDto dto)
         {
             ServiceResult _res = Result.ReturnAsSuccess();
+            List<ErrorList> _er = new List<ErrorList>();
 
             if (string.IsNullOrEmpty(dto.username))
             {
-                _res = Result.ReturnAsFail(message: "Kullanıcı Adı Boş Geçilemez", null);
+               _er.Add(new ErrorList { Error = "Email adresi zaten kayıtlı" });
             }
 
             if (string.IsNullOrEmpty(dto.password))
             {
-                _res = Result.ReturnAsFail(message: "Kullanıcı Şifre Boş Geçilemez", null);
+                _er.Add(new ErrorList { Error = "Kullanıcı adı zaten kayıtlı" });
+            }
+
+            if (_er.Count > 0)
+            {
+                _res = Result.ReturnAsFail(null, _er);
             }
 
             return _res;
@@ -44,6 +51,86 @@ namespace SCA.Services
             if (dto.IsActive == true)
             {
                 _res = Result.ReturnAsFail(message: "Sisteme Girişiniz Yetkiniz Bulunmamaktadır.", null);
+            }
+
+            return _res;
+        }
+
+        public ServiceResult CreateUserValidation(UsersDTO dto)
+        {
+            ServiceResult _res = Result.ReturnAsSuccess();
+            List<ErrorList> _er = new List<ErrorList>();
+            _res = Result.ReturnAsSuccess();
+
+            if (string.IsNullOrEmpty( dto.Name))
+            {
+                _er.Add(new ErrorList { Error = "İsim boş geçiemez" });
+            }
+
+            if (string.IsNullOrEmpty(dto.Surname))
+            {
+                _er.Add(new ErrorList { Error = "Soy boş geçiemez" });
+            }
+
+            if (string.IsNullOrEmpty(dto.EmailAddress))
+            {
+                _er.Add(new ErrorList { Error = "Email boş geçiemez" });
+            }
+
+
+            if (_userRepo.Get(x => x.EmailAddress == dto.EmailAddress).EmailAddress != null)
+            {
+                _er.Add(new ErrorList { Error = "Email adresi zaten kayıtlı" });
+            }
+
+            if (_userRepo.Get(x => x.UserName == dto.UserName).UserName != null)
+            {
+                _er.Add(new ErrorList { Error = "Kullanıcı adı zaten kayıtlı" });
+            }
+
+            if (_er.Count > 0)
+            {
+                _res = Result.ReturnAsFail(null, _er);
+            }
+
+            return _res;
+        }
+
+        public ServiceResult UserRegisterValidation(UserRegisterDto dto)
+        {
+            ServiceResult _res = Result.ReturnAsSuccess();
+            List<ErrorList> _er = new List<ErrorList>();
+            _res = Result.ReturnAsSuccess();
+
+            if (string.IsNullOrEmpty(dto.Name))
+            {
+                _er.Add(new ErrorList { Error = "İsim boş geçiemez" });
+            }
+
+            if (string.IsNullOrEmpty(dto.Surname))
+            {
+                _er.Add(new ErrorList { Error = "Soy boş geçiemez" });
+            }
+
+            if (string.IsNullOrEmpty(dto.EmailAddress))
+            {
+                _er.Add(new ErrorList { Error = "Email boş geçiemez" });
+            }
+
+
+            if (_userRepo.Get(x => x.EmailAddress == dto.EmailAddress).EmailAddress != null)
+            {
+                _er.Add(new ErrorList { Error = "Email adresi zaten kayıtlı" });
+            }
+
+            if (_userRepo.Get(x => x.UserName == dto.UserName).UserName != null)
+            {
+                _er.Add(new ErrorList { Error = "Kullanıcı adı zaten kayıtlı" });
+            }
+
+            if (_er.Count > 0)
+            {
+                _res = Result.ReturnAsFail(null, _er);
             }
 
             return _res;

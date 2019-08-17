@@ -78,6 +78,13 @@
                                                 @*<small class="form-control-feedback"> This field has error. </small>*@
                                             </div>
                                         </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">Kullanıcı Adı</label>
+                                                <input type="text" id="userName" ng-model="userModel.userName" class="form-control form-control-danger" placeholder="Kullanıcı Adı">
+                                                @*<small class="form-control-feedback"> This field has error. </small>*@
+                                            </div>
+                                        </div>
                                         <div class="col-md-3 p-l-0 p-t-20">
                                             <input type="file" id="input-file-now-custom-3" ng-file-select="onFileSelect($files)" ng-model="userModel.imageData" class="dropify" data-height="150" />
                                         </div>
@@ -132,100 +139,136 @@
                                 </div>
                                 <hr>
                                 <div class="card-body">
-                                    <h4 class="card-title">Adres Bilgileri</h4>
+                                    <h4 class="card-title">Biografi</h4>
+                                    <div class="row">
+                                        <div class="col-md-9">
+                                            <div class="form-group">
+                                                <label class="control-label">Biografi</label>
+                                                <textarea rows="3" ng-model="userModel.biography" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="card-body">
+                                    <h4 class="card-title">Sosyal Medya</h4>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">Facebook</label>
+                                                <input type="text" class="form-control" ng-model="userModel.facebook" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">Linkedin</label>
+                                                <input type="text" class="form-control" ng-model="userModel.linkedin" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">Instagram</label>
+                                                <input type="text" class="form-control" ng-model="userModel.instagram" />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     @*<div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">İl</label>
-                                                <select id="cityId" class="form-control custom-select" ng-model="userModel.CityId" name="cityId">
-                                                    <option ng-repeat="x in cityList" value="{{x.cityId}}">{{x.cityName}}</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <div class="custom-control custom-switch">
-                                                    <input ng-model="userModel.isemailsend" type="checkbox" class="custom-control-input" id="customSwitch1">
-                                                    <label class="custom-control-label" for="customSwitch1">E mail gönderilsin?</label>
-                                                </div>
-                                                <div class="custom-control custom-switch">
-                                                    <input ng-model="userModel.isphonesend" type="checkbox" class="custom-control-input" id="customSwitch2">
-                                                    <label class="custom-control-label" for="customSwitch2">Telefona mesaj gönderilsin?</label>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">İl</label>
+                                                    <select id="cityId" class="form-control custom-select" ng-model="userModel.CityId" name="cityId">
+                                                        <option ng-repeat="x in cityList" value="{{x.cityId}}">{{x.cityName}}</option>
+                                                    </select>
                                                 </div>
                                             </div>
-                                        </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <div class="custom-control custom-switch">
+                                                        <input ng-model="userModel.isemailsend" type="checkbox" class="custom-control-input" id="customSwitch1">
+                                                        <label class="custom-control-label" for="customSwitch1">E mail gönderilsin?</label>
+                                                    </div>
+                                                    <div class="custom-control custom-switch">
+                                                        <input ng-model="userModel.isphonesend" type="checkbox" class="custom-control-input" id="customSwitch2">
+                                                        <label class="custom-control-label" for="customSwitch2">Telefona mesaj gönderilsin?</label>
+                                                    </div>
+                                                </div>
+                                            </div>
 
 
-                                        <!--/span-->
-                                        <!--/span-->
-                                    </div>*@
+                                            <!--/span-->
+                                            <!--/span-->
+                                        </div>*@
                                     @*<div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">Eğitim Durumu</label>
-                                                <select id="roletypeid" class="form-control custom-select" ng-change="onChanageEdcationStatus()" ng-model="userModel.educationstatusid" name="educationstatusid">
-                                                    <option ng-repeat="x in educationTypeList" value="{{x.id}}">{{x.description}}</option>
-                                                </select>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Eğitim Durumu</label>
+                                                    <select id="roletypeid" class="form-control custom-select" ng-change="onChanageEdcationStatus()" ng-model="userModel.educationstatusid" name="educationstatusid">
+                                                        <option ng-repeat="x in educationTypeList" value="{{x.id}}">{{x.description}}</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <!--/span-->
-                                        <div class="col-md-6">
-                                            <div ng-show="showHigSchoolType" class="form-group">
-                                                <label class="control-label">Okul Adı</label>
-                                                <select id="highschooltypeid" class="form-control custom-select" ng-model="userModel.HighSchoolTypeId" name="highschooltypeid">
-                                                    <option ng-repeat="x in highSchollList" value="{{x.id}}">{{x.schoolName}}</option>
-                                                </select>
+                                            <!--/span-->
+                                            <div class="col-md-6">
+                                                <div ng-show="showHigSchoolType" class="form-group">
+                                                    <label class="control-label">Okul Adı</label>
+                                                    <select id="highschooltypeid" class="form-control custom-select" ng-model="userModel.HighSchoolTypeId" name="highschooltypeid">
+                                                        <option ng-repeat="x in highSchollList" value="{{x.id}}">{{x.schoolName}}</option>
+                                                    </select>
+                                                </div>
+                                                <div ng-show="!showHigSchoolType" class="form-group">
+                                                    <label class="control-label">Üniversite</label>
+                                                    <select id="universityid" class="form-control custom-select" ng-model="userModel.UniversityId" name="universityid">
+                                                        <option ng-repeat="x in universityList" value="{{x.id}}">{{x.universityName}}</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                            <div ng-show="!showHigSchoolType" class="form-group">
-                                                <label class="control-label">Üniversite</label>
-                                                <select id="universityid" class="form-control custom-select" ng-model="userModel.UniversityId" name="universityid">
-                                                    <option ng-repeat="x in universityList" value="{{x.id}}">{{x.universityName}}</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <!--/span-->
-                                    </div>*@
+                                            <!--/span-->
+                                        </div>*@
                                     @*<div ng-show="!showHigSchoolType" class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">Fakülte</label>
-                                                <select id="facultyid" class="form-control custom-select" ng-model="userModel.FacultyId" name="facultyid">
-                                                    <option ng-repeat="x in facultyList" value="{{x.id}}">{{x.facultyName}}</option>
-                                                </select>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Fakülte</label>
+                                                    <select id="facultyid" class="form-control custom-select" ng-model="userModel.FacultyId" name="facultyid">
+                                                        <option ng-repeat="x in facultyList" value="{{x.id}}">{{x.facultyName}}</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <!--/span-->
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">Bölüm</label>
-                                                <select id="departmentid" class="form-control custom-select" ng-model="userModel.DepartmentId" name="departmentid">
-                                                    <option ng-repeat="x in departmentList" value="{{x.id}}">{{x.departmentName}}</option>
-                                                </select>
+                                            <!--/span-->
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Bölüm</label>
+                                                    <select id="departmentid" class="form-control custom-select" ng-model="userModel.DepartmentId" name="departmentid">
+                                                        <option ng-repeat="x in departmentList" value="{{x.id}}">{{x.departmentName}}</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <!--/span-->
-                                    </div>*@
+                                            <!--/span-->
+                                        </div>*@
                                     @*<div class="row">
-                                        <div ng-show="showHigSchoolType" class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">Sınıf</label>
-                                                <select id="roletypeid" class="form-control custom-select" ng-model="userModel.roletypeid" name="roletypeid">
-                                                    <option ng-repeat="x in classTypeList" value="{{x.id}}">{{x.description}}</option>
-                                                </select>
+                                            <div ng-show="showHigSchoolType" class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Sınıf</label>
+                                                    <select id="roletypeid" class="form-control custom-select" ng-model="userModel.roletypeid" name="roletypeid">
+                                                        <option ng-repeat="x in classTypeList" value="{{x.id}}">{{x.description}}</option>
+                                                    </select>
 
+                                                </div>
                                             </div>
-                                        </div>
-                                        <!--/span-->
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">Referans kodu</label>
-                                                <input ng-model="userModel.referancecode" type="text" class="form-control">
+                                            <!--/span-->
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Referans kodu</label>
+                                                    <input ng-model="userModel.referancecode" type="text" class="form-control">
+                                                </div>
                                             </div>
-                                        </div>
-                                        <!--/span-->
-                                    </div>*@
+                                            <!--/span-->
+                                        </div>*@
 
                                     <!--/row-->
 
