@@ -8,6 +8,7 @@ namespace SCA.Entity.DTO
 {
     public class UserRegisterDto
     {
+        public long Id { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Username { get; set; }
@@ -24,5 +25,12 @@ namespace SCA.Entity.DTO
         public string Password { get; set; }
         public string RetypePassword { get; set; }
         public string ReferanceCode { get; set; }
+        public bool IsEmailSend { get; set; }
+        public bool IsPhoneSend { get; set; }
+        public bool IsActive { get; set; }
+        public bool SubscribeNewsletter { get; set; }
+        public string ImageData { get; set; }
+        public int BanCount { get; set; }
+        public PlatformType EnrollPlatformTypeId { get; set; }
     }
 }
