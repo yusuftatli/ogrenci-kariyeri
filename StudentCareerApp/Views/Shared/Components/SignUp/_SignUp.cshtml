@@ -11,7 +11,7 @@
                 <div class="ts-grid-box">
                     <div class="reg-page">
                         <h3 class="log-sign-title mb-25">Kayıt Ol!</h3>
-                        
+
                         @using (Html.BeginForm("Register", "Shared", FormMethod.Post, new { enctype = "multipart/form-data" }))
                         {
                             <div class="form-row">
@@ -25,7 +25,7 @@
                                 </div> <!-- form-group end.// -->
                                 <div class="col form-group">
                                     <label>Kullanıcı adı</label>
-                                    <input name="Username" type="text" class="form-control" placeholder="" required/>
+                                    <input name="Username" type="text" class="form-control" placeholder="" required />
                                 </div>
                             </div> <!-- form-row end.// -->
                             <div class="form-row">
@@ -55,7 +55,7 @@
                             <div class="form-row">
                                 <div class="form-group col">
                                     <label>Eğitim Durumu</label>
-                                    <select id="educationType" class="form-control" required>
+                                    <select id="educationType" class="form-control" name="EducationType" required>
                                         <option value="">Seçim yapınız...</option>
                                         @foreach (var x in Model.EducationTypes)
                                         {
@@ -157,6 +157,12 @@
                             <div class="form-group">
                                 <button type="submit" id="registerSubmit" class="btn btn-primary btn-block">Kayıt Ol</button>
                             </div> <!-- form-group// -->
+                            <div class="form-row">
+                                <div class="form-group col" id="isEmailSend">
+                                    <input type="checkbox" id="isEmailSend" name="SubscribeNewsletter" />
+                                    <label>Geliştirmelerden haberdar olmak istiyorum.</label>
+                                </div>
+                            </div>
                             <small class="text-muted">Kayıt ol butonuna tıklayarak kullanım ve gizlilik şartlarını kabul etmiş sayılırsınız.</small>
                         }
                         <div class="border-top card-body text-center">Hesabınız var mı? <a href="#" class="openLoginMagnific">Giriş yap!</a></div>
@@ -172,6 +178,6 @@
     <!-- container end-->
 </section>
 
-@section  Scripts{ 
+@section Scripts{
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SCA.Entity.DTO;
 using SCA.Entity.Model;
@@ -14,10 +15,12 @@ namespace SCA.UI.Controllers
     {
 
         private readonly IUserManager _userManager;
+        private readonly IMapper _mapper;
 
-        public SharedController(IUserManager userManager)
+        public SharedController(IUserManager userManager, IMapper mapper)
         {
             _userManager = userManager;
+            _mapper = mapper;
         }
 
         public IActionResult Index()
@@ -32,34 +35,43 @@ namespace SCA.UI.Controllers
 
         [ValidateAntiForgeryToken]
         [Route("Shared/Register"), HttpPost]
-        public IActionResult Register(UserRegisterDto model)
+        public async Task<IActionResult> Register(UserRegisterDto model)
         {
-            var a = 1;
-            if (ModelState.IsValid)
-            {
-                var b = 1;
-            }
+            
             if(Request.Form["Password"].ToString() == Request.Form["RetypePassword"])
             {
-                var educationType = (Entity.Enums.EducationType)Enum.Parse(typeof(Entity.Enums.EducationType), Request.Form["DepartmentId"].ToString());
+                var educationType = (Entity.Enums.EducationType)Enum.Parse(typeof(Entity.Enums.EducationType), Request.Form["EducationType"].ToString());
                 model = new UserRegisterDto
                 {
                     BirthDate = Convert.ToDateTime(Request.Form["BirthDate"].ToString()),
-                    ClassId = bool.Parse(Request.Form["IsStudent"].ToString()) ? long.Parse(Request.Form["ClassId"].ToString()) : 0,
+                    ClassId = Request.Form["IsStudent"].ToString() == "on" ? long.Parse(Request.Form["ClassId"].ToString()) : 0,
                     DepartmentId = (educationType == Entity.Enums.EducationType.University ||educationType == Entity.Enums.EducationType.Master) ? long.Parse(Request.Form["DepartmentId"].ToString()) : 0,
                     EducationStatusId = educationType,
                     EmailAddress = Request.Form["EmailAddress"].ToString(),
                     FacultyId = (educationType == Entity.Enums.EducationType.University || educationType == Entity.Enums.EducationType.Master) ? int.Parse(Request.Form["FacultyId"].ToString()) : 0,
                     GenderId = (Entity.Enums.GenderType)Enum.Parse(typeof(Entity.Enums.GenderType), Request.Form["GenderId"].ToString()),
                     HighSchoolTypeId = (educationType == Entity.Enums.EducationType.HighSchool) ? int.Parse(Request.Form["HighSchoolTypeId"].ToString()) : 0,
-                    IsStudent = bool.Parse(Request.Form["IsStudent"].ToString()),
+                    IsStudent = Request.Form["IsStudent"].ToString() == "on",
                     Name = Request.Form["Name"].ToString(),
                     Password = Request.Form["Password"].ToString(),
                     Surname = Request.Form["Surname"].ToString(),
                     UniversityId = (educationType == Entity.Enums.EducationType.University || educationType == Entity.Enums.EducationType.Master) ? int.Parse(Request.Form["UniversityId"].ToString()) : 0,
-                    UserName = Request.Form["Username"].ToString()
+                    Username = Request.Form["Username"].ToString(),
+                    SubscribeNewsletter = Request.Form["SubscribeNewsletter"].ToString() == "on",
+                    ReferanceCode = Request.Form["ReferanceCode"].ToString()
                 };
+                try
+                {
+                    var a = _mapper.Map<UsersDTO>(model);
+                    var res = await _userManager.CreateUser(_mapper.Map<UsersDTO>(model));
+                }
+                catch(Exception ex)
+                {
+                    var a = ex;
+                }
+                return View();
             }
+            _userManager.CreateUser()
             return View();
         }
 

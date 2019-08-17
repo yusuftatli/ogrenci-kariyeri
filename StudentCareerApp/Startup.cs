@@ -165,6 +165,8 @@ namespace StudentCareerApp
                 cfg.CreateMap<Users, UsersResultDTO>().ReverseMap();
                 cfg.CreateMap<UsersDTO, UsersResultDTO>().ReverseMap();
                 cfg.CreateMap<Users, UserMobilDto>().ReverseMap();
+                cfg.CreateMap<Users, UserRegisterDto>().ReverseMap();
+                cfg.CreateMap<UsersDTO, UserRegisterDto>().ReverseMap();
 
                 #endregion
 
