@@ -71,7 +71,6 @@ namespace SCA.UI.Controllers
                 }
                 return View();
             }
-            _userManager.CreateUser()
             return View();
         }
 
