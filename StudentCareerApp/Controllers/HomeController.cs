@@ -9,7 +9,6 @@ using SCA.Services.Interface;
 
 namespace SCA.UI.Controllers
 {
-    [Route("[controller]/[action]")]
     public class HomeController : Controller
     {
         #region INTERFACES & CONSTRUCTOR
