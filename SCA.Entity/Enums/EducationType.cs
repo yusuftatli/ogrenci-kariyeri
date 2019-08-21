@@ -2,7 +2,7 @@
 
 namespace SCA.Entity.Enums
 {
-    public enum EducationType
+    public enum EducationType : long
     {
         [Description("Lise")]
         HighSchool = 1,

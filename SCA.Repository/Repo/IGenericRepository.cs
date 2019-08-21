@@ -12,6 +12,7 @@ namespace SCA.Repository.Repo
         IQueryable<T> GetAll(Expression<Func<T, bool>> predicate);
         T GetById(object id);
         T Get(Expression<Func<T, bool>> predicate);
+        bool Any(Expression<Func<T, bool>> predicate);
         T Add(T entity);
         void AddRange(List<T> entitList);
         void Update(T entity);

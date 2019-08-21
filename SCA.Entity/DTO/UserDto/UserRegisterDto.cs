@@ -14,7 +14,7 @@ namespace SCA.Entity.DTO
         public string UserName { get; set; }
         public string EmailAddress { get; set; }
         public GenderType GenderId { get; set; }
-        public EducationType EducationStatusId { get; set; }
+        public EducationType? EducationStatusId { get; set; }
         public DateTime BirthDate { get; set; }
         public long? HighSchoolTypeId { get; set; }
         public long? UniversityId { get; set; }

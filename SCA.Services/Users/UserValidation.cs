@@ -77,13 +77,11 @@ namespace SCA.Services
                 _er.Add(new ErrorList { Error = "Email boş geçiemez" });
             }
 
-
-            if (_userRepo.Get(x => x.EmailAddress == dto.EmailAddress).EmailAddress != null)
+            if (_userRepo.Any(x => x.EmailAddress == dto.EmailAddress))
             {
                 _er.Add(new ErrorList { Error = "Email adresi zaten kayıtlı" });
             }
-
-            if (_userRepo.Get(x => x.UserName == dto.UserName).UserName != null)
+            if (_userRepo.Any(x => x.UserName == dto.UserName))
             {
                 _er.Add(new ErrorList { Error = "Kullanıcı adı zaten kayıtlı" });
             }
@@ -117,15 +115,14 @@ namespace SCA.Services
                 _er.Add(new ErrorList { Error = "Email boş geçiemez" });
             }
 
-
-            if (_userRepo.Get(x => x.EmailAddress == dto.EmailAddress).EmailAddress != null)
+            if (_userRepo.Any(x => x.UserName.Equals(dto.UserName)))
             {
-                _er.Add(new ErrorList { Error = "Email adresi zaten kayıtlı" });
+                _er.Add(new ErrorList { Error = "Bu kullanıcı adı daha önce alınmış." });
             }
 
-            if (_userRepo.Get(x => x.UserName == dto.UserName).UserName != null)
+            if (_userRepo.Any(x=>x.EmailAddress.Equals(dto.EmailAddress)))
             {
-                _er.Add(new ErrorList { Error = "Kullanıcı adı zaten kayıtlı" });
+                _er.Add(new ErrorList { Error = "Email adresi zaten kayıtlı" });
             }
 
             if (_er.Count > 0)

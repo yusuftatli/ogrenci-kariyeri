@@ -40,7 +40,7 @@ namespace SCA.Entity.Model
         public GenderType GenderId { get; set; }
 
         [ForeignKey("EducationStatusId")]
-        public long? EducationStatusId { get; set; }
+        public EducationType? EducationStatusId { get; set; }
         public EducationStatus EducationStatus { get; set; }
 
         public DateTime BirthDate { get; set; }

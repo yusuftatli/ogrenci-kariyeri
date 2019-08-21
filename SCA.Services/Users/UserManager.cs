@@ -67,6 +67,14 @@ namespace SCA.Services
             return dataResult;
         }
 
+        public async Task<ServiceResult> CheckUserForLogin(string email, string password)
+        {
+            if (_userRepo.Any(x => x.Password.Equals(password) && x.EmailAddress.Equals(email)))
+                return Result.ReturnAsSuccess("Giriş başarılı!");
+            else
+                return Result.ReturnAsFail("Kullanıcı adı veya şifre hatalı!");
+        }
+
 
         public async Task<ServiceResult> RegisterUser(UserRegisterDto dto)
         {
@@ -91,9 +99,16 @@ namespace SCA.Services
             userData.IsActive = false;
 
             _userRepo.Add(_mapper.Map<Users>(dto));
+            try
+            {
 
             _unitOfWork.SaveChanges();
-            return Result.ReturnAsFail(null, null);
+            }
+            catch(Exception ex)
+            {
+
+            }
+            return Result.ReturnAsSuccess(null, null);
         }
 
         /// <summary>

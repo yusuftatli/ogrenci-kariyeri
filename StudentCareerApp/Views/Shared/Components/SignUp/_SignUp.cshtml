@@ -3,6 +3,15 @@
 
 @model SCA.Entity.DTO.AllUniversityInformationDto
 
+    <style>
+        input[type='checkbox']{
+            vertical-align:middle;
+        }
+        .m-b-0{
+            margin-bottom:0 !important;
+        }
+    </style>
+
 <section class="block-wrapper" id="vue-sign-up">
     <div class="container">
         <div class="row">
@@ -59,7 +68,7 @@
                                         <option value="">Seçim yapınız...</option>
                                         @foreach (var x in Model.EducationTypes)
                                         {
-                                            <option value="@((int)Enum.Parse(typeof(EducationType), x.Id.ToString()))">@x.Description</option>
+                                            <option value="@((long)Enum.Parse(typeof(EducationType), x.Id.ToString()))">@x.Description</option>
                                         }
                                     </select>
                                 </div> <!-- form-group end.// -->
@@ -158,9 +167,15 @@
                                 <button type="submit" id="registerSubmit" class="btn btn-primary btn-block">Kayıt Ol</button>
                             </div> <!-- form-group// -->
                             <div class="form-row">
-                                <div class="form-group col" id="isEmailSend">
+                                <div class="form-group m-b-0" id="isEmailSend">
                                     <input type="checkbox" id="isEmailSend" name="SubscribeNewsletter" />
-                                    <label>Geliştirmelerden haberdar olmak istiyorum.</label>
+                                    <label class="m-b-0">Geliştirmelerden email ile haberdar olmak istiyorum.</label>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group m-b-0" id="acceptTerms">
+                                    <input type="checkbox" id="isEmailSend" name="AcceptTerms" />
+                                    <label class="m-b-0">Kullanım ve gizlilik şartlarını kabul ediyorum.</label>
                                 </div>
                             </div>
                             <small class="text-muted">Kayıt ol butonuna tıklayarak kullanım ve gizlilik şartlarını kabul etmiş sayılırsınız.</small>
@@ -177,7 +192,3 @@
     </div>
     <!-- container end-->
 </section>
-
-@section Scripts{
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-}

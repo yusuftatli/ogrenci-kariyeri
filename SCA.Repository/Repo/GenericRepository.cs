@@ -43,7 +43,13 @@ namespace SCA.Repository.Repo
         }
         public T Get(Expression<Func<T, bool>> predicate)
         {
-            return _dbSet.Where(predicate).AsNoTracking().FirstOrDefault();
+            var res = _dbSet.Where(predicate).AsNoTracking().FirstOrDefault();
+            return res;
+        }
+
+        public bool Any(Expression<Func<T, bool>> predicate)
+        {
+            return _dbSet.Any(predicate);
         }
 
         public T Add(T entity)

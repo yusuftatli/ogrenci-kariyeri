@@ -57,9 +57,21 @@ $(document).on("change", "#educationType", function(e) {
     : $(".template-still-student").addClass("hidden");
 });
 
-// $(document).on('click', '#registerSubmit', function(){
-
-// })
+$(document).on('submit', '.loginForm', function(e){
+    var form = $(this).serialize();
+    $.ajax({
+        url: "/Shared/Login",
+        type: "post",
+        data: form,
+        success: function(res){
+            console.log(res);
+        },
+        error: function(res){
+            console.log(res);
+        }
+    })
+    e.preventDefault();
+})
 
 function initRegisterPanel() {
   new Switchery($("#stillStudent")[0], $("#stillStudent").data());
