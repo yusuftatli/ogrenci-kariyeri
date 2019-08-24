@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -79,6 +80,15 @@ namespace StudentCareerApp
                  };
              });
 
+            services.AddMvc(config2 =>
+            {
+                // Add XML Content Negotiation
+                config2.RespectBrowserAcceptHeader = true;
+                config2.ReturnHttpNotAcceptable = true;
+                config2.InputFormatters.Add(new XmlSerializerInputFormatter());
+                config2.OutputFormatters.Add(new XmlSerializerOutputFormatter());
+            });
+
             #region Configurations
             //services.Configure<CookiePolicyOptions>(options =>
             //{
@@ -124,6 +134,7 @@ namespace StudentCareerApp
             services.AddTransient<IUserValidation, UserValidation>();
             services.AddTransient<ISyncManager, SyncManager>();
             services.AddTransient<IApiManager, ApiManager>();
+            services.AddTransient<ICompanyClubManager, CompanyClubManager>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IErrorManagement, ErrorManagement>();
@@ -224,7 +235,7 @@ namespace StudentCareerApp
 
                 #endregion
 
-                #region Screen
+                #region SocialMedia
 
                 cfg.CreateMap<SocialMedia, SocialMediaDto>().ReverseMap();
 
@@ -232,28 +243,33 @@ namespace StudentCareerApp
 
                 #region Sector
 
-                cfg.CreateMap<SectorDto, Sector>().ReverseMap();
+                cfg.CreateMap<Sector, SectorDto>().ReverseMap();
 
                 #endregion
 
                 #region ScreenAnouncement
 
-                cfg.CreateMap<AnouncementDto, Anouncement>().ReverseMap();
+                cfg.CreateMap<Anouncement, AnouncementDto>().ReverseMap();
 
                 #endregion
 
                 #region ScreenAnouncement
 
-                cfg.CreateMap<ImageGaleryDto, ImageGalery>().ReverseMap();
+                cfg.CreateMap<ImageGalery, ImageGaleryDto>().ReverseMap();
 
                 #endregion
 
                 #region Errors
 
-                cfg.CreateMap<ErrorDto, Errors>().ReverseMap();
+                cfg.CreateMap<Errors, ErrorDto>().ReverseMap();
 
                 #endregion
 
+                #region CompanyClubs
+
+                cfg.CreateMap<CompanyClubsDto, CompanyClubs>().ReverseMap();
+
+                #endregion
             });
 
             services.AddSpaStaticFiles(configuration =>
@@ -266,7 +282,8 @@ namespace StudentCareerApp
             services.AddSingleton(mapper);
             #endregion
 
-            services.AddSession(options => {
+            services.AddSession(options =>
+            {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
             });
             services.AddDistributedMemoryCache();

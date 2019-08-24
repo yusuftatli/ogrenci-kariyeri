@@ -1,22 +1,27 @@
 ﻿@{
-    ViewBag.Title = "Kategori";
+    ViewBag.Title = "Şirket Yönetimi";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
 
-<head>
-    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+@{
+    var a = 1;
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="//cdn.ckeditor.com/4.7.1/standard/ckeditor.js"></script>
+}
+    <head>
+        <link href="~/Template/AngularComponents/treeselect/vue-treeselect.css" rel="stylesheet" />
+        <link href="~/Template/assets/node_modules/switchery/dist/switchery.css" rel="stylesheet" />
+        <script src="~/Template/AngularComponents/treeselect/vue.js"></script>
+        <script src="~/Template/AngularComponents/treeselect/vue-treeselect.js"></script>
+        <script src="~/Template/AngularComponents/treeselect/index.js"></script>
+        <script src="~/ScriptController/companyController.js"></script>
+        <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <script src="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.js"></script>
+        <link href="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.css" rel="stylesheet" />
 
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-
-    <script src="~/ScriptController/companyController.js"></script>
-</head>
+    </head>
 
 
 <div class="page-wrapper" ng-app="MyApp" ng-controller="comapanyController">
@@ -29,13 +34,13 @@
         <!-- ============================================================== -->
         <div class="row page-titles">
             <div class="col-md-5 align-self-center">
-                <h4 class="text-themecolor">Şirket Kayıt</h4>
+                <h4 class="text-themecolor">Şirket Yönetimi</h4>
             </div>
             <div class="col-md-7 align-self-center text-right">
                 <div class="d-flex justify-content-end align-items-center">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Kullanıcı Kayıt</a></li>
-                        <li class="breadcrumb-item active">Şirket Kayıt</li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Şirket Yönetimi</a></li>
+                        <li class="breadcrumb-item active">Şirket  Yönetimi</li>
                     </ol>
                 </div>
             </div>
@@ -49,139 +54,131 @@
         <!-- Row -->
         <div class="row">
             <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item" ng-click="CompanyCreate()"> <a class="nav-link active" data-toggle="tab" href="#createCompany" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Şirket Ekle</span></a> </li>
+                            <li class="nav-item" ng-click="photoGallery" ()> <a class="nav-link" data-toggle="tab" href="#photoGallery" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Resim Galeri</span></a> </li>
+                        </ul>
+                        <div class="tab-content tabcontent-border">
 
+                            <div class="tab-pane active" id="createCompany" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="card">
+                                            <div class="card-header bg-info">
+                                                <h4 class="mb-0 text-white">Şirket Kayıt</h4>
+                                            </div>
+                                            <div class="form-body">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Şirket Kısa Adı</label>
+                                                                <input type="text" id="companyShortName" ng-model="companyModel.ShortName" class="form-control" placeholder="Şirket Kısa Adı">
+                                                                @*<small class="form-control-feedback"> This is inline help </small>*@
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Sektör Türü</label>
+                                                                <select id="roletypeid" class="form-control custom-select" ng-model="companyModel.SectorId" name="eventId">
+                                                                    <option ng-repeat="x in sectorTypes" value="{{x.id}}">{{x.description}}</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 p-l-0 p-t-20">
+                                                            <input type="file" id="input-file-now-custom-3" ng-file-select="onFileSelect($files)" ng-model="companyModel.ImageData" class="dropify" data-height="150" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="card-body">
+                                                    <h4 class="card-title">Şirket Bilgileri</h4>
+                                                    <div class="row">
+                                                        <div class="col-md-9">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Web Sitesi</label>
+                                                                <input ng-model="companyModel.WebSite" class="form-control" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-9">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Telefon Numarası</label>
+                                                                <input rows="3" ng-model="companyModel.PhoneNumber" class="form-control" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-9">
+                                                            <div class="form-group">
+                                                                <label class="control-label">E-Posta</label>
+                                                                <input rows="3" ng-model="companyModel.EmailAddress" class="form-control" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-9">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Açıklama</label>
+                                                                <textarea rows="3" ng-model="companyModel.Description" class="form-control"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="card-body">
+                                                    <h4 class="card-title">Sosyal Medya</h4>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Facebook</label>
+                                                                <input type="text" class="form-control" ng-model="companyModel.Facebook" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Linkedin</label>
+                                                                <input type="text" class="form-control" ng-model="companyModel.Linkedin" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Instagram</label>
+                                                                <input type="text" class="form-control" ng-model="companyModel.Instagram" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-actions">
+                                                    <div class="card-body">
+                                                        <button ng-disabled="showSaveLoading" ng-click="onClikSave()" class="btn btn-success">
+                                                            <span ng-show="showSaveLoading"><i class="fa fa-spinner fa-spin"></i></span>
+                                                            Kaydet
+                                                        </button>
 
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-header bg-info">
-                                <h4 class="mb-0 text-white">Kullanıcı Kayıt</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <br />
                             </div>
-                            <div class="card-body">
-                                <h4 class="card-title">Kişisel Bilgiler</h4>
-                            </div>
-                            <div class="form-body">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label class="control-label">Şirket Kısa Adı</label>
-                                                <input type="text" id="companyShortName" ng-model="companyModel.shortName" class="form-control" placeholder="Şirket Kısa Adı">
-                                                @*<small class="form-control-feedback"> This is inline help </small>*@
-                                            </div>
-                                        </div>
-                                        <!--/span-->
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label class="control-label">Soyad</label>
-                                                <input type="text" id="surname" ng-model="userModel.surname" class="form-control form-control-danger" placeholder="Soyad">
-                                                @*<small class="form-control-feedback"> This field has error. </small>*@
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label class="control-label">Başlık Resmi</label>
-                                                <input type="text" id="userName" ng-model="userModel.userName" class="form-control form-control-danger" placeholder="Kullanıcı Adı">
-                                                @*<small class="form-control-feedback"> This field has error. </small>*@
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3 p-l-0 p-t-20">
-                                            <input type="file" id="input-file-now-custom-3" ng-file-select="onFileSelect($files)" ng-model="companyModel.imageData" class="dropify" data-height="150" />
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">Email</label>
-                                                <input type="text" id="EmailAddress" ng-model="userModel.EmailAddress" class="form-control" placeholder="Email">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">Şifre</label>
-                                                <input type="text" id="Password" ng-model="userModel.Password" class="form-control" placeholder="Password">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="card-body">
-                                    <h4 class="card-title">Şirket Bilgileri</h4>
-                                    <div class="row">
-                                        <div class="col-md-9">
-                                            <div class="form-group">
-                                                <label class="control-label">Web Sitesi</label>
-                                                <input ng-model="companyModel.webSite" class="form-control" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-9">
-                                            <div class="form-group">
-                                                <label class="control-label">Telefon Numarası</label>
-                                                <input rows="3" ng-model="companyModel.phoneNumber" class="form-control" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-9">
-                                            <div class="form-group">
-                                                <label class="control-label">E posta</label>
-                                                <input rows="3" ng-model="companyModel.emailAddress" class="form-control" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-9">
-                                            <div class="form-group">
-                                                <label class="control-label">Açıklama</label>
-                                                <textarea rows="3" ng-model="companyModel.description" class="form-control"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="card-body">
-                                    <h4 class="card-title">Sosyal Medya</h4>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">Facebook</label>
-                                                <input type="text" class="form-control" ng-model="companyModel.facebook" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">Linkedin</label>
-                                                <input type="text" class="form-control" ng-model="companyModel.linkedin" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">Instagram</label>
-                                                <input type="text" class="form-control" ng-model="companyModel.instagram" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-actions">
-                                    <div class="card-body">
-                                        <button ng-disabled="showSaveLoading" ng-click="onClikSave()" class="btn btn-success">
-                                            <span ng-show="showSaveLoading"><i class="fa fa-spinner fa-spin"></i></span>
-                                            Kaydet
-                                        </button>
 
-                                    </div>
-                                </div>
+                            <div class="tab-pane  p-20" id="photoGallery" role="tabpanel">
+
+                            </div>
                             </div>
                         </div>
-                    </div>
                 </div>
-
                 <div class="right-sidebar">
                     <div class="slimscrollright">
                         <div class="rpanel-title"> Service Panel <span><i class="ti-close right-side-toggle"></i></span> </div>
@@ -241,14 +238,47 @@
             <!-- ============================================================== -->
         </div>
     </div>
+
 </div>
 
+<input class="hidden" id="selectedCategoryId" />
 
-            </div>
-<!-- ============================================================== -->
-<!-- End Container fluid  -->
-<!-- ============================================================== -->
-        </div>
-    </div>
-</div>
 
+@section Styles{
+    <style>
+        label.col-md-4 {
+            padding: 0;
+        }
+
+        .newsImage {
+            border-radius: 10px;
+            box-shadow: 0px 0px 5px 0px;
+            margin: 10px;
+            margin-right: 0;
+        }
+
+        label {
+            font-weight: 800;
+        }
+    </style>
+}
+
+<style>
+    .ulrow {
+        list-style-type: none;
+        padding-left: 0;
+        margin-left: 15px;
+    }
+
+    .closeBtn {
+    }
+
+    .show-grid [class^=col-] {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        background-color: #eee;
+        background-color: rgba(86,61,124,.15);
+        border: 1px solid #ddd;
+        border: 1px solid rgba(86,61,124,.2);
+    }
+</style>

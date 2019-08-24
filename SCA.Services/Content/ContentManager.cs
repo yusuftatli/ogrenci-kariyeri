@@ -49,11 +49,13 @@ namespace SCA.Services
             ServiceResult _res = new ServiceResult();
             try
             {
-                DateTime startDate = (string.IsNullOrEmpty(dto.StartDate)) ? DateTime.Now.AddDays(-30) : Convert.ToDateTime(dto.StartDate);
-                DateTime endDate = (string.IsNullOrEmpty(dto.EndDate)) ? DateTime.Now.AddDays(30) : Convert.ToDateTime(dto.EndDate);
+                DateTime startDate = string.IsNullOrEmpty(dto.StartDate) ? DateTime.Now.AddDays(-30) : Convert.ToDateTime(dto.StartDate);
+
+                DateTime endDate = string.IsNullOrEmpty(dto.EndDate) ? DateTime.Now.AddDays(30) : Convert.ToDateTime(dto.EndDate);
+
 
                 string query = "SELECT \"Id\",\"Header\",\"Writer\",\"ReadCount\", \"Category\",\"CreatedDate\",\"PublishDate\",\"PublishStateType\",\"PlatformType\",\"ConfirmUserName\" " +
-                               "FROM public.\"Content\"  where \"PublishDate\" <= '" + startDate + "' and \"PublishDate\" >= '" + endDate + "'";
+                               "FROM public.\"Content\"  where \"PublishDate\" >= '" + startDate.ToString("yyyy-MM-dd") + "' and \"PublishDate\" <= '" + endDate.ToString("yyyy-MM-dd") + "'";
 
 
                 var dataList = _db.Query<ContentShortListDto>(query).ToList();

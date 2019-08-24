@@ -128,13 +128,14 @@ app.controller("assayController", function ($scope, $http, $filter) {
 
     //content list
     function getContentShortList() {
-        $scope.searchModel.startDate =$("#searchStartDate").val();
-        $scope.searchModel.endDate = $("#searchEndDate").val();
+        $scope.showTable = true;
+        $scope.searchModel.startDate = isNaN(moment($("#searchStartDate").val())) ? null : moment($("#searchStartDate").val()).format('DD.MM.YYYY');
+        $scope.searchModel.endDate = isNaN(moment($("#searchEndDate").val())) ? null : moment($("#searchEndDate").val()).format('DD.MM.YYYY');
         $scope.searchModel.searhCategoryIds = $("#searhCategoryIds").val();
         $http(GetContentShortListReq()).then(function (res) {
             if (res.data.resultCode === 200) {
                 $scope.assayList = res.data.data;
-                // pagin();
+                pagin();
                 $scope.showTable = false;
             } else {
                 shortMessage(res.data.message, "e");

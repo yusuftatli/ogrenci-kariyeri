@@ -63,7 +63,7 @@ app.controller('questionController', function ($scope, $http, $filter) {
     $scope.addOptions = function (x) {
         var data = { guidId: getId(), option: '', description: '', image: defaultPage, totalMarks: 0 };
         for (var i = 0; i < $scope.questionList.length; i++) {
-            if ($scope.questionList[i].guidId == x.guidId) {
+            if ($scope.questionList[i].guidId === x.guidId) {
                 $scope.questionList[i].questionOptionList.push(data);
             }
         }
@@ -103,28 +103,26 @@ app.controller('questionController', function ($scope, $http, $filter) {
         }
     }
 
-    $scope.onChangeOptionName = function (x, y) {
-        for (var i = 0; i < length; i++) {
-            if ($scope.questionList[i].guidId == x.guidId) {
-                if (true) {
-
-                }
-            }
-        }
-    }
+    //$scope.onChangeOptionName = function (x, y) {
+    //    for (var i = 0; i < length; i++) {
+    //        if ($scope.questionList[i].guidId === x.guidId) {
+             
+    //        }
+    //    }
+    //}
 
     $scope.onChangeQuestionName = function (x) {
         for (var i = 0; i < $scope.questionList.length; i++) {
-            if ($scope.questionList[i].guidId == x.guidId) {
-                $scope.questionList[i].question == x.question;
+            if ($scope.questionList[i].guidId === x.guidId) {
+                $scope.questionList[i].question === x.question;
             }
         }
     }
 
     $scope.onChangeQuestionOption = function (x) {
         for (var i = 0; i < $scope.questionOptionsList.length; i++) {
-            if ($scope.questionOptionsList[i].guidId == x.guidId) {
-                $scope.questionOptionsList[i].option == x.option;
+            if ($scope.questionOptionsList[i].guidId === x.guidId) {
+                $scope.questionOptionsList[i].option === x.option;
             }
         }
     }
