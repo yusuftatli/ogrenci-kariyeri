@@ -8,21 +8,41 @@ document.cookie
   : $(".cookieEnable").addClass("hidden");
 
 function openLoginMagnific() {
-  $.magnificPopup.open({
-    items: {
-      src: $("#loginPanel").html(),
-      type: "inline"
+  $.ajax({
+    url: '/Shared/_LoginPage',
+    type: 'get',
+    dataType: 'html',
+    success: function(res){
+      $.magnificPopup.open({
+        items: {
+          src: res,
+          type: "inline"
+        }
+      });
     }
-  });
+  })
+  // $.magnificPopup.open({
+  //   items: {
+  //     src: $("#loginPanel").html(),
+  //     type: "inline"
+  //   }
+  // });
 }
 
 function openRegisterMagnific() {
-  $.magnificPopup.open({
-    items: {
-      src: $("#registerPanel").html(),
-      type: "inline"
+  $.ajax({
+    url: '/Shared/_RegisterPage',
+    type: 'get',
+    dataType: 'html',
+    success: function(res){
+      $.magnificPopup.open({
+        items: {
+          src: res,
+          type: "inline"
+        }
+      });
     }
-  });
+  })
 
   initRegisterPanel();
 }

@@ -33,6 +33,17 @@ namespace SCA.UI.Controllers
             return PartialView();
         }
 
+        
+        public PartialViewResult _LoginPage()
+        {
+            return PartialView();
+        }
+
+        public PartialViewResult _RegisterPage()
+        {
+            return PartialView();
+        }
+
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
