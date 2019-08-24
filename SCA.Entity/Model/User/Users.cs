@@ -39,9 +39,7 @@ namespace SCA.Entity.Model
         public DateTime RoleExpiresDate { get; set; }
         public GenderType GenderId { get; set; }
 
-        [ForeignKey("EducationStatusId")]
-        public EducationType? EducationStatusId { get; set; }
-        public EducationStatus EducationStatus { get; set; }
+        public EducationType EducationStatusId { get; set; }
 
         public DateTime BirthDate { get; set; }
 

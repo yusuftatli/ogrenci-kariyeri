@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SCA.Entity.DTO
 {
-   public class CompanyClubsDto
+    public class CompanyClubsDto
     {
         public long Id { get; set; }
         public CompanyClupType CompanyClupType { get; set; }
@@ -13,7 +13,7 @@ namespace SCA.Entity.DTO
         public SectorType SectorType { get; set; }
 
         public string HeaderImage { get; set; }
-
+        public string imageData { get; set; }
         public long SectorId { get; set; }
         public long? UserId { get; set; }
 
@@ -21,5 +21,9 @@ namespace SCA.Entity.DTO
         public string WebSite { get; set; }
         public string PhoneNumber { get; set; }
         public string EmailAddress { get; set; }
+
+        public string Facebook { get; set; }
+        public string Linkedin { get; set; }
+        public string Instagram { get; set; }
     }
 }

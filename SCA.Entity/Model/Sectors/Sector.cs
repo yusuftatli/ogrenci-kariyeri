@@ -10,7 +10,5 @@ namespace SCA.Entity.Model
     {
         public SectorType SectorTypeId { get; set; }
         public string Description { get; set; }
-
-        public ICollection<CompanyClubs> CompanyClubs { get; set; }
     }
 }

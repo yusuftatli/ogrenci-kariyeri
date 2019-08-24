@@ -98,17 +98,19 @@ namespace SCA.Services
             userData.RoleType = null;
             userData.IsActive = false;
 
-            _userRepo.Add(_mapper.Map<Users>(dto));
-            try
-            {
+            var userRes = _userRepo.Add(_mapper.Map<Users>(dto));
+            var result = _unitOfWork.SaveChanges();
 
-            _unitOfWork.SaveChanges();
-            }
-            catch(Exception ex)
+            if (result.ResultCode != HttpStatusCode.OK)
             {
-
+                await _errorManagement.SaveError(result.Message);
+                _res = Result.ReturnAsFail(message: AlertResource.AnErrorOccurredWhenProcess, null);
             }
-            return Result.ReturnAsSuccess(null, null);
+            else
+            {
+                _res = Result.ReturnAsSuccess(message: resultMessage, userRes.Id);
+            }
+            return _res;
         }
 
         /// <summary>
