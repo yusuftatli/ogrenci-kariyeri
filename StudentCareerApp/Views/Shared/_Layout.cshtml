@@ -1,4 +1,12 @@
-﻿
+﻿@using Microsoft.AspNetCore.Http;
+
+@{
+    SCA.Entity.DTO.UserSession user = new SCA.Entity.DTO.UserSession();
+    if (Context.Session.Keys.Any(x => x.Contains("userInfo")))
+    {
+        user = Newtonsoft.Json.JsonConvert.DeserializeObject<SCA.Entity.DTO.UserSession>(Context.Session.GetString("userInfo"));
+    }
+}
 
 <!doctype html>
 <html lang="tr">
@@ -48,6 +56,7 @@
     <link rel="stylesheet" href="~/css/colors/color-13.css">
 
     <link href="~/Template/assets/node_modules/switchery/dist/switchery.min.css" rel="stylesheet" />
+    <link href="~/Content/toastr.min.css" rel="stylesheet" />
 
     <!-- Responsive -->
     <link rel="stylesheet" href="~/css/responsive.css">
@@ -110,27 +119,75 @@
                         <!--nav brand end-->
 
                         <div class="nav-menus-wrapper clearfix">
-                            <!--nav right menu start-->
-                            <ul class="right-menu align-to-right">
-                                <li>
-                                    <a href="#">
-                                        <i class="fa fa-user-circle-o openLoginMagnific"></i>
-                                    </a>
-                                </li>
-                                <li class="header-search">
-                                    <div class="nav-search">
-                                        <div class="nav-search-button">
-                                            <i class="icon icon-search"></i>
-                                        </div>
-                                        <form>
-                                            <span class="nav-search-close-button" tabindex="0">✕</span>
-                                            <div class="nav-search-inner">
-                                                <input type="search" name="search" placeholder="Type and hit ENTER">
+                            @if (!user.Id.Equals(0))
+                            {
+                                <ul class="right-menu align-to-right">
+                                    <li class="header-search">
+                                        <div class="nav-search">
+                                            <div class="nav-search-button">
+                                                <i class="icon icon-search"></i>
                                             </div>
-                                        </form>
-                                    </div>
-                                </li>
-                            </ul>
+                                            <form>
+                                                <span class="nav-search-close-button" tabindex="0">✕</span>
+                                                <div class="nav-search-inner">
+                                                    <input type="search" name="search" placeholder="Type and hit ENTER">
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <!--nav right menu start-->
+                                <ul class="nav-menu align-to-right">
+
+                                    <li>
+                                        <a href="#" style="width:100%;padding-right:10px;">
+                                            <i class="fa fa-user-circle-o"></i> @user.UserName.ToLower()
+                                        </a>
+                                        <ul class="nav-dropdown">
+                                            <li>
+                                                <a href="#">Profil</a>
+                                            </li>
+                                            @if (!user.RoleTypeId.Equals(3))
+                                            {
+                                                <li>
+                                                    <a href="@Url.Action("Assay", "Content", new { area = "Admin"})">Yönetim Paneli</a>
+                                                </li>
+                                            }
+                                            <li>
+                                                <a href="#">Kaynaklar</a>
+                                            </li>
+                                            <li>
+                                                <a href="#" id="logoutButton">Çıkış Yap</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                </ul>
+                            }
+                            else
+                            {
+                                <ul class="right-menu align-to-right">
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-user-circle-o openLoginMagnific"></i>
+                                        </a>
+                                    </li>
+                                    <li class="header-search">
+                                        <div class="nav-search">
+                                            <div class="nav-search-button">
+                                                <i class="icon icon-search"></i>
+                                            </div>
+                                            <form>
+                                                <span class="nav-search-close-button" tabindex="0">✕</span>
+                                                <div class="nav-search-inner">
+                                                    <input type="search" name="search" placeholder="Type and hit ENTER">
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </li>
+                                </ul>
+                            }
+
                             <!--nav right menu end-->
                             <!-- nav menu start-->
                             <ul class="nav-menu">
@@ -787,14 +844,12 @@
 
     <script type="text/template" id="loginPanel">
         <div class="white-popup">
-            @*@await Component.InvokeAsync("Login")*@
         </div>
 
     </script>
 
     <script type="text/template" id="registerPanel">
         <div class="white-popup">
-            @*@await Component.InvokeAsync("SignUp")*@
         </div>
     </script>
 
@@ -831,7 +886,7 @@
     <script src="~/Template/assets/node_modules/switchery/dist/switchery.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-    <script src="~/Scripts/PViews/Shared/login.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
     <script src="~/Scripts/PViews/Shared/signup.js"></script>
 
 

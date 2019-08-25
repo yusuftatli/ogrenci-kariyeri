@@ -29,7 +29,6 @@ namespace StudentCareerApp.Components.UserComponents.SignIn
                     Universities = await _definitionManager.GetUniversityForUI(),
                     Faculties = await _definitionManager.GetFacultyForUI(),
                     Departments = await _definitionManager.GetDepartmentForUI(),
-                    EducationTypes = await _definitionManager.GetEducationStatusForUI(),
                     Classes = await _definitionManager.GetStudentClassForUI(),
                     HighSchools = await _definitionManager.GetHighSchoolForUI(),
                     Cities = await _addressManager.CityList()

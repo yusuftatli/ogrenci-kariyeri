@@ -9,10 +9,10 @@ document.cookie
 
 function openLoginMagnific() {
   $.ajax({
-    url: '/Shared/_LoginPage',
-    type: 'get',
-    dataType: 'html',
-    success: function(res){
+    url: "/Shared/_LoginPage",
+    type: "get",
+    dataType: "html",
+    success: function(res) {
       $.magnificPopup.open({
         items: {
           src: res,
@@ -20,7 +20,7 @@ function openLoginMagnific() {
         }
       });
     }
-  })
+  });
   // $.magnificPopup.open({
   //   items: {
   //     src: $("#loginPanel").html(),
@@ -31,20 +31,19 @@ function openLoginMagnific() {
 
 function openRegisterMagnific() {
   $.ajax({
-    url: '/Shared/_RegisterPage',
-    type: 'get',
-    dataType: 'html',
-    success: function(res){
+    url: "/Shared/_RegisterPage",
+    type: "get",
+    dataType: "html",
+    success: function(res) {
       $.magnificPopup.open({
         items: {
           src: res,
           type: "inline"
         }
       });
+      initRegisterPanel();
     }
-  })
-
-  initRegisterPanel();
+  });
 }
 
 $(document).on("click", "white-popup", function() {
@@ -72,26 +71,44 @@ $(document).on("change", "#educationType", function(e) {
   e.target.value == 1
     ? $(".template-selected-highschool").removeClass("hidden")
     : $(".template-selected-highschool").addClass("hidden");
-  e.target.value > 0 
+  e.target.value > 0
     ? $(".template-still-student").removeClass("hidden")
     : $(".template-still-student").addClass("hidden");
 });
 
-$(document).on('submit', '.loginForm', function(e){
-    var form = $(this).serialize();
-    $.ajax({
-        url: "/Shared/Login",
-        type: "post",
-        data: form,
-        success: function(res){
-            console.log(res);
-        },
-        error: function(res){
-            console.log(res);
-        }
-    })
-    e.preventDefault();
-})
+$(document).on("submit", ".loginForm", function(e) {
+  var form = $(this).serialize();
+  $.ajax({
+    url: "/Shared/Login",
+    type: "post",
+    data: form,
+    success: function(res) {
+      if (res.resultCode == 200) {
+        toastr["success"]("Seni aramızda görmekten çok mutlu olduk :)" ,res.message);
+        setTimeout(() => {
+          document.location.reload();
+        }, 2000);
+      } else toastr["error"](res.message, "Birşeyler hatalı!");
+    },
+    error: function(res) {
+      console.log(res);
+    }
+  });
+  e.preventDefault();
+});
+
+$(document).on("click", "#logoutButton", function(e) {
+  $.ajax({
+    url: "/Shared/Logout",
+    type: "get",
+    success: function(res) {
+      toastr["success"](res.message, "Çıkış yaptınız.");
+      setTimeout(() => {
+        document.location.reload();
+      }, 2000);
+    }
+  });
+});
 
 function initRegisterPanel() {
   new Switchery($("#stillStudent")[0], $("#stillStudent").data());
