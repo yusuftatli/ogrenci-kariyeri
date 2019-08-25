@@ -70,9 +70,12 @@ namespace SCA.Services
         public async Task<ServiceResult> CheckUserForLogin(string email, string password)
         {
             if (_userRepo.Any(x => x.Password.Equals(password) && x.EmailAddress.Equals(email)))
-                return Result.ReturnAsSuccess("Giriş başarılı!");
+            {
+                var res = _mapper.Map<UserSession>(_userRepo.Get(x => x.EmailAddress.Equals(email) && x.Password.Equals(password)));
+                return Result.ReturnAsSuccess("Hoşgeldin "+res.Name+"!", res);
+            }
             else
-                return Result.ReturnAsFail("Kullanıcı adı veya şifre hatalı!");
+                return Result.ReturnAsFail("Bazı bilgileriniz hatalı oldu!");
         }
 
 
@@ -96,9 +99,17 @@ namespace SCA.Services
             userData.IsStudent = true;
             userData.RoleExpiresDate = DateTime.Now.AddYears(20);
             userData.RoleType = null;
-            userData.IsActive = false;
+            userData.RoleTypeId = 3;
 
-            var userRes = _userRepo.Add(_mapper.Map<Users>(dto));
+            userData.IsActive = false;
+            userData.HighSchoolTypeId = dto.HighSchoolTypeId == 0 ? null : dto.HighSchoolTypeId;
+            userData.FacultyId = dto.FacultyId == 0 ? null : dto.FacultyId;
+            userData.UniversityId = dto.UniversityId == 0 ? null : dto.UniversityId;
+            userData.DepartmentId = dto.DepartmentId == 0 ? null : dto.DepartmentId;
+            userData.ClassId = dto.ClassId == 0 ? null : dto.ClassId;
+
+
+            var userRes = _userRepo.Add(_mapper.Map<Users>(userData));
             var result = _unitOfWork.SaveChanges();
 
             if (result.ResultCode != HttpStatusCode.OK)

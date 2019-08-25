@@ -66,9 +66,9 @@
                                     <label>Eğitim Durumu</label>
                                     <select id="educationType" class="form-control" name="EducationType" required>
                                         <option value="">Seçim yapınız...</option>
-                                        @foreach (var x in Model.EducationTypes)
+                                        @foreach (EducationType x in (EducationType[]) Enum.GetValues(typeof(EducationType)))
                                         {
-                                            <option value="@((long)Enum.Parse(typeof(EducationType), x.Id.ToString()))">@x.Description</option>
+                                            <option value="@((long)x)">@x.GetDescription()</option>
                                         }
                                     </select>
                                 </div> <!-- form-group end.// -->

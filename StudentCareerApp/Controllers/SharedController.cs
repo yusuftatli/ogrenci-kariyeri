@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SCA.Entity.DTO;
 using SCA.Entity.Model;
@@ -45,13 +46,24 @@ namespace SCA.UI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(string email, string password)
+        public async Task<JsonResult> Login(string email, string password)
         {
             var res = await _userManager.CheckUserForLogin(email, password);
+
             if (res.IsSuccess())
-                return View();
+            {
+                HttpContext.Session.SetString("userInfo", Newtonsoft.Json.JsonConvert.SerializeObject(res.Data));
+                return Json(res);
+            }
             else
-                return View();
+                return Json(res);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> Logout()
+        {
+            HttpContext.Session.Remove("userInfo");
+            return Json(new { message = "Çıkış yapıldı. Umarız tekrar dönersiniz :)" });
         }
 
         [ValidateAntiForgeryToken]
