@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SCA.DataAccess.Context;
@@ -9,9 +10,10 @@ using SCA.DataAccess.Context;
 namespace SCA.DataAccess.Migrations
 {
     [DbContext(typeof(PostgreDbContext))]
-    partial class PostgreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190825073446_last")]
+    partial class last
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -197,9 +199,11 @@ namespace SCA.DataAccess.Migrations
 
                     b.Property<string>("PhoneNumber");
 
-                    b.Property<long>("SectorId");
+                    b.Property<long?>("SectorId");
 
                     b.Property<byte>("SectorType");
+
+                    b.Property<long>("SectorTypeId");
 
                     b.Property<string>("ShortName");
 
@@ -1206,8 +1210,7 @@ namespace SCA.DataAccess.Migrations
                 {
                     b.HasOne("SCA.Entity.Model.Sector", "Sector")
                         .WithMany("CompanyClubs")
-                        .HasForeignKey("SectorId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("SectorId");
 
                     b.HasOne("SCA.Entity.Model.Users", "Users")
                         .WithMany("CompanyClubs")

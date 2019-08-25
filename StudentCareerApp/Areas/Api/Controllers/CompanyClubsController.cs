@@ -25,19 +25,27 @@ namespace StudentCareerApp.Areas.Api.Controller
             _companyClubsManager = companyClubsManager;
         }
 
-        [HttpGet("web-companyclubs")]
-        public async Task<ServiceResult> GetAllCompaniesClubs(CompanyClupType companyClupType)
+        [HttpGet("web-get-allcompanies")]
+        public async Task<ServiceResult> GetAllCompanies()
         {
-            return await _companyClubsManager.GetAllCompaniesClubs(companyClupType);
+
+            return await _companyClubsManager.GetAllCompaniesClubs(CompanyClupType.Company);
         }
 
-        [HttpGet("web-get-company")]
+        [HttpGet("web-get-allclubs")]
+        public async Task<ServiceResult> GetAllClubs()
+        {
+
+            return await _companyClubsManager.GetAllCompaniesClubs(CompanyClupType.Club);
+        }
+
+        [HttpGet("web-get-companybyid")]
         public async Task<ServiceResult> GetCompanyId(long id)
         {
             return await _companyClubsManager.GetCompanyId(id);
         }
 
-        [HttpGet("web-get-clubs")]
+        [HttpGet("web-get-clubsbyid")]
         public async Task<ServiceResult> GetClubs(long id)
         {
             return await _companyClubsManager.GetCompanyId(id);

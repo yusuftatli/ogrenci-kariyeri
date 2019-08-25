@@ -267,7 +267,7 @@ namespace StudentCareerApp
 
                 #region CompanyClubs
 
-                cfg.CreateMap<CompanyClubsDto, CompanyClubs>().ReverseMap();
+                cfg.CreateMap<CompanyClubs, CompanyClubsDto>().ReverseMap();
 
                 #endregion
             });
