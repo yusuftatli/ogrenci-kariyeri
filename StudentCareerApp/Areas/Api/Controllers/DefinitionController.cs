@@ -153,7 +153,7 @@ namespace StudentCareerApp.Areas.Api.Controller
         }
 
         [HttpPost, Route("createsektor")]
-        public async Task<ServiceResult> CreateSector(SectorDto dto)
+        public async Task<ServiceResult> CreateSector([FromBody]SectorDto dto)
         {
             return await _definitionManager.CreateSector(dto);
         }

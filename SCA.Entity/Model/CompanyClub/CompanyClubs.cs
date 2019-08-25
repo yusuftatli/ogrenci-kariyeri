@@ -15,7 +15,10 @@ namespace SCA.Entity.Model
 
         public string HeaderImage { get; set; }
 
-        public long SectorId { get; set; }
+        [ForeignKey("SectorTypeId")]
+        public long SectorTypeId { get; set; }
+        public Sector Sector { get; set; }
+
 
         [ForeignKey("UserId")]
         public long? UserId { get; set; }

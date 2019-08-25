@@ -1,6 +1,8 @@
 ﻿using SCA.Entity.Enums;
+using SCA.Entity.Model;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace SCA.Entity.DTO
@@ -10,10 +12,9 @@ namespace SCA.Entity.DTO
         public long Id { get; set; }
         public CompanyClupType CompanyClupType { get; set; }
         public string ShortName { get; set; }
-        public SectorType SectorType { get; set; }
 
         public string HeaderImage { get; set; }
-        public string imageData { get; set; }
+        public string ImageData { get; set; }
         public long SectorId { get; set; }
         public long? UserId { get; set; }
 

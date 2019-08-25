@@ -15,7 +15,7 @@ namespace StudentCareerApp.Areas.Admin.Controllers
         public IActionResult Assay()
         {
             HttpContext.Session.SetString("name", "Jignesh Trivedi");
-            ViewBag.name= HttpContext.Session.GetString("name");
+            ViewBag.name= HttpContext.Session.GetString("UserId");
             return View();
         }
 
