@@ -59,26 +59,26 @@ namespace SCA.Services
                 return _res;
             }
 
-            var loginData = _mapper.Map<UsersDTO>(_userRepo.Get(x => x.EmailAddress == dto.username && x.Password == dto.password));
+            Users userInfo = _mapper.Map<Users>(_userRepo.Get(x => x.EmailAddress.Equals(dto.username) && x.Password.Equals(dto.password)));
+            var sessionData = _mapper.Map<UserSession>(userInfo);
 
-            _res = _userValidation.UserDataValidation(loginData);
             if (_res.ResultCode != HttpStatusCode.OK)
             {
                 return _res;
             }
 
-            UsersResultDTO data = _mapper.Map<UsersResultDTO>(loginData);
-            data.Token = GenerateToken(loginData);
+            sessionData.Token = GenerateToken(sessionData);
 
             UserLogDto dtoLog = new UserLogDto()
             {
-                UserId = loginData.Id,
+                UserId = userInfo.Id,
                 PlatformTypeId = PlatformType.Web,
                 EnteraceDate = DateTime.Now
             };
 
             await _userManager.CreateUserLog(dtoLog);
-            return Result.ReturnAsSuccess(message: "Giriş Başarılı", data);
+            _res = Result.ReturnAsSuccess(message: "Giriş Başarılı", sessionData);
+            return _res;
         }
 
         public async Task<ServiceResult> PasswordForget(string emailAddress)
@@ -109,7 +109,7 @@ namespace SCA.Services
                 return Result.ReturnAsSuccess(null, newData);
             }
         }
-        private string GenerateToken(UsersDTO user)
+        public string GenerateToken(UserSession user)
         {
             var someClaims = new Claim[]{
                 new Claim(JwtRegisteredClaimNames.UniqueName,user.Id.ToString()),

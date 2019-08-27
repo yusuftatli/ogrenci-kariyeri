@@ -26,8 +26,9 @@ namespace SCA.Services
         private IGenericRepository<SocialMedia> _socialMediaRepo;
         private IPictureManager _pictureManager;
         private IUserValidation _userValidation;
+        private IAuthManager _authManager;
         private readonly IErrorManagement _errorManagement;
-        public UserManager(IUnitofWork unitOfWork, IMapper mapper, ISender sender, IPictureManager pictureManager, IErrorManagement errorManagement, IUserValidation userValidation)
+        public UserManager(IUnitofWork unitOfWork, IMapper mapper, ISender sender, IPictureManager pictureManager, IErrorManagement errorManagement, IUserValidation userValidation, IAuthManager authManager)
         {
             _mapper = mapper;
             _sender = sender;
@@ -38,6 +39,7 @@ namespace SCA.Services
             _errorManagement = errorManagement;
             _pictureManager = pictureManager;
             _userValidation = userValidation;
+            _authManager = authManager;
         }
 
         public async Task<ServiceResult> CreateUserByMobil(UserMobilDto dto)
@@ -72,7 +74,8 @@ namespace SCA.Services
             if (_userRepo.Any(x => x.Password.Equals(password) && x.EmailAddress.Equals(email)))
             {
                 var res = _mapper.Map<UserSession>(_userRepo.Get(x => x.EmailAddress.Equals(email) && x.Password.Equals(password)));
-                return Result.ReturnAsSuccess("Hoşgeldin "+res.Name+"!", res);
+                res.Token = _authManager.GenerateToken(res);
+                return Result.ReturnAsSuccess("Hoşgeldin " + res.Name + "!", res);
             }
             else
                 return Result.ReturnAsFail("Bazı bilgileriniz hatalı oldu!");
