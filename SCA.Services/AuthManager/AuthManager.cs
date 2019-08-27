@@ -27,19 +27,19 @@ namespace SCA.Services
         private ISender _sender;
         private readonly IUnitofWork _unitOfWork;
         private IGenericRepository<Users> _userRepo;
-        IUserManager _userManager;
+       // IUserManager _userManager;
 
         public AuthManager(IUnitofWork unitOfWork,
             IMapper mapper,
             ISender sender,
-            IUserManager userManager,
+          //  IUserManager userManager,
             IAnalysisManager analysisManager,
             IUserValidation userValidation)
         {
             _mapper = mapper;
             _sender = sender;
             _unitOfWork = unitOfWork;
-            _userManager = userManager;
+           // _userManager = userManager;
             _userValidation = userValidation;
             _userRepo = _unitOfWork.GetRepository<Users>();
         }
@@ -76,7 +76,7 @@ namespace SCA.Services
                 EnteraceDate = DateTime.Now
             };
 
-            await _userManager.CreateUserLog(dtoLog);
+           // await _userManager.CreateUserLog(dtoLog);
             _res = Result.ReturnAsSuccess(message: "Giriş Başarılı", sessionData);
             return _res;
         }

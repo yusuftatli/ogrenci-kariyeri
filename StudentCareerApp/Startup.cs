@@ -135,7 +135,6 @@ namespace StudentCareerApp
             services.AddTransient<ISyncManager, SyncManager>();
             services.AddTransient<IApiManager, ApiManager>();
             services.AddTransient<ICompanyClubManager, CompanyClubManager>();
-
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IErrorManagement, ErrorManagement>();
             #endregion
