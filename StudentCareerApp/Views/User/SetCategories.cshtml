@@ -1,0 +1,69 @@
+﻿@{
+    ViewData["Title"] = "SetCategories";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .card {
+        background: black !important;
+    }
+
+    .arrow-down {
+        cursor: pointer;
+    }
+
+        .arrow-down i:hover {
+            color: #ff6e0d;
+        }
+</style>
+
+<!-- block post area start-->
+<section class="block-wrapper mt-15" id="vue-category">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 mb-30" v-for="x,index in categories" v-if="x.parentId == null">
+                        <div class="item post-content-box">
+                            <div class="post-content">
+                                <a class="post-cat orange-color no-bg" href="#">{{x.description}}</a>
+                                <h3 class="post-title md">
+                                    <a href="#"><span style="text-transform:capitalize;">{{x.description}}</span> kategorisini keşfet!</a>
+                                </h3>
+                                <div class="form-group">
+                                    <input type="checkbox" class="js-switch" :id="'categorySelection'+x.id" data-color="#00c292" v-init="lastClickedMainCategory == null ? switcher(1, '#categorySelection'+x.id) : ''" />
+                                </div>
+                                <div v-if="categories.filter(z=>z.parentId == x.id).length > 0 ">
+                                    <div v-if="lastClickedMainCategory != x.id">
+                                        <a class="arrow-down no-bg" v-on:click="openMainCategory(x.id)"><i class="fa fa-2x fa-arrow-down"></i></a>
+                                    </div>
+                                    <div v-else>
+                                        <a class="arrow-down no-bg"><i class="fa fa-2x fa-arrow-up" v-on:click="lastClickedMainCategory = -1"></i></a>
+                                        <div class="form-group" v-for="y,index2 in categories" v-if="y.parentId == x.id">
+                                            <label>{{y.description}}</label>
+                                            <input type="checkbox" class="js-switch" :id="index+'subCategorySelection'+y.id" data-color="#00c292" v-init="switcher(1, '#'+index+'subCategorySelection'+y.id)" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-else>
+                                    <a class="arrow-down no-bg"><i class="fa fa-2x fa-exchange"></i></a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- row end-->
+    </div>
+    <!-- container end-->
+</section>
+<!-- block area end-->
+
+
+<span id="infoArea" class="hidden" hidden></span>
+<!-- block wrapper end-->
+@section Scripts{
+    <script src="~/Scripts/PViews/User/setCategory.js"></script>
+}
