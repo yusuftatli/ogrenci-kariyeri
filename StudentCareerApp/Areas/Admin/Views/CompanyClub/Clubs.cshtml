@@ -1,6 +1,341 @@
 ﻿@{
-    ViewBag.Title = "Eğitim";
+    ViewBag.Title = "Kulüb Yönetimi";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
-<h1>Clubs</h1>
 
+
+@{
+    var a = 1;
+
+}
+<head>
+    <link href="~/Template/AngularComponents/treeselect/vue-treeselect.css" rel="stylesheet" />
+    <link href="~/Template/assets/node_modules/switchery/dist/switchery.css" rel="stylesheet" />
+    <script src="~/Template/AngularComponents/treeselect/vue.js"></script>
+    <script src="~/Template/AngularComponents/treeselect/vue-treeselect.js"></script>
+    <script src="~/Template/AngularComponents/treeselect/index.js"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
+    <script src="~/ScriptController/clubController.js"></script>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <script src="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.js"></script>
+    <link href="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.css" rel="stylesheet" />
+
+</head>
+
+
+<div class="page-wrapper" ng-app="MyApp" ng-controller="clubController">
+    <!-- ============================================================== -->
+    <!-- Container fluid  -->
+    <!-- ============================================================== -->
+    <div class="container-fluid">
+        <!-- ============================================================== -->
+        <!-- Bread crumb and right sidebar toggle -->
+        <!-- ============================================================== -->
+        <div class="row page-titles">
+            <div class="col-md-5 align-self-center">
+                <h4 class="text-themecolor">Şirket Yönetimi</h4>
+            </div>
+            <div class="col-md-7 align-self-center text-right">
+                <div class="d-flex justify-content-end align-items-center">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Kulüb Yönetimi</a></li>
+                        <li class="breadcrumb-item active">Kulüb  Yönetimi</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Bread crumb and right sidebar toggle -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Start Page Content -->
+        <!-- ============================================================== -->
+        <!-- Row -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item" ng-click="onClickclubsList()"> <a class="nav-link active" data-toggle="tab" href="#culubList" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Kulüb Liste</span></a> </li>
+                            <li class="nav-item" ng-click="onClikClubsCreate()"> <a class="nav-link" data-toggle="tab" href="#createCulub" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Kulüb Ekle</span></a> </li>
+                            <li class="nav-item" ng-click="onClickphotoGallery" ()> <a class="nav-link" data-toggle="tab" href="#photoGallery" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Kulüb Galeri</span></a> </li>
+                        </ul>
+                        <div class="tab-content tabcontent-border">
+
+
+                            <div class="tab-pane active" id="culubList" role="tabpanel">
+                                <div class="card">
+
+                                    <div class="card-body">
+                                        <h4 class="card-title">Şirket Listesi</h4>
+                                        <h6 class="card-subtitle">Şirket Sayısı : <code><span ng-bind="culubsList.length"></span></code></h6>
+                                        <h4><input type="text" class="form-control" name="site-search" id="getData" ng-model="search" ng-keypress="getData($event)" placeholder="Ara..."></h4>
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <button class="btn btn-block btn-primary" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">Önceki </button>
+                                                </td>
+                                                <td>
+                                                    &nbsp;{{currentPage+1}}/{{numberOfPages()}}&nbsp;
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-block btn-primary" ng-disabled="currentPage >= getData().length/pageSize - 1" ng-click="currentPage=currentPage+1"> Sonraki</button>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <div class="table-responsive" ng-show="!showTable">
+
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Şirket Kısa Adı</th>
+                                                        <th>Sktör</th>
+                                                        <th>Telefon Numarası</th>
+                                                        <th>Oluşturan Kişi</th>
+                                                        <th>Oluşturulma Tarihi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="x in culubsList| filter:search | startFrom:currentPage*pageSize | limitTo:pageSize" )">
+                                                        <td ng-show="false" ng-bind="x.id"></td>
+                                                        <td ng-bind="x.shortName"></td>
+                                                        <td ng-bind="x.sectorDescription"></td>
+                                                        <td ng-bind="x.phoneNumber"></td>
+                                                        <td ng-bind="x.createUserName"></td>
+                                                        <td ng-bind="x.createdDate| date:'MM/dd/yyyy HH:mm:ss'"></td>
+                                                        <td>
+                                                            <div class="btn-group">
+                                                                <button ng-click="showContentDetail(x.id)" type="button" class="btn btn-primary">Aç</button>
+                                                                <button data-toggle="modal" @*data-target="#addSubCategoryModal" *@ type="button" class="btn btn-primary">Diğer</button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="tab-pane" id="createCulub" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="card">
+                                            <div class="card-header bg-info">
+                                                <h4 class="mb-0 text-white">Şirket Kayıt</h4>
+                                            </div>
+                                            <div class="form-body">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Şirket Kısa Adı</label>
+                                                                <input type="text" id="companyShortName" ng-model="clubsModel.ShortName" class="form-control" placeholder="Şirket Kısa Adı">
+                                                                @*<small class="form-control-feedback"> This is inline help </small>*@
+                                                            </div>
+                                                        </div>
+                                                        @*<div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Sektör Türü</label>
+                                                                <select id="roletypeid" class="form-control custom-select" ng-model="clubsModel.SectorId" name="eventId">
+                                                                    <option ng-repeat="x in sectorTypes" value="{{x.id}}">{{x.description}}</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>*@
+                                                        <div class="col-md-3 p-l-0 p-t-20">
+                                                            <input type="file" id="input-file-now-custom-3" ng-file-select="onFileSelect($files)" ng-model="clubsModel.ImageData" class="dropify" data-height="150" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="card-body">
+                                                    <h4 class="card-title">Şirket Bilgileri</h4>
+                                                    <div class="row">
+                                                        <div class="col-md-9">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Web Sitesi</label>
+                                                                <input ng-model="clubsModel.WebSite" class="form-control" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-9">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Telefon Numarası</label>
+                                                                <input rows="3" ng-model="clubsModel.PhoneNumber" class="form-control" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-9">
+                                                            <div class="form-group">
+                                                                <label class="control-label">E-Posta</label>
+                                                                <input rows="3" ng-model="clubsModel.EmailAddress" class="form-control" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-9">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Açıklama</label>
+                                                                <textarea rows="3" ng-model="clubsModel.Description" class="form-control"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="card-body">
+                                                    <h4 class="card-title">Sosyal Medya</h4>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Facebook</label>
+                                                                <input type="text" class="form-control" ng-model="clubsModel.Facebook" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Linkedin</label>
+                                                                <input type="text" class="form-control" ng-model="clubsModel.Linkedin" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Instagram</label>
+                                                                <input type="text" class="form-control" ng-model="clubsModel.Instagram" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-actions">
+                                                    <div class="card-body">
+                                                        <button ng-disabled="showSaveLoading" ng-click="onClikSave()" class="btn btn-success">
+                                                            <span ng-show="showSaveLoading"><i class="fa fa-spinner fa-spin"></i></span>
+                                                            Kaydet
+                                                        </button>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <br />
+                            </div>
+
+                            <div class="tab-pane" id="photoGallery" role="tabpanel">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="right-sidebar">
+                    <div class="slimscrollright">
+                        <div class="rpanel-title"> Service Panel <span><i class="ti-close right-side-toggle"></i></span> </div>
+                        <div class="r-panel-body">
+                            <ul id="themecolors" class="m-t-20">
+                                <li><b>With Light sidebar</b></li>
+                                <li><a href="javascript:void(0)" data-skin="skin-default" class="default-theme working">1</a></li>
+                                <li><a href="javascript:void(0)" data-skin="skin-green" class="green-theme">2</a></li>
+                                <li><a href="javascript:void(0)" data-skin="skin-red" class="red-theme">3</a></li>
+                                <li><a href="javascript:void(0)" data-skin="skin-blue" class="blue-theme">4</a></li>
+                                <li><a href="javascript:void(0)" data-skin="skin-purple" class="purple-theme">5</a></li>
+                                <li><a href="javascript:void(0)" data-skin="skin-megna" class="megna-theme">6</a></li>
+                                <li class="d-block m-t-30"><b>With Dark sidebar</b></li>
+                                <li><a href="javascript:void(0)" data-skin="skin-default-dark" class="default-dark-theme ">7</a></li>
+                                <li><a href="javascript:void(0)" data-skin="skin-green-dark" class="green-dark-theme">8</a></li>
+                                <li><a href="javascript:void(0)" data-skin="skin-red-dark" class="red-dark-theme">9</a></li>
+                                <li><a href="javascript:void(0)" data-skin="skin-blue-dark" class="blue-dark-theme">10</a></li>
+                                <li><a href="javascript:void(0)" data-skin="skin-purple-dark" class="purple-dark-theme">11</a></li>
+                                <li><a href="javascript:void(0)" data-skin="skin-megna-dark" class="megna-dark-theme ">12</a></li>
+                            </ul>
+                            <ul class="m-t-20 chatonline">
+                                <li><b>Chat option</b></li>
+                                <li>
+                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"> <span>Varun Dhavan <small class="text-success">online</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/2.jpg" alt="user-img" class="img-circle"> <span>Genelia Deshmukh <small class="text-warning">Away</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/3.jpg" alt="user-img" class="img-circle"> <span>Ritesh Deshmukh <small class="text-danger">Busy</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/4.jpg" alt="user-img" class="img-circle"> <span>Arijit Sinh <small class="text-muted">Offline</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/5.jpg" alt="user-img" class="img-circle"> <span>Govinda Star <small class="text-success">online</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/6.jpg" alt="user-img" class="img-circle"> <span>John Abraham<small class="text-success">online</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/7.jpg" alt="user-img" class="img-circle"> <span>Hritik Roshan<small class="text-success">online</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/8.jpg" alt="user-img" class="img-circle"> <span>Pwandeep rajan <small class="text-success">online</small></span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Right sidebar -->
+                <!-- ============================================================== -->
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+        </div>
+    </div>
+
+</div>
+
+<input class="hidden" id="selectedCategoryId" />
+
+
+@section Styles{
+    <style>
+        label.col-md-4 {
+            padding: 0;
+        }
+
+        .newsImage {
+            border-radius: 10px;
+            box-shadow: 0px 0px 5px 0px;
+            margin: 10px;
+            margin-right: 0;
+        }
+
+        label {
+            font-weight: 800;
+        }
+    </style>
+}
+
+<style>
+    .ulrow {
+        list-style-type: none;
+        padding-left: 0;
+        margin-left: 15px;
+    }
+
+    .closeBtn {
+    }
+
+    .show-grid [class^=col-] {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        background-color: #eee;
+        background-color: rgba(86,61,124,.15);
+        border: 1px solid #ddd;
+        border: 1px solid rgba(86,61,124,.2);
+    }
+</style>

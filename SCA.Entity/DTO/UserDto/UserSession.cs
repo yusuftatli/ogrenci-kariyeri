@@ -9,8 +9,10 @@ namespace SCA.Entity.DTO
         public int Id { get; set; }
         public string ImagePath { get; set; }
         public string UserName { get; set; }
+        public string EmailAddress { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
         public long RoleTypeId { get; set; }
+        public string Token { get; set; }
     }
 }

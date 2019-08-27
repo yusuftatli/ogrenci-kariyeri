@@ -8,20 +8,20 @@
     var a = 1;
 
 }
-    <head>
-        <link href="~/Template/AngularComponents/treeselect/vue-treeselect.css" rel="stylesheet" />
-        <link href="~/Template/assets/node_modules/switchery/dist/switchery.css" rel="stylesheet" />
-        <script src="~/Template/AngularComponents/treeselect/vue.js"></script>
-        <script src="~/Template/AngularComponents/treeselect/vue-treeselect.js"></script>
-        <script src="~/Template/AngularComponents/treeselect/index.js"></script>
-        <script src="~/ScriptController/companyController.js"></script>
-        <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <script src="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.js"></script>
-        <link href="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.css" rel="stylesheet" />
+<head>
+    <link href="~/Template/AngularComponents/treeselect/vue-treeselect.css" rel="stylesheet" />
+    <link href="~/Template/assets/node_modules/switchery/dist/switchery.css" rel="stylesheet" />
+    <script src="~/Template/AngularComponents/treeselect/vue.js"></script>
+    <script src="~/Template/AngularComponents/treeselect/vue-treeselect.js"></script>
+    <script src="~/Template/AngularComponents/treeselect/index.js"></script>
+    <script src="~/ScriptController/companyController.js"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <script src="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.js"></script>
+    <link href="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.css" rel="stylesheet" />
 
-    </head>
+</head>
 
 
 <div class="page-wrapper" ng-app="MyApp" ng-controller="comapanyController">
@@ -57,12 +57,69 @@
                 <div class="card">
                     <div class="card-body">
                         <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item" ng-click="CompanyCreate()"> <a class="nav-link active" data-toggle="tab" href="#createCompany" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Şirket Ekle</span></a> </li>
-                            <li class="nav-item" ng-click="photoGallery" ()> <a class="nav-link" data-toggle="tab" href="#photoGallery" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Resim Galeri</span></a> </li>
+                            <li class="nav-item" ng-click="onClickcompanyList()"> <a class="nav-link active" data-toggle="tab" href="#companyList" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Şirket Liste</span></a> </li>
+                            <li class="nav-item" ng-click="onClickcompanyCreate()"> <a class="nav-link" data-toggle="tab" href="#createCompany" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Şirket Ekle</span></a> </li>
+                            <li class="nav-item" ng-click="onClickphotoGallery" ()> <a class="nav-link" data-toggle="tab" href="#photoGallery" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Resim Galeri</span></a> </li>
                         </ul>
                         <div class="tab-content tabcontent-border">
 
-                            <div class="tab-pane active" id="createCompany" role="tabpanel">
+
+                            <div class="tab-pane active" id="companyList" role="tabpanel">
+                                <div class="card">
+
+                                    <div class="card-body">
+                                        <h4 class="card-title">Şirket Listesi</h4>
+                                        <h6 class="card-subtitle">Şirket Sayısı : <code><span ng-bind="companyList.length"></span></code></h6>
+                                        <h4><input type="text" class="form-control" name="site-search" id="getData" ng-model="search" ng-keypress="getData($event)" placeholder="Ara..."></h4>
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <button class="btn btn-block btn-primary" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">Önceki </button>
+                                                </td>
+                                                <td>
+                                                    &nbsp;{{currentPage+1}}/{{numberOfPages()}}&nbsp;
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-block btn-primary" ng-disabled="currentPage >= getData().length/pageSize - 1" ng-click="currentPage=currentPage+1"> Sonraki</button>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <div class="table-responsive" ng-show="!showTable">
+
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Şirket Kısa Adı</th>
+                                                        <th>Sktör</th>
+                                                        <th>Telefon Numarası</th>
+                                                        <th>Oluşturan Kişi</th>
+                                                        <th>Oluşturulma Tarihi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="x in companyList| filter:search | startFrom:currentPage*pageSize | limitTo:pageSize" )">
+                                                        <td ng-show="false" ng-bind="x.id"></td>
+                                                        <td ng-bind="x.shortName"></td>
+                                                        <td ng-bind="x.sectorDescription"></td>
+                                                        <td ng-bind="x.phoneNumber"></td>
+                                                        <td ng-bind="x.createUserName"></td>
+                                                        <td ng-bind="x.createdDate| date:'MM/dd/yyyy HH:mm:ss'"></td>
+                                                        <td>
+                                                            <div class="btn-group">
+                                                                <button ng-click="showContentDetail(x.id)" type="button" class="btn btn-primary">Aç</button>
+                                                                <button data-toggle="modal" @*data-target="#addSubCategoryModal" *@ type="button" class="btn btn-primary">Diğer</button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="tab-pane" id="createCompany" role="tabpanel">
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="card">
@@ -173,11 +230,11 @@
                                 <br />
                             </div>
 
-                            <div class="tab-pane  p-20" id="photoGallery" role="tabpanel">
+                            <div class="tab-pane" id="photoGallery" role="tabpanel">
 
                             </div>
-                            </div>
                         </div>
+                    </div>
                 </div>
                 <div class="right-sidebar">
                     <div class="slimscrollright">

@@ -16,15 +16,19 @@ namespace SCA.Entity.DTO
         public string HeaderImage { get; set; }
         public string ImageData { get; set; }
         public long SectorId { get; set; }
+        public string SectorDescription { get; set; }
         public long? UserId { get; set; }
 
         public string Description { get; set; }
         public string WebSite { get; set; }
         public string PhoneNumber { get; set; }
         public string EmailAddress { get; set; }
+        public string CreateUserName { get; set; }
 
         public string Facebook { get; set; }
         public string Linkedin { get; set; }
         public string Instagram { get; set; }
+        public long CreatedUserId { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

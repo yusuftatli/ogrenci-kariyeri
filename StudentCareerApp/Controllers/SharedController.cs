@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SCA.Entity.DTO;
 using SCA.Entity.Model;
 using SCA.Services;
@@ -34,7 +35,7 @@ namespace SCA.UI.Controllers
             return PartialView();
         }
 
-        
+
         public PartialViewResult _LoginPage()
         {
             return PartialView();
@@ -53,6 +54,8 @@ namespace SCA.UI.Controllers
             if (res.IsSuccess())
             {
                 HttpContext.Session.SetString("userInfo", Newtonsoft.Json.JsonConvert.SerializeObject(res.Data));
+                JsonSerializer serializer = new JsonSerializer();
+                var result = JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo"));
                 return Json(res);
             }
             else
