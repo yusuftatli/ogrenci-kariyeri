@@ -51,7 +51,12 @@ namespace SCA.Services
 
                 throw ex;
             }
-           
+
+        }
+        public async Task<List<RoleTypeDto>> GetRoles()
+        {
+            var res = _mapper.Map<List<RoleTypeDto>>(_roleTypeRepo.GetAll(x => x.Id == 1));//süper admin geitrme
+            return res;
         }
 
         public async Task<ServiceResult> CreateRoleType(RoleTypeDto dto)

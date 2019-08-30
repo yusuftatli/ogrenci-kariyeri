@@ -15,6 +15,7 @@ namespace SCA.Services
         Task<ServiceResult> RegisterUser(UserRegisterDto dto);
         Task<ServiceResult> DeleteUser(long userId);
         Task<ServiceResult> CreateUserByMobil(UserMobilDto dto);
+        Task<List<UserModelList>> GetUserList();
         /// <summary>
         /// Kullanıcı bilgilerini döner
         /// </summary>
@@ -36,5 +37,6 @@ namespace SCA.Services
         /// <param name="value"></param>
         /// <returns></returns>
         Task<ServiceResult> UpdateUserStatu(long id, bool value);
+        Task<ServiceResult> UserLoginByMobil(string email, string password);
     }
 }

@@ -33,6 +33,7 @@ namespace StudentCareerApp.Areas.Api.Controller
             return await _tagManager.GetTags();
         }
 
+        //[Authorize()]
         [HttpPost("ContentShortList")]
         public async Task<ServiceResult> ContentShortList([FromBody]ContentSearchDto dto)
         {

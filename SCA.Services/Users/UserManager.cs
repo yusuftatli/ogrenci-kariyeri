@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SCA.Common;
 using SCA.Common.Resource;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
@@ -28,7 +29,8 @@ namespace SCA.Services
         private IUserValidation _userValidation;
         private IAuthManager _authManager;
         private readonly IErrorManagement _errorManagement;
-        public UserManager(IUnitofWork unitOfWork, IMapper mapper, ISender sender, IPictureManager pictureManager, IErrorManagement errorManagement, IUserValidation userValidation, IAuthManager authManager)
+        private readonly IRoleManager _roleManager;
+        public UserManager(IUnitofWork unitOfWork, IRoleManager roleManager, IMapper mapper, ISender sender, IPictureManager pictureManager, IErrorManagement errorManagement, IUserValidation userValidation, IAuthManager authManager)
         {
             _mapper = mapper;
             _sender = sender;
@@ -40,6 +42,7 @@ namespace SCA.Services
             _pictureManager = pictureManager;
             _userValidation = userValidation;
             _authManager = authManager;
+            _roleManager = roleManager;
         }
 
         public async Task<ServiceResult> CreateUserByMobil(UserMobilDto dto)
@@ -58,6 +61,35 @@ namespace SCA.Services
 
         }
 
+        public async Task<List<UserModelList>> GetUserList()
+        {
+            var roleTypes = await _roleManager.GetRoles();
+            var data = _mapper.Map<List<UserModelList>>(_userRepo.GetAll().ToList());
+
+            data.ForEach(x =>
+            {
+                x.GenderDescription = x.GenderId.GetDescription();
+                if (x.RoleTypeId != 0)
+                {
+                    x.RoleDescription = roleTypes.Where(y => y.Id == x.RoleTypeId).Select(s => s.Description).FirstOrDefault().ToString();
+                }
+                else
+                {
+                    x.RoleDescription = "Yok";
+                }
+                if (x.EducationStatusId != 0)
+                {
+                    x.EducationDescription = x.EducationStatusId.GetDescription();
+                }
+                else
+                {
+                    x.EducationDescription = "Girilmemiş";
+                }
+                x.Durum = x.IsActive == true ? "Aktif" : "Pasif";
+            });
+            return data;
+        }
+
         /// <summary>
         /// Kullanıcı bilgilerini döner
         /// </summary>
@@ -67,6 +99,18 @@ namespace SCA.Services
         {
             var dataResult = _mapper.Map<UsersDTO>((_userRepo.Get(x => x.Id == Id)));
             return dataResult;
+        }
+
+        public async Task<ServiceResult> UserLoginByMobil(string email, string password)
+        {
+            if (_userRepo.Any(x => x.Password.Equals(password) && x.EmailAddress.Equals(email)))
+            {
+                var res = _mapper.Map<UserSession>(_userRepo.Get(x => x.EmailAddress.Equals(email) && x.Password.Equals(password)));
+                res.Token = _authManager.GenerateToken(res);
+                return Result.ReturnAsSuccess("Hoşgeldin " + res.Name + "!", res);
+            }
+            else
+                return Result.ReturnAsFail("Bazı bilgileriniz hatalı oldu!");
         }
 
         public async Task<ServiceResult> CheckUserForLogin(string email, string password)

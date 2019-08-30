@@ -13,6 +13,7 @@ namespace SCA.Services
         RoleTypeDto GetRoleTypeDataRow(long roleId);
         Task<ServiceResult> GetRoleTypes();
         Task<ServiceResult> CreateRoleType(RoleTypeDto dto);
+        Task<List<RoleTypeDto>> GetRoles();
 
         #endregion
 

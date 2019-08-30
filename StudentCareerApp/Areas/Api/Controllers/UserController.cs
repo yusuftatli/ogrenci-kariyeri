@@ -30,6 +30,12 @@ namespace StudentCareerApp.Areas.Api.Controller
             return await _userManager.CreateUser(dto);
         }
 
+        [HttpGet("web-getallusers")]
+        public async Task<List<UserModelList>> GetUserList()
+        {
+            return await _userManager.GetUserList();
+        }
+
         [HttpDelete("DeleteUser/{userId}")]
         public async Task<ActionResult<ServiceResult>> DeleteUser(long userId)
         {
@@ -51,6 +57,19 @@ namespace StudentCareerApp.Areas.Api.Controller
         public async Task<ServiceResult> CreateUserByMobil(UserMobilDto dto)
         {
             return await _userManager.CreateUserByMobil(dto);
+        }
+
+        /// <summary>
+        /// mobil kullanıcı login
+        /// </summary>
+        /// <param name="email">email Adress</param>
+        /// <param name="password">password</param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpPost("mobil-userlogin")]
+        public async Task<ServiceResult> UserLoginByMobil(string email, string password)
+        {
+            return await _userManager.UserLoginByMobil(email, password);
         }
     }
 }

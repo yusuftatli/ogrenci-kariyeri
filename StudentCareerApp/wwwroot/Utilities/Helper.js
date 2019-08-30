@@ -1,11 +1,15 @@
 ﻿var prodType = "d";//d,p
 var _link = '';
+var _domain = "";
+
 
 
 if (prodType === "d") {
-    _link = "https://localhost:44308/api";
+    _link = _domain + "/api";
+    _domain = "https://localhost:44308";
 } else {
-    _link = "https://localhost:5000/api";
+    _link = _domain + "/api";
+    _domain = "https://localhost:44308";
 }
 
 var ContentType_ = "application/x-www-form-urlencoded; charset=utf-8;application/json";
@@ -292,4 +296,20 @@ function openCustomRoxy2(id) {
 }
 function closeCustomRoxy2(id) {
     $(id).dialog('close');
+}
+
+function getCookie(cname) {
+    debugger;
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) === ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) === 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
 }
