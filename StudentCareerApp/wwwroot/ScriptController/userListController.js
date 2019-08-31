@@ -39,6 +39,7 @@ app.controller('userListController', function ($scope, $http, $filter) {
         $http(publishStateReq()).then(function (res) {
             if (res.data.resultCode === 200) {
                 shortMessage(res.data.message, "s");
+                $("#userProcessModal").modal('hide');
                 getUserList();
             } else {
                 shortMessage(res.data.message, "e");
