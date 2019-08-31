@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
 using SCA.Services;
@@ -70,6 +71,12 @@ namespace StudentCareerApp.Areas.Api.Controller
         public async Task<ServiceResult> UserLoginByMobil(MobilUserLoginDto dto)
         {
             return await _userManager.UserLoginByMobil(dto);
+        }
+
+        [HttpPost("web-updateUserRoleType")]
+        public async Task<ServiceResult> UpdateUserRoleType(UserRoleTypeDto dto)
+        {
+            return await _userManager.UpdateUserRoleType(dto, JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
         }
     }
 }

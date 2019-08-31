@@ -38,5 +38,6 @@ namespace SCA.Services
         /// <returns></returns>
         Task<ServiceResult> UpdateUserStatu(long id, bool value);
         Task<ServiceResult> UserLoginByMobil(MobilUserLoginDto dto);
+        Task<ServiceResult> UpdateUserRoleType(UserRoleTypeDto dto, UserSession session);
     }
 }

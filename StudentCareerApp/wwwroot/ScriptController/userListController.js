@@ -2,8 +2,10 @@
 app.controller('userListController', function ($scope, $http, $filter) {
     "use strict";
 
+    $scope.userProcess = {};
     getUserList();
 
+    $scope.roleTypes = [{ id: 0, description: '-----' }, { id: 2, description: 'Admin' }, { id: 3, description: 'Öğrenci' }, { id: 4, description: 'Editör' }, { id: 5, description: 'Yazar' }];
 
 
     function getUserList() {
@@ -24,8 +26,34 @@ app.controller('userListController', function ($scope, $http, $filter) {
         });
     }
 
-    $scope.postRoleTypeProcess = function (x) {
+    $scope.onClikckProcess = function (x) {
+        $scope.userProcess.id = x.id;
+        $scope.userProcess.roleDescription = x.roleDescription;
+        $scope.userProcess.name = x.name;
+        $scope.userProcess.surname = x.surname;
+        $scope.userProcess.roleType = $scope.roleTypes[0].id;
+    };
 
+    $scope.postRoleTypeProcess = function (x) {
+        $scope.showSaveLoading = true;
+        $http(publishStateReq()).then(function (res) {
+            if (res.data.resultCode === 200) {
+                shortMessage(res.data.message, "s");
+                getUserList();
+            } else {
+                shortMessage(res.data.message, "e");
+            }
+            $scope.showSaveLoading = false;
+        });
+    };
+
+    var publishStateReq = function () {
+        return {
+            method: "post",
+            url: _link + "/User/web-updateUserRoleType",
+            headers: Headers,
+            data: { userId: $scope.userProcess.id, roleTypeId: $scope.userProcess.roleType }
+        };
     };
 
     function pagin() {

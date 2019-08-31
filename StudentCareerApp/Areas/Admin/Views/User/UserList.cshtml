@@ -109,22 +109,22 @@
                                         <th>Detay</th>
                                         @if (ViewBag.showColumn == 1 || ViewBag.showColumn == 2)
                                         {
-                                            <th>İşlem</th>
+                                        <th>İşlem</th>
                                         }
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @*<tr>
-                    <td>1011</td>
-                    <td>
-                        <a href="javascript:void(0)"><img width="100" height="100" src="~/Template/assets/images/users/1.jpg" alt="user" class="img-circle" /> Genelia Deshmukh</a>
-                    </td>
-                    <td>genelia@gmail.com</td>
-                    <td>How to customize the template?</td>
-                    <td><span class="label label-warning">New</span> </td>
-                    <td>Johnathon</td>
-                    <td>14-10-2017</td>
-                </tr>*@
+                                            <td>1011</td>
+                                            <td>
+                                                <a href="javascript:void(0)"><img width="100" height="100" src="~/Template/assets/images/users/1.jpg" alt="user" class="img-circle" /> Genelia Deshmukh</a>
+                                            </td>
+                                            <td>genelia@gmail.com</td>
+                                            <td>How to customize the template?</td>
+                                            <td><span class="label label-warning">New</span> </td>
+                                            <td>Johnathon</td>
+                                            <td>14-10-2017</td>
+                                        </tr>*@
                                     <tr ng-repeat="x in userList| filter:search | startFrom:currentPage*pageSize | limitTo:pageSize" )">
                                         <td ng-show="false" ng-bind="x.id"></td>
                                         <td ng-show="false" ng-bind="x.imagePath"></td>
@@ -138,13 +138,13 @@
                                         <td ng-bind="x.birthDate | date:'MM/dd/yyyy HH:mm:ss'"></td>
                                         <td ng-bind="x.createdDate | date:'MM/dd/yyyy HH:mm:ss'"></td>
                                         <td>
-                                            <button ng-click="showContentDetail(x.id)" type="button" class="btn btn-primary">Aç</button>
+                                            <button ng-click="showContentDetail(x.id)" type="button" class="btn btn-rounded btn-success">Aç</button>
                                         </td>
                                         @if (ViewBag.showColumn == 1 || ViewBag.showColumn == 2)
                                         {
-                                            <td>
-                                                <button ng-click="onClikckProcess(x)" type="button" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#contentProcessModal">İşlem</button>
-                                            </td>
+                                        <td>
+                                            <button ng-click="onClikckProcess(x)" type="button" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#userProcessModal">İşlem</button>
+                                        </td>
                                         }
                                     </tr>
                                 </tbody>
@@ -155,7 +155,7 @@
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h4 class="modal-title" id="userProcessModal">Platform Türü:{{userProcess.roleDescription}} - Makale Adı{{userProcess.name}} {{userProcess.surname}} </h4>
+                                            <h4 class="modal-title" id="userProcessModal"> Rol Türü:{{userProcess.roleDescription}} - Ad Soyad{{userProcess.name}} {{userProcess.surname}} </h4>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                         </div>
                                         <div class="modal-body">
