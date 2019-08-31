@@ -9,11 +9,14 @@ app.controller("assayController", function ($scope, $http, $filter) {
     $scope.showTable = true;
 
     $scope.assayCreate = {};
+    $scope.contentProcess = {};
+
 
     $scope.assayList = [];
     $scope.events = [{ id: 0, description: '-----' }, { id: 1, description: 'Mentor' }, { id: 2, description: 'Kariyer Sohbetleri' }];
     $scope.internList = [{ id: 1, description: '-----' }, { id: 1, description: 'Deneme Staj' }];
     $scope.visibleList = [{ id: 1, description: 'Herkese Açık' }, { id: 1, description: 'Parola Korumalı' }, { id: 1, description: 'Özel' }];
+    $scope.confirmType = [{ id: 0, description: '-----' }, { id: 1, description: 'Taslak' }, { id: 2, description: 'Yayın Aşamasında' }, { id: 3, description: 'Yayında Değil' }, { id: 4, description: 'Yayında' }];
 
     var trMap = {
         çÇ: "c",
@@ -127,6 +130,27 @@ app.controller("assayController", function ($scope, $http, $filter) {
         });
     }
 
+
+    $scope.onClikckProcess = function (x) {
+        $scope.contentProcess.header = x.header;
+        $scope.contentProcess.platformTypeDes = x.platformTypeDes;
+        $scope.contentProcess.id = x.id;
+    };
+
+    $scope.postPublishState = function () {
+        $scope.showSaveLoading = true;
+        var dds = $scope.contentProcess.publishState;
+        $http(publishStateReq()).then(function (res) {
+            if (res.data.resultCode === 200) {
+                shortMessage(res.data.message, "s");
+                getContentShortList();
+            } else {
+                shortMessage(res.data.message, "e");
+            }
+            $scope.showSaveLoading = false;
+        });
+    };
+
     //content list
     function getContentShortList() {
         $scope.showTable = true;
@@ -180,7 +204,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
                     $("#img_roxyField").attr('src', e.data.imagePath);
                     $("#publishHour").val(moment(e.data.publishDate).format('HH:mm'));
                     $("#publishDate").datepicker("setDate", new Date(moment(e.data.publishDate)));
-                    
+
                     changeSwitchery($("#togglwPublish"), e.data.isHeadLine);
                     changeSwitchery($("#toggleManset"), e.data.isManset);
                     changeSwitchery($("#toggleMainMenu"), e.data.isMainMenu);
@@ -290,6 +314,14 @@ app.controller("assayController", function ($scope, $http, $filter) {
         };
     };
 
+    var publishStateReq = function () {
+        return {
+            method: "post",
+            url: _link + "/Content/UpdateContentPublish",
+            headers: Headers,
+            data: { id: $scope.contentProcess.id, publishState: $scope.contentProcess.publishState }
+        };
+    };
     //post assay request object
     var PostAssayReq = function () {
         return {
@@ -305,28 +337,6 @@ app.controller("assayController", function ($scope, $http, $filter) {
         return {
             method: 'post',
             url: _link + "/content/contentshortlist",
-            headers: Headers,
-            data: $scope.searchModel
-        };
-    };
-
-
-
-    //sen content for publish request
-    var contentPublishProcess = function () {
-        return {
-            method: 'post',
-            url: _link + "/content/content-sendConfirmForPublishProcess",
-            headers: Headers,
-            data: $scope.searchModel
-        };
-    };
-
-    //send content for un publish process
-    var contentUnPublishProcess = function () {
-        return {
-            method: 'post',
-            url: _link + "/content/content-sendConfirmUnPublishProcess",
             headers: Headers,
             data: $scope.searchModel
         };

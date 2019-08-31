@@ -124,14 +124,14 @@ namespace SCA.Services
             var listData = _mapper.Map<ContentDto>(_contentRepo.Get(x => x.SeoUrl == url));
             return Result.ReturnAsSuccess(null, null, listData);
         }
-        public async Task<ServiceResult> UpdateContentPublish(long id, PublishState publishState)
+        public async Task<ServiceResult> UpdateContentPublish(long id, PublishState publishState, UserSession session)
         {
             if (publishState.Equals(PublishState.Publish))
             {
                 var data = _contentRepo.Get(x => x.Id == id);
                 data.PublishStateType = publishState;
                 data.ConfirmUserId = 1;
-                data.ConfirmUserName = "tets";
+                data.ConfirmUserName = session.Name + " " + session.Surname;
                 _contentRepo.Update(data);
                 _unitOfWork.SaveChanges();
             }

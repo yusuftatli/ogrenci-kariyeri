@@ -44,7 +44,7 @@ namespace SCA.Services
         /// <returns></returns>
         Task<ServiceResult> UpdateAssayState(long Id, PublishState publishState);
 
-        Task<ServiceResult> UpdateContentPublish(long id, PublishState publishState);
+        Task<ServiceResult> UpdateContentPublish(long id, PublishState publishState, UserSession session);
         Task<ServiceResult> ContentShortListForUI();
 
         /// <summary>

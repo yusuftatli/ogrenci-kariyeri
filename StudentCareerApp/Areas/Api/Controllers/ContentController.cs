@@ -66,9 +66,9 @@ namespace StudentCareerApp.Areas.Api.Controller
         }
 
         [HttpPost("UpdateContentPublish")]
-        public async Task<ServiceResult> UpdateContentPublish(long id, PublishState publishState)
+        public async Task<ServiceResult> UpdateContentPublish([FromBody]publishStateDto dto)
         {
-            return await _contentManager.UpdateContentPublish(id, publishState);
+            return await _contentManager.UpdateContentPublish(dto, JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
         }
 
         [HttpGet("getContentbyid")]
