@@ -142,7 +142,7 @@ namespace SCA.Services
 
 
 
-            return Result.ReturnAsSuccess(message: resMessage, assayDetail);
+            return Result.ReturnAsSuccess(null, message: resMessage, assayDetail);
         }
 
         public async Task<ServiceResult> SyncDiger()
@@ -158,7 +158,7 @@ namespace SCA.Services
 
             RootObject assayDetail = Newtonsoft.Json.JsonConvert.DeserializeObject<RootObject>(pageContents);
 
-            return Result.ReturnAsSuccess(message: " Adet Makalenin Seknronizasyon İşlemi Tamamlanmıştır.", assayDetail);
+            return Result.ReturnAsSuccess(null, message: " Adet Makalenin Seknronizasyon İşlemi Tamamlanmıştır.", assayDetail);
         }
     }
 }

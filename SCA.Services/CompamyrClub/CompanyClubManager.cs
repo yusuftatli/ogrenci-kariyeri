@@ -36,22 +36,22 @@ namespace SCA.Services
         public async Task<ServiceResult> GetAllCompaniesClubs(CompanyClupType companyClupType)
         {
             var data = _mapper.Map<List<CompanyClubsDto>>(_companyClubsRepo.GetAll(x => x.CompanyClupType == companyClupType));
-            return Result.ReturnAsSuccess(null, data);
+            return Result.ReturnAsSuccess(null, null, data);
         }
 
         public async Task<ServiceResult> GetCompanyId(long id)
         {
             var data = _companyClubsRepo.Get(x => x.Id == id);
-            return Result.ReturnAsSuccess(message: AlertResource.SuccessfulOperation, data);
+            return Result.ReturnAsSuccess(null, message: AlertResource.SuccessfulOperation, data);
         }
 
         public async Task<ServiceResult> CreateCompanyClubs(CompanyClubsDto dto, long userId)
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult _res = new ServiceResult(null, null);
             string resultMessage = "";
             if (dto.Equals(null))
             {
-                return Result.ReturnAsFail();
+                return Result.ReturnAsFail(null, null);
             }
 
             dto.UserId = 30;//userId;
@@ -90,7 +90,7 @@ namespace SCA.Services
             }
             else
             {
-                _res = Result.ReturnAsSuccess(message: resultMessage, null);
+                _res = Result.ReturnAsSuccess(null, message: resultMessage, null);
             }
             return _res;
         }

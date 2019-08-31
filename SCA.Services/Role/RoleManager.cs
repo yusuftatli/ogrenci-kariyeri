@@ -43,7 +43,7 @@ namespace SCA.Services
             try
             {
                 var dataList = _mapper.Map<List<RoleTypeDto>>(_roleTypeRepo.GetAll(x => x.IsDeleted.Equals(false)));
-                return Result.ReturnAsSuccess(null, dataList);
+                return Result.ReturnAsSuccess(null, null, dataList);
 
             }
             catch (Exception ex)
@@ -81,7 +81,7 @@ namespace SCA.Services
 
             _unitOfWork.SaveChanges();
             var dataList = _roleTypeRepo.GetAll();
-            return Result.ReturnAsSuccess(resultMessage, dataList);
+            return Result.ReturnAsSuccess(null, resultMessage, dataList);
         }
 
         #endregion
@@ -91,7 +91,7 @@ namespace SCA.Services
         public async Task<ServiceResult> GetRolePermission()
         {
             var dataList = _rolePermissionRepo.GetAll();
-            return Result.ReturnAsSuccess(null, dataList);
+            return Result.ReturnAsSuccess(null, null, dataList);
         }
 
         public async Task<ServiceResult> CreateRolePermission(RolePermissionDto dto)
@@ -114,7 +114,7 @@ namespace SCA.Services
             }
 
             _unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess(resultMessage, _rolePermissionRepo.GetAll());
+            return Result.ReturnAsSuccess(null, resultMessage, _rolePermissionRepo.GetAll());
 
         }
 

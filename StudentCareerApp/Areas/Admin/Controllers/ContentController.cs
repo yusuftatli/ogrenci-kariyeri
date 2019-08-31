@@ -17,13 +17,14 @@ namespace StudentCareerApp.Areas.Admin.Controllers
         public IActionResult Assay()
         {
             var data = HttpContext.Session.GetString("userInfo");
-            if (HttpContext.Session.GetString("userInfo") != null)
-            {
-                CookieOptions options = new CookieOptions();
-                options.Expires = DateTime.Now.AddDays(1);
-                var result = JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo"));
-                Response.Cookies.Append("token", result.Token, options);
-            }
+            //if (HttpContext.Session.GetString("userInfo") != null)
+            //{
+            //    CookieOptions options = new CookieOptions();
+            //    options.Expires = DateTime.Now.AddDays(1);
+            //    var result = JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo"));
+            //    Response.Cookies.Append("token", result.Token, options);
+            //}
+            ViewBag.showColumn = JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")).RoleTypeId;
             return View();
         }
 

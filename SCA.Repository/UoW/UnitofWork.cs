@@ -40,7 +40,7 @@ namespace SCA.Repository.UoW
 
                 var affectedRow = _context.SaveChanges();
                 transaction.Commit();
-                return Result.ReturnAsSuccess(null, affectedRow);
+                return Result.ReturnAsSuccess(null, null, affectedRow);
             }
             catch (DbUpdateConcurrencyException ex)
             {

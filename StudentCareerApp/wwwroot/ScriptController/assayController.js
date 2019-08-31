@@ -55,7 +55,8 @@ app.controller("assayController", function ($scope, $http, $filter) {
     $scope.searchModel = {};
 
     $scope.onClickDashboard = function () {
-        $scope.showTable = true;
+        $("#AssayCreate").hide();
+        $("#home").show();
         getContentShortList();
     };
 
@@ -132,45 +133,18 @@ app.controller("assayController", function ($scope, $http, $filter) {
         $scope.searchModel.startDate = isNaN(moment($("#searchStartDate").val())) ? null : moment($("#searchStartDate").val()).format('DD.MM.YYYY');
         $scope.searchModel.endDate = isNaN(moment($("#searchEndDate").val())) ? null : moment($("#searchEndDate").val()).format('DD.MM.YYYY');
         $scope.searchModel.searhCategoryIds = $("#searhCategoryIds").val();
-
-        //let Headers = {
-        //    "Content-Type": "application/json",
-        //    "Authorization": "Bearer " + getCookie('token')
-        //};
-
-        $.ajax({
-            url: _link + "/content/contentshortlist",
-            type: 'POST',
-            contentType: 'application/json',
-            headers: Headers,
-            success: function (e) {
-                if (res.data.resultCode === 200) {
-                    $scope.assayList = res.data.data;
-                    pagin();
-                    $scope.showTable = false;
-                } else {
-                    shortMessage(res.data.message, "e");
-                    $scope.showTable = false;
-                }
-            },
-            error: function (error) {
-                if (error.status === 401) {
-                    window.location.href = _domain;
-                }
+        $http(GetContentShortListReq()).then(function (res) {
+            if (res.data.resultCode === 200) {
+                $scope.assayList = res.data.data;
+                $scope.assayListRoleType = res.data.roleTypeId;
+                pagin();
+                $scope.showTable = false;
+            } else {
+                shortMessage(res.data.message, "e");
+                $scope.showTable = false;
             }
         });
     }
-
-
-    //content list
-    var GetContentShortListReq = function () {
-        return {
-            method: 'post',
-            url: _link + "/content/contentshortlist",
-            headers: Headers,
-            data: $scope.searchModel
-        };
-    };
 
     $scope.showContentDetail = function (x) {
         getContentById(x);
@@ -212,6 +186,10 @@ app.controller("assayController", function ($scope, $http, $filter) {
 
                     $("#AssayCreate").show();
                     $("#home").hide();
+
+                    $("#dashboardTab").removeClass("active");
+                    $("#contentTab").addClass("active");
+
                 } else {
                     shortMessage("Hata Meydana Geldi", "e");
                 }
@@ -317,6 +295,15 @@ app.controller("assayController", function ($scope, $http, $filter) {
         };
     };
 
+    //content list
+    var GetContentShortListReq = function () {
+        return {
+            method: 'post',
+            url: _link + "/content/contentshortlist",
+            headers: Headers,
+            data: $scope.searchModel
+        };
+    };
 
 
 

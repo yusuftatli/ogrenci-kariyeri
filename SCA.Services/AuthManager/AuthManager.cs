@@ -77,7 +77,7 @@ namespace SCA.Services
             };
 
            // await _userManager.CreateUserLog(dtoLog);
-            _res = Result.ReturnAsSuccess(message: "Giriş Başarılı", sessionData);
+            _res = Result.ReturnAsSuccess(null, message: "Giriş Başarılı", sessionData);
             return _res;
         }
 
@@ -106,7 +106,7 @@ namespace SCA.Services
                 PasswordResultDto newData = new PasswordResultDto();
                 newData.Name = loginData.Name;
                 newData.Surname = loginData.Surname;
-                return Result.ReturnAsSuccess(null, newData);
+                return Result.ReturnAsSuccess(null, null, newData);
             }
         }
         public string GenerateToken(UserSession user)

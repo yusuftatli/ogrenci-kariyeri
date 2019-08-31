@@ -45,7 +45,7 @@ namespace SCA.Services
         #region Department
         public async Task<ServiceResult> GetDepartment()
         {
-            return Result.ReturnAsSuccess(null, _mapper.Map<List<DepartmentDto>>(_departmentRepo.GetAll().ToList()));
+            return Result.ReturnAsSuccess(null, null, _mapper.Map<List<DepartmentDto>>(_departmentRepo.GetAll().ToList()));
         }
 
         public async Task<List<DepartmentDto>> GetDepartmentForUI()
@@ -72,7 +72,7 @@ namespace SCA.Services
                 resultMessage = AlertResource.UpdateIsOk;
             }
             _unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess(resultMessage, null);
+            return Result.ReturnAsSuccess(null, resultMessage, null);
         }
 
         public async Task<ServiceResult> UpdateDepartmentIsActive(long Id, bool IsActive)
@@ -85,14 +85,14 @@ namespace SCA.Services
             _departmentRepo.Update(_mapper.Map<Department>(data));
             _unitOfWork.SaveChanges();
             resultMessage = AlertResource.UpdateIsOk;
-            return Result.ReturnAsSuccess(resultMessage, null);
+            return Result.ReturnAsSuccess(null, resultMessage, null);
         }
         #endregion
 
         #region EducationStatus
         public async Task<ServiceResult> GetEducationStatus()
         {
-            return Result.ReturnAsSuccess(null, _mapper.Map<List<EducationStatusDto>>(_educationStatusRepo.GetAll().ToList()));
+            return Result.ReturnAsSuccess(null, null, _mapper.Map<List<EducationStatusDto>>(_educationStatusRepo.GetAll().ToList()));
         }
 
         public async Task<List<EducationStatusDto>> GetEducationStatusForUI()
@@ -118,7 +118,7 @@ namespace SCA.Services
                 resultMessage = AlertResource.UpdateIsOk;
             }
             _unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess(resultMessage, null);
+            return Result.ReturnAsSuccess(null, resultMessage, null);
         }
 
         public async Task<ServiceResult> UpdateEducationStatusIsActive(long Id, bool IsActive)
@@ -131,7 +131,7 @@ namespace SCA.Services
             _educationStatusRepo.Update(_mapper.Map<EducationStatus>(data));
             _unitOfWork.SaveChanges();
             resultMessage = AlertResource.UpdateIsOk;
-            return Result.ReturnAsSuccess(resultMessage, null);
+            return Result.ReturnAsSuccess(null, resultMessage, null);
         }
         #endregion
 
@@ -139,7 +139,7 @@ namespace SCA.Services
         public async Task<ServiceResult> GetFaculty()
         {
             var dataList = _mapper.Map<List<FacultyDto>>(_facultyRepo.GetAll().ToList());
-            return Result.ReturnAsSuccess(null, dataList);
+            return Result.ReturnAsSuccess(null, null, dataList);
         }
 
         public async Task<List<FacultyDto>> GetFacultyForUI()
@@ -167,7 +167,7 @@ namespace SCA.Services
                 resultMessage = AlertResource.UpdateIsOk;
             }
             _unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess(resultMessage, null);
+            return Result.ReturnAsSuccess(null, resultMessage, null);
         }
 
         public async Task<ServiceResult> UpdateFacultIsActive(long Id, bool IsActive)
@@ -180,7 +180,7 @@ namespace SCA.Services
             _facultyRepo.Update(_mapper.Map<Faculty>(data));
             _unitOfWork.SaveChanges();
             resultMessage = AlertResource.UpdateIsOk;
-            return Result.ReturnAsSuccess(resultMessage, null);
+            return Result.ReturnAsSuccess(null, resultMessage, null);
         }
 
         #endregion
@@ -194,7 +194,7 @@ namespace SCA.Services
             {
                 x.CityName = cityList.Where(a => a.CityId == x.CityId).Select(s => s.CityName).FirstOrDefault();
             });
-            return Result.ReturnAsSuccess(null, dataList);
+            return Result.ReturnAsSuccess(null, null, dataList);
         }
 
         public async Task<List<HighSchoolDto>> GetHighSchoolForUI()
@@ -227,7 +227,7 @@ namespace SCA.Services
                 resultMessage = AlertResource.UpdateIsOk;
             }
             _unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess(resultMessage, null);
+            return Result.ReturnAsSuccess(null, resultMessage, null);
         }
 
         public async Task<ServiceResult> UpdatehighSchoolIsActive(long Id, bool IsActive)
@@ -240,7 +240,7 @@ namespace SCA.Services
             _highSchoolTypeRepo.Update(_mapper.Map<HighSchool>(data));
             _unitOfWork.SaveChanges();
             resultMessage = AlertResource.UpdateIsOk;
-            return Result.ReturnAsSuccess(resultMessage, null);
+            return Result.ReturnAsSuccess(null, resultMessage, null);
         }
 
         #endregion
@@ -248,7 +248,7 @@ namespace SCA.Services
         #region StudentClass
         public async Task<ServiceResult> GetStudentClass()
         {
-            return Result.ReturnAsSuccess(null, _mapper.Map<List<StudentClassDto>>(_classTypeRepo.GetAll().ToList()));
+            return Result.ReturnAsSuccess(null, null, _mapper.Map<List<StudentClassDto>>(_classTypeRepo.GetAll().ToList()));
         }
 
         public async Task<List<StudentClassDto>> GetStudentClassForUI()
@@ -274,7 +274,7 @@ namespace SCA.Services
                 resultMessage = AlertResource.UpdateIsOk;
             }
             _unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess(resultMessage, null);
+            return Result.ReturnAsSuccess(null, resultMessage, null);
         }
 
         public async Task<ServiceResult> UpdateStudentClassIsActive(long Id, bool IsActive)
@@ -287,7 +287,7 @@ namespace SCA.Services
             _classTypeRepo.Update(_mapper.Map<StudentClass>(data));
             _unitOfWork.SaveChanges();
             resultMessage = AlertResource.UpdateIsOk;
-            return Result.ReturnAsSuccess(resultMessage, null);
+            return Result.ReturnAsSuccess(null, resultMessage, null);
         }
 
         #endregion
@@ -301,7 +301,7 @@ namespace SCA.Services
             {
                 x.CityName = cityList.Where(a => a.CityId == x.CityId).Select(s => s.CityName).FirstOrDefault();
             });
-            return Result.ReturnAsSuccess(null, dataList);
+            return Result.ReturnAsSuccess(null, null, dataList);
         }
 
         public async Task<List<UniversityDto>> GetUniversityForUI()
@@ -334,7 +334,7 @@ namespace SCA.Services
                 resultMessage = AlertResource.UpdateIsOk;
             }
             _unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess(resultMessage, null);
+            return Result.ReturnAsSuccess(null, resultMessage, null);
         }
 
         public async Task<ServiceResult> UpdateUniversityIsActive(long Id, bool IsActive)
@@ -347,7 +347,7 @@ namespace SCA.Services
             _universityRepo.Update(_mapper.Map<University>(data));
             _unitOfWork.SaveChanges();
             resultMessage = AlertResource.UpdateIsOk;
-            return Result.ReturnAsSuccess(resultMessage, null);
+            return Result.ReturnAsSuccess(null, resultMessage, null);
         }
 
         #endregion
@@ -356,7 +356,7 @@ namespace SCA.Services
         public async Task<ServiceResult> GetAllSector()
         {
             var data = _sectorRepo.GetAll();
-            return Result.ReturnAsSuccess(null, data);
+            return Result.ReturnAsSuccess(null, null, data);
         }
 
         public async Task<List<Sector>> GetAllSectorForUI()
@@ -384,7 +384,7 @@ namespace SCA.Services
                 resultMessage = "Güncelleme İşlemi Başarılı";
             }
             _unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess(message: resultMessage, null);
+            return Result.ReturnAsSuccess(null, message: resultMessage, null);
         } 
         #endregion
 

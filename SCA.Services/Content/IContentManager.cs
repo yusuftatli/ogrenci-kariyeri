@@ -14,7 +14,7 @@ namespace SCA.Services
         /// makale kısa açıklamalarını listeler
         /// </summary>
         /// <returns></returns>
-        Task<ServiceResult> ContentShortList(ContentSearchDto dto);
+        Task<ServiceResult> ContentShortList(ContentSearchDto dto, UserSession session);
 
         /// <summary>
         /// Makaleleri içerikleri ile birlikte listeler

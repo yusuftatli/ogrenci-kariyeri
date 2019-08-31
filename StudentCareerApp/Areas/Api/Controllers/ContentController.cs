@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
 using SCA.Entity.Enums;
@@ -37,7 +38,7 @@ namespace StudentCareerApp.Areas.Api.Controller
         [HttpPost("ContentShortList")]
         public async Task<ServiceResult> ContentShortList([FromBody]ContentSearchDto dto)
         {
-            return await _contentManager.ContentShortList(dto);
+            return await _contentManager.ContentShortList(dto, JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
         }
 
         [HttpGet("ContentList")]

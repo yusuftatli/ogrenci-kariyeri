@@ -8,20 +8,20 @@
     var a = 1;
 
 }
-    <head>
-        <link href="~/Template/AngularComponents/treeselect/vue-treeselect.css" rel="stylesheet" />
-        <link href="~/Template/assets/node_modules/switchery/dist/switchery.css" rel="stylesheet" />
-        <script src="~/Template/AngularComponents/treeselect/vue.js"></script>
-        <script src="~/Template/AngularComponents/treeselect/vue-treeselect.js"></script>
-        <script src="~/Template/AngularComponents/treeselect/index.js"></script>
-        <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
-        <script src="~/ScriptController/assayController.js"></script>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <script src="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.js"></script>
-        <link href="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.css" rel="stylesheet" />
+<head>
+    <link href="~/Template/AngularComponents/treeselect/vue-treeselect.css" rel="stylesheet" />
+    <link href="~/Template/assets/node_modules/switchery/dist/switchery.css" rel="stylesheet" />
+    <script src="~/Template/AngularComponents/treeselect/vue.js"></script>
+    <script src="~/Template/AngularComponents/treeselect/vue-treeselect.js"></script>
+    <script src="~/Template/AngularComponents/treeselect/index.js"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
+    <script src="~/ScriptController/assayController.js"></script>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <script src="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.js"></script>
+    <link href="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.css" rel="stylesheet" />
 
-    </head>
+</head>
 
 
 <div class="page-wrapper" ng-app="MyApp" ng-controller="assayController">
@@ -57,8 +57,8 @@
                 <div class="card">
                     <div class="card-body">
                         <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item" ng-click="onClickDashboard()"> <a class="nav-link active" data-toggle="tab" href="#home" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">DashBoard</span></a> </li>
-                            <li class="nav-item" ng-click="onClickContent" ()> <a class="nav-link" data-toggle="tab" href="#AssayCreate" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Makale Ekle</span></a> </li>
+                            <li class="nav-item" ng-click="onClickDashboard()"> <a id="dashboardTab" class="nav-link active" data-toggle="tab" href="#home" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">DashBoard</span></a> </li>
+                            <li class="nav-item" ng-click="onClickContent" ()> <a id="contentTab" class="nav-link" data-toggle="tab" href="#AssayCreate" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Makale Ekle</span></a> </li>
                         </ul>
                         <div class="tab-content tabcontent-border">
 
@@ -209,6 +209,12 @@
                                                                 <th>Okunma</th>
                                                                 <th>Oluşturma Tarihi</th>
                                                                 <th>Yayınlanma Tarihi</th>
+                                                                <th>Detay</th>
+                                                                @*@if (@ViewBag.showColumn == "1" && @ViewBag.showColumn == "2" && @ViewBag.showColumn == "4")
+                                                                    {
+                                                                        <th>İşlem</th>
+                                                                    }*@
+
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -222,11 +228,15 @@
                                                                 <td ng-bind="x.createdDate | date:'MM/dd/yyyy HH:mm:ss'"></td>
                                                                 <td ng-bind="x.publishDate | date:'MM/dd/yyyy HH:mm:ss'"></td>
                                                                 <td>
-                                                                    <div class="btn-group">
-                                                                        <button ng-click="showContentDetail(x.id)" type="button" class="btn btn-primary">Aç</button>
-                                                                        <button data-toggle="modal" @*data-target="#addSubCategoryModal" *@ type="button" class="btn btn-primary">Diğer</button>
-                                                                    </div>
+                                                                    <button ng-click="showContentDetail(x.id)" type="button" class="btn btn-primary">Aç</button>
                                                                 </td>
+                                                                @*@if (@ViewBag.showColumn == "1" && @ViewBag.showColumn == "2" && @ViewBag.showColumn == "4")
+                                                                    {
+                                                                        <td>
+                                                                            <button ng-click="onClikckProcess(x)" type="button" class="btn btn-primary">İşlem</button>
+                                                                        </td>
+                                                                    }*@
+
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -492,7 +502,7 @@
                 format: 'dd.mm.yyyy'
             })
 
-             $("#publishDate").datepicker({
+            $("#publishDate").datepicker({
                 format: 'dd.mm.yyyy'
             });
 

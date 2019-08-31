@@ -35,7 +35,7 @@ namespace SCA.Services
             ServiceResult _res = new ServiceResult();
             Task t = new Task(() =>
             {
-                _res = Result.ReturnAsSuccess(null, _mapper.Map<List<TagDto>>(_tagRepo.GetAll()));
+                _res = Result.ReturnAsSuccess(null, null, _mapper.Map<List<TagDto>>(_tagRepo.GetAll()));
             });
             t.Start();
             return _res;
@@ -100,7 +100,7 @@ namespace SCA.Services
                 }
                 CreateTagRelation(tagRelationList);
             }
-            _res = Result.ReturnAsSuccess("", _mapper.Map<List<TagDto>>(_tagRepo.GetAll()));
+            _res = Result.ReturnAsSuccess(null, "", _mapper.Map<List<TagDto>>(_tagRepo.GetAll()));
             return _res;
         }
 

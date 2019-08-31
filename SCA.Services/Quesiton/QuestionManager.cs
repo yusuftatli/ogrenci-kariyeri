@@ -53,7 +53,7 @@ namespace SCA.Services
                 //               Count = _analysisManager.GetCountValue(ReadType.Test, _test.Id)
                 //           }).ToList();
 
-                _res = Result.ReturnAsSuccess(null, null);
+                _res = Result.ReturnAsSuccess(null, null, null);
             });
             t.Start();
             return _res;
@@ -93,7 +93,7 @@ namespace SCA.Services
                                    }).ToList()
                                }).ToList()
                            }).ToList();
-                _res = Result.ReturnAsSuccess(null, res);
+                _res = Result.ReturnAsSuccess(null, null, res);
             });
             t.Start();
             return _res;
@@ -134,7 +134,7 @@ namespace SCA.Services
 
                 }
                 _unitOfWork.SaveChanges();
-                _res = Result.ReturnAsSuccess(AlertResource.SuccessfulOperation, null);
+                _res = Result.ReturnAsSuccess(null, AlertResource.SuccessfulOperation, null);
             });
             t.Start();
             return _res;
@@ -179,7 +179,7 @@ namespace SCA.Services
 
                 var res = _unitOfWork.SaveChanges();
 
-                _res = Result.ReturnAsSuccess(AlertResource.SuccessfulOperation, null);
+                _res = Result.ReturnAsSuccess(null, AlertResource.SuccessfulOperation, null);
             });
             t.Start();
             return _res;

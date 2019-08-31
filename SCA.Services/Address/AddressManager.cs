@@ -32,7 +32,7 @@ namespace SCA.Services
         public async Task<ServiceResult> GetCities()
         {
             var data = _mapper.Map<List<CitiesDto>>(_citiesRepo.GetAll());
-            return Result.ReturnAsSuccess(null, data);
+            return Result.ReturnAsSuccess(null, null, data);
         }
 
         public async Task<ServiceResult> GetDistrict(int cityId)
@@ -42,7 +42,7 @@ namespace SCA.Services
                 return Result.ReturnAsFail(AlertResource.OperationFailed, null);
             }
             var data = _mapper.Map<List<DistrictDto>>(_districtRepo.GetAll(x => x.CityId == cityId));
-            return Result.ReturnAsSuccess(null, data);
+            return Result.ReturnAsSuccess(null, null, data);
         }
 
         public async Task<List<CitiesDto>> CityList()

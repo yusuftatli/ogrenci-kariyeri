@@ -70,7 +70,7 @@ namespace SCA.Services
                 resultMessage = AlertResource.UpdateIsOk;
             }
             _unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess(message: resultMessage, null);
+            return Result.ReturnAsSuccess(null, message: resultMessage, null);
         }
 
         public async Task<ServiceResult> ScreenMasterState(long id, bool state)
@@ -78,7 +78,7 @@ namespace SCA.Services
             var data = _screenMasterRepo.Get(x => x.Id == id);
             data.IsActive = state;
             _screenMasterRepo.Update(_mapper.Map<ScreenMaster>(data));
-            return Result.ReturnAsSuccess(message: "Veri Güncelleme İşlemi Başarılı", null);
+            return Result.ReturnAsSuccess(null, message: "Veri Güncelleme İşlemi Başarılı", null);
         }
 
         #endregion
@@ -108,7 +108,7 @@ namespace SCA.Services
                 resultMessage = AlertResource.UpdateIsOk;
             }
             _unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess(message: resultMessage, null);
+            return Result.ReturnAsSuccess(null, message: resultMessage, null);
         }
 
         public async Task<ServiceResult> ScreenDetailState(long id, bool state)
@@ -116,7 +116,7 @@ namespace SCA.Services
             var data = _screenDetailRepo.Get(x => x.Id == id);
             data.IsActive = state;
             _screenDetailRepo.Update(_mapper.Map<ScreenDetail>(data));
-            return Result.ReturnAsSuccess(message: "Veri Güncelleme İşlemi Başarılı", null);
+            return Result.ReturnAsSuccess(null, message: "Veri Güncelleme İşlemi Başarılı", null);
         }
 
         #endregion

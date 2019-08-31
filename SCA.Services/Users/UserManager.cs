@@ -107,7 +107,7 @@ namespace SCA.Services
             {
                 var res = _mapper.Map<UserSession>(_userRepo.Get(x => x.EmailAddress.Equals(email) && x.Password.Equals(password)));
                 res.Token = _authManager.GenerateToken(res);
-                return Result.ReturnAsSuccess("Hoşgeldin " + res.Name + "!", res);
+                return Result.ReturnAsSuccess(null, "Hoşgeldin " + res.Name + "!", res);
             }
             else
                 return Result.ReturnAsFail("Bazı bilgileriniz hatalı oldu!");
@@ -119,7 +119,7 @@ namespace SCA.Services
             {
                 var res = _mapper.Map<UserSession>(_userRepo.Get(x => x.EmailAddress.Equals(email) && x.Password.Equals(password)));
                 res.Token = _authManager.GenerateToken(res);
-                return Result.ReturnAsSuccess("Hoşgeldin " + res.Name + "!", res);
+                return Result.ReturnAsSuccess(null, "Hoşgeldin " + res.Name + "!", res);
             }
             else
                 return Result.ReturnAsFail("Bazı bilgileriniz hatalı oldu!");
@@ -166,7 +166,7 @@ namespace SCA.Services
             }
             else
             {
-                _res = Result.ReturnAsSuccess(message: resultMessage, userRes.Id);
+                _res = Result.ReturnAsSuccess(null, message: resultMessage, userRes.Id);
             }
             return _res;
         }
@@ -275,7 +275,7 @@ namespace SCA.Services
             }
             else
             {
-                _res = Result.ReturnAsSuccess(message: resultMessage, _userId);
+                _res = Result.ReturnAsSuccess(null, message: resultMessage, _userId);
             }
 
             return _res;
@@ -311,7 +311,7 @@ namespace SCA.Services
             data.IsActive = value;
             _userRepo.Update(_mapper.Map<Users>(data));
             _unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess();
+            return Result.ReturnAsSuccess(null, null, null);
         }
 
     }

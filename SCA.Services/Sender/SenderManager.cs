@@ -12,11 +12,11 @@ namespace SCA.Services
     {
         public async Task<ServiceResult> SendEmail(string to = "", string subject = "", string emailAddress = "")
         {
-            return Result.ReturnAsSuccess(AlertResource.EmailSendAsSuccessfuly, null);
+            return Result.ReturnAsSuccess(null, AlertResource.EmailSendAsSuccessfuly, null);
         }
         public async Task<ServiceResult> SendMessage(string phoneNumber)
         {
-            return Result.ReturnAsSuccess(AlertResource.MessageSendAsSuccessfuly, null);
+            return Result.ReturnAsSuccess(null, AlertResource.MessageSendAsSuccessfuly, null);
         }
     }
 }

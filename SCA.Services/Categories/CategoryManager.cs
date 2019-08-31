@@ -36,7 +36,7 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> MainCategoryList(long? id)
         {
-            return Result.ReturnAsSuccess(null, _mapper.Map<List<MainCategoryDto>>(_categoryRepo.GetAll(x => x.IsDeleted.Equals(false) && x.ParentId.Equals(id)).ToList()));
+            return Result.ReturnAsSuccess(null, null, _mapper.Map<List<MainCategoryDto>>(_categoryRepo.GetAll(x => x.IsDeleted.Equals(false) && x.ParentId.Equals(id)).ToList()));
         }
         /// <summary>
         /// Kategorileri listeler, parenttan bağımsız tüm kategoriler
@@ -44,7 +44,7 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> MainCategoryListWithParents()
         {
-            return Result.ReturnAsSuccess(null, _mapper.Map<List<MainCategoryDto>>(_categoryRepo.GetAll(x => x.IsDeleted.Equals(false))));
+            return Result.ReturnAsSuccess(null, null, _mapper.Map<List<MainCategoryDto>>(_categoryRepo.GetAll(x => x.IsDeleted.Equals(false))));
         }
         /// <summary>
         /// Kategori ekler

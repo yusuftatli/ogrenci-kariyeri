@@ -123,7 +123,7 @@ namespace SCA.Repository.Cache
                 cacheList.Add(appCache);
             }
 
-            return Result.ReturnAsSuccess("Operation Başarılı", cacheList);
+            return Result.ReturnAsSuccess(null, "Operation Başarılı", cacheList);
         }
     }
 }

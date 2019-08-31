@@ -71,7 +71,7 @@ namespace SCA.Services
             }
 
             var res = _unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess(null, null);
+            return Result.ReturnAsSuccess(null, null, null);
         }
 
         public  long GetCountValue(ReadType readType, long id)

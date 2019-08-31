@@ -43,7 +43,7 @@ namespace SCA.Services
         public async Task<ServiceResult> GetAllCommentsPendingApproval()
         {
             var result = _mapper.Map<List<CommentsDto>>((_commentRepo.GetAll(x => x.Approved.Equals(false))));
-            return Result.ReturnAsSuccess(null, result);
+            return Result.ReturnAsSuccess(null, null, result);
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace SCA.Services
             data.Approved = false;
             _commentRepo.Update(data);
             _unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess("Yorum onaylandı", null);
+            return Result.ReturnAsSuccess(null, "Yorum onaylandı", null);
         }
     }
 }

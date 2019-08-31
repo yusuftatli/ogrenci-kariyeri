@@ -44,7 +44,7 @@ namespace SCA.Services
         /// makale kısa açıklamalarını listeler
         /// </summary>
         /// <returns></returns>
-        public async Task<ServiceResult> ContentShortList(ContentSearchDto dto)
+        public async Task<ServiceResult> ContentShortList(ContentSearchDto dto, UserSession session)
         {
             ServiceResult _res = new ServiceResult();
             try
@@ -59,7 +59,7 @@ namespace SCA.Services
 
 
                 var dataList = _db.Query<ContentShortListDto>(query).ToList();
-                if (dataList.Count>0)
+                if (dataList.Count > 0)
                 {
                     dataList.ForEach(x =>
                     {
@@ -68,7 +68,7 @@ namespace SCA.Services
                     });
                 }
 
-                return Result.ReturnAsSuccess(message: AlertResource.SuccessfulOperation, dataList);
+                return Result.ReturnAsSuccess(session.RoleTypeId.ToString(), message: AlertResource.SuccessfulOperation, dataList);
             }
             catch (Exception _ex)
             {
@@ -100,7 +100,7 @@ namespace SCA.Services
             });
 
 
-            return Result.ReturnAsSuccess(null, dataList);
+            return Result.ReturnAsSuccess(null, null, dataList);
         }
         public async Task<ServiceResult> GetContentUI(string url)
         {
@@ -112,17 +112,17 @@ namespace SCA.Services
             contentData.WriterName = userData.Name + " " + userData.Surname;
             contentData.WriterImagePath = userData.ImagePath;
 
-            return Result.ReturnAsSuccess(null, contentData);
+            return Result.ReturnAsSuccess(null, null, contentData);
         }
         public async Task<ServiceResult> GetContent(long id)
         {
             var listData = _mapper.Map<ContentDto>(_contentRepo.Get(x => x.Id == id));
-            return Result.ReturnAsSuccess(null, listData);
+            return Result.ReturnAsSuccess(null, null, listData);
         }
         public async Task<ServiceResult> GetContent(string url)
         {
             var listData = _mapper.Map<ContentDto>(_contentRepo.Get(x => x.SeoUrl == url));
-            return Result.ReturnAsSuccess(null, listData);
+            return Result.ReturnAsSuccess(null, null, listData);
         }
         public async Task<ServiceResult> UpdateContentPublish(long id, PublishState publishState)
         {
@@ -142,7 +142,7 @@ namespace SCA.Services
                 _contentRepo.Update(data);
                 _unitOfWork.SaveChanges();
             }
-            return Result.ReturnAsSuccess();
+            return Result.ReturnAsSuccess(null, null, null);
         }
         /// <summary>
         /// Makaleleri içerikleri ile birlikte listeler
@@ -150,7 +150,7 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> ContentList()
         {
-            return Result.ReturnAsSuccess(null, _mapper.Map<List<ContentDto>>(_contentRepo.GetAll(x => x.IsDeleted.Equals(false)).ToList()));
+            return Result.ReturnAsSuccess(null, null, _mapper.Map<List<ContentDto>>(_contentRepo.GetAll(x => x.IsDeleted.Equals(false)).ToList()));
         }
         /// <summary>
         /// makale ekler
@@ -188,7 +188,7 @@ namespace SCA.Services
             _unitOfWork.SaveChanges();
             await _tagManager.CreateTag(dto.Tags, res.Id, ReadType.Content);
             await _categoryManager.CreateCategoryRelation(_categoryManager.GetCategoryRelation(dto.Category, res.Id, ReadType.Content));
-            return Result.ReturnAsSuccess(message: resultMessage, null);
+            return Result.ReturnAsSuccess(null, message: resultMessage, null);
         }
         /// <summary>
         /// makale siler
