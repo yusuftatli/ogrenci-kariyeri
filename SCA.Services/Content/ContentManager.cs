@@ -140,7 +140,7 @@ namespace SCA.Services
                 var data = _contentRepo.Get(x => x.Id == dto.id);
                 data.PublishStateType = (PublishState)dto.publishState;
                 _contentRepo.Update(data);
-                _unitOfWork.SaveChanges();
+              var res=  _unitOfWork.SaveChanges();
             }
             return Result.ReturnAsSuccess(null, null, null);
         }
