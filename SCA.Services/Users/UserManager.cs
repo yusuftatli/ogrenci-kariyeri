@@ -64,19 +64,35 @@ namespace SCA.Services
         public async Task<List<UserModelList>> GetUserList()
         {
             var roleTypes = await _roleManager.GetRoles();
-            var data = _mapper.Map<List<UserModelList>>(_userRepo.GetAll().ToList());
+            var data = _mapper.Map<List<UserModelList>>(_userRepo.GetAll(x => x.RoleTypeId != 1).ToList());
 
             data.ForEach(x =>
             {
                 x.GenderDescription = x.GenderId.GetDescription();
-                if (x.RoleTypeId != 0)
+                if (x.RoleTypeId == 2)
                 {
-                    x.RoleDescription = roleTypes.Where(y => y.Id == x.RoleTypeId).Select(s => s.Description).FirstOrDefault().ToString();
+                    x.RoleDescription = "Admin";
+                    ;
+                }
+                else if (x.RoleTypeId == 3)
+                {
+                    x.RoleDescription = "Öğrenci";
+                }
+                else if (x.RoleTypeId == 4)
+                {
+                    x.RoleDescription = "Editör";
+                }
+                else if (x.RoleTypeId == 5)
+                {
+                    x.RoleDescription = "Yazar";
                 }
                 else
                 {
                     x.RoleDescription = "Yok";
                 }
+
+
+
                 if (x.EducationStatusId != 0)
                 {
                     x.EducationDescription = x.EducationStatusId.GetDescription();
@@ -101,16 +117,16 @@ namespace SCA.Services
             return dataResult;
         }
 
-        public async Task<ServiceResult> UserLoginByMobil(string email, string password)
+        public async Task<ServiceResult> UserLoginByMobil(MobilUserLoginDto dto)
         {
-            if (_userRepo.Any(x => x.Password.Equals(password) && x.EmailAddress.Equals(email)))
+            if (_userRepo.Any(x => x.Password.Equals(dto.password) && x.EmailAddress.Equals(dto.username)))
             {
-                var res = _mapper.Map<UserSession>(_userRepo.Get(x => x.EmailAddress.Equals(email) && x.Password.Equals(password)));
+                var res = _mapper.Map<UserSession>(_userRepo.Get(x => x.EmailAddress.Equals(dto.username) && x.Password.Equals(dto.password)));
                 res.Token = _authManager.GenerateToken(res);
                 return Result.ReturnAsSuccess(null, "Hoşgeldin " + res.Name + "!", res);
             }
             else
-                return Result.ReturnAsFail("Bazı bilgileriniz hatalı oldu!");
+                return Result.ReturnAsFail("Kullanıcı Adı veya Şifre Hatalı");
         }
 
         public async Task<ServiceResult> CheckUserForLogin(string email, string password)

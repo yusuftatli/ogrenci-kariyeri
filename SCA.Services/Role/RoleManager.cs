@@ -55,7 +55,7 @@ namespace SCA.Services
         }
         public async Task<List<RoleTypeDto>> GetRoles()
         {
-            var res = _mapper.Map<List<RoleTypeDto>>(_roleTypeRepo.GetAll(x => x.Id == 1));//süper admin geitrme
+            var res = _mapper.Map<List<RoleTypeDto>>(_roleTypeRepo.GetAll(x => x.Id != 1));//süper admin geitrme
             return res;
         }
 
