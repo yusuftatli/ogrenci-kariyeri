@@ -37,6 +37,6 @@ namespace SCA.Services
         /// <param name="value"></param>
         /// <returns></returns>
         Task<ServiceResult> UpdateUserStatu(long id, bool value);
-        Task<ServiceResult> UserLoginByMobil(string email, string password);
+        Task<ServiceResult> UserLoginByMobil(MobilUserLoginDto dto);
     }
 }

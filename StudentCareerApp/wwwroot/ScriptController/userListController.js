@@ -5,18 +5,11 @@ app.controller('userListController', function ($scope, $http, $filter) {
     getUserList();
 
 
-    var getUserReq = function () {
-        return {
-            method: 'Get',
-            url: _link + "/User/web-getallusers",
-            headers: Headers
-        };
-    };
 
     function getUserList() {
         $scope.showTable = true;
         $http({
-            method: 'Get',
+            method: "get",
             url: _link + "/User/web-getallusers",
             headers: Headers
         }).then(function (res) {
@@ -31,7 +24,9 @@ app.controller('userListController', function ($scope, $http, $filter) {
         });
     }
 
+    $scope.postRoleTypeProcess = function (x) {
 
+    };
 
     function pagin() {
         $scope.currentPage = 0;
@@ -48,7 +43,7 @@ app.controller('userListController', function ($scope, $http, $filter) {
 
         for (var i = 0; i < 50; i++) {
             $scope.data.push("Item " + i);
-        };
+        }
 
         $scope.$watch('search', function (newValue, oldValue) {
             if (oldValue !== newValue) {
@@ -63,6 +58,13 @@ app.controller('userListController', function ($scope, $http, $filter) {
         "Content-Type": "application/json"
     };
 
+    var userListReq = function () {
+        return {
+            method: "get",
+            url: _link + "/User/web-getallusers",
+            headers: Headers
+        };
+    };
 
 });
 

@@ -67,9 +67,9 @@ namespace StudentCareerApp.Areas.Api.Controller
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost("mobil-userlogin")]
-        public async Task<ServiceResult> UserLoginByMobil(string email, string password)
+        public async Task<ServiceResult> UserLoginByMobil(MobilUserLoginDto dto)
         {
-            return await _userManager.UserLoginByMobil(email, password);
+            return await _userManager.UserLoginByMobil(dto);
         }
     }
 }
