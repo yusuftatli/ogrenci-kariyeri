@@ -172,10 +172,15 @@ app.controller("assayController", function ($scope, $http, $filter) {
             success: function (e) {
                 if (e.resultCode === 200) {
                     getMainCategories();
-                    getTags();
+                    // getTags();
                     console.log($scope.assayCreate);
 
-
+                    $scope.assayCreate.header = e.data.header;
+                    $("#roxyField").val(e.data.imagePath);
+                    $("#img_roxyField").attr('src', e.data.imagePath);
+                    $("#publishHour").val(moment(e.data.publishDate).format('HH:mm'));
+                    $("#publishDate").datepicker("setDate", new Date(moment(e.data.publishDate)));
+                    
                     changeSwitchery($("#togglwPublish"), e.data.isHeadLine);
                     changeSwitchery($("#toggleManset"), e.data.isManset);
                     changeSwitchery($("#toggleMainMenu"), e.data.isMainMenu);

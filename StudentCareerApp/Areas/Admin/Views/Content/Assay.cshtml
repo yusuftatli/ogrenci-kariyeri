@@ -210,10 +210,10 @@
                                                                 <th>Oluşturma Tarihi</th>
                                                                 <th>Yayınlanma Tarihi</th>
                                                                 <th>Detay</th>
-                                                                @*@if (@ViewBag.showColumn == "1" && @ViewBag.showColumn == "2" && @ViewBag.showColumn == "4")
-                                                                    {
-                                                                        <th>İşlem</th>
-                                                                    }*@
+                                                                @if (ViewBag.showColumn == 1 && ViewBag.showColumn == 2 && ViewBag.showColumn == 4)
+                                                                {
+                                                                    <th>İşlem</th>
+                                                                }
 
                                                             </tr>
                                                         </thead>
@@ -230,12 +230,12 @@
                                                                 <td>
                                                                     <button ng-click="showContentDetail(x.id)" type="button" class="btn btn-primary">Aç</button>
                                                                 </td>
-                                                                @*@if (@ViewBag.showColumn == "1" && @ViewBag.showColumn == "2" && @ViewBag.showColumn == "4")
-                                                                    {
-                                                                        <td>
-                                                                            <button ng-click="onClikckProcess(x)" type="button" class="btn btn-primary">İşlem</button>
-                                                                        </td>
-                                                                    }*@
+                                                                @if (ViewBag.showColumn == 1 && ViewBag.showColumn == 2 && ViewBag.showColumn == 4)
+                                                                {
+                                                                    <td>
+                                                                        <button ng-click="onClikckProcess(x)" type="button" class="btn btn-primary">İşlem</button>
+                                                                    </td>
+                                                                }
 
                                                             </tr>
                                                         </tbody>
