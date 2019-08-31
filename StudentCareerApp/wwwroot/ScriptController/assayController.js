@@ -56,7 +56,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
     $scope.options = [];
     $scope.tagOptions = [];
     $scope.searchModel = {};
-    
+
 
     $scope.onClickDashboard = function () {
         $("#AssayCreate").hide();
@@ -140,10 +140,10 @@ app.controller("assayController", function ($scope, $http, $filter) {
 
     $scope.postPublishState = function () {
         $scope.showSaveLoading = true;
-        var dds = $scope.contentProcess.publishState;
         $http(publishStateReq()).then(function (res) {
             if (res.data.resultCode === 200) {
                 shortMessage(res.data.message, "s");
+                $("#contentProcessModal").modal('hide');
                 getContentShortList();
             } else {
                 shortMessage(res.data.message, "e");

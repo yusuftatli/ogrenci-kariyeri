@@ -330,5 +330,26 @@ namespace SCA.Services
             return Result.ReturnAsSuccess(null, null, null);
         }
 
+        public async Task<ServiceResult> UpdateUserRoleType(UserRoleTypeDto dto, UserSession session)
+        {
+            ServiceResult _res = new ServiceResult();
+            string resultMessage = "";
+            if (session.RoleTypeId == 1 || session.RoleTypeId == 2)
+            {
+                var data = _userRepo.Get(x => x.Id == dto.userId);
+                data.RoleTypeId = dto.RoleTypeId;
+                _userRepo.Update(data);
+                var res = _unitOfWork.SaveChanges();
+                resultMessage = "Kullanıcı Rol Atama Başarı ile gerçekleşmiştir.";
+                _res = Result.ReturnAsSuccess(message: resultMessage);
+            }
+            else
+            {
+                resultMessage = "Bu işlemi yapmak için yetkiniz bulunmamaktadır.";
+                _res = Result.ReturnAsFail(message: resultMessage);
+            }
+            return _res;
+        }
+
     }
 }

@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using SCA.Entity.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +17,14 @@ namespace StudentCareerApp.Areas.Admin.Controllers
         [HttpGet("UserList")]
         public IActionResult UserList()
         {
+            ViewBag.showColumn = JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")).RoleTypeId;
             return View();
         }
 
         [HttpGet("CreateUser")]
         public IActionResult CreateUser()
         {
+            ViewBag.showColumn = JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")).RoleTypeId;
             return View();
         }
 

@@ -140,7 +140,7 @@ namespace SCA.Services
                 var data = _contentRepo.Get(x => x.Id == dto.id);
                 data.PublishStateType = (PublishState)dto.publishState;
                 _contentRepo.Update(data);
-              var res=  _unitOfWork.SaveChanges();
+                var res = _unitOfWork.SaveChanges();
             }
             return Result.ReturnAsSuccess(null, null, null);
         }
@@ -223,6 +223,32 @@ namespace SCA.Services
         }
         public async Task<List<ContentForHomePageDTO>> GetContentForHomePage(HitTypes hitTypes, int count)
         {
+            List<ContentShortListUIDto> listData = new List<ContentShortListUIDto>();
+
+            if (hitTypes == HitTypes.LastAssay)
+            {
+                listData = _mapper.Map<List<ContentShortListUIDto>>(_contentRepo.GetAll().OrderByDescending(x => x.PublishDate).Take(count).ToList());
+            }
+
+            else if(hitTypes==HitTypes.Manset)
+            {
+                listData = _mapper.Map<List<ContentShortListUIDto>>(_contentRepo.GetAll().OrderByDescending(x => x.PublishDate).Take(count).ToList());
+            }
+
+            else if (hitTypes == HitTypes.MostPopuler)
+            {
+                listData = _mapper.Map<List<ContentShortListUIDto>>(_contentRepo.GetAll().OrderByDescending(x => x.PublishDate).Take(count).ToList());
+            }
+
+            else if (hitTypes == HitTypes.DailyMostPopuler)
+            {
+                listData = _mapper.Map<List<ContentShortListUIDto>>(_contentRepo.GetAll().OrderByDescending(x => x.PublishDate).Take(count).ToList());
+            }
+
+            else if (hitTypes == HitTypes.HeadLine)
+            {
+                listData = _mapper.Map<List<ContentShortListUIDto>>(_contentRepo.GetAll().OrderByDescending(x => x.PublishDate).Take(count).ToList());
+            }
             return ComtentFake.FakeContentList();
         }
     }

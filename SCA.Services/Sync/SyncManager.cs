@@ -59,7 +59,7 @@ namespace SCA.Services
                         ContentDto dto = new ContentDto();
 
                         HttpClient http = new HttpClient();
-                        string url = @"https://ogrencikariyeri.com/panel/yusuf.php?act=haber&id="+item.ID;
+                        string url = @"https://ogrencikariyeri.com/panel/yusuf.php?act=haber&id=" + item.ID;
 
                         HttpClient client = new HttpClient();
                         var response = await client.GetAsync(url);
@@ -70,6 +70,19 @@ namespace SCA.Services
                         dto.Header = assayDetail.post_title;
                         dto.ContentDescription = assayDetail.post_content;
                         dto.UserId = Convert.ToInt64(assayDetail.post_author);
+
+                        dto.Category = assayDetail.kategori;
+
+                        if (!string.IsNullOrEmpty(assayDetail.appStaj))
+                        {
+                            dto.InternId = Convert.ToInt32(assayDetail.appStaj);
+                        }
+
+
+                        if (!string.IsNullOrEmpty(assayDetail.appEtkinlik))
+                        {
+                            dto.EventId = Convert.ToInt32(assayDetail.appEtkinlik);
+                        }
 
                         if (assayDetail.appKat != null)
                         {
@@ -109,28 +122,32 @@ namespace SCA.Services
                         }
 
                         Content res = _contentRepo.Add(_mapper.Map<Content>(dto));
-                        _unitOfWork.SaveChanges();
+                      var res1=  _unitOfWork.SaveChanges();
 
-                        if (assayDetail.yorumlar.Count > 0)
+                        if (assayDetail.yorumlar!=null)
                         {
-                            List<CommentsDto> yorumList = new List<CommentsDto>();
-                            foreach (var _yorum in assayDetail.yorumlar)
+                            if (assayDetail.yorumlar.Count > 0)
                             {
-                                CommentsDto yorum = new CommentsDto();
-                                yorum.Approved = true;
-                                yorum.ArticleId = res.Id;
-                                yorum.PostDate = Convert.ToDateTime(_yorum.tarih);
-                                yorum.UserID = Convert.ToInt64(_yorum.uye);
-                                yorum.userName = _yorum.isim;
-                                yorum.Comment = _yorum.yorum;
-                                yorumList.Add(yorum);
+                                List<CommentsDto> yorumList = new List<CommentsDto>();
+                                foreach (var _yorum in assayDetail.yorumlar)
+                                {
+                                    CommentsDto yorum = new CommentsDto();
+                                    yorum.Approved = true;
+                                    yorum.ArticleId = res.Id;
+                                    yorum.PostDate = Convert.ToDateTime(_yorum.tarih);
+                                    yorum.UserID = Convert.ToInt64(_yorum.uye);
+                                    yorum.userName = _yorum.isim;
+                                    yorum.Comment = _yorum.yorum;
+                                    yorumList.Add(yorum);
+                                }
+                                _commentRepo.AddRange(_mapper.Map<List<Comments>>(yorumList));
                             }
-                            _commentRepo.AddRange(_mapper.Map<List<Comments>>(yorumList));
+                            _unitOfWork.SaveChanges();
                         }
-                        _unitOfWork.SaveChanges();
+                        
 
                     }
-               }
+                }
             }
             catch (Exception ex)
             {
