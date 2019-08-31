@@ -56,6 +56,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
     $scope.options = [];
     $scope.tagOptions = [];
     $scope.searchModel = {};
+    
 
     $scope.onClickDashboard = function () {
         $("#AssayCreate").hide();
@@ -199,6 +200,12 @@ app.controller("assayController", function ($scope, $http, $filter) {
                     console.log($scope.assayCreate);
 
                     $scope.assayCreate.header = e.data.header;
+                    $scope.assayCreate.eventId = e.data.eventId;
+                    $scope.assayCreate.internId = e.data.internId;
+                    $scope.assayCreate.visibleId = e.data.visibleId;
+                    $scope.categoryValue = e.data.category != null ? e.data.category.split(',') : "";
+                    $scope.tagsValue = e.data.tags != null ? e.data.tags.split(',') : "";
+                    CKEDITOR.instances.ckeditorForAssayContent.setData(e.data.contentDescription);
                     $("#roxyField").val(e.data.imagePath);
                     $("#img_roxyField").attr('src', e.data.imagePath);
                     $("#publishHour").val(moment(e.data.publishDate).format('HH:mm'));
