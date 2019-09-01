@@ -78,5 +78,11 @@ namespace StudentCareerApp.Areas.Api.Controller
         {
             return await _userManager.UpdateUserRoleType(dto, JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
         }
+
+        [HttpGet("web-token")]
+        public async Task<ServiceResult> WebToken()
+        {
+            return Result.ReturnAsSuccess(data: JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")).Token);
+        }
     }
 }

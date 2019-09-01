@@ -102,10 +102,23 @@ namespace SCA.Services
 
             return Result.ReturnAsSuccess(null, null, dataList);
         }
-        public async Task<ServiceResult> GetContentUI(string url)
+        public async Task<ServiceResult> GetContentUI(string seoUrl)
         {
             ContentForUIDto result = new ContentForUIDto();
-            var contentData = _mapper.Map<ContenUIDto>(_contentRepo.Get(x => x.SeoUrl == url));
+            var contentData = _mapper.Map<ContenUIDto>(_contentRepo.Get(x => x.SeoUrl == seoUrl && x.PlatformType != PlatformType.Mobil));
+
+            var userData = _userManager.GetUserInfo(contentData.CreatedUserId);
+
+            contentData.WriterName = userData.Name + " " + userData.Surname;
+            contentData.WriterImagePath = userData.ImagePath;
+
+            return Result.ReturnAsSuccess(null, null, contentData);
+        }
+
+        public async Task<ServiceResult> GetContentForMobil(string seoUrl)
+        {
+            ContentForUIDto result = new ContentForUIDto();
+            var contentData = _mapper.Map<ContenUIDto>(_contentRepo.Get(x => x.SeoUrl == seoUrl && x.PlatformType == PlatformType.Mobil));
 
             var userData = _userManager.GetUserInfo(contentData.CreatedUserId);
 
@@ -230,7 +243,7 @@ namespace SCA.Services
                 listData = _mapper.Map<List<ContentShortListUIDto>>(_contentRepo.GetAll().OrderByDescending(x => x.PublishDate).Take(count).ToList());
             }
 
-            else if(hitTypes==HitTypes.Manset)
+            else if (hitTypes == HitTypes.Manset)
             {
                 listData = _mapper.Map<List<ContentShortListUIDto>>(_contentRepo.GetAll().OrderByDescending(x => x.PublishDate).Take(count).ToList());
             }

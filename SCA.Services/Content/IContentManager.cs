@@ -56,5 +56,19 @@ namespace SCA.Services
         Task<List<ContentForHomePageDTO>> GetContentForHomePage(HitTypes hitTypes, int count);
 
         Task<ServiceResult> GetContent(long id);
+
+        /// <summary>
+        /// makale detay servisi
+        /// </summary>
+        /// <param name="seoUrl"></param>
+        /// <returns></returns>
+        Task<ServiceResult> GetContentUI(string seoUrl);
+
+        /// <summary>
+        /// mobil makale detay servisi
+        /// </summary>
+        /// <param name="seoUrl"></param>
+        /// <returns></returns>
+        Task<ServiceResult> GetContentForMobil(string seoUrl)
     }
 }
