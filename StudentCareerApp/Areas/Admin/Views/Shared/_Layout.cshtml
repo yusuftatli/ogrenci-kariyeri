@@ -704,3 +704,20 @@
             width: 128px;
         }
 </style>
+
+
+<script>
+    $.ajax({
+        url: _link + "/User/web-token",
+        type: "GET",
+        dataType: Json_,
+        contentType: ContentType_,
+        success: function (e) {
+            if (e.resultCode === 200) {
+                localStorage.setItem("token", e.data);
+            } else {
+                shortMessage("Api token alınırken hata meydana geldi", "e");
+            }
+        }
+    });
+</script>
