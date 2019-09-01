@@ -18,5 +18,7 @@ namespace SCA.Entity.Enums
         ConstantMainMenu = 7,
         [Display(Name = "LastAssay")]
         LastAssay = 7,
+        [Display(Name = "CategoryNews")]
+        CategoryNews = 8
     }
 }
