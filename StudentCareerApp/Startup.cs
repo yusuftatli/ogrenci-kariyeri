@@ -137,6 +137,7 @@ namespace StudentCareerApp
             services.AddTransient<ICompanyClubManager, CompanyClubManager>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IErrorManagement, ErrorManagement>();
+            services.AddTransient<IPageManager, PageManager>();
             #endregion
 
             #region Auto Mapper
@@ -271,6 +272,14 @@ namespace StudentCareerApp
                 cfg.CreateMap<CompanyClubs, CompanyClubsDto>().ReverseMap();
 
                 #endregion
+
+                #region pages
+
+                cfg.CreateMap<BasicPages, BasicPagesDto>().ReverseMap();
+
+                #endregion
+
+                services.AddMvc().AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             });
 
             services.AddSpaStaticFiles(configuration =>

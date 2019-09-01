@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Makale Yönetimi";
+    ViewBag.Title = "Sayfa yönetimi";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
@@ -16,6 +16,7 @@
     <script src="~/Template/AngularComponents/treeselect/index.js"></script>
     <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
     <script src="~/ScriptController/assayController.js"></script>
+    <script src="~/ScriptController/pagesController.js"></script>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <script src="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.js"></script>
@@ -24,7 +25,7 @@
 </head>
 
 
-<div class="page-wrapper" ng-app="MyApp" ng-controller="assayController">
+<div class="page-wrapper" ng-app="MyApp" ng-controller="pageController">
     <!-- ============================================================== -->
     <!-- Container fluid  -->
     <!-- ============================================================== -->
@@ -34,13 +35,13 @@
         <!-- ============================================================== -->
         <div class="row page-titles">
             <div class="col-md-5 align-self-center">
-                <h4 class="text-themecolor">Makale Yönetimi</h4>
+                <h4 class="text-themecolor">Sayfa Yönetimi</h4>
             </div>
             <div class="col-md-7 align-self-center text-right">
                 <div class="d-flex justify-content-end align-items-center">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Makale Yönetimi</a></li>
-                        <li class="breadcrumb-item active">Makale  Yönetimi</li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Sayfa Yönetimi</a></li>
+                        <li class="breadcrumb-item active">Sayfa Yönetimi</li>
                     </ol>
                 </div>
             </div>
@@ -57,223 +58,62 @@
                 <div class="card">
                     <div class="card-body">
                         <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item" ng-click="onClickDashboard()"> <a id="dashboardTab" class="nav-link active" data-toggle="tab" href="#home" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">DashBoard</span></a> </li>
-                            <li class="nav-item" ng-click="onClickContent" ()> <a id="contentTab" class="nav-link" data-toggle="tab" href="#AssayCreate" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Makale Ekle</span></a> </li>
+                            <li class="nav-item" ng-click="onClickPageList()"> <a id="pageListTap" class="nav-link active" data-toggle="tab" href="#PageList" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Sayfalar</span></a> </li>
+                            <li class="nav-item" ng-click="onClickPage" ()> <a id="pageTab" class="nav-link" data-toggle="tab" href="#PageCreate" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Sayfa Ekle</span></a> </li>
                         </ul>
                         <div class="tab-content tabcontent-border">
 
                             <div class="tab-pane active" id="home" role="tabpanel">
-                                <br />
-                                <div class="row" ng-model="rowdata">
-                                    <!-- Column -->
-                                    <div class="col-lg-3 col-md-6">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row p-t-10 p-b-10">
-                                                    <!-- Column -->
-                                                    <div class="col p-r-0">
-                                                        <h1 class="font-light" ng-bind="contentDashboard[0].quantity"></h1>
-                                                        <h6 class="text-muted">Tolam Test</h6>
-                                                    </div>
-                                                    <!-- Column -->
-                                                    <div class="col text-right align-self-center">
-                                                        <div data-label="{{contentDashboard[0].percent}}%" class="css-bar m-b-0 css-bar-primary css-bar-20"><i class="mdi mdi-account-circle"></i></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Column -->
-                                    <!-- Column -->
-                                    <div class="col-lg-3 col-md-6">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row p-t-10 p-b-10">
-                                                    <!-- Column -->
-                                                    <div class="col p-r-0">
-                                                        <h1 class="font-light" ng-bind="contentDashboard[1].quantity"></h1>
-                                                        <h6 class="text-muted">Yayınlanmış</h6>
-                                                    </div>
-                                                    <!-- Column -->
-                                                    <div class="col text-right align-self-center">
-                                                        <div data-label="{{contentDashboard[1].percent}}%" class="css-bar m-b-0 css-bar-danger css-bar-20"><i class="mdi mdi-briefcase-check"></i></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Column -->
-                                    <!-- Column -->
-                                    <div class="col-lg-3 col-md-6">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row p-t-10 p-b-10">
-                                                    <!-- Column -->
-                                                    <div class="col p-r-0">
-                                                        <h1 class="font-light" ng-bind="contentDashboard[2].quantity"></h1>
-                                                        <h6 class="text-muted">Taslak</h6>
-                                                    </div>
-                                                    <!-- Column -->
-                                                    <div class="col text-right align-self-center">
-                                                        <div data-label="{{contentDashboard[2].percent}}%" class="css-bar m-b-0 css-bar-warning css-bar-40"><i class="mdi mdi-star-circle"></i></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Column -->
-                                    <!-- Column -->
-                                    <div class="col-lg-3 col-md-6">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row p-t-10 p-b-10">
-                                                    <!-- Column -->
-                                                    <div class="col p-r-0">
-                                                        <h1 class="font-light" ng-bind="contentDashboard[3].quantity"></h1>
-                                                        <h6 class="text-muted">Yayınlanmamış</h6>
-                                                    </div>
-                                                    <!-- Column -->
-                                                    <div class="col text-right align-self-center">
-                                                        <div data-label="{{contentDashboard[3].percent}}%" class="css-bar m-b-0 css-bar-info css-bar-60"><i class="mdi mdi-receipt"></i></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Column -->
-                                </div>
-                                <br />
-                                <br />
-                                <div class="center" ng-show="showTable">
-                                    <span><i class="fa fa-spinner fa-spin"></i></span>
-                                </div>
-                                <div class="row" ng-show="!showTable">
-                                    <div class="col-lg-12">
+                                <div class="card">
 
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <div class="form-group">
-                                                    <label>Başlangıç Tarihi</label>
-                                                    <input id="searchStartDate" type="text" class="form-control" placeholder="dd.mm.yyyy" />
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <div class="form-group">
-                                                    <label>Bitiş Tarihi</label>
-                                                    <input id="searchEndDate" type="text" class="form-control" placeholder="dd.mm.yyyy" />
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label>Makale Kategori</label>
-                                                    <input type="hidden" id="searhCategoryIds" />
-                                                    <treeselect v-props-options="options" v-props-field="'searhCategoryIds'" v-props-multiple="true" v-props-value="value" watch-depth="value"></treeselect>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <div class="form-group">
-                                                    <label><span></span></label>
-                                                    <button ng-click="shoShortListAssay()" type="button" class="btn btn-primary">Ara</button>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="card-body">
+                                        <h4 class="card-title">Sayfa Listesi</h4>
+                                        <h6 class="card-subtitle">Sayfa Sayısı : <code><span ng-bind="assayList.length"></span></code></h6>
+                                        <h4><input type="text" class="form-control" name="site-search" id="getData" ng-model="search" ng-keypress="getData($event)" placeholder="Ara..."></h4>
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <button class="btn btn-block btn-primary" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">Önceki </button>
+                                                </td>
+                                                <td>
+                                                    &nbsp;{{currentPage+1}}/{{numberOfPages()}}&nbsp;
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-block btn-primary" ng-disabled="currentPage >= getData().length/pageSize - 1" ng-click="currentPage=currentPage+1"> Sonraki</button>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <div class="table-responsive">
 
-                                        <div class="card">
-
-                                            <div class="card-body">
-                                                <h4 class="card-title">Makaleler Listesi</h4>
-                                                <h6 class="card-subtitle">Makale Sayısı : <code><span ng-bind="assayList.length"></span></code></h6>
-                                                <h4><input type="text" class="form-control" name="site-search" id="getData" ng-model="search" ng-keypress="getData($event)" placeholder="Ara..."></h4>
-                                                <table>
+                                            <table class="table">
+                                                <thead>
                                                     <tr>
-                                                        <td>
-                                                            <button class="btn btn-block btn-primary" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">Önceki </button>
-                                                        </td>
-                                                        <td>
-                                                            &nbsp;{{currentPage+1}}/{{numberOfPages()}}&nbsp;
-                                                        </td>
-                                                        <td>
-                                                            <button class="btn btn-block btn-primary" ng-disabled="currentPage >= getData().length/pageSize - 1" ng-click="currentPage=currentPage+1"> Sonraki</button>
-                                                        </td>
+                                                        <th>Açıklama</th>
+                                                        <th>Seo-Url</th>
+                                                        <th>Başlık</th>
+                                                        <th>Aktif/Pasif</th>
+                                                        <th>Detay</th>
                                                     </tr>
-                                                </table>
-                                                <div class="table-responsive">
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="x in assayList| filter:search | startFrom:currentPage*pageSize | limitTo:pageSize" )">
+                                                        <td ng-show="false" ng-bind="x.id"></td>
+                                                        <td ng-bind="x.description"></td>
+                                                        <td ng-bind="x.seoUrl"></td>
+                                                        <td ng-bind="x.title"></td>
+                                                        <td ng-bind="x.ActiveDescription"></td>
+                                                        <td>
+                                                            <button ng-click="showDetailPages(x.id)" type="button" class="btn btn-rounded btn-success">Aç</button>
+                                                        </td>
 
-                                                    <table class="table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Başlık</th>
-                                                                <th>Yazar</th>
-                                                                <th>Yayınlanma Durumu</th>
-                                                                <th>Platform</th>
-                                                                <th>Okunma</th>
-                                                                <th>Oluşturma Tarihi</th>
-                                                                <th>Yayınlanma Tarihi</th>
-                                                                <th>Detay</th>
-                                                                @if (ViewBag.showColumn == 1 || ViewBag.showColumn == 2 || ViewBag.showColumn == 4)
-                                                                {
-                                                                    <th>İşlem</th>
-                                                                }
 
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr ng-repeat="x in assayList| filter:search | startFrom:currentPage*pageSize | limitTo:pageSize" )">
-                                                                <td ng-show="false" ng-bind="x.id"></td>
-                                                                <td ng-bind="x.header"></td>
-                                                                <td ng-bind="x.writer"></td>
-                                                                <td ng-bind="x.publishStateTypeDes"></td>
-                                                                <td ng-bind="x.platformTypeDes"></td>
-                                                                <td ng-bind="x.readCount"></td>
-                                                                <td ng-bind="x.createdDate | date:'MM/dd/yyyy HH:mm:ss'"></td>
-                                                                <td ng-bind="x.publishDate | date:'MM/dd/yyyy HH:mm:ss'"></td>
-                                                                <td>
-                                                                    <button ng-click="showContentDetail(x.id)" type="button" class="btn btn-rounded btn-success">Aç</button>
-                                                                </td>
-                                                                @if (ViewBag.showColumn == 1 || ViewBag.showColumn == 2 || ViewBag.showColumn == 4)
-                                                                {
-                                                                    <td>
-                                                                        <button ng-click="onClikckProcess(x)" type="button" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#contentProcessModal">İşlem</button>
-                                                                    </td>
-                                                                }
-
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
 
-                            </div>
-
-
-
-                            <div class="modal fade" id="contentProcessModal" tabindex="-1" role="dialog" aria-labelledby="contentProcessModal">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title" id="exampleModalLabel1">Platform Türü:{{contentProcess.platformTypeDes}} - Makale Adı{{contentProcess.header}} </h4>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form>
-                                                <div class="form-group">
-                                                    <label ng-show="false" class="control-label" ng-model="contentProcess.id"></label>
-                                                    <label class="control-label">Yayın Durumu</label>
-                                                    <select id="roletypeid" class="form-control custom-select" name="publishState" ng-model="contentProcess.publishState">
-                                                        <option ng-repeat="x in confirmType" value="{{x.id}}">{{x.description}}</option>
-                                                    </select>
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
-                                            <button type="button" class="btn btn-primary" ng-click="postPublishState()">İşlem Yap <span ng-show="showSaveLoading"><i class="fa fa-spinner fa-spin"></i></span></button>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
 
 
@@ -287,7 +127,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label>Makale Başlığı</label>
-                                                        <input type="text" class="form-control" ng-model="assayCreate.header">
+                                                        <input type="text" class="form-control" ng-model="pageCreate.header">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
