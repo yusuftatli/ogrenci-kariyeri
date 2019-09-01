@@ -69,6 +69,6 @@ namespace SCA.Services
         /// </summary>
         /// <param name="seoUrl"></param>
         /// <returns></returns>
-        Task<ServiceResult> GetContentForMobil(string seoUrl)
+        Task<ServiceResult> GetContentForMobil(string seoUrl);
     }
 }
