@@ -45,6 +45,27 @@ namespace SCA.Services
             _roleManager = roleManager;
         }
 
+        public async Task<ServiceResult> UpdateUserCategory(long userId, string category)
+        {
+            ServiceResult _res = new ServiceResult();
+            await Task.Run(() =>
+            {
+                var data = _userRepo.Get(x => x.Id == userId);
+                data.Category = category;
+                _userRepo.Update(data);
+                var result = _unitOfWork.SaveChanges();
+                if (result.ResultCode == HttpStatusCode.OK)
+                {
+                    _res = Result.ReturnAsSuccess(message: "Kategori ilgi alanları güncelleme başarılı");
+                }
+                else
+                {
+                    _res = Result.ReturnAsFail(message: "Kategori ilgi alanları güncelleme yapılırken hata meydana geldi");
+                    _errorManagement.SaveError(result.Message);
+                }
+            });
+            return _res;
+        }
         public async Task<ServiceResult> CreateUserByMobil(UserMobilDto dto)
         {
             if (dto.Equals(null))

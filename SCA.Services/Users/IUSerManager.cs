@@ -39,5 +39,13 @@ namespace SCA.Services
         Task<ServiceResult> UpdateUserStatu(long id, bool value);
         Task<ServiceResult> UserLoginByMobil(MobilUserLoginDto dto);
         Task<ServiceResult> UpdateUserRoleType(UserRoleTypeDto dto, UserSession session);
+
+        /// <summary>
+        /// Kullanıcı kategori günceleme
+        /// </summary>
+        /// <param name="userId">Kullanıcı id</param>
+        /// <param name="category">kategori</param>
+        /// <returns></returns>
+        Task<ServiceResult> UpdateUserCategory(long userId, string category);
     }
 }

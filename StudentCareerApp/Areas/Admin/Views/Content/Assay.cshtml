@@ -379,6 +379,14 @@
                                                         </select>
                                                     </div>
                                                 </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Platform Türü</label>
+                                                        <select id="platformId" class="form-control custom-select" ng-model="assayCreate.platformType" name="visibleId">
+                                                            <option ng-repeat="x in platformType" value="{{x.id}}">{{x.description}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-md-2 text-right">

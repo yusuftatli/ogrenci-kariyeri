@@ -17,6 +17,9 @@ app.controller("assayController", function ($scope, $http, $filter) {
     $scope.internList = [{ id: 1, description: '-----' }, { id: 1, description: 'Deneme Staj' }];
     $scope.visibleList = [{ id: 1, description: 'Herkese Açık' }, { id: 1, description: 'Parola Korumalı' }, { id: 1, description: 'Özel' }];
     $scope.confirmType = [{ id: 0, description: '-----' }, { id: 1, description: 'Taslak' }, { id: 2, description: 'Yayın Aşamasında' }, { id: 3, description: 'Yayında Değil' }, { id: 4, description: 'Yayında' }];
+    $scope.events = [{ id: 0, description: '-----' }, { id: 1, description: 'Mentor' }, { id: 2, description: 'Kariyer Sohbetleri' }];
+    $scope.platformType = [{ id: 0, description: '-----' }, { id: 1, description: 'Mobil' }, { id: 2, description: 'Web' }, { id: 2, description: 'Web/Mobil' }];
+
 
     var trMap = {
         çÇ: "c",

@@ -27,7 +27,7 @@ namespace SCA.Services
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        Task<ServiceResult> ContentCreate(ContentDto dto);
+        Task<ServiceResult> ContentCreate(ContentDto dto, UserSession session);
 
         /// <summary>
         /// makale siler

@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -170,7 +171,7 @@ namespace SCA.Services
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        public async Task<ServiceResult> ContentCreate(ContentDto dto)
+        public async Task<ServiceResult> ContentCreate(ContentDto dto, UserSession session)
         {
             string resultMessage = "";
             if (dto == null)
@@ -186,7 +187,7 @@ namespace SCA.Services
             if (dto.Id == 0)
             {
                 dto.ReadCount = 0;
-                dto.Writer = "Yusuf Can TATLI";
+                dto.Writer = session.Name + " " + session.Surname;
                 dto.PublishStateType = PublishState.Taslak;
                 var data = _mapper.Map<Content>(dto);
                 res = _contentRepo.Add(data);
@@ -210,13 +211,31 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> ContentDelete(long Id)
         {
-            if (Id == null)
+            ServiceResult _res = new ServiceResult();
+
+            await Task.Run(() =>
             {
-                Result.ReturnAsFail(AlertResource.NoChanges, null);
-            }
-            var deleteData = _contentRepo.Get(x => x.Id == Id);
+                if (Id == 0)
+                {
+                    Result.ReturnAsFail(AlertResource.NoChanges, null);
+                }
+                var deleteData = _contentRepo.Get(x => x.Id == Id);
+                var result = _unitOfWork.SaveChanges();
+
+                if (result.ResultCode == HttpStatusCode.OK)
+                {
+                    _res = Result.ReturnAsSuccess(message: "Silme işlemi başarılı");
+                }
+                else
+                {
+                    _res = Result.ReturnAsFail(message: "Silme işlemi sırasında hata meydana geldi.");
+                    _errorManagement.SaveError(result.Message);
+                }
+            });
+
             return _unitOfWork.SaveChanges();
         }
+
         /// <summary>
         /// makalelerin yayınlanma durumunu günceller
         /// </summary>
@@ -225,44 +244,64 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> UpdateAssayState(long Id, PublishState publishState)
         {
-            if (Id == 0)
+            ServiceResult _res = new ServiceResult();
+
+            await Task.Run(() =>
             {
-                Result.ReturnAsFail(AlertResource.NoChanges, null);
-            }
-            var data = _contentRepo.Get(x => x.Id.Equals(Id) && x.IsDeleted.Equals(false));
-            data.PublishStateType = publishState;
-            _contentRepo.Update(_mapper.Map<Content>(data));
-            return _unitOfWork.SaveChanges();
+                string errorMessage = "Güncelleme işlemi başarılı";
+                if (Id == 0)
+                {
+                    Result.ReturnAsFail(AlertResource.NoChanges, null);
+                }
+                var data = _contentRepo.Get(x => x.Id.Equals(Id) && x.IsDeleted.Equals(false));
+                data.PublishStateType = publishState;
+                _contentRepo.Update(_mapper.Map<Content>(data));
+                var result = _unitOfWork.SaveChanges();
+                if (result.ResultCode == HttpStatusCode.OK)
+                {
+                    _res = Result.ReturnAsSuccess(message: errorMessage);
+                }
+                else
+                {
+                    errorMessage = "Güncelleme işlemi yapılırken hata meydana geldi.";
+                    _res = Result.ReturnAsFail(message: errorMessage);
+                    _errorManagement.SaveError(_res.Message);
+                }
+            });
+            return _res;
         }
         public async Task<List<ContentForHomePageDTO>> GetContentForHomePage(HitTypes hitTypes, int count)
         {
-            List<ContentShortListUIDto> listData = new List<ContentShortListUIDto>();
+            List<ContentForHomePageDTO> listData = new List<ContentForHomePageDTO>();
 
-            if (hitTypes == HitTypes.LastAssay)
+            await Task.Run(() =>
             {
-                listData = _mapper.Map<List<ContentShortListUIDto>>(_contentRepo.GetAll().OrderByDescending(x => x.PublishDate).Take(count).ToList());
-            }
+                if (hitTypes == HitTypes.LastAssay)
+                {
+                    listData = _mapper.Map<List<ContentForHomePageDTO>>(_contentRepo.GetAll().OrderByDescending(x => x.PublishDate).Take(count).ToList());
+                }
 
-            else if (hitTypes == HitTypes.Manset)
-            {
-                listData = _mapper.Map<List<ContentShortListUIDto>>(_contentRepo.GetAll().OrderByDescending(x => x.PublishDate).Take(count).ToList());
-            }
+                else if (hitTypes == HitTypes.Manset)
+                {
+                    listData = ComtentFake.FakeContentList();//_mapper.Map<List<ContentForHomePageDTO>>(_contentRepo.GetAll().OrderByDescending(x => x.PublishDate).Take(count).ToList());
+                }
 
-            else if (hitTypes == HitTypes.MostPopuler)
-            {
-                listData = _mapper.Map<List<ContentShortListUIDto>>(_contentRepo.GetAll().OrderByDescending(x => x.PublishDate).Take(count).ToList());
-            }
+                else if (hitTypes == HitTypes.MostPopuler)
+                {
+                    listData = ComtentFake.FakeContentList();//_mapper.Map<List<ContentForHomePageDTO>>(_contentRepo.GetAll().OrderByDescending(x => x.PublishDate).Take(count).ToList());
+                }
 
-            else if (hitTypes == HitTypes.DailyMostPopuler)
-            {
-                listData = _mapper.Map<List<ContentShortListUIDto>>(_contentRepo.GetAll().OrderByDescending(x => x.PublishDate).Take(count).ToList());
-            }
+                else if (hitTypes == HitTypes.DailyMostPopuler)
+                {
+                    listData = ComtentFake.FakeContentList();// _mapper.Map<List<ContentForHomePageDTO>>(_contentRepo.GetAll().OrderByDescending(x => x.PublishDate).Take(count).ToList());
+                }
 
-            else if (hitTypes == HitTypes.HeadLine)
-            {
-                listData = _mapper.Map<List<ContentShortListUIDto>>(_contentRepo.GetAll().OrderByDescending(x => x.PublishDate).Take(count).ToList());
-            }
-            return ComtentFake.FakeContentList();
+                else if (hitTypes == HitTypes.HeadLine)
+                {
+                    listData = ComtentFake.FakeContentList();//_mapper.Map<List<ContentForHomePageDTO>>(_contentRepo.GetAll().OrderByDescending(x => x.PublishDate).Take(count).ToList());
+                }
+            });
+            return listData;
         }
     }
 }

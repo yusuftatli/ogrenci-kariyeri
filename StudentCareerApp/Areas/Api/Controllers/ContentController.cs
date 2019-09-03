@@ -50,7 +50,7 @@ namespace StudentCareerApp.Areas.Api.Controller
         [HttpPost("ContentCreate")]
         public async Task<ServiceResult> ContentCreate([FromBody]ContentDto dto)
         {
-            return await _contentManager.ContentCreate(dto);
+            return await _contentManager.ContentCreate(dto, JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
         }
 
         [HttpDelete("ContentDelete")]
