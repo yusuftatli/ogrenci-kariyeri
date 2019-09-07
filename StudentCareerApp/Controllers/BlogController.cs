@@ -20,11 +20,11 @@ namespace SCA.UI.Controllers
 
 
         [Route("makale/{SeoUrl}"), HttpGet]
-        public IActionResult Index(string SeoUrl)
+        public async Task<IActionResult> Index(string SeoUrl)
         {
-            var res = b2cManager.GetContentDetailForDetailPage(SeoUrl);
+            var res = await b2cManager.GetContentDetailForDetailPage(SeoUrl);
             var fakeData = FakeContentDetail();
-            return View(fakeData);
+            return View(res);
         }
 
         public ContentDetailForDetailPageDTO FakeContentDetail()
@@ -168,3 +168,4 @@ namespace SCA.UI.Controllers
         }
     }
 }
+
