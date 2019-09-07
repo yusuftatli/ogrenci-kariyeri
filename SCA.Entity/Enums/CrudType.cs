@@ -11,6 +11,8 @@ namespace SCA.Entity.Enums
         Update = 2,
 
         [Description("Delete")]
-        Delete = 3
+        Delete = 3,
+        [Description("List")]
+        List = 1,
     }
 }

@@ -15,5 +15,6 @@ namespace SCA.Entity.DTO
         public string Tags { get; set; }
         public string ContentDescription { get; set; }
         public List<ContentForHomePageDTO> MostPopularItems { get; set; }
+        public List<CommentForUIDto> CommentList{ get; set; }
     }
 }

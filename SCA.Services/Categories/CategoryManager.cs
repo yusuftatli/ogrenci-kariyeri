@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Dapper;
 using MySql.Data.MySqlClient;
 using SCA.Common.Resource;
 using SCA.Common.Result;
@@ -24,15 +25,17 @@ namespace SCA.Services
         private readonly IUnitofWork _unitOfWork;
         private IGenericRepository<Category> _categoryRepo;
         private IGenericRepository<CategoryRelation> _categoryRelationRepo;
+        private readonly IErrorManagement _errorManagent;
         private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
 
 
-        public CategoryManager(IUnitofWork unitOfWork, IMapper mapper)
+        public CategoryManager(IUnitofWork unitOfWork, IMapper mapper, IErrorManagement errorManagement)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _categoryRepo = unitOfWork.GetRepository<Category>();
             _categoryRelationRepo = unitOfWork.GetRepository<CategoryRelation>();
+            _errorManagent = errorManagement;
         }
         #region MainCategory
         /// <summary>
@@ -49,7 +52,18 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> MainCategoryListWithParents()
         {
-            return Result.ReturnAsSuccess(null, null, _mapper.Map<List<MainCategoryDto>>(_categoryRepo.GetAll(x => x.IsDeleted.Equals(false))));
+            ServiceResult _res = new ServiceResult();
+            try
+            {
+                string query = "select * from Category where IsActive=true";
+                var lisData = _db.QueryAsync<MainCategoryDto>(query);
+                _res = Result.ReturnAsSuccess(data: lisData);
+            }
+            catch (Exception ex)
+            {
+                await _errorManagent.SaveError(ex.ToString());
+            }
+            return _res;
         }
         /// <summary>
         /// Kategori ekler
@@ -58,14 +72,23 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> MainCategoryCreate(MainCategoryDto dto)
         {
+            ServiceResult _res = new ServiceResult();
             if (dto == null)
             {
-                Result.ReturnAsFail(AlertResource.NoChanges, null);
+                _res = Result.ReturnAsFail(AlertResource.NoChanges, null);
             }
-            string query = GetCategoryQuery(CrudType.Insert, null, null);
-
-
-            return null;
+            try
+            {
+                string query = GetCategoryQuery(CrudType.Insert, null, null);
+                var result = _db.Execute(query);
+                _res = Result.ReturnAsSuccess(message: "Kategori Kayıt İşlemi Başarılı");
+            }
+            catch (Exception ex)
+            {
+                await _errorManagent.SaveError(ex.ToString());
+                _res = Result.ReturnAsFail(message: "Kategori kayıt İşlemi Sırasında Hata Meydana Geldi.");
+            }
+            return _res;
         }
         /// <summary>
         /// kategori bilgileri güncellenir
@@ -74,12 +97,23 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> MainCategoryUpdate(MainCategoryDto dto)
         {
+            ServiceResult _res = new ServiceResult();
             if (dto == null)
             {
-                Result.ReturnAsFail(AlertResource.NoChanges, null);
+                _res = Result.ReturnAsFail(AlertResource.NoChanges, null);
             }
-            _categoryRepo.Update(_mapper.Map<Category>(dto));
-            return _unitOfWork.SaveChanges();
+            try
+            {
+                string query = GetCategoryQuery(CrudType.Update, null, null);
+                var result = _db.Execute(query);
+                _res = Result.ReturnAsSuccess(message: "Kategori Güncelleme İşlem Başarılı");
+            }
+            catch (Exception ex)
+            {
+                await _errorManagent.SaveError(ex.ToString());
+                _res = Result.ReturnAsFail(message: "Kategori Güncelleme İşlemi Sırasında Hata Meydana Geldi");
+            }
+            return _res;
         }
         /// <summary>
         /// Kategori siler
@@ -100,24 +134,40 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> MainCategoryStatusUpdate(int id, bool state)
         {
-            var data = _categoryRepo.Get(x => x.Id == id);
-            data.IsActive = state;
-            _categoryRepo.Update(data);
-            var result = _unitOfWork.SaveChanges();
-            return result;
+            ServiceResult _res = new ServiceResult();
+            string flag = state == true ? "Aktif" : "Pasif";
+            try
+            {
+                string query = $"Update Category set IsActive={state} where Id={id}";
+                var result = _db.Execute(query);
+                _res = Result.ReturnAsSuccess(message: $"Kategori Başarılı Bir Şekilde {flag} Edildi");
+            }
+            catch (Exception ex)
+            {
+                await _errorManagent.SaveError(ex.ToString());
+                _res = Result.ReturnAsFail(message: $"Kategori {flag} Edilirken hata meydane geldi");
+            }
+            return _res;
         }
         #endregion
-        public async Task<ServiceResult> CreateCategoryRelation(List<CategoryRelationDto> listData)
+        public async Task<ServiceResult> CreateCategoryRelation(List<CategoryRelationDto> listData, UserSession session)
         {
-
-
-            _categoryRelationRepo.AddRange(_mapper.Map<List<CategoryRelation>>(listData));
-            return _unitOfWork.SaveChanges();
+            foreach (var item in listData)
+            {
+                string query = GetCategoryRelationQuery(CrudType.Insert, item, session);
+                var result = _db.Execute(query);
+            }
+            return Result.ReturnAsSuccess();
         }
 
         private static string GetCategoryQuery(CrudType crudType, CategoriesDto dto, CategoriesDto session)
         {
             string query = "";
+            if (crudType == CrudType.List)
+            {
+                query = "";
+            }
+
             if (crudType == CrudType.Insert)
             {
                 query = $"Insert Into Category (Description,IsActive,CreatedUserId,CreatedDate) VALUES({dto.Description},{true},{session.Id},{DateTime.Now})";
@@ -146,7 +196,7 @@ namespace SCA.Services
             return query;
         }
 
-        public List<CategoryRelationDto> GetCategoryRelation(string data, long Id, ReadType readType)
+        public List<CategoryRelationDto> GetCategoryRelation(string data, long Id, ReadType readType, UserSession session)
         {
             List<CategoryRelationDto> listData = new List<CategoryRelationDto>();
             string[] data_ = data.Replace("[", "").Replace("]", "").Replace("\"", "").Replace("\"", "").Split(',');
@@ -158,7 +208,7 @@ namespace SCA.Services
                     TagContentId = Id,
                     ReadType = readType
                 };
-                listData.Add(relationData);
+                string query = GetCategoryRelationQuery(CrudType.Insert, relationData, session);
             }
             return listData;
         }

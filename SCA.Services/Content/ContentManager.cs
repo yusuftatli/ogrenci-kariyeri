@@ -116,8 +116,12 @@ namespace SCA.Services
 
 
                 query = $"select  * from  Content where  PlatformType <> 1 order by PublishDate desc limit 10;";
+
                 var result2 = await _db.QueryFirstAsync<List<ContentForHomePageDTO>>(query);
                 _res.MostPopularItems = result2;
+
+                query = $"select * from Comments where ArticleId={GetContentId(seoUrl)}";
+                _res.CommentList = _db.Query<CommentForUIDto>(query) as List<CommentForUIDto>;
             }
             catch (Exception ex)
             {
@@ -126,6 +130,12 @@ namespace SCA.Services
             return _res;
         }
 
+        public async Task<long> GetContentId(string seoUrl)
+        {
+            string query = $"select * from content where seoUrl={seoUrl}";
+            var data = _db.Query<ContentDto>(query).FirstOrDefault();
+            return data.Id;
+        }
         public async Task<ServiceResult> GetContentForMobil(string seoUrl)
         {
             ContentForUIDto result = new ContentForUIDto();
@@ -218,8 +228,15 @@ namespace SCA.Services
             }
 
             await _tagManager.CreateTag(dto.Tags, res.Id, ReadType.Content, session);
-            await _categoryManager.CreateCategoryRelation(_categoryManager.GetCategoryRelation(dto.Category, res.Id, ReadType.Content));
+            //await _categoryManager.CreateCategoryRelation(_categoryManager.GetCategoryRelation(dto.Category, res.Id, ReadType.Content, null));
             return Result.ReturnAsSuccess(null, message: resultMessage, null);
+        }
+
+        public async Task<List<CommentForUIDto>> GetCommentsByContentId(long contentId)
+        {
+            string query = $"Select * Comments where ArticleId ={contentId}";
+            var listData = _db.Query<CommentForUIDto>(query) as List<CommentForUIDto>;
+            return listData;
         }
 
         public async Task<ServiceResult> CreateContent(ContentDto dto, UserSession session)
