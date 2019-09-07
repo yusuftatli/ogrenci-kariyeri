@@ -8,5 +8,8 @@ namespace SCA.Entity.DTO
     {
         public long Id { get; set; }
         public string Description { get; set; }
+        public string userName { get; set; }
+
+        public DateTime CreatedDate { get; set; }
     }
 }

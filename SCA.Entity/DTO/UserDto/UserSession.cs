@@ -6,7 +6,7 @@ namespace SCA.Entity.DTO
 {
     public class UserSession
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string ImagePath { get; set; }
         public string UserName { get; set; }
         public string EmailAddress { get; set; }

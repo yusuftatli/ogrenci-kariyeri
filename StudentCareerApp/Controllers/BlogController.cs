@@ -26,9 +26,29 @@ namespace SCA.UI.Controllers
         [Route("haber/{SeoUrl}"), HttpGet]
         public async Task<IActionResult> Index(string seoUrl)
         {
-            var res = await _contentManager.GetContentUI(seoUrl, HttpContext.GetSessionData<UserSession>("userInfo").Id);
+            var res = await _contentManager.GetContentUI(seoUrl, HttpContext.GetSessionData<UserSession>("userInfo")?.Id);
             return View(res);
         }
+
+        [HttpPost]
+        public async Task<JsonResult> AddOrRemoveFavorite(FavoriteDto model)
+        {
+            if (HttpContext.GetSessionData<UserSession>("userInfo")?.Id > 0)
+            {
+                model.UserId = HttpContext.GetSessionData<UserSession>("userInfo").Id;
+                var res = await _contentManager.CreateFavorite(model);
+                return Json(new { Status = res, Explanation = "Beklenmedik bir hata oluştu." });
+            }
+
+            return Json(new { Status = false, Explanation = "Giriş yapılmadan yorum yapılamaz." });
+        }
+
+        //[HttpPost]
+        //public async Task<JsonResult> PostComment(CommentsDto model)
+        //{
+        //    var res = await _commentManager.CreateComments(model);
+        //    return Json(res);
+        //}
 
     }
 }

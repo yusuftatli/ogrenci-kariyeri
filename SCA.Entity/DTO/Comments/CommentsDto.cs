@@ -7,7 +7,7 @@ namespace SCA.Entity.DTO
 {
     public class CommentsDto
     {
-        public long Id { get; set; }
+        public long? Id { get; set; }
         public ReadType ReadType { get; set; }
         public string Comment { get; set; }
         public long ArticleId { get; set; }

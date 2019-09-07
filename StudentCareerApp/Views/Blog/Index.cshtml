@@ -1,4 +1,5 @@
-﻿@model SCA.Entity.DTO.ContentDetailForDetailPageDTO
+﻿@using SCA.Common;
+@model SCA.Entity.DTO.ContentDetailForDetailPageDTO
 
 @{
     ViewData["Title"] = "Index";
@@ -14,28 +15,35 @@
         border-radius: 5px;
         box-shadow: 0px 0px 5px 0px;
     }
-    .heart-box i{
-        width:35px;
+
+    .heart-box i {
+        width: 35px;
         height: 35px;
         -webkit-border-radius: 50%;
-        text-align:center;
-        vertical-align:sub;
-        font-size:28px !important;
+        text-align: center;
+        vertical-align: sub;
+        font-size: 28px !important;
         line-height: 28px !important;
+        cursor: pointer;
     }
-    .heart-box a:hover, heart-box a.active{
-        color: #e31b23 !important;
+
+    .heart-box {
+        color: unset !important;
     }
+
+        .heart-box a:hover, .heart-box a.active {
+            color: #e31b23 !important;
+        }
 </style>
 
 <!-- single post start -->
 <section class="single-post-wrapper post-layout-1">
     <div class="container">
         @*<div class="row">
-                <div class="col-lg-12">
-                    <div class="single-big-img mb-30" style="background-image: url(@Model.ImagePath)"></div>
-                </div>
-            </div>*@
+            <div class="col-lg-12">
+                <div class="single-big-img mb-30" style="background-image: url(@Model.ImagePath)"></div>
+            </div>
+        </div>*@
         <div class="row">
             <div class="col-lg-9">
                 @*<div class="single-big-img mb-30" style="background-image: url(@Model.ImagePath)"></div>*@
@@ -45,10 +53,10 @@
                             <span>
                                 @if (!string.IsNullOrEmpty(Model.Category))
                                 {
-                                    foreach (var x in Model.Category.Split(","))
-                                    {
-                                        <a href="@Url.Action("Index", "Category")" class="post-cat ts-green-bg">@x</a>
-                                    }
+                                foreach (var x in Model.Category.Split(","))
+                                {
+                                <a href="@Url.Action(" Index", "Category" )" class="post-cat ts-green-bg">@x</a>
+                                }
                                 }
                             </span>
                         </div>
@@ -68,7 +76,7 @@
                             <li>
                                 <a href="">
                                     <i class="fa fa-comments"></i>
-                                    5 comments
+                                    @Model.CommentList.Count
                                 </a>
                             </li>
                             <li class="active">
@@ -80,11 +88,23 @@
                                     <i class="fa fa-share"></i>
                                 </a>
                             </li>
+
                             <li class="heart-box">
-                                <a href="" class="@(Model.IsFavoriteContent ? "active" : "")">
-                                    <i class="fa fa-heart"></i>
-                                </a>
+                                @if (Context.GetSessionData<SCA.Entity.DTO.UserSession>
+                                    ("userInfo")?.Id > 0)
+                                    {
+                                    <a id="addFavorite" data-id="@Model.Id" class="@(Model.IsFavoriteContent ? "active" : "" )">
+                                        <i class="fa fa-heart"></i>
+                                    </a>
+                                    }
+                                    else
+                                    {
+                                    <a class="openLoginMagnific">
+                                        <i class="fa fa-heart"></i>
+                                    </a>
+                                    }
                             </li>
+
                         </ul>
                     </div>
                     <!-- single post header end-->
@@ -152,42 +172,26 @@
                 <!--single post end -->
                 <div class="comments-form ts-grid-box">
 
-                    <h3 class="comments-counter">03 Comments</h3>
+                    <h3 class="comments-counter">@Model.CommentList.Count Yorum</h3>
                     <ul class="comments-list">
+                        @foreach (var x in Model.CommentList)
+                        {
                         <li>
                             <div class="comment">
-                                <img class="comment-avatar float-left" alt="" src="images/avater/author.png">
+                                <img class="comment-avatar float-left" alt="" src="">
                                 <div class="comment-body">
                                     <div class="meta-data">
-                                        <span class="float-right"><a class="comment-reply" href="#"><i class="fa fa-mail-reply-all"></i> Reply</a></span>
-                                        <span class="comment-author">Demon Lion</span><span class="comment-date">October 31, 2018</span>
+                                        <span class="comment-author">@x.userName</span><span class="comment-date">@x.CreatedDate.ToShortDateString()</span>
                                     </div>
                                     <div class="comment-content">
-                                        <p>There’s such a thing as “too much information”, especially for the companies scaling out their sales operations. That’s why Attentive was help sales teams </p>
+                                        <p>@x.Description</p>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Comments end-->
-                            <ul class="comments-reply">
-                                <li>
-                                    <div class="comment">
-                                        <img class="comment-avatar float-left" alt="" src="images/avater/author2.png">
-                                        <div class="comment-body reply-bg">
-                                            <div class="meta-data">
-                                                <span class="float-right"><a class="comment-reply" href="#"><i class="fa fa-mail-reply-all"></i> Reply</a></span>
-                                                <span class="comment-author">Henry kendel</span><span class="comment-date">October 31, 2018</span>
-                                            </div>
-                                            <div class="comment-content">
-                                                <p>There’s such a thing as “too much information”, especially for the companies scaling out their sales operations. That’s why Attentive was born</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Comments end-->
-                                </li>
-                            </ul>
-                            <!-- comments-reply end-->
                         </li>
+                        }
                         <!-- Comments-list li end-->
+                        @*
                         <li>
                             <div class="comment last">
                                 <img class="comment-avatar float-left" alt="" src="images/avater/author.png">
@@ -201,44 +205,32 @@
                                     </div>
                                 </div>
                             </div><!-- Comments last end-->
-                        </li>
+                        </li>*@
                     </ul>
                     <!-- Comments-list ul end-->
 
-                    <h3 class="comment-reply-title">Add Comment</h3>
-                    <form role="form" class="ts-form">
+                    <h3 class="comment-reply-title">Yorum Yap</h3>
+                    <form role="form" class="ts-form" id="commentForm">
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <input class="form-control" name="name" id="name" placeholder="Your Name" type="text" required="">
-                                </div>
-                                <!-- form group end-->
-                                <div class="form-group">
-                                    <input class="form-control" name="email" id="email" placeholder="Your Email" type="email" required="">
-                                </div>
-                                <!-- form group end-->
-                                <div class="form-group">
-                                    <input class="form-control" placeholder="Your Website" type="text" required="">
-                                </div>
-                                <!-- form group end-->
-                            </div>
                             <!-- Col end -->
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <textarea class="form-control msg-box" id="message" placeholder="Your Comment" rows="10" required=""></textarea>
                                 </div>
                             </div>
-                            <!-- Col end -->
-                            <div class="col-md-12">
-                                <p class="comment-form-cookies-consent">
-                                    <input id="wp-comment-cookies-consent" name="wp-comment-cookies-consent" type="checkbox" value="yes">
-                                    <label for="wp-comment-cookies-consent">Save my name, email, and website in this browser for the next time I comment.</label>
-                                </p>
-                            </div>
                         </div>
                         <!-- Form row end -->
                         <div class="clearfix">
-                            <button class="comments-btn btn btn-primary" type="submit">Post Comment</button>
+                            @if (Context.GetSessionData<SCA.Entity.DTO.UserSession>
+                                ("userInfo")?.Id > 0)
+                                {
+                                <input class="hidden" type="hidden" name="ArticleId" value="@Model.Id" />
+                                <button class="comments-btn btn btn-primary" type="submit">Yorum Yap</button>
+                                }
+                                else
+                                {
+                                <button class="comments-btn btn btn-primary openLoginMagnific" type="button">Yorum Yap</button>
+                                }
                         </div>
                     </form>
                     <!-- Form end -->
@@ -263,3 +255,7 @@
     <!-- container-->
 </section>
 <!-- single post end-->
+
+@section Scripts{
+    <script src="~/Scripts/PViews/Blog/index.js"></script>
+}
