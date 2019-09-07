@@ -70,5 +70,7 @@ namespace SCA.Services
         /// <param name="seoUrl"></param>
         /// <returns></returns>
         Task<ServiceResult> GetContentForMobil(string seoUrl);
+
+        Task<ServiceResult> CreateContentSyncData(ContentDto dto);
     }
 }

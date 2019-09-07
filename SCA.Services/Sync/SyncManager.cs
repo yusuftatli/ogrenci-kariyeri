@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Dapper;
+using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
@@ -10,7 +12,9 @@ using SCA.Repository.UoW;
 using SCA.Services.Sync;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -25,6 +29,7 @@ namespace SCA.Services
         private IGenericRepository<Content> _contentRepo;
         private IGenericRepository<Comments> _commentRepo;
         private readonly IApiManager _apiService;
+        private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
 
         public SyncManager(IUnitofWork unitOfWork, IMapper mapper, IApiManager apiService)
         {
@@ -53,8 +58,8 @@ namespace SCA.Services
 
                 foreach (var item in ids)
                 {
-                    var isData = _contentRepo.Get(x => x.SycnId == Convert.ToInt64(item.ID));
-                    if (isData == null)
+                    bool isData = ContentControl(Convert.ToInt64(item.ID));
+                    if (isData == false)
                     {
                         ContentDto dto = new ContentDto();
 
@@ -120,32 +125,7 @@ namespace SCA.Services
                         {
                             dto.PlatformType = PlatformType.WebMobil;
                         }
-
-                        Content res = _contentRepo.Add(_mapper.Map<Content>(dto));
-                      var res1=  _unitOfWork.SaveChanges();
-
-                        if (assayDetail.yorumlar!=null)
-                        {
-                            if (assayDetail.yorumlar.Count > 0)
-                            {
-                                List<CommentsDto> yorumList = new List<CommentsDto>();
-                                foreach (var _yorum in assayDetail.yorumlar)
-                                {
-                                    CommentsDto yorum = new CommentsDto();
-                                    yorum.Approved = true;
-                                    yorum.ArticleId = res.Id;
-                                    yorum.PostDate = Convert.ToDateTime(_yorum.tarih);
-                                    yorum.UserID = Convert.ToInt64(_yorum.uye);
-                                    yorum.userName = _yorum.isim;
-                                    yorum.Comment = _yorum.yorum;
-                                    yorumList.Add(yorum);
-                                }
-                                _commentRepo.AddRange(_mapper.Map<List<Comments>>(yorumList));
-                            }
-                            _unitOfWork.SaveChanges();
-                        }
-                        
-
+                        CreateContentSyncData(dto);
                     }
                 }
             }
@@ -155,6 +135,7 @@ namespace SCA.Services
 
 
             }
+
 
 
 
@@ -177,5 +158,111 @@ namespace SCA.Services
 
             return Result.ReturnAsSuccess(null, message: " Adet Makalenin Seknronizasyon İşlemi Tamamlanmıştır.", assayDetail);
         }
+
+        public async Task<ServiceResult> CreateContentSyncData(ContentDto dto)
+        {
+            ServiceResult _res = new ServiceResult();
+            try
+            {
+                UserSession session = new UserSession()
+                {
+                    Id = 1
+                };
+
+                string query = "";
+                DynamicParameters filter = new DynamicParameters();
+                GetContentQuery(CrudType.Insert, dto, session, ref query, ref filter);
+
+                var result = _db.Execute(query, filter);
+            }
+            catch (Exception ex)
+            {
+
+                _res = Result.ReturnAsFail(message: ex.ToString());
+            }
+            return _res;
+        }
+
+
+        public bool ContentControl(long id)
+        {
+            bool res = false;
+            string query = "select * from Content where SycnId=" + id;
+            var result = _db.Query<DistrictDto>(query).ToList();
+
+            if (result.Count > 0)
+            {
+                res = true;
+            }
+            else
+            {
+                res = false;
+            }
+            return res;
+        }
+
+        public void GetContentQuery(CrudType crudType, ContentDto dto, UserSession session, ref string query, ref DynamicParameters filter)
+        {
+            query = @"INSERT INTO Content (UserId, PublishStateType, SycnId, ReadCount,ImagePath, SeoUrl, Header, Writer, ConfirmUserId, ConfirmUserName, Category, ContentDescription, PlatformType, IsHeadLine, IsManset, IsMainMenu, IsConstantMainMenu, EventId, InternId, VisibleId, CreatedUserId, CreatedDate, UpdatedUserId, UpdatedDate, DeletedDate, DeletedUserId)
+                           VALUES (@UserId, @PublishStateType, @SycnId, @ReadCount, @ImagePath, @SeoUrl, @Header, @Writer, @ConfirmUserId, @ConfirmUserName, @Category, @ContentDescription, @PlatformType, @IsHeadLine, @IsManset, @IsMainMenu, @IsConstantMainMenu, @EventId, @InternId, @VisibleId, @CreatedUserId, @CreatedDate, @UpdatedUserId, @UpdatedDate, @DeletedDate, @DeletedUserId);";
+
+            if (crudType == CrudType.Insert)
+            {
+                query += "SELECT LAST_INSERT_ID();";
+            }
+
+            var _filter = new DynamicParameters();
+
+            _filter.Add("UserId", dto.UserId);
+            _filter.Add("PublishStateType", dto.PublishStateType);
+            _filter.Add("SycnId", dto.SycnId);
+            _filter.Add("ReadCount", dto.ReadCount);
+            _filter.Add("ImagePath", dto.ImagePath);
+            _filter.Add("SeoUrl", dto.SeoUrl);
+            _filter.Add("Header", dto.Header);
+            _filter.Add("Writer", dto.Writer);
+            _filter.Add("ConfirmUserId", dto.ConfirmUserId);
+            _filter.Add("ConfirmUserName", dto.ConfirmUserName);
+            _filter.Add("Category", dto.Category);
+            _filter.Add("ContentDescription", dto.ContentDescription);
+            _filter.Add("PlatformType", dto.PlatformType);
+            _filter.Add("IsHeadLine", dto.IsHeadLine);
+            _filter.Add("IsManset", dto.IsManset);
+            _filter.Add("IsMainMenu", dto.IsMainMenu);
+            _filter.Add("IsConstantMainMenu", dto.IsConstantMainMenu);
+            _filter.Add("EventId", dto.EventId);
+            _filter.Add("InternId", dto.InternId);
+            _filter.Add("VisibleId", dto.VisibleId);
+            if (crudType == CrudType.Insert)
+            {
+                _filter.Add("CreatedUserId", session.Id);
+                _filter.Add("CreatedDate", DateTime.Now);
+                _filter.Add("UpdatedUserId", "");
+                _filter.Add("UpdatedDate", "");
+                _filter.Add("DeletedDate", session.Id);
+                _filter.Add("DeletedUserId", DateTime.Now);
+            }
+            else
+            {
+                _filter.Add("UpdatedUserId", "");
+                _filter.Add("UpdatedDate", "");
+            }
+
+            if (crudType == CrudType.Update)
+            {
+                _filter.Add("UpdatedUserId", session.Id);
+                _filter.Add("UpdatedDate", DateTime.Now);
+            }
+
+            if (crudType == CrudType.Delete)
+            {
+                _filter.Add("DeletedDate", session.Id);
+                _filter.Add("DeletedUserId", DateTime.Now);
+                _filter.Add("IsDeleted", true);
+            }
+
+            filter = _filter;
+        }
+
     }
 }
