@@ -7,6 +7,7 @@ namespace SCA.Entity.DTO
 {
     public class TagRelationDto
     {
+        public long Id { get; set; }
         public long TagId { get; set; }
         public long TagContentId { get; set; }
         public ReadType ReadType { get; set; }

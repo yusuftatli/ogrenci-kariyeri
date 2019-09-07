@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MySql.Data.MySqlClient;
 using SCA.Common.Resource;
 using SCA.Common.Result;
 using SCA.Entity.Dto;
@@ -10,6 +11,7 @@ using SCA.Repository.UoW;
 using SCA.Services.Interface;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +24,9 @@ namespace SCA.Services
         private readonly IUnitofWork _unitOfWork;
         private IGenericRepository<Category> _categoryRepo;
         private IGenericRepository<CategoryRelation> _categoryRelationRepo;
+        private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
+
+
         public CategoryManager(IUnitofWork unitOfWork, IMapper mapper)
         {
             _mapper = mapper;
@@ -57,10 +62,10 @@ namespace SCA.Services
             {
                 Result.ReturnAsFail(AlertResource.NoChanges, null);
             }
-            var entity = _categoryRepo.Add(_mapper.Map<Category>(dto));
-            var res = _unitOfWork.SaveChanges();
-            res.Data = entity.Id;
-            return res;
+            string query = GetCategoryQuery(CrudType.Insert, null, null);
+
+
+            return null;
         }
         /// <summary>
         /// kategori bilgileri güncellenir
@@ -104,9 +109,43 @@ namespace SCA.Services
         #endregion
         public async Task<ServiceResult> CreateCategoryRelation(List<CategoryRelationDto> listData)
         {
+
+
             _categoryRelationRepo.AddRange(_mapper.Map<List<CategoryRelation>>(listData));
             return _unitOfWork.SaveChanges();
         }
+
+        private static string GetCategoryQuery(CrudType crudType, CategoriesDto dto, CategoriesDto session)
+        {
+            string query = "";
+            if (crudType == CrudType.Insert)
+            {
+                query = $"Insert Into Category (Description,IsActive,CreatedUserId,CreatedDate) VALUES({dto.Description},{true},{session.Id},{DateTime.Now})";
+            }
+
+            if (crudType == CrudType.Update)
+            {
+                query = $"Update Category set Description={dto.Description},IsActive={dto.IsActive},UpdatedUserId={session.IsActive},UpdatedDate={DateTime.Now}";
+            }
+            return query;
+        }
+
+        private static string GetCategoryRelationQuery(CrudType crudType, CategoryRelationDto dto, UserSession session)
+        {
+            string query = "";
+            if (crudType == CrudType.Insert)
+            {
+                query = $"Insert Into CategoryRelation  (CategoryId,TagContentId,ReadType,CreatedUserId,CreatedDate) Values" +
+                    $"({dto.CategoryId},{dto.TagContentId},{dto.ReadType},{session.Id},{DateTime.Now})";
+            }
+
+            if (crudType == CrudType.Update)
+            {
+                query = $"Update CategoryRelation set CategoryId={dto.CategoryId},TagContentId={dto.TagContentId},ReadType={dto.ReadType},UpdatedUserId={session.Id},UpdatedDate={DateTime.Now}";
+            }
+            return query;
+        }
+
         public List<CategoryRelationDto> GetCategoryRelation(string data, long Id, ReadType readType)
         {
             List<CategoryRelationDto> listData = new List<CategoryRelationDto>();
