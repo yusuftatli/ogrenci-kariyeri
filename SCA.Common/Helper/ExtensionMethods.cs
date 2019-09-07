@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
@@ -19,6 +21,11 @@ namespace SCA.Common
             }
             else
                 return "This is not an enum";
+        }
+
+        public static T GetSessionData<T>(this HttpContext context, string sessionName) where T : class
+        {
+            return JsonConvert.DeserializeObject<T>(context.Session.GetString("userInfo"));
         }
 
         public static string FriendlyUrl(this string url)
