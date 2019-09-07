@@ -62,7 +62,7 @@ namespace SCA.Services
         /// </summary>
         /// <param name="seoUrl"></param>
         /// <returns></returns>
-        Task<ContentDetailForDetailPageDTO> GetContentUI(string seoUrl, long userId);
+        Task<ContentDetailForDetailPageDTO> GetContentUI(string seoUrl, long? userId = null);
 
         /// <summary>
         /// mobil makale detay servisi
@@ -74,6 +74,6 @@ namespace SCA.Services
         Task<ServiceResult> CreateContentSyncData(ContentDto dto);
 
         Task<List<FavoriteDto>> GetFavoriteContents(int count);
-        Task<bool> CreateFavorite(long userId, long contentId);
+        Task<bool> CreateFavorite(FavoriteDto dto);
     }
 }

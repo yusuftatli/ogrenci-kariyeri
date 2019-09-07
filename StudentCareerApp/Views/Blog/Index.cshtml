@@ -6,13 +6,25 @@
 }
 
 <style>
-    .entry-content img{
+    .entry-content img {
         width: 100% !important;
         height: 100% !important;
-        margin-top:10px !important;
-        margin-bottom:10px !important;
-        border-radius:5px;
-        box-shadow:0px 0px 5px 0px;
+        margin-top: 10px !important;
+        margin-bottom: 10px !important;
+        border-radius: 5px;
+        box-shadow: 0px 0px 5px 0px;
+    }
+    .heart-box i{
+        width:35px;
+        height: 35px;
+        -webkit-border-radius: 50%;
+        text-align:center;
+        vertical-align:sub;
+        font-size:28px !important;
+        line-height: 28px !important;
+    }
+    .heart-box a:hover, heart-box a.active{
+        color: #e31b23 !important;
     }
 </style>
 
@@ -20,13 +32,13 @@
 <section class="single-post-wrapper post-layout-1">
     <div class="container">
         @*<div class="row">
-            <div class="col-lg-12">
-                <div class="single-big-img mb-30" style="background-image: url(@Model.ImagePath)"></div>
-            </div>
-        </div>*@
+                <div class="col-lg-12">
+                    <div class="single-big-img mb-30" style="background-image: url(@Model.ImagePath)"></div>
+                </div>
+            </div>*@
         <div class="row">
             <div class="col-lg-9">
-                <div class="single-big-img mb-30" style="background-image: url(@Model.ImagePath)"></div>
+                @*<div class="single-big-img mb-30" style="background-image: url(@Model.ImagePath)"></div>*@
                 <div class="ts-grid-box content-wrapper single-post">
                     <div class="entry-header">
                         <div class="category-name-list">
@@ -68,87 +80,97 @@
                                     <i class="fa fa-share"></i>
                                 </a>
                             </li>
+                            <li class="heart-box">
+                                <a href="" class="@(Model.IsFavoriteContent ? "active" : "")">
+                                    <i class="fa fa-heart"></i>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                     <!-- single post header end-->
                     <div class="post-content-area">
+                        <div class="post-media post-featured-image">
+                            <a href="@Model.ImagePath" class="gallery-popup">
+                                <img src="@Model.ImagePath" class="img-fluid" alt="">
+                            </a>
+                        </div>
                         <div class="entry-content">
                             @Html.Raw(Model.ContentDescription)
                             @*<p>
-                        <span class="tie-dropcap">A</span> farmers in the US’s South—faced with continued failure in their efforts to run on successful farms their
-                        launched a lawsuit claiming that “white racism” is to the blame for their inability to produce crop yields.
-                    </p>
-                    <p>
-                        Black farmers in the US’s South—
-                        <span>faced with continued failure their efforts to run successful farms</span> their launched a lawsuit claiming that
-                        “white racism” is to blame for their inability to the produce crop yields and on equivalent to that switched seeds.
-                    </p>
-                    <blockquote>
-                        Black farmers in the US’s South faced with continued failure in their efforts to run the successful farms launched a lawsuit
-                        <cite>Steve Jobs</cite>
-                    </blockquote>
-                    <h3>
-                        For the first time the Swiss State Secretart for Economic Affair (SECO) has indicated that Uber taxi drivers should
-                    </h3>
-                    <p>
-                        Black farmers in the US’s South—
-                        <span>faced with continued failure their efforts to run successful farms</span> their launched a lawsuit claiming that
-                        “white racism” is to blame for their inability to the produce crop yields and on equivalent to that switched seeds.
-                    </p>
+                                    <span class="tie-dropcap">A</span> farmers in the US’s South—faced with continued failure in their efforts to run on successful farms their
+                                    launched a lawsuit claiming that “white racism” is to the blame for their inability to produce crop yields.
+                                </p>
+                                <p>
+                                    Black farmers in the US’s South—
+                                    <span>faced with continued failure their efforts to run successful farms</span> their launched a lawsuit claiming that
+                                    “white racism” is to blame for their inability to the produce crop yields and on equivalent to that switched seeds.
+                                </p>
+                                <blockquote>
+                                    Black farmers in the US’s South faced with continued failure in their efforts to run the successful farms launched a lawsuit
+                                    <cite>Steve Jobs</cite>
+                                </blockquote>
+                                <h3>
+                                    For the first time the Swiss State Secretart for Economic Affair (SECO) has indicated that Uber taxi drivers should
+                                </h3>
+                                <p>
+                                    Black farmers in the US’s South—
+                                    <span>faced with continued failure their efforts to run successful farms</span> their launched a lawsuit claiming that
+                                    “white racism” is to blame for their inability to the produce crop yields and on equivalent to that switched seeds.
+                                </p>
 
 
-                    <p>
-                        Black farmers in the US’s South—
-                        <span>faced with continued failure their efforts to run successful farms</span> their launched a lawsuit claiming that
-                        “white racism” is to blame for their inability to the produce crop yields and on equivalent to that switched seeds.
-                    </p>
-                    <div class="post-video">
-                        <img class="img-fluid" src="images/news/travel/travel9.jpg" alt="">
-                        <div class="post-video-content">
-                            <a href="https://www.youtube.com/watch?v=_0UO1NcheAE" class="ts-play-btn">
-                                <i class="fa fa-play" aria-hidden="true"></i>
-                            </a>
-                            <h3>
-                                <a href=""> For the first time the Swiss State Secretart for Economic indicated that Uber taxi</a>
-                            </h3>
-                        </div>
-                    </div>
-                    <h3>
-                        For the first time the Swiss State Secretart for Economic Affair (SECO) has indicated that Uber taxi drivers should be classed
-                        as employees
-                    </h3>
-                    <p>
-                        Black farmers in the US’s South—faced with continued failure in their efforts to run successful farms their launched a lawsuit
-                        claiming that “white racism” is to blame for their inability to produce crop yields and on equivalent to that switched
-                        seeds in order to sell black farmers a subpar product at the Mid-South Farm & Gin Show in March 2017. Despite above
-                        average rainfall, the black farmers saw limited soybean yield from the Stine seeds during the 2017 harvest.
-                    </p>
-                    <p>
-                        <a href="">
-                            <img class="img-fluid" src="images/banner/banner2.jpg" alt="">
-                        </a>
-                    </p>
-                    <h3>
-                        For the first time the Swiss State Secretart for Economic Affair
-                    </h3>
-                    <ul>
-                        <li>
-                            But there was also no shortage of news for the worlds of film.
-                        </li>
-                        <li>
-                            Prasad made these comments on behalf of the Treasury benches.
-                        </li>
-                        <li>
-                            He gave details of the answers provided by Defence.
-                        </li>
-                        <li>
-                            The government has been forthcoming in declaring the aircraft.
-                        </li>
-                    </ul>
-                    <p>
-                        Black farmers in the US’s South—faced with continued failure in their efforts to run successful farms their launched a lawsuit
-                        claiming that “white racism” is to blame for their inability
-                    </p>*@
+                                <p>
+                                    Black farmers in the US’s South—
+                                    <span>faced with continued failure their efforts to run successful farms</span> their launched a lawsuit claiming that
+                                    “white racism” is to blame for their inability to the produce crop yields and on equivalent to that switched seeds.
+                                </p>
+                                <div class="post-video">
+                                    <img class="img-fluid" src="images/news/travel/travel9.jpg" alt="">
+                                    <div class="post-video-content">
+                                        <a href="https://www.youtube.com/watch?v=_0UO1NcheAE" class="ts-play-btn">
+                                            <i class="fa fa-play" aria-hidden="true"></i>
+                                        </a>
+                                        <h3>
+                                            <a href=""> For the first time the Swiss State Secretart for Economic indicated that Uber taxi</a>
+                                        </h3>
+                                    </div>
+                                </div>
+                                <h3>
+                                    For the first time the Swiss State Secretart for Economic Affair (SECO) has indicated that Uber taxi drivers should be classed
+                                    as employees
+                                </h3>
+                                <p>
+                                    Black farmers in the US’s South—faced with continued failure in their efforts to run successful farms their launched a lawsuit
+                                    claiming that “white racism” is to blame for their inability to produce crop yields and on equivalent to that switched
+                                    seeds in order to sell black farmers a subpar product at the Mid-South Farm & Gin Show in March 2017. Despite above
+                                    average rainfall, the black farmers saw limited soybean yield from the Stine seeds during the 2017 harvest.
+                                </p>
+                                <p>
+                                    <a href="">
+                                        <img class="img-fluid" src="images/banner/banner2.jpg" alt="">
+                                    </a>
+                                </p>
+                                <h3>
+                                    For the first time the Swiss State Secretart for Economic Affair
+                                </h3>
+                                <ul>
+                                    <li>
+                                        But there was also no shortage of news for the worlds of film.
+                                    </li>
+                                    <li>
+                                        Prasad made these comments on behalf of the Treasury benches.
+                                    </li>
+                                    <li>
+                                        He gave details of the answers provided by Defence.
+                                    </li>
+                                    <li>
+                                        The government has been forthcoming in declaring the aircraft.
+                                    </li>
+                                </ul>
+                                <p>
+                                    Black farmers in the US’s South—faced with continued failure in their efforts to run successful farms their launched a lawsuit
+                                    claiming that “white racism” is to blame for their inability
+                                </p>*@
                         </div>
                         <!-- entry content end-->
                     </div>
