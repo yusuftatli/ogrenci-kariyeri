@@ -11,7 +11,7 @@ namespace SCA.Services
     public interface ITagManager
     {
         Task<ServiceResult> GetTags();
-        Task<ServiceResult> CreateTag(string tags, long tagContentId, ReadType ReadType);
+        Task<ServiceResult> CreateTag(string tags, long tagContentId, ReadType ReadType, UserSession session);
         void CreateTagRelation(List<TagRelationDto> dto);
         void UpdateTagRelation(List<TagRelationDto> dto);
     }

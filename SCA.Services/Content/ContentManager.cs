@@ -104,12 +104,13 @@ namespace SCA.Services
 
             return Result.ReturnAsSuccess(null, null, dataList);
         }
-        public async Task<ContentDetailForDetailPageDTO> GetContentUI(string seoUrl)
+        public async Task<ContentDetailForDetailPageDTO> GetContentUI(string seoUrl, long userId)
         {
             ContentDetailForDetailPageDTO _res = new ContentDetailForDetailPageDTO();
             try
             {
-                string query = "select * from Content where SeoUrl=@SeoUrl";
+                string query = $"select *, IFNULL((select Id from Favorite _f where _f.UserId = {userId} and _f.ContentId = _c.Id and _f.IsActive = 1),0) as IsFavoriteContent " +
+                    $"from Content _c where PlatformType <> 1 and seoUrl={seoUrl}";
                 DynamicParameters filter = new DynamicParameters();
                 _res = await _db.QueryFirstAsync<ContentDetailForDetailPageDTO>(query, new { SeoUrl = seoUrl });
 
@@ -199,18 +200,25 @@ namespace SCA.Services
                 dto.ReadCount = 0;
                 dto.Writer = session.Name + " " + session.Surname;
                 dto.PublishStateType = PublishState.Taslak;
-                var data = _mapper.Map<Content>(dto);
-                res = _contentRepo.Add(data);
+
+                string query = "";
+                DynamicParameters filter = new DynamicParameters();
+                GetContentQuery(CrudType.Insert, dto, session, ref query, ref filter);
+                var contenId = _db.Execute(query, filter);
+
                 resultMessage = (dto.IsSendConfirm) ? "Makale Yönetici Tarafına Onaya Gönderildi." : "Makale Taslak Olarak Kayıt Edildi.";
             }
             else
             {
-                var updateData = _mapper.Map<Content>(dto);
-                _contentRepo.Update(updateData);
+                string query = "";
+                DynamicParameters filter = new DynamicParameters();
+                GetContentQuery(CrudType.Update, dto, session, ref query, ref filter);
+                var contenId = _db.Execute(query, filter);
+
                 resultMessage = (dto.IsSendConfirm) ? "Makale Yönetici Tarafına Onaya Gönderildi." : "Makale Taslak Olarak Güncellendi.";
             }
-            _unitOfWork.SaveChanges();
-            await _tagManager.CreateTag(dto.Tags, res.Id, ReadType.Content);
+
+            await _tagManager.CreateTag(dto.Tags, res.Id, ReadType.Content, session);
             await _categoryManager.CreateCategoryRelation(_categoryManager.GetCategoryRelation(dto.Category, res.Id, ReadType.Content));
             return Result.ReturnAsSuccess(null, message: resultMessage, null);
         }
@@ -223,7 +231,7 @@ namespace SCA.Services
             DynamicParameters filter = null;
             GetContentQuery(CrudType.Insert, dto, session, ref query, ref filter);
 
-            var dataList = _db.Query<ContentShortListDto>(query, filter);
+            var res = _db.Execute(query, filter);
 
             return Result.ReturnAsSuccess();
 
@@ -293,6 +301,7 @@ namespace SCA.Services
             {
                 _filter.Add("UpdatedUserId", session.Id);
                 _filter.Add("UpdatedDate", DateTime.Now);
+                _filter.Add("IsDeleted", false);
             }
 
             if (crudType == CrudType.Delete)
@@ -415,6 +424,22 @@ namespace SCA.Services
             }
 
             return listData;
+        }
+
+
+        public async Task<List<FavoriteDto>> GetFavoriteContents(int count)
+        {
+            string query = $"select * from Favorite limit {count}";
+            var listData = _db.Query<FavoriteDto>(query).ToList();
+            return listData;
+        }
+
+
+        public async Task<bool> CreateFavorite(long userId, long contentId)
+        {
+            string query = $"Insert Into Favorite (UserId,ContentId,IsActive) values ({userId},{contentId},{true})";
+            var res = _db.Execute(query);
+          return  (res != -1) ? true : false;
         }
     }
 }
