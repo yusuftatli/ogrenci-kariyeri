@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using Dapper;
+using MySql.Data.MySqlClient;
 using SCA.Entity.Model;
 using SCA.Repository.Repo;
 using SCA.Repository.UoW;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,12 +16,13 @@ namespace SCA.Services
     {
         private readonly IMapper _mapper;
         private readonly IUnitofWork _unitOfWork;
-        private IGenericRepository<Errors> _errorRepo;
+        private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=ErrorDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
+
+
         public ErrorManagement(IUnitofWork unitOfWork, IMapper mapper)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
-            _errorRepo = unitOfWork.GetRepository<Errors>();
         }
 
         public async Task<string> SaveError(string value)
@@ -26,11 +30,12 @@ namespace SCA.Services
             string error = "";
             try
             {
-                Errors data = new Errors();
-                data.Error = value;
+                string query = "insert into Errors(Description,UserId,ErrorDate) values(@Description,1,CURDATE());";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("Description", value);
+                var result = _db.Execute(query, filter);
 
-                _errorRepo.Add(data);
-                var res = _unitOfWork.SaveChanges();
+
             }
             catch (Exception ex)
             {

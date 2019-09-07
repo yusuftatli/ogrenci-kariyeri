@@ -375,27 +375,27 @@ namespace SCA.Services
 
                 if (hitTypes == HitTypes.LastAssay)
                 {
-                    query = $"select  * from  Content order by Id asc limit {count}";
+                    query = $"select  * from  Content where  PlatformType <> 1 order by Id asc limit {count};";
                 }
 
                 else if (hitTypes == HitTypes.Manset)
                 {
-                    query = $"select  * from  Content order by Id asc limit {count}";
+                    query = $"select  * from  Content where  PlatformType <> 1 order by Id asc limit {count};";
                 }
 
                 else if (hitTypes == HitTypes.MostPopuler)
                 {
-                    query = $"select  * from  Content order by Id asc limit {count}";
+                    query = $"select  * from  Content where  PlatformType <> 1 order by Id asc limit {count};";
                 }
 
                 else if (hitTypes == HitTypes.DailyMostPopuler)
                 {
-                    query = $"select  * from  Content order by Id asc limit {count}";
+                    query = $"select  * from  Content where  PlatformType <> 1 order by Id asc limit {count};";
                 }
 
                 else if (hitTypes == HitTypes.HeadLine)
                 {
-                    query = $"select  * from  Content order by Id asc limit {count}";
+                    query = $"select  * from  Content where  PlatformType <> 1 order by Id asc limit {count};";
                 }
                 listData = _db.Query<ContentForHomePageDTO>(query, filter).ToList();
             }
