@@ -13,6 +13,7 @@ namespace SCA.Entity.DTO
         public DateTime PublishDate { get; set; }
         public int ReadCount { get; set; }
         public string Tags { get; set; }
+        public bool IsFavoriteContent { get; set; }
         public string ContentDescription { get; set; }
         public List<ContentForHomePageDTO> MostPopularItems { get; set; }
     }

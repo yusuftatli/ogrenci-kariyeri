@@ -23,7 +23,7 @@
         font-size:28px !important;
         line-height: 28px !important;
     }
-    .heart-box a:hover{
+    .heart-box a:hover, heart-box a.active{
         color: #e31b23 !important;
     }
 </style>
@@ -81,7 +81,7 @@
                                 </a>
                             </li>
                             <li class="heart-box">
-                                <a href="">
+                                <a href="" class="@(Model.IsFavoriteContent ? "active" : "")">
                                     <i class="fa fa-heart"></i>
                                 </a>
                             </li>
