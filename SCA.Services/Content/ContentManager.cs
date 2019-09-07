@@ -435,11 +435,37 @@ namespace SCA.Services
         }
 
 
-        public async Task<bool> CreateFavorite(long userId, long contentId)
+        public async Task<bool> CreateFavorite(FavoriteDto dto)
         {
-            string query = $"Insert Into Favorite (UserId,ContentId,IsActive) values ({userId},{contentId},{true})";
-            var res = _db.Execute(query);
-          return  (res != -1) ? true : false;
+            string query = "";
+            if (await FavoriteControl(dto.UserId, dto.ContentId) == false)
+            {
+                query = $"Insert Into Favorite (UserId,ContentId,IsActive) values ({dto.UserId},{dto.ContentId},{dto.IsActive})";
+            }
+            else
+            {
+                query = $"Update Favorite  set IsActive={dto.IsActive} where UserId={dto.UserId} and ContentId={dto.ContentId}";
+            }
+
+            var res = await _db.ExecuteAsync(query);
+            return (res != -1) ? true : false;
+        }
+
+        public async Task<bool> FavoriteControl(long userId, long cotentId)
+        {
+            bool _res = false;
+            string query = $"Select * from Favorite where UserId={userId} and ContentId ={cotentId}";
+            var result = await _db.QueryAsync<FavoriteDto>(query) as List<FavoriteDto>;
+
+            if (result.Count > 0)
+            {
+                _res = true;
+            }
+            else
+            {
+                _res = false;
+            }
+            return _res;
         }
     }
 }
