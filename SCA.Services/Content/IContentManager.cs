@@ -62,7 +62,7 @@ namespace SCA.Services
         /// </summary>
         /// <param name="seoUrl"></param>
         /// <returns></returns>
-        Task<ServiceResult> GetContentUI(string seoUrl);
+        Task<ContentDetailForDetailPageDTO> GetContentUI(string seoUrl);
 
         /// <summary>
         /// mobil makale detay servisi

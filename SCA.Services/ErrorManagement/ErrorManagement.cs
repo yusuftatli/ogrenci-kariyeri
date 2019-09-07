@@ -34,8 +34,6 @@ namespace SCA.Services
                 DynamicParameters filter = new DynamicParameters();
                 filter.Add("Description", value);
                 var result = _db.Execute(query, filter);
-
-
             }
             catch (Exception ex)
             {
