@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SCA.Entity.DTO;
+using SCA.Services;
 using SCA.Services.Interface;
 
 namespace SCA.UI.Controllers
@@ -11,19 +12,18 @@ namespace SCA.UI.Controllers
     public class BlogController : Controller
     {
         #region INTERFACES & CONSTRUCTOR
-        private readonly IB2CManagerUI b2cManager;
-        public BlogController(IB2CManagerUI b2CManager)
+        private readonly IContentManager _contentManager;
+        public BlogController(IContentManager contentManager)
         {
-            this.b2cManager = b2CManager;
+            _contentManager = contentManager;
         }
         #endregion
 
 
         [Route("makale/{SeoUrl}"), HttpGet]
-        public async Task<IActionResult> Index(string SeoUrl)
+        public async Task<IActionResult> Index(string seoUrl)
         {
-            var res = await b2cManager.GetContentDetailForDetailPage(SeoUrl);
-            var fakeData = FakeContentDetail();
+            var res = await _contentManager.GetContentUI(seoUrl);
             return View(res);
         }
 
