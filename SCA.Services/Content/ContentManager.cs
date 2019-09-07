@@ -104,17 +104,26 @@ namespace SCA.Services
 
             return Result.ReturnAsSuccess(null, null, dataList);
         }
-        public async Task<ServiceResult> GetContentUI(string seoUrl)
+        public async Task<ContentDetailForDetailPageDTO> GetContentUI(string seoUrl)
         {
-            ContentForUIDto result = new ContentForUIDto();
-            var contentData = _mapper.Map<ContenUIDto>(_contentRepo.Get(x => x.SeoUrl == seoUrl && x.PlatformType != PlatformType.Mobil));
+            ContentDetailForDetailPageDTO _res = new ContentDetailForDetailPageDTO();
+            try
+            {
+                string query = "select * from Content where SeoUrl=@SeoUrl";
+                DynamicParameters filter = new DynamicParameters();
+                _res = await _db.QueryFirstAsync<ContentDetailForDetailPageDTO>(query, new { SeoUrl = seoUrl });
 
-            var userData = _userManager.GetUserInfo(contentData.CreatedUserId);
+                _res.Writer = "Olcay Aksoy";
 
-            contentData.WriterName = userData.Name + " " + userData.Surname;
-            contentData.WriterImagePath = userData.ImagePath;
-
-            return Result.ReturnAsSuccess(null, null, contentData);
+                query = $"select  * from  Content where  PlatformType <> 1 order by PublishDate desc limit 10;";
+                var result2 = await _db.QueryFirstAsync<List<ContentForHomePageDTO>>(query);
+                _res.MostPopularItems = result2;
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString());
+            }
+            return _res;
         }
 
         public async Task<ServiceResult> GetContentForMobil(string seoUrl)
@@ -363,6 +372,7 @@ namespace SCA.Services
             });
             return _res;
         }
+
         public async Task<List<ContentForHomePageDTO>> GetContentForHomePage(HitTypes hitTypes, int count)
         {
             List<ContentForHomePageDTO> listData = new List<ContentForHomePageDTO>();
@@ -375,7 +385,7 @@ namespace SCA.Services
 
                 if (hitTypes == HitTypes.LastAssay)
                 {
-                    query = $"select  * from  Content where  PlatformType <> 1 order by Id asc limit {count};";
+                    query = $"select  * from  Content where  PlatformType <> 1 order by PublishDate desc limit {count};";
                 }
 
                 else if (hitTypes == HitTypes.Manset)
@@ -385,7 +395,7 @@ namespace SCA.Services
 
                 else if (hitTypes == HitTypes.MostPopuler)
                 {
-                    query = $"select  * from  Content where  PlatformType <> 1 order by Id asc limit {count};";
+                    query = $"select  * from  Content where  PlatformType <> 1 order by ReadCount asc limit {count};";
                 }
 
                 else if (hitTypes == HitTypes.DailyMostPopuler)
@@ -401,7 +411,7 @@ namespace SCA.Services
             }
             catch (Exception ex)
             {
-
+                await _errorManagement.SaveError(ex.ToString());
             }
 
             return listData;
