@@ -54,8 +54,8 @@ namespace SCA.Services
         /// <param name="state"></param>
         /// <returns></returns>
         Task<ServiceResult> MainCategoryStatusUpdate(int id, bool state);
-        Task<ServiceResult> CreateCategoryRelation(List<CategoryRelationDto> listData);
-        List<CategoryRelationDto> GetCategoryRelation(string data, long Id, ReadType readType);
+        Task<ServiceResult> CreateCategoryRelation(List<CategoryRelationDto> listData,UserSession session);
+        List<CategoryRelationDto> GetCategoryRelation(string data, long Id, ReadType readType, UserSession session);
 
     }
 }

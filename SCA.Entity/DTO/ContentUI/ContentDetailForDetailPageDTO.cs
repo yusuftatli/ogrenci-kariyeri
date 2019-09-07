@@ -16,5 +16,6 @@ namespace SCA.Entity.DTO
         public bool IsFavoriteContent { get; set; }
         public string ContentDescription { get; set; }
         public List<ContentForHomePageDTO> MostPopularItems { get; set; }
+        public List<CommentForUIDto> CommentList{ get; set; }
     }
 }
