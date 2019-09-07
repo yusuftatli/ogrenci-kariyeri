@@ -55,7 +55,7 @@
                     @await Component.InvokeAsync("SocialMedia")
                     @await Component.InvokeAsync("Banner", new { url = "#", imagePath = "images/banner/sidebar-banner1.jpg" })
                     @await Component.InvokeAsync("RecentAndFavorites")
-                    @await Component.InvokeAsync("PopularContents")
+                    @await Component.InvokeAsync("PopularContents", new { count = 5})
                     @await Component.InvokeAsync("PopularCategories")
                 </div>
                 <!-- right sidebar end-->

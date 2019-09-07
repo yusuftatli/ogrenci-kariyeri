@@ -113,7 +113,6 @@ namespace SCA.Services
                 DynamicParameters filter = new DynamicParameters();
                 _res = await _db.QueryFirstAsync<ContentDetailForDetailPageDTO>(query, new { SeoUrl = seoUrl });
 
-                _res.Writer = "Olcay Aksoy";
 
                 query = $"select  * from  Content where  PlatformType <> 1 order by PublishDate desc limit 10;";
                 var result2 = await _db.QueryFirstAsync<List<ContentForHomePageDTO>>(query);

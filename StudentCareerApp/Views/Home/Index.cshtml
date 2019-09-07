@@ -95,7 +95,7 @@
             <div class="col-lg-3">
                 <div class="right-sidebar">
                     @await Component.InvokeAsync("SocialMedia")
-                    @await Component.InvokeAsync("PopularContents")
+                    @await Component.InvokeAsync("PopularContents", new { count = 5})
                     @await Component.InvokeAsync("PopularCategories")
                     @await Component.InvokeAsync("NewsletterForm")
                 </div>
@@ -107,13 +107,13 @@
     <!-- container end-->
 </section>
 <!-- post wraper end-->
-@await Component.InvokeAsync("NewsWithSlider", 10)
+@await Component.InvokeAsync("NewsWithSlider", new { count = 10})
 <!-- post wraper end-->
 <section class="block-wrapper mt-15 xs-mb-30">
     <div class="container">
         <div class="row">
             <div class="col-lg-9">
-                @await Component.InvokeAsync("NewsWith2Columns", 20)
+                @await Component.InvokeAsync("NewsWith2Columns", new { count = 20})
             </div>
             <div class="col-lg-3">
                 <div class="right-sidebar">

@@ -1,6 +1,16 @@
-﻿@model SCA.Entity.DTO.RecentAndFavoritesContentForUIDto
+﻿@using Microsoft.AspNetCore.Http;
 
-@if (Model != null && Model.Recents != null && Model.Recents.Count > 0)
+@model SCA.Entity.DTO.RecentAndFavoritesContentForUIDto
+
+@{
+    SCA.Entity.DTO.UserSession user = new SCA.Entity.DTO.UserSession();
+    if (Context.Session.Keys.Any(x => x.Contains("userInfo")))
+    {
+        user = Newtonsoft.Json.JsonConvert.DeserializeObject<SCA.Entity.DTO.UserSession>(Context.Session.GetString("userInfo"));
+    }
+}
+
+@if (!user.Id.Equals(0) && Model != null && Model.Recents != null && Model.Recents.Count > 0)
 {
     <div class="post-list-item widgets">
         <!-- Nav tabs -->
