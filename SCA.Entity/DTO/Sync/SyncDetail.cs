@@ -20,6 +20,6 @@ namespace SCA.Entity.DTO
         public string app { get; set; }
         public bool favori { get; set; }
         public string kategori { get; set; }
-        public List<yorumlar> yorumlar { get; set; }
+
     }
 }

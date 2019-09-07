@@ -2,6 +2,7 @@
 using Dapper;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
+using SCA.Common;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
 using SCA.Entity.DTO.Sync;
@@ -75,8 +76,8 @@ namespace SCA.Services
                         dto.Header = assayDetail.post_title;
                         dto.ContentDescription = assayDetail.post_content;
                         dto.UserId = Convert.ToInt64(assayDetail.post_author);
-
                         dto.Category = assayDetail.kategori;
+                        dto.SeoUrl =assayDetail.post_title.FriendlyUrl();
 
                         if (!string.IsNullOrEmpty(assayDetail.appStaj))
                         {
@@ -203,8 +204,8 @@ namespace SCA.Services
 
         public void GetContentQuery(CrudType crudType, ContentDto dto, UserSession session, ref string query, ref DynamicParameters filter)
         {
-            query = @"INSERT INTO Content (UserId, PublishStateType, SycnId, ReadCount,ImagePath, SeoUrl, Header, Writer, ConfirmUserId, ConfirmUserName, Category, ContentDescription, PlatformType, IsHeadLine, IsManset, IsMainMenu, IsConstantMainMenu, EventId, InternId, VisibleId, CreatedUserId, CreatedDate, UpdatedUserId, UpdatedDate, DeletedDate, DeletedUserId)
-                           VALUES (@UserId, @PublishStateType, @SycnId, @ReadCount, @ImagePath, @SeoUrl, @Header, @Writer, @ConfirmUserId, @ConfirmUserName, @Category, @ContentDescription, @PlatformType, @IsHeadLine, @IsManset, @IsMainMenu, @IsConstantMainMenu, @EventId, @InternId, @VisibleId, @CreatedUserId, @CreatedDate, @UpdatedUserId, @UpdatedDate, @DeletedDate, @DeletedUserId);";
+            query = @"INSERT INTO Content (UserId, PublishStateType, SycnId, ReadCount,ImagePath, SeoUrl, Header, Writer, ConfirmUserId, PublishDate, ConfirmUserName, Category, ContentDescription, PlatformType, IsHeadLine, IsManset, IsMainMenu, IsConstantMainMenu, EventId, InternId, VisibleId, CreatedUserId, CreatedDate, UpdatedUserId, UpdatedDate, DeletedDate, DeletedUserId)
+                           VALUES (@UserId, @PublishStateType, @SycnId, @ReadCount, @ImagePath, @SeoUrl, @Header, @Writer, @ConfirmUserId,@PublishDate, @ConfirmUserName, @Category, @ContentDescription, @PlatformType, @IsHeadLine, @IsManset, @IsMainMenu, @IsConstantMainMenu, @EventId, @InternId, @VisibleId, @CreatedUserId, @CreatedDate, @UpdatedUserId, @UpdatedDate, @DeletedDate, @DeletedUserId);";
 
             if (crudType == CrudType.Insert)
             {
@@ -228,6 +229,7 @@ namespace SCA.Services
             _filter.Add("PlatformType", dto.PlatformType);
             _filter.Add("IsHeadLine", dto.IsHeadLine);
             _filter.Add("IsManset", dto.IsManset);
+            _filter.Add("PublishDate", dto.PublishDate);
             _filter.Add("IsMainMenu", dto.IsMainMenu);
             _filter.Add("IsConstantMainMenu", dto.IsConstantMainMenu);
             _filter.Add("EventId", dto.EventId);
