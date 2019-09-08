@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Dapper;
+using MySql.Data.MySqlClient;
 using SCA.Common;
 using SCA.Common.Resource;
 using SCA.Common.Result;
@@ -10,8 +12,10 @@ using SCA.Repository.UoW;
 using SCA.Services.Interface;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,8 +32,11 @@ namespace SCA.Services
         private IPictureManager _pictureManager;
         private IUserValidation _userValidation;
         private IAuthManager _authManager;
+        private IEnumerable<ContentShortListDto> dataList;
         private readonly IErrorManagement _errorManagement;
         private readonly IRoleManager _roleManager;
+        private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
+
         public UserManager(IUnitofWork unitOfWork, IRoleManager roleManager, IMapper mapper, ISender sender, IPictureManager pictureManager, IErrorManagement errorManagement, IUserValidation userValidation, IAuthManager authManager)
         {
             _mapper = mapper;
@@ -48,22 +55,21 @@ namespace SCA.Services
         public async Task<ServiceResult> UpdateUserCategory(long userId, string category)
         {
             ServiceResult _res = new ServiceResult();
-            await Task.Run(() =>
+            try
             {
-                var data = _userRepo.Get(x => x.Id == userId);
-                data.Category = category;
-                _userRepo.Update(data);
-                var result = _unitOfWork.SaveChanges();
-                if (result.ResultCode == HttpStatusCode.OK)
-                {
-                    _res = Result.ReturnAsSuccess(message: "Kategori ilgi alanları güncelleme başarılı");
-                }
-                else
-                {
-                    _res = Result.ReturnAsFail(message: "Kategori ilgi alanları güncelleme yapılırken hata meydana geldi");
-                    _errorManagement.SaveError(result.Message);
-                }
-            });
+                string query = "Update Users set Category=@Category where Id=@userId";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("userId", userId);
+                filter.Add("Category", category);
+
+                var result = _db.Execute(query, filter);
+                _res = Result.ReturnAsSuccess(message: "iİlgi alanları güncelleme işlemi başarılı");
+            }
+            catch (Exception ex)
+            {
+                _res = Result.ReturnAsFail(message: "İlgi alanları güncelleme işlemi sırasında hata meydana geldi.");
+                await _errorManagement.SaveError(ex.ToString());
+            }
             return _res;
         }
         public async Task<ServiceResult> CreateUserByMobil(UserMobilDto dto)
@@ -84,6 +90,11 @@ namespace SCA.Services
 
         public async Task<List<UserModelList>> GetUserList()
         {
+            string query = "";
+
+
+
+
             var roleTypes = await _roleManager.GetRoles();
             var data = _mapper.Map<List<UserModelList>>(_userRepo.GetAll(x => x.RoleTypeId != 1).ToList());
 
@@ -140,6 +151,22 @@ namespace SCA.Services
 
         public async Task<ServiceResult> UserLoginByMobil(MobilUserLoginDto dto)
         {
+            ServiceResult _res = new ServiceResult();
+            try
+            {
+                string query = "";
+
+
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+
             if (_userRepo.Any(x => x.Password.Equals(dto.password) && x.EmailAddress.Equals(dto.username)))
             {
                 var res = _mapper.Map<UserSession>(_userRepo.Get(x => x.EmailAddress.Equals(dto.username) && x.Password.Equals(dto.password)));
@@ -152,16 +179,45 @@ namespace SCA.Services
 
         public async Task<ServiceResult> CheckUserForLogin(string email, string password)
         {
-            if (_userRepo.Any(x => x.Password.Equals(password) && x.EmailAddress.Equals(email)))
+            ServiceResult _res = new ServiceResult();
+            try
             {
-                var res = _mapper.Map<UserSession>(_userRepo.Get(x => x.EmailAddress.Equals(email) && x.Password.Equals(password)));
-                res.Token = _authManager.GenerateToken(res);
-                return Result.ReturnAsSuccess(null, "Hoşgeldin " + res.Name + "!", res);
+                string query = "select * from Users where EmailAddress=@EmailAddress and Password=@Password";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("EmailAddress", email);
+                filter.Add("Password", MD5Hash(password));
+
+                var result = _db.Query<UserSession>(query,filter).FirstOrDefault();
+                if (result != null)
+                {
+                    result.Token = _authManager.GenerateToken(result);
+                    _res = Result.ReturnAsSuccess(message: "Hoşgeldin " + result.Name + "!", data: result);
+                }
+                else
+                {
+                    _res = Result.ReturnAsFail(message: "Kullanıc adı veya şifre hatalı");
+                }
             }
-            else
-                return Result.ReturnAsFail("Bazı bilgileriniz hatalı oldu!");
+            catch (Exception ex)
+            {
+                _res = Result.ReturnAsFail(message: "Sisteme erişim sırasında hata meydana geldi");
+                await _errorManagement.SaveError(ex.ToString());
+            }
+            return _res;
         }
 
+        public static string MD5Hash(string text)
+        {
+            MD5 md5 = new MD5CryptoServiceProvider();
+            md5.ComputeHash(ASCIIEncoding.ASCII.GetBytes(text));
+            byte[] result = md5.Hash;
+            StringBuilder strBuilder = new StringBuilder();
+            for (int i = 0; i < result.Length; i++)
+            {
+                strBuilder.Append(result[i].ToString("x2"));
+            }
+            return strBuilder.ToString();
+        }
 
         public async Task<ServiceResult> RegisterUser(UserRegisterDto dto)
         {
