@@ -216,7 +216,7 @@ namespace SCA.Services
             }
             catch (Exception ex)
             {
-               await _errorManagement.SaveError(ex.ToString());
+                await _errorManagement.SaveError(ex.ToString());
                 _res = Result.ReturnAsFail();
             }
             return _res;
@@ -236,43 +236,54 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> ContentCreate(ContentDto dto, UserSession session)
         {
-            string resultMessage = "";
+            ServiceResult _res = new ServiceResult();
             if (dto == null)
             {
-                Result.ReturnAsFail(AlertResource.NoChanges, null);
+                _res = Result.ReturnAsFail(AlertResource.NoChanges, null);
             }
-            if (dto.IsSendConfirm == true)
+            string resultMessage = "";
+            try
             {
-                dto.PublishStateType = (dto.IsSendConfirm == true) ? PublishState.PublishProcess : PublishState.Taslak;
-            }
 
-            Content res = null;
-            if (dto.Id == 0)
+                if (dto.IsSendConfirm == true)
+                {
+                    dto.PublishStateType = (dto.IsSendConfirm == true) ? PublishState.PublishProcess : PublishState.Taslak;
+                }
+
+                Content res = null;
+                if (dto.Id == 0)
+                {
+                    dto.ReadCount = 0;
+                    dto.Writer = session.Name + " " + session.Surname;
+                    dto.PublishStateType = PublishState.Taslak;
+
+                    string query = "";
+                    DynamicParameters filter = new DynamicParameters();
+                    GetContentQuery(CrudType.Insert, dto, session, ref query, ref filter);
+                    var contenId = _db.Execute(query, filter);
+
+                    resultMessage = (dto.IsSendConfirm) ? "Makale Yönetici Tarafına Onaya Gönderildi." : "Makale Taslak Olarak Kayıt Edildi.";
+                }
+                else
+                {
+                    string query = "";
+                    DynamicParameters filter = new DynamicParameters();
+                    GetContentQuery(CrudType.Update, dto, session, ref query, ref filter);
+                    var contenId = _db.Execute(query, filter);
+
+                    resultMessage = (dto.IsSendConfirm) ? "Makale Yönetici Tarafına Onaya Gönderildi." : "Makale Taslak Olarak Güncellendi.";
+                }
+
+                await _tagManager.CreateTag(dto.Tags, res.Id, ReadType.Content, session);
+                await _categoryManager.CreateCategoryRelation(dto.Category, res.Id, ReadType.Content, session);
+                _res = Result.ReturnAsSuccess(message: resultMessage);
+            }
+            catch (Exception ex)
             {
-                dto.ReadCount = 0;
-                dto.Writer = session.Name + " " + session.Surname;
-                dto.PublishStateType = PublishState.Taslak;
-
-                string query = "";
-                DynamicParameters filter = new DynamicParameters();
-                GetContentQuery(CrudType.Insert, dto, session, ref query, ref filter);
-                var contenId = _db.Execute(query, filter);
-
-                resultMessage = (dto.IsSendConfirm) ? "Makale Yönetici Tarafına Onaya Gönderildi." : "Makale Taslak Olarak Kayıt Edildi.";
+                await _errorManagement.SaveError(ex.ToString());
+                _res = Result.ReturnAsFail(message: resultMessage);
             }
-            else
-            {
-                string query = "";
-                DynamicParameters filter = new DynamicParameters();
-                GetContentQuery(CrudType.Update, dto, session, ref query, ref filter);
-                var contenId = _db.Execute(query, filter);
-
-                resultMessage = (dto.IsSendConfirm) ? "Makale Yönetici Tarafına Onaya Gönderildi." : "Makale Taslak Olarak Güncellendi.";
-            }
-
-            await _tagManager.CreateTag(dto.Tags, res.Id, ReadType.Content, session);
-            //await _categoryManager.CreateCategoryRelation(_categoryManager.GetCategoryRelation(dto.Category, res.Id, ReadType.Content, null));
-            return Result.ReturnAsSuccess(null, message: resultMessage, null);
+            return _res;
         }
 
         public async Task<List<CommentForUIDto>> GetCommentsByContentId(long contentId)
@@ -319,8 +330,8 @@ namespace SCA.Services
 
         public void GetContentQuery(CrudType crudType, ContentDto dto, UserSession session, ref string query, ref DynamicParameters filter)
         {
-            query = @"INSERT INTO Content (UserId, PublishStateType, SycnId, ReadCount,ImagePath, SeoUrl, Header, Writer, ConfirmUserId, ConfirmUserName, Category, ContentDescription, PlatformType, IsHeadLine, IsManset, IsMainMenu, IsConstantMainMenu, EventId, InternId, VisibleId, CreatedUserId, CreatedDate, UpdatedUserId, DeletedDate, DeletedUserId, IsDeleted)
-                           VALUES (@UserId, @PublishStateType, @SycnId, @ReadCount, @ImagePath, @SeoUrl, @Header, @Writer, @ConfirmUserId, @ConfirmUserName, @Category, @ContentDescription, @PlatformType, @IsHeadLine, @IsManset, @IsMainMenu, @IsConstantMainMenu, @EventId, @InternId, @VisibleId, @CreatedUserId, @CreatedDate, @UpdatedUserId, @DeletedDate, @DeletedUserId, @IsDeleted);";
+            query = @"INSERT INTO Content (UserId, PublishStateType, SycnId, ReadCount,ImagePath, SeoUrl, Header, Writer, ConfirmUserId, ConfirmUserName, Category, ContentDescription, PlatformType, IsHeadLine, IsManset, IsMainMenu, IsConstantMainMenu, EventId, InternId, VisibleId, CreatedUserId, CreatedDate)
+                           VALUES (@UserId, @PublishStateType, @SycnId, @ReadCount, @ImagePath, @SeoUrl, @Header, @Writer, @ConfirmUserId, @ConfirmUserName, @Category, @ContentDescription, @PlatformType, @IsHeadLine, @IsManset, @IsMainMenu, @IsConstantMainMenu, @EventId, @InternId, @VisibleId, @CreatedUserId, @CreatedDate);";
 
             if (crudType == CrudType.Insert)
             {

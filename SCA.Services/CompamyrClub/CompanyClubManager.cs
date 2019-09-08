@@ -40,12 +40,30 @@ namespace SCA.Services
 
         public async Task<ServiceResult> GetAllCompaniesClubs(CompanyClupType companyClupType)
         {
-               
+            ServiceResult _res = new ServiceResult();
+            string flag = (companyClupType == CompanyClupType.Club) ? "Şirket" : "Klüp";
+            try
+            {
+                string query = "select * from CompanyClubs where CompanyClupType=@CompanyClupType";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("CompanyClupType", companyClupType);
+                var resultData = _db.Query<CompanyClubsDto>(query, filter).ToList();
 
-
-
-            var data = _mapper.Map<List<CompanyClubsDto>>(_companyClubsRepo.GetAll(x => x.CompanyClupType == companyClupType));
-            return Result.ReturnAsSuccess(null, null, data);
+                if (resultData.Count > 0)
+                {
+                    _res = Result.ReturnAsSuccess(data: resultData);
+                }
+                else
+                {
+                    _res = Result.ReturnAsFail(message: $"{flag} bilgisi yüklenirken hata meydana geldi");
+                }
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString());
+                _res = Result.ReturnAsFail(message: $"{flag} bilgisi yüklenirken hata meydana geldi");
+            }
+            return _res;
         }
 
         public async Task<ServiceResult> GetCompanyId(string seoUrl)
@@ -80,12 +98,41 @@ namespace SCA.Services
 
         public async Task<ServiceResult> CreateCompanyClubs(CompanyClubsDto dto, long userId)
         {
-            ServiceResult _res = new ServiceResult(null, null);
+            ServiceResult _res = new ServiceResult();
             string resultMessage = "";
+            DynamicParameters filter = new DynamicParameters();
+            string query = "";
             if (dto.Equals(null))
             {
                 return Result.ReturnAsFail(null, null);
             }
+
+            try
+            {
+                query = $"insert into CompanyClubs (CompanyClupType, ShortName, SectorType, SeoUrl, HeaderImage, SectorId, UserId, CreateUserName, Description, WebSite, PhoneNumber,EmailAddress,CreatedUserId,CreatedDate) values " +
+                    $"insert into CompanyClubs (@CompanyClupType, @ShortName, @SectorType, @SeoUrl, @HeaderImage, @SectorId, @UserId, @CreateUserName, @Description, @WebSite, @PhoneNumber,@EmailAddress,@CreatedUserId,@CreatedDate";
+                filter.Add("CompanyClupType", dto.CompanyClupType);
+                //filter.Add("ShortName", dto.ShortName);
+                //filter.Add("SectorType", dto.sec
+                //filter.Add("SeoUrl", 
+                //filter.Add("HeaderImage", 
+                //filter.Add("SectorId", 
+                //filter.Add("UserId", 
+                //filter.Add("CreateUserName", 
+                //filter.Add("Description", 
+                //filter.Add("WebSite", 
+                //filter.Add("PhoneNumber",
+                //filter.Add("EmailAddress",
+                //filter.Add("CreatedUserId",
+                //filter.Add("CreatedDate",
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
 
             dto.UserId = 30;//userId;
             CompanyClubs resData = new CompanyClubs();
