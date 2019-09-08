@@ -13,10 +13,18 @@ namespace StudentCareerApp.Components.SidebarComponents.RecentAndFavorites
     {
         private readonly IContentManager _contentManager;
 
+        public RecentAndFavoritesViewComponent(IContentManager contentManager)
+        {
+            _contentManager = contentManager;
+        }
+
         public async Task<IViewComponentResult> InvokeAsync(int count) 
         {
             var model = FakeData();
-            model.Favorites = await _contentManager.GetUsersFavoriteContents(HttpContext.GetSessionData<UserSession>("userInfo").Id, count);
+            if(HttpContext.GetSessionData<UserSession>("userInfo")?.Id > 0)
+            {
+                model.Favorites = await _contentManager.GetUsersFavoriteContents(HttpContext.GetSessionData<UserSession>("userInfo").Id, count);
+            }
             return View("_RecentAndFavorites", model);
         }
 

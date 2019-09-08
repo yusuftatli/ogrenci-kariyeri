@@ -452,7 +452,7 @@ namespace SCA.Services
 
         public async Task<List<ContentForHomePageDTO>> GetUsersFavoriteContents(long userId, int count)
         {
-            string query = $"select * from Content where Id in (select ContentId from Favorite where UserId = {userId} and IsActive = 1) limit {count} order by PublishDate desc";
+            string query = $"select * from Content where Id in (select ContentId from Favorite where UserId = {userId} and IsActive = 1) order by PublishDate desc  limit {count}";
             var listData = await _db.QueryAsync<ContentForHomePageDTO>(query) as List<ContentForHomePageDTO>;
             return listData;
         }
