@@ -1,4 +1,5 @@
-﻿using SCA.Common.Result;
+﻿
+using SCA.Common.Result;
 using SCA.Entity.DTO;
 using System;
 using System.Collections.Generic;
@@ -7,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace SCA.Services
 {
-    public interface ICommentInterface
+    public interface ICommentManager
     {
         /// <summary>
         /// makale veya test için yorum insert yapar 
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        Task<ServiceResult> CreateComments(CommentsDto dto);
+        Task<ServiceResult> CreateComments(CommentForUIDto dto);
 
         /// <summary>
         /// onayda beykeleyn bütün yorumları çeker

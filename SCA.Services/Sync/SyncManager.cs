@@ -30,7 +30,7 @@ namespace SCA.Services
         private IGenericRepository<Content> _contentRepo;
         private IGenericRepository<Comments> _commentRepo;
         private readonly IApiManager _apiService;
-        private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
+        private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;Convert Zero Datetime=True");
 
         public SyncManager(IUnitofWork unitOfWork, IMapper mapper, IApiManager apiService)
         {
@@ -39,6 +39,23 @@ namespace SCA.Services
             _contentRepo = unitOfWork.GetRepository<Content>();
             _commentRepo = unitOfWork.GetRepository<Comments>();
             _apiService = apiService;
+        }
+
+        public async Task<ServiceResult> SyncUser()
+        {
+            ServiceResult _res = new ServiceResult();
+            try
+            {
+                string query = "select * from ogrencikariyeri.tf_uyeler";
+                var result = _db.Query(query).ToList();
+
+            }
+            catch (Exception ex)
+            {
+                _res = Result.ReturnAsFail(message: ex.ToString());
+
+            }
+            return _res;
         }
 
         public async Task<ServiceResult> SyncAssay()
@@ -77,7 +94,7 @@ namespace SCA.Services
                         dto.ContentDescription = assayDetail.post_content;
                         dto.UserId = Convert.ToInt64(assayDetail.post_author);
                         dto.Category = assayDetail.kategori;
-                        dto.SeoUrl =assayDetail.post_title.FriendlyUrl();
+                        dto.SeoUrl = assayDetail.post_title.FriendlyUrl();
 
                         if (!string.IsNullOrEmpty(assayDetail.appStaj))
                         {
@@ -146,8 +163,6 @@ namespace SCA.Services
 
         public async Task<ServiceResult> SyncDiger()
         {
-            string data = "";
-
             HttpClient http = new HttpClient();
             string url = @"https://ogrencikariyeri.com/panel/yusuf.php?act=sabit";
 

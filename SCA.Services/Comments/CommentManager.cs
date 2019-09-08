@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Dapper;
+using MySql.Data.MySqlClient;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
 using SCA.Entity.Model;
@@ -6,21 +8,26 @@ using SCA.Repository.Repo;
 using SCA.Repository.UoW;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SCA.Services
 {
-    public class CommentsService
+    public class CommentManager : ICommentManager
     {
         private readonly IMapper _mapper;
         private readonly IUnitofWork _unitOfWork;
         private IGenericRepository<Comments> _commentRepo;
-        public CommentsService(IUnitofWork unitOfWork, IMapper mapper)
+        private readonly IErrorManagement _errorManagement;
+        private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
+
+        public CommentManager(IUnitofWork unitOfWork, IMapper mapper, IErrorManagement errorManagement)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _commentRepo = unitOfWork.GetRepository<Comments>();
+            _errorManagement = errorManagement;
         }
 
 
@@ -29,11 +36,21 @@ namespace SCA.Services
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        public async Task<ServiceResult> CreateComments(CommentsDto dto)
+        public async Task<ServiceResult> CreateComments(CommentForUIDto dto)
         {
-            dto.Approved = false;
-            _commentRepo.Add(_mapper.Map<Comments>(dto));
-            return _unitOfWork.SaveChanges();
+            ServiceResult _res = new ServiceResult();
+            try
+            {
+                string query = $"Insert into Comments (ReadType,Description,ArticleId,Approved,UserID) values (2,{dto.Description},{dto.ArticleId},0,{dto.UserID})";
+                var result = _db.Execute(query);
+                _res = Result.ReturnAsSuccess();
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString());
+                _res = Result.ReturnAsFail();
+            }
+            return _res;
         }
 
         /// <summary>
@@ -84,5 +101,6 @@ namespace SCA.Services
             _unitOfWork.SaveChanges();
             return Result.ReturnAsSuccess(null, "Yorum onaylandı", null);
         }
+
     }
 }

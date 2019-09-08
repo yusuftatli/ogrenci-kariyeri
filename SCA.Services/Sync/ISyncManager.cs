@@ -10,5 +10,6 @@ namespace SCA.Services
     {
         Task<ServiceResult> SyncAssay();
         Task<ServiceResult> SyncDiger();
+        Task<ServiceResult> SyncUser();
     }
 }

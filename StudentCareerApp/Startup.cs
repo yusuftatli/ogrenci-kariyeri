@@ -138,6 +138,7 @@ namespace StudentCareerApp
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IErrorManagement, ErrorManagement>();
             services.AddTransient<IPageManager, PageManager>();
+             services.AddTransient<ICommentManager, CommentManager>();
             #endregion
 
             #region Auto Mapper

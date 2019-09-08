@@ -14,8 +14,8 @@ namespace StudentCareerApp.Areas.Admin.Controllers
     [Route("[area]/[controller]")]
     public class CommentsController : ControllerBase
     {
-        ICommentInterface _commentManager;
-        public CommentsController(ICommentInterface commentManager)
+        ICommentManager _commentManager;
+        public CommentsController(ICommentManager commentManager)
         {
             _commentManager = commentManager;
         }
@@ -25,11 +25,11 @@ namespace StudentCareerApp.Areas.Admin.Controllers
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost, Route("comment-CreateComments")]
-        public async Task<ServiceResult> CreateComments([FromBody] CommentsDto dto)
-        {
-            return await _commentManager.CreateComments(dto);
-        }
+        //[HttpPost, Route("comment-CreateComments")]
+        //public async Task<ServiceResult> CreateComments([FromBody] CommentsDto dto)
+        //{
+        //    return await _commentManager.CreateComments(dto);
+        //}
 
         /// <summary>
         /// onayda beykeleyn bütün yorumları çeker

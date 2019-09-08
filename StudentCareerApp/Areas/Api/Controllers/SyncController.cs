@@ -33,6 +33,12 @@ namespace StudentCareerApp.Areas.Api.Controller
             return await _syncManager.SyncAssay();
         }
 
+        [HttpGet, Route("SyncUser")]
+        public async Task<ServiceResult> SyncUser()
+        {
+            return await _syncManager.SyncUser();
+        }
+
         public async Task<ServiceResult> SyncDiger()
         {
             return await _syncManager.SyncDiger();
