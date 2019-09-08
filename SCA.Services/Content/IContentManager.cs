@@ -74,6 +74,9 @@ namespace SCA.Services
         Task<ServiceResult> CreateContentSyncData(ContentDto dto);
 
         Task<List<FavoriteDto>> GetFavoriteContents(int count);
+
+        Task<List<ContentForHomePageDTO>> GetUsersFavoriteContents(long userId, int count);  
+
         Task<bool> CreateFavorite(FavoriteDto dto);
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SCA.Common;
 using SCA.Entity.DTO;
+using SCA.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +11,12 @@ namespace StudentCareerApp.Components.SidebarComponents.RecentAndFavorites
 {
     public class RecentAndFavoritesViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke()
+        private readonly IContentManager _contentManager;
+
+        public async Task<IViewComponentResult> InvokeAsync(int count) 
         {
             var model = FakeData();
+            model.Favorites = await _contentManager.GetUsersFavoriteContents(HttpContext.GetSessionData<UserSession>("userInfo").Id, count);
             return View("_RecentAndFavorites", model);
         }
 
@@ -19,57 +24,7 @@ namespace StudentCareerApp.Components.SidebarComponents.RecentAndFavorites
         {
             return new RecentAndFavoritesContentForUIDto
             {
-                Favorites = new List<ContentForHomePageDTO>
-                {
-                    new ContentForHomePageDTO
-                    {
-                        Category = "Teknoloji",
-                        Header = "Elon Musk yeni teknoloji şirketini duyurdu. Intellicore!",
-                        ImagePath = "/AdminFiles/CMS/Content/Images/3.jpg",
-                        IsHeadLine = true,
-                        IsManset = true,
-                        PublishDate = new DateTime(2019, 7, 11),
-                        ReadCount = 122,
-                        SeoUrl = "elon-musk-yeni-teknoloji-sirketini-duyurdu-intellicore",
-                        Writer = "Göksu Deniz"
-                    },
-                    new ContentForHomePageDTO
-                    {
-                        Category = "Teknoloji",
-                        Header = "SpaceX, Çin ile yarışıyor! Uzaya gönderilen roket sayısında inanılmaz rekabet!",
-                        ImagePath = "/AdminFiles/CMS/Content/Images/3.jpg",
-                        IsHeadLine = true,
-                        IsManset = true,
-                        PublishDate = new DateTime(2019, 7, 11),
-                        ReadCount = 122,
-                        SeoUrl = "spacex-cin-ile-yarisiyor-uzaya-gonderilen-roket-sayisinda-inanilmaz-rekabet",
-                        Writer = "Göksu Deniz"
-                    },
-                    new ContentForHomePageDTO
-                    {
-                        Category = "Eğitim",
-                        Header = "UIPath, RPA alanında Türkiye'de ücretsiz serfikasyon programına başladı.",
-                        ImagePath = "/AdminFiles/CMS/Content/Images/3.jpg",
-                        IsHeadLine = true,
-                        IsManset = true,
-                        PublishDate = new DateTime(2019, 7, 11),
-                        ReadCount = 74,
-                        SeoUrl = "uipath-rpa-alaninda-turkiyede-ucretsiz-sertifikasyon-programina-basladi",
-                        Writer = "Göksu Deniz"
-                    },
-                    new ContentForHomePageDTO
-                    {
-                        Category = "Sağlık",
-                        Header = "Kansere yakın zamanda tedavi bulunabilir. İsrailli bilim adamları oral yolla alınan ilaç geliştirdi.",
-                        ImagePath = "/AdminFiles/CMS/Content/Images/3.jpg",
-                        IsHeadLine = true,
-                        IsManset = true,
-                        PublishDate = new DateTime(2019, 7, 11),
-                        ReadCount = 122,
-                        SeoUrl = "kansere-yakin-zamanda-tedavi-bulunabilir-israilli-bilim-adamlari-oral-yolla-alinan-ilac-gelistirdi",
-                        Writer = "Göksu Deniz"
-                    }
-                },
+                Favorites = null,
                 Recents = new List<ContentForHomePageDTO>
                 {
                     new ContentForHomePageDTO
