@@ -40,15 +40,15 @@ namespace StudentCareerApp.Areas.Api.Controller
         }
 
         [HttpGet("web-get-companybyid")]
-        public async Task<ServiceResult> GetCompanyId(long id)
+        public async Task<ServiceResult> GetCompanyId(string seoUrl)
         {
-            return await _companyClubsManager.GetCompanyId(id);
+            return await _companyClubsManager.GetCompanyId(seoUrl);
         }
 
         [HttpGet("web-get-clubsbyid")]
-        public async Task<ServiceResult> GetClubs(long id)
+        public async Task<ServiceResult> GetClubs(string seoUrl)
         {
-            return await _companyClubsManager.GetCompanyId(id);
+            return await _companyClubsManager.GetCompanyId(seoUrl);
         }
 
         [HttpPost("web-create-company")]

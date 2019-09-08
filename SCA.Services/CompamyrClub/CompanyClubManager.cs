@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Dapper;
 using Microsoft.AspNetCore.Http;
+using MySql.Data.MySqlClient;
 using SCA.Common.Resource;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
@@ -9,6 +11,8 @@ using SCA.Repository.Repo;
 using SCA.Repository.UoW;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +27,7 @@ namespace SCA.Services
         private IGenericRepository<SocialMedia> _socialMediaRepo;
         private IGenericRepository<CompanyClubs> _companyClubsRepo;
         private readonly IErrorManagement _errorManagement;
+        private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
 
         public CompanyClubManager(IUnitofWork unitOfWork, IMapper mapper, IAddressManager addressManager, IErrorManagement errorManagement)
         {
@@ -35,13 +40,41 @@ namespace SCA.Services
 
         public async Task<ServiceResult> GetAllCompaniesClubs(CompanyClupType companyClupType)
         {
+               
+
+
+
             var data = _mapper.Map<List<CompanyClubsDto>>(_companyClubsRepo.GetAll(x => x.CompanyClupType == companyClupType));
             return Result.ReturnAsSuccess(null, null, data);
         }
 
-        public async Task<ServiceResult> GetCompanyId(long id)
+        public async Task<ServiceResult> GetCompanyId(string seoUrl)
         {
-            var data = _companyClubsRepo.Get(x => x.Id == id);
+            ServiceResult _res = new ServiceResult();
+            try
+            {
+                string query = "select * from CompanyClubs where SeoUrl=@SeoUrl";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("SeoUrl", seoUrl);
+
+                var result = _db.Query<CompanyClubsDto>(query, filter).FirstOrDefault();
+                if (result != null)
+                {
+                    _res = Result.ReturnAsSuccess(data: result);
+                }
+                else
+                {
+                    _res = Result.ReturnAsFail(message: "Aranılan şirket bulunamadı");
+                }
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString());
+                _res = Result.ReturnAsFail(message: "Şirket bilgisi yüklenirken hata meydana geldi.");
+            }
+
+
+            var data = _companyClubsRepo.Get(x => x.Id == 0);
             return Result.ReturnAsSuccess(null, message: AlertResource.SuccessfulOperation, data);
         }
 

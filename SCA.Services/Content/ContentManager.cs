@@ -51,14 +51,26 @@ namespace SCA.Services
             ServiceResult _res = new ServiceResult();
             try
             {
-                DateTime startDate = string.IsNullOrEmpty(dto.StartDate) ? DateTime.Now.AddDays(-30) : Convert.ToDateTime(dto.StartDate);
+                string query = "";
+                DynamicParameters filter = new DynamicParameters();
 
+                DateTime startDate = string.IsNullOrEmpty(dto.StartDate) ? DateTime.Now.AddDays(-30) : Convert.ToDateTime(dto.StartDate);
                 DateTime endDate = string.IsNullOrEmpty(dto.EndDate) ? DateTime.Now.AddDays(30) : Convert.ToDateTime(dto.EndDate);
 
+                if (session.RoleTypeId == 1 || session.RoleTypeId == 2)
+                {
+                    query = ContentQuery.ContentListQuery;
+                    filter.Add("PublishStartDate", startDate.ToString("yyyy-MM-dd"));
+                    filter.Add("PublishEndate", endDate.ToString("yyyy-MM-dd"));
 
-                string query = "SELECT \"Id\",\"Header\",\"Writer\",\"ReadCount\", \"Category\",\"CreatedDate\",\"PublishDate\",\"PublishStateType\",\"PlatformType\",\"ConfirmUserName\" " +
-                               "FROM public.\"Content\"  where \"PublishDate\" >= '" + startDate.ToString("yyyy-MM-dd") + "' and \"PublishDate\" <= '" + endDate.ToString("yyyy-MM-dd") + "'";
-
+                }
+                else
+                {
+                    query = ContentQuery.ContentListQueryWithUser;
+                    filter.Add("PublishStartDate", startDate.ToString("yyyy-MM-dd"));
+                    filter.Add("PublishEndate", endDate.ToString("yyyy-MM-dd"));
+                    filter.Add("UserId", session.Id);
+                }
 
                 var dataList = _db.Query<ContentShortListDto>(query).ToList();
                 if (dataList.Count > 0)
@@ -124,7 +136,6 @@ namespace SCA.Services
                     filter.Add("seoUrl", seoUrl);
                 }
 
-                DynamicParameters filter = new DynamicParameters();
                 filter.Add("seoUrl", seoUrl);
                 filter.Add("UserId", (userId.HasValue ? userId.ToString() : "null"));
                 _res = await _db.QueryFirstAsync<ContentDetailForDetailPageDTO>(query, new { SeoUrl = seoUrl });
