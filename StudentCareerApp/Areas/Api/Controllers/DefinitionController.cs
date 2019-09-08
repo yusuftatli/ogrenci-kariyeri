@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
 using SCA.Services;
@@ -155,7 +156,7 @@ namespace StudentCareerApp.Areas.Api.Controller
         [HttpPost, Route("createsektor")]
         public async Task<ServiceResult> CreateSector([FromBody]SectorDto dto)
         {
-            return await _definitionManager.CreateSector(dto);
+            return await _definitionManager.CreateSector(dto, JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
         }
         #endregion
 

@@ -150,15 +150,7 @@ namespace SCA.Services
             return _res;
         }
         #endregion
-        public async Task<ServiceResult> CreateCategoryRelation(List<CategoryRelationDto> listData, UserSession session)
-        {
-            foreach (var item in listData)
-            {
-                string query = GetCategoryRelationQuery(CrudType.Insert, item, session);
-                var result = _db.Execute(query);
-            }
-            return Result.ReturnAsSuccess();
-        }
+
 
         private static string GetCategoryQuery(CrudType crudType, CategoriesDto dto, CategoriesDto session)
         {
@@ -185,20 +177,19 @@ namespace SCA.Services
             string query = "";
             if (crudType == CrudType.Insert)
             {
-                query = $"Insert Into CategoryRelation  (CategoryId,TagContentId,ReadType,CreatedUserId,CreatedDate) Values" +
+                query = $"Insert Into CategoryRelation  (CategoryId,TagContentId,ReadType) Values" +
                     $"({dto.CategoryId},{dto.TagContentId},{dto.ReadType},{session.Id},{DateTime.Now})";
             }
 
             if (crudType == CrudType.Update)
             {
-                query = $"Update CategoryRelation set CategoryId={dto.CategoryId},TagContentId={dto.TagContentId},ReadType={dto.ReadType},UpdatedUserId={session.Id},UpdatedDate={DateTime.Now}";
+                query = $"Update CategoryRelation set CategoryId={dto.CategoryId},TagContentId={dto.TagContentId},ReadType={dto.ReadType}";
             }
             return query;
         }
 
-        public List<CategoryRelationDto> GetCategoryRelation(string data, long Id, ReadType readType, UserSession session)
+        public async Task<bool> CreateCategoryRelation(string data, long Id, ReadType readType, UserSession session)
         {
-            List<CategoryRelationDto> listData = new List<CategoryRelationDto>();
             string[] data_ = data.Replace("[", "").Replace("]", "").Replace("\"", "").Replace("\"", "").Split(',');
             foreach (var item in data_)
             {
@@ -209,8 +200,9 @@ namespace SCA.Services
                     ReadType = readType
                 };
                 string query = GetCategoryRelationQuery(CrudType.Insert, relationData, session);
+                var res = _db.Execute(query);
             }
-            return listData;
+            return true;
         }
     }
 }

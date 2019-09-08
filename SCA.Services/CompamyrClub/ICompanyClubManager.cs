@@ -11,7 +11,7 @@ namespace SCA.Services
     public interface ICompanyClubManager
     {
         Task<ServiceResult> GetAllCompaniesClubs(CompanyClupType companyClupType);
-        Task<ServiceResult> GetCompanyId(long id);
+        Task<ServiceResult> GetCompanyId(string seourl);
         Task<ServiceResult> CreateCompanyClubs(CompanyClubsDto dto, long userId);
     }
 }

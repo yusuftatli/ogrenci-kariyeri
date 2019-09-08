@@ -51,23 +51,30 @@ namespace SCA.Services
             ServiceResult _res = new ServiceResult();
             try
             {
-                DateTime startDate = string.IsNullOrEmpty(dto.StartDate) ? DateTime.Now.AddDays(-30) : Convert.ToDateTime(dto.StartDate);
+                string query = "";
+                DynamicParameters filter = new DynamicParameters();
 
+                DateTime startDate = string.IsNullOrEmpty(dto.StartDate) ? DateTime.Now.AddDays(-30) : Convert.ToDateTime(dto.StartDate);
                 DateTime endDate = string.IsNullOrEmpty(dto.EndDate) ? DateTime.Now.AddDays(30) : Convert.ToDateTime(dto.EndDate);
 
+                if (session.RoleTypeId == 1 || session.RoleTypeId == 2)
+                {
+                    query = ContentQuery.ContentListQuery;
+                    filter.Add("PublishStartDate", startDate.ToString("yyyy-MM-dd"));
+                    filter.Add("PublishEndate", endDate.ToString("yyyy-MM-dd"));
 
-                string query = "SELECT \"Id\",\"Header\",\"Writer\",\"ReadCount\", \"Category\",\"CreatedDate\",\"PublishDate\",\"PublishStateType\",\"PlatformType\",\"ConfirmUserName\" " +
-                               "FROM public.\"Content\"  where \"PublishDate\" >= '" + startDate.ToString("yyyy-MM-dd") + "' and \"PublishDate\" <= '" + endDate.ToString("yyyy-MM-dd") + "'";
+                }
+                else
+                {
+                    query = ContentQuery.ContentListQueryWithUser;
+                    filter.Add("PublishStartDate", startDate.ToString("yyyy-MM-dd"));
+                    filter.Add("PublishEndate", endDate.ToString("yyyy-MM-dd"));
+                    filter.Add("UserId", session.Id);
+                }
 
-
-                var dataList = _db.Query<ContentShortListDto>(query).ToList();
+                var dataList = _db.Query<ContentShortListDto>(query, filter).ToList();
                 if (dataList.Count > 0)
                 {
-                    dataList.ForEach(x =>
-                    {
-                        x.PublishStateTypeDes = x.PublishStateType.GetDescription();
-                        x.PlatformTypeDes = x.PlatformType.GetDescription();
-                    });
                 }
 
                 return Result.ReturnAsSuccess(session.RoleTypeId.ToString(), message: AlertResource.SuccessfulOperation, dataList);
@@ -164,8 +171,30 @@ namespace SCA.Services
         }
         public async Task<ServiceResult> GetContent(long id)
         {
-            var listData = _mapper.Map<ContentDto>(_contentRepo.Get(x => x.Id == id));
-            return Result.ReturnAsSuccess(null, null, listData);
+            ServiceResult _res = new ServiceResult();
+            try
+            {
+                string query = "Select *From Content where Id=@Id";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("Id", id);
+
+                var resultData = await _db.QueryFirstAsync<ContentDto>(query, filter);
+
+                if (resultData != null)
+                {
+                    _res = Result.ReturnAsSuccess(data: resultData);
+                }
+                else
+                {
+                    _res = Result.ReturnAsFail(message: "Yüklenecek herhangi bir makale detayı bulunamadı");
+                }
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString());
+                _res = Result.ReturnAsFail(message: "Makale detay bilgisi yüklenirken hata meydana geldi");
+            }
+            return _res;
         }
         public async Task<ServiceResult> GetContent(string url)
         {
@@ -174,23 +203,23 @@ namespace SCA.Services
         }
         public async Task<ServiceResult> UpdateContentPublish(publishStateDto dto, UserSession session)
         {
-            if (dto.publishState.Equals(PublishState.Publish))
+            ServiceResult _res = new ServiceResult();
+            try
             {
-                var data = _contentRepo.Get(x => x.Id == dto.id);
-                data.PublishStateType = (PublishState)dto.publishState;
-                data.ConfirmUserId = 1;
-                data.ConfirmUserName = session.Name + " " + session.Surname;
-                _contentRepo.Update(data);
-                _unitOfWork.SaveChanges();
+                string query = "Update Content set PublishStateType = @PublishStateType where Id=@Id";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("Id", dto.Id);
+                filter.Add("PublishStateType", dto.publishState);
+
+                var resultData = _db.Execute(query, filter);
+                _res = Result.ReturnAsSuccess();
             }
-            else
+            catch (Exception ex)
             {
-                var data = _contentRepo.Get(x => x.Id == dto.id);
-                data.PublishStateType = (PublishState)dto.publishState;
-                _contentRepo.Update(data);
-                var res = _unitOfWork.SaveChanges();
+                await _errorManagement.SaveError(ex.ToString());
+                _res = Result.ReturnAsFail();
             }
-            return Result.ReturnAsSuccess(null, null, null);
+            return _res;
         }
         /// <summary>
         /// Makaleleri içerikleri ile birlikte listeler
@@ -207,43 +236,54 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> ContentCreate(ContentDto dto, UserSession session)
         {
-            string resultMessage = "";
+            ServiceResult _res = new ServiceResult();
             if (dto == null)
             {
-                Result.ReturnAsFail(AlertResource.NoChanges, null);
+                _res = Result.ReturnAsFail(AlertResource.NoChanges, null);
             }
-            if (dto.IsSendConfirm == true)
+            string resultMessage = "";
+            try
             {
-                dto.PublishStateType = (dto.IsSendConfirm == true) ? PublishState.PublishProcess : PublishState.Taslak;
-            }
 
-            Content res = null;
-            if (dto.Id == 0)
+                if (dto.IsSendConfirm == true)
+                {
+                    dto.PublishStateType = (dto.IsSendConfirm == true) ? PublishState.PublishProcess : PublishState.Taslak;
+                }
+
+                Content res = null;
+                if (dto.Id == 0)
+                {
+                    dto.ReadCount = 0;
+                    dto.Writer = session.Name + " " + session.Surname;
+                    dto.PublishStateType = PublishState.Taslak;
+
+                    string query = "";
+                    DynamicParameters filter = new DynamicParameters();
+                    GetContentQuery(CrudType.Insert, dto, session, ref query, ref filter);
+                    var contenId = _db.Execute(query, filter);
+
+                    resultMessage = (dto.IsSendConfirm) ? "Makale Yönetici Tarafına Onaya Gönderildi." : "Makale Taslak Olarak Kayıt Edildi.";
+                }
+                else
+                {
+                    string query = "";
+                    DynamicParameters filter = new DynamicParameters();
+                    GetContentQuery(CrudType.Update, dto, session, ref query, ref filter);
+                    var contenId = _db.Execute(query, filter);
+
+                    resultMessage = (dto.IsSendConfirm) ? "Makale Yönetici Tarafına Onaya Gönderildi." : "Makale Taslak Olarak Güncellendi.";
+                }
+
+                await _tagManager.CreateTag(dto.Tags, res.Id, ReadType.Content, session);
+                await _categoryManager.CreateCategoryRelation(dto.Category, res.Id, ReadType.Content, session);
+                _res = Result.ReturnAsSuccess(message: resultMessage);
+            }
+            catch (Exception ex)
             {
-                dto.ReadCount = 0;
-                dto.Writer = session.Name + " " + session.Surname;
-                dto.PublishStateType = PublishState.Taslak;
-
-                string query = "";
-                DynamicParameters filter = new DynamicParameters();
-                GetContentQuery(CrudType.Insert, dto, session, ref query, ref filter);
-                var contenId = _db.Execute(query, filter);
-
-                resultMessage = (dto.IsSendConfirm) ? "Makale Yönetici Tarafına Onaya Gönderildi." : "Makale Taslak Olarak Kayıt Edildi.";
+                await _errorManagement.SaveError(ex.ToString());
+                _res = Result.ReturnAsFail(message: resultMessage);
             }
-            else
-            {
-                string query = "";
-                DynamicParameters filter = new DynamicParameters();
-                GetContentQuery(CrudType.Update, dto, session, ref query, ref filter);
-                var contenId = _db.Execute(query, filter);
-
-                resultMessage = (dto.IsSendConfirm) ? "Makale Yönetici Tarafına Onaya Gönderildi." : "Makale Taslak Olarak Güncellendi.";
-            }
-
-            await _tagManager.CreateTag(dto.Tags, res.Id, ReadType.Content, session);
-            //await _categoryManager.CreateCategoryRelation(_categoryManager.GetCategoryRelation(dto.Category, res.Id, ReadType.Content, null));
-            return Result.ReturnAsSuccess(null, message: resultMessage, null);
+            return _res;
         }
 
         public async Task<List<CommentForUIDto>> GetCommentsByContentId(long contentId)
@@ -290,8 +330,8 @@ namespace SCA.Services
 
         public void GetContentQuery(CrudType crudType, ContentDto dto, UserSession session, ref string query, ref DynamicParameters filter)
         {
-            query = @"INSERT INTO Content (UserId, PublishStateType, SycnId, ReadCount,ImagePath, SeoUrl, Header, Writer, ConfirmUserId, ConfirmUserName, Category, ContentDescription, PlatformType, IsHeadLine, IsManset, IsMainMenu, IsConstantMainMenu, EventId, InternId, VisibleId, CreatedUserId, CreatedDate, UpdatedUserId, DeletedDate, DeletedUserId, IsDeleted)
-                           VALUES (@UserId, @PublishStateType, @SycnId, @ReadCount, @ImagePath, @SeoUrl, @Header, @Writer, @ConfirmUserId, @ConfirmUserName, @Category, @ContentDescription, @PlatformType, @IsHeadLine, @IsManset, @IsMainMenu, @IsConstantMainMenu, @EventId, @InternId, @VisibleId, @CreatedUserId, @CreatedDate, @UpdatedUserId, @DeletedDate, @DeletedUserId, @IsDeleted);";
+            query = @"INSERT INTO Content (UserId, PublishStateType, SycnId, ReadCount,ImagePath, SeoUrl, Header, Writer, ConfirmUserId, ConfirmUserName, Category, ContentDescription, PlatformType, IsHeadLine, IsManset, IsMainMenu, IsConstantMainMenu, EventId, InternId, VisibleId, CreatedUserId, CreatedDate)
+                           VALUES (@UserId, @PublishStateType, @SycnId, @ReadCount, @ImagePath, @SeoUrl, @Header, @Writer, @ConfirmUserId, @ConfirmUserName, @Category, @ContentDescription, @PlatformType, @IsHeadLine, @IsManset, @IsMainMenu, @IsConstantMainMenu, @EventId, @InternId, @VisibleId, @CreatedUserId, @CreatedDate);";
 
             if (crudType == CrudType.Insert)
             {

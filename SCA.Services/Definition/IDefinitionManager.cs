@@ -41,8 +41,8 @@ namespace SCA.Services
         Task<ServiceResult> UpdateUniversityIsActive(long Id, bool IsActive);
 
         Task<ServiceResult> GetAllSector();
-        Task<List<Sector>> GetAllSectorForUI();
-        Task<ServiceResult> CreateSector(SectorDto dto);
+        Task<List<SectorDto>> GetAllSectorForUI();
+        Task<ServiceResult> CreateSector(SectorDto dto, UserSession session);
 
     }
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
 using SCA.Entity.Enums;
@@ -40,23 +41,22 @@ namespace StudentCareerApp.Areas.Api.Controller
         }
 
         [HttpGet("web-get-companybyid")]
-        public async Task<ServiceResult> GetCompanyId(long id)
+        public async Task<ServiceResult> GetCompanyId(string seoUrl)
         {
-            return await _companyClubsManager.GetCompanyId(id);
+            return await _companyClubsManager.GetCompanyId(seoUrl);
         }
 
         [HttpGet("web-get-clubsbyid")]
-        public async Task<ServiceResult> GetClubs(long id)
+        public async Task<ServiceResult> GetClubs(string seoUrl)
         {
-            return await _companyClubsManager.GetCompanyId(id);
+            return await _companyClubsManager.GetCompanyId(seoUrl);
         }
 
         [HttpPost("web-create-company")]
         public async Task<ServiceResult> CreateCompany(CompanyClubsDto dto)
         {
             dto.CompanyClupType = CompanyClupType.Company;
-            long userId = Convert.ToInt64(HttpContext.Session.GetString("UserId"));
-            return await _companyClubsManager.CreateCompanyClubs(dto, userId);
+            return await _companyClubsManager.CreateCompanyClubs(dto, JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")).Id);
         }
 
         [Consumes("multipart/form-data")]
@@ -64,8 +64,7 @@ namespace StudentCareerApp.Areas.Api.Controller
         public async Task<ServiceResult> CreateClubs([FromForm]CompanyClubsDto dto)
         {
             dto.CompanyClupType = CompanyClupType.Club;
-            long userId = Convert.ToInt64(HttpContext.Session.GetString("UserId"));
-            return await _companyClubsManager.CreateCompanyClubs(dto, userId);
+            return await _companyClubsManager.CreateCompanyClubs(dto, JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")).Id);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace SCA.Entity.DTO
 {
     public class publishStateDto
     {
-        public long id { get; set; }
+        public long Id   { get; set; }
         public long publishState { get; set; }
     }
 }

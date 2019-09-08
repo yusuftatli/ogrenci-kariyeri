@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Dapper;
+using MySql.Data.MySqlClient;
 using SCA.Common.Resource;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
@@ -9,6 +11,7 @@ using SCA.Repository.UoW;
 using SCA.Services.Interface;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,7 +30,10 @@ namespace SCA.Services
         private IGenericRepository<StudentClass> _classTypeRepo;
         private IGenericRepository<University> _universityRepo;
         private IGenericRepository<Sector> _sectorRepo;
-        public DefinitionManager(IUnitofWork unitOfWork, IMapper mapper, IAddressManager addressManager)
+        private readonly IErrorManagement _errorManagement;
+        private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
+
+        public DefinitionManager(IUnitofWork unitOfWork, IMapper mapper, IAddressManager addressManager, IErrorManagement errorManagement)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
@@ -39,6 +45,7 @@ namespace SCA.Services
             _universityRepo = unitOfWork.GetRepository<University>();
             _addressManager = addressManager;
             _sectorRepo = unitOfWork.GetRepository<Sector>();
+            _errorManagement = errorManagement;
 
         }
 
@@ -355,37 +362,82 @@ namespace SCA.Services
         #region Sector
         public async Task<ServiceResult> GetAllSector()
         {
-            var data = _sectorRepo.GetAll();
-            return Result.ReturnAsSuccess(null, null, data);
+            ServiceResult _res = new ServiceResult();
+            try
+            {
+                string query = "select * from Sector";
+                var result = _db.Query<SectorDto>(query).ToList();
+
+                if (result.Count > 0)
+                {
+                    _res = Result.ReturnAsSuccess(data: result);
+                }
+                else
+                {
+                    _res = Result.ReturnAsFail(message: "Sektör bilgisi yüklenemedi");
+                }
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString());
+                _res = Result.ReturnAsFail(message: "Sektör bilgisi yüklenirken hata meydana geldi");
+            }
+            return _res;
         }
 
-        public async Task<List<Sector>> GetAllSectorForUI()
+        public async Task<List<SectorDto>> GetAllSectorForUI()
         {
-            var data = _sectorRepo.GetAll().ToList();
-            return data;
+            List<SectorDto> listData = new List<SectorDto>();
+            try
+            {
+                string query = "select * from Sector";
+                listData = _db.Query<SectorDto>(query).ToList();
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString());
+            }
+            return listData;
         }
 
-        public async Task<ServiceResult> CreateSector(SectorDto dto)
+        public async Task<ServiceResult> CreateSector(SectorDto dto, UserSession session)
         {
+            ServiceResult _res = new ServiceResult();
+            string query = "";
+            DynamicParameters filter = new DynamicParameters();
             string resultMessage = "";
-            if (dto.Equals(null))
+            try
             {
-                return Result.ReturnAsFail(AlertResource.OperationFailed, null);
+                if (dto.Id == 0)
+                {
+                    query = @"Insert Into Sector (SectorTypeId, CreatedUserId, CreatedDate, Description) values
+                        (SectorTypeId=@SectorTypeId, CreatedUserId=@CreatedUserId, CreatedDate=@CreatedDate,Description=@Description)";
+                    filter.Add("SectorTypeId", dto.SectorTypeId);
+                    filter.Add("CreatedUserId", session.Id);
+                    filter.Add("CreatedDate", DateTime.Now);
+                    filter.Add("Description", dto.Description);
+                    resultMessage = "Kayıt işlemi başarılı";
+                }
+                else
+                {
+                    query = "update Sector set SectorTypeId=@SectorTypeId,UpdatedUserId=@UpdatedUserId,UpdatedDate=@UpdatedDate ,Description=@Description where Id=@Id";
+                    filter.Add("Id", dto.Id);
+                    filter.Add("SectorTypeId", dto.SectorTypeId);
+                    filter.Add("UpdatedDate", session.Id);
+                    filter.Add("CreatedDate", DateTime.Now);
+                    filter.Add("Description", dto.Description);
+                    resultMessage = "Güncelleme işlemi başarılı";
+                }
+                var res = _db.Execute(query, filter);
+                _res = Result.ReturnAsSuccess(message: resultMessage);
             }
-
-            if (dto.Id == 0)
+            catch (Exception ex)
             {
-                _sectorRepo.Add(_mapper.Map<Sector>(dto));
-                resultMessage = "Kayıt İşlemi Başarılı";
+                await _errorManagement.SaveError(ex.ToString());
+                _res = Result.ReturnAsFail(message: "Sektör bilgisi kayıt işlemi sırasında hata meydana geldi.");
             }
-            else
-            {
-                _sectorRepo.Update(_mapper.Map<Sector>(dto));
-                resultMessage = "Güncelleme İşlemi Başarılı";
-            }
-            _unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess(null, message: resultMessage, null);
-        } 
+            return _res;
+        }
         #endregion
 
     }

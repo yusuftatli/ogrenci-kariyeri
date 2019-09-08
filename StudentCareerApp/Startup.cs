@@ -137,8 +137,9 @@ namespace StudentCareerApp
             services.AddTransient<ICompanyClubManager, CompanyClubManager>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IErrorManagement, ErrorManagement>();
+            services.AddTransient<INewsletterManager, NewsletterManager>();
             services.AddTransient<IPageManager, PageManager>();
-             services.AddTransient<ICommentManager, CommentManager>();
+            services.AddTransient<ICommentManager, CommentManager>();
             #endregion
 
             #region Auto Mapper
