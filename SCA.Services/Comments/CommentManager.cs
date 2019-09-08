@@ -41,8 +41,8 @@ namespace SCA.Services
             ServiceResult _res = new ServiceResult();
             try
             {
-                string query = $"Insert into Comments (ReadType,Description,ArticleId,Approved,UserID) values (2,{dto.Description},{dto.ArticleId},0,{dto.UserID})";
-                var result = _db.Execute(query);
+                string query = $"Insert into Comments (ReadType,Description,ArticleId,Approved,UserID, PostDate) values (2,'{dto.Description}',{dto.ArticleId},0,{dto.UserID}, NOW())";
+                var result = await _db.ExecuteAsync(query);
                 _res = Result.ReturnAsSuccess();
             }
             catch (Exception ex)

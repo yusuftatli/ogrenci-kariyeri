@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SCA.Entity.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,6 +12,7 @@ namespace SCA.Entity.DTO
         public string Category { get; set; }
         public string Header { get; set; }
         public string Writer { get; set; }
+        public GenderType GenderId { get; set; }
         public DateTime PublishDate { get; set; }
         public int ReadCount { get; set; }
         public string Tags { get; set; }

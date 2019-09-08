@@ -135,7 +135,7 @@ namespace SCA.Services
                 var result2 = await _db.QueryAsync<ContentForHomePageDTO>(query) as List<ContentForHomePageDTO>;
                 _res.MostPopularItems = result2;
 
-                query = $"select * from Comments where ArticleId={_res.Id}";
+                query = $"select _c.*, concat(_u.Name, _u.Surname) as UserName, _u.GenderId from Comments as _c left join Users as _u on _u.Id = _c.UserID where ArticleId = {_res.Id}";
                 _res.CommentList = await _db.QueryAsync<CommentForUIDto>(query) as List<CommentForUIDto>;
             }
             catch (Exception ex)

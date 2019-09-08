@@ -16,9 +16,11 @@ namespace SCA.UI.Controllers
     {
         #region INTERFACES & CONSTRUCTOR
         private readonly IContentManager _contentManager;
-        public BlogController(IContentManager contentManager)
+        private readonly ICommentManager _commentManager;
+        public BlogController(IContentManager contentManager, ICommentManager commentManager)
         {
             _contentManager = contentManager;
+            _commentManager = commentManager;
         }
         #endregion
 
@@ -43,12 +45,13 @@ namespace SCA.UI.Controllers
             return Json(new { Status = false, Explanation = "Giriş yapılmadan yorum yapılamaz." });
         }
 
-        //[HttpPost]
-        //public async Task<JsonResult> PostComment(CommentsDto model)
-        //{
-        //    var res = await _commentManager.CreateComments(model);
-        //    return Json(res);
-        //}
+        [HttpPost]
+        public async Task<JsonResult> PostComment(CommentForUIDto model)
+        {
+            model.UserID = HttpContext.GetSessionData<UserSession>("userInfo").Id;
+            var res = await _commentManager.CreateComments(model);
+            return Json(res);
+        }
 
     }
 }
