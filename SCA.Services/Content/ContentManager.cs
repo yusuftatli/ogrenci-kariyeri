@@ -109,9 +109,21 @@ namespace SCA.Services
             ContentDetailForDetailPageDTO _res = new ContentDetailForDetailPageDTO();
             try
             {
+                string query = "";
+                DynamicParameters filter = new DynamicParameters();
+                if (userId != null)
+                {
+                    query = $"select *,IFNULL((select Id from Favorite _f where _f.UserId =@UserId and _f.ContentId = _c.Id and _f.IsActive = 1),0) as IsFavoriteContent " +
+                        $"from Content _c where PlatformType <> 1 and _c.seoUrl = '@seoUrl'";
+                    filter.Add("seoUrl", seoUrl);
+                    filter.Add("UserId", userId);
+                }
+                else
+                {
+                    query = "select * from Content _c where PlatformType <> 1 and _c.seoUrl='@seoUrl'";
+                    filter.Add("seoUrl", seoUrl);
+                }
 
-                string query = $"select *, IFNULL((select Id from Favorite _f where _u.Id =@UserId and _f.ContentId = _c.Id and _f.IsActive = 1),0) as IsFavoriteContent " +
-                    $"from Content _c where PlatformType <> 1 and seoUrl='@seoUrl'";
                 DynamicParameters filter = new DynamicParameters();
                 filter.Add("seoUrl", seoUrl);
                 filter.Add("UserId", (userId.HasValue ? userId.ToString() : "null"));
