@@ -1,8 +1,33 @@
 ﻿
 @{
 
-   Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+<style>
+    .slider-arrow-item {
+        bottom: 10px !important;
+        top: unset !important;
+    }
+
+        .slider-arrow-item .owl-prev {
+            float: left;
+            margin: 0 !important;
+        }
+
+        .slider-arrow-item .owl-next {
+            float: right;
+        }
+
+            .slider-arrow-item .owl-next i, .slider-arrow-item .owl-prev i {
+                background: #1a3458;
+                border-radius: 999px;
+                padding-left: 10px !important;
+                padding-right: 10px !important;
+                padding-top:5px !important;
+                padding-bottom:5px !important;
+            }
+</style>
 
 
 <!-- block post area start-->
@@ -10,31 +35,95 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 pr-0">
-                <div class="ts-overlay-style featured-post featured-post-style">
-                    <div class="item" style="background-image:url(images/news/travel/travel3.jpg)">
-                        <a class="post-cat ts-orange-bg" href="#">Travel</a>
-                        <div class="overlay-post-content">
-                            <div class="post-content">
-
-                                <h2 class="post-title lg">
-                                    <a href="#">Clothing and Accessories for the Fashionable Crypto Trader</a>
-                                </h2>
-                                <ul class="post-meta-info">
-                                    <li>
-                                        <i class="fa fa-clock-o"></i>
-                                        March 21, 2019
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-comments"> </i> Comments
-                                        </a>
-                                    </li>
-                                </ul>
+                <section class="block-wrapper hero-area owl-carousel" id="hero-slider">
+                    <div class="featured-slider-item"  style="background-image: url(http://ogrencikariyeri.com/haber/wp-content/uploads/2019/09/ciplak_ayak_yurumek.jpg)">
+                        <div class="featured-table">
+                            <div class="table-cell">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-lg-8">
+                                            <div class="hero-content">
+                                                <a href="#" class="post-cat">Football</a>
+                                                <h2>
+                                                    Greenough Prison break reveal caused
+                                                </h2>
+                                            </div>
+                                        </div>
+                                        <!-- col end-->
+                                    </div>
+                                    <!-- row end-->
+                                </div>
+                                <!-- container end-->
                             </div>
                         </div>
-                        <!--/ Featured post end -->
                     </div>
-                </div>
+
+                    <div class="featured-slider-item" style="background-image: url(http://ogrencikariyeri.com/haber/wp-content/uploads/2019/02/beyaz-zambaklar-ulkesinde.jpg)">
+                        <div class="featured-table">
+                            <div class="table-cell">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-lg-8">
+                                            <div class="hero-content">
+                                                <a href="#" class="post-cat">Football</a>
+                                                <h2>
+                                                    How did it go so wrong for Ferrari in Singapore?
+                                                </h2>
+                                            </div>
+                                        </div>
+                                        <!-- col end-->
+                                    </div>
+                                    <!-- row end-->
+                                </div>
+                                <!-- container end-->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="featured-slider-item" style="background-image: url(http://ogrencikariyeri.com/haber/wp-content/uploads/2019/02/tobb-etu.jpg)">
+                        <div class="featured-table">
+                            <div class="table-cell">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-lg-8">
+                                            <div class="hero-content">
+                                                <a href="#" class="post-cat">Football</a>
+                                                <h2>
+                                                    Bernard the only positive, Everton crumble all over the pitch
+                                                </h2>
+                                            </div>
+                                        </div>
+                                        <!-- col end-->
+                                    </div>
+                                    <!-- row end-->
+                                </div>
+                                <!-- container end-->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="featured-slider-item" style="background-image: url(http://ogrencikariyeri.com/haber/wp-content/uploads/2019/08/mikroogrenme.jpg)">
+                        <div class="featured-table">
+                            <div class="table-cell">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-lg-8">
+                                            <div class="hero-content">
+                                                <a href="#" class="post-cat">Football</a>
+                                                <h2>
+                                                    Talent crisis gives Aaron Finch his Test-match chance
+                                                </h2>
+                                            </div>
+                                        </div>
+                                        <!-- col end-->
+                                    </div>
+                                    <!-- row end-->
+                                </div>
+                                <!-- container end-->
+                            </div>
+                        </div>
+                    </div>
+                </section>
                 <!-- ts overlay end-->
             </div>
             <!-- col end-->
@@ -95,7 +184,7 @@
             <div class="col-lg-3">
                 <div class="right-sidebar">
                     @await Component.InvokeAsync("SocialMedia")
-                    @await Component.InvokeAsync("PopularContents", new { count = 5})
+                    @await Component.InvokeAsync("PopularContents", new { count = 5 })
                     @await Component.InvokeAsync("PopularCategories")
                     @await Component.InvokeAsync("NewsletterForm")
                 </div>
@@ -107,18 +196,18 @@
     <!-- container end-->
 </section>
 <!-- post wraper end-->
-@await Component.InvokeAsync("NewsWithSlider", new { count = 10})
+@await Component.InvokeAsync("NewsWithSlider", new { count = 10 })
 <!-- post wraper end-->
 <section class="block-wrapper mt-15 xs-mb-30">
     <div class="container">
         <div class="row">
             <div class="col-lg-9">
-                @await Component.InvokeAsync("NewsWith2Columns", new { count = 20})
+                @await Component.InvokeAsync("NewsWith2Columns", new { count = 20 })
             </div>
             <div class="col-lg-3">
                 <div class="right-sidebar">
                     @await Component.InvokeAsync("Banner", new { url = "#", imagePath = "images/banner/sidebar-banner4.jpg" })
-                    @await Component.InvokeAsync("RecentAndFavorites", new { count = 5})
+                    @await Component.InvokeAsync("RecentAndFavorites", new { count = 5 })
                     @await Component.InvokeAsync("Tags")
                     @await Component.InvokeAsync("Banner", new { url = "#", imagePath = "images/banner/sidebar-banner1.jpg" })
                 </div>

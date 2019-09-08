@@ -53,10 +53,10 @@
                             <span>
                                 @if (!string.IsNullOrEmpty(Model.Category))
                                 {
-                                foreach (var x in Model.Category.Split(","))
-                                {
-                                <a href="@Url.Action(" Index", "Category" )" class="post-cat ts-green-bg">@x</a>
-                                }
+                                    foreach (var x in Model.Category.Split(","))
+                                    {
+                                <a href="@Url.Action(" Index", "Category")" class="post-cat ts-green-bg">@x</a>
+                                    }
                                 }
                             </span>
                         </div>
@@ -64,7 +64,7 @@
                         <ul class="post-meta-info">
                             <li class="author">
                                 <a href="#">
-                                    <img src="/images/avater/author.png" alt=""> @Model.Writer
+                                    <img src="@(Model.WriterImagePath ?? ((Model.GenderId == SCA.Entity.Enums.GenderType.Man) ? "/images/avatar/man.png" : "/images/avatar/woman.png"))" alt=""> @Model.Writer
                                 </a>
                             </li>
                             <li>
@@ -121,7 +121,7 @@
                     </div>
                     <!-- post content area-->
                     <div class="author-box">
-                        <img class="author-img" src="images/avater/author.png" alt="">
+                        <img class="author-img" src="@(Model.WriterImagePath ?? ((Model.GenderId == SCA.Entity.Enums.GenderType.Man) ? "/images/avatar/man.png" : "/images/avatar/woman.png"))" alt="">
                         <div class="author-info">
                             <h4 class="author-name">@Model.Writer</h4>
                             <div class="authors-social">
@@ -140,8 +140,7 @@
                             </div>
                             <div class="clearfix"></div>
                             <p>
-                                Black farmers in the US’s South—faced with continued failure in their efforts to run for the successful farms their
-                                launched
+                                @Model.WriterBiography
                             </p>
 
                         </div>
