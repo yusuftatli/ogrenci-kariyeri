@@ -312,18 +312,19 @@ $(function ($) {
             margin: 10,
             loop: true,
             dots: true,
+            dotsData:true,
             nav: true,
             autoplay: true,
             items: 1,
             autoplayHoverPause: true,
-            mouseDrag: false,
+            mouseDrag: true,
             touchDrag:false,
             animateOut: 'slideOutLeft',
             navText: ["<i class='icon-arrow-left'></i>", "<i class='icon-arrow-right'></i>"],
         });
 
-        $('#hero-slider .owl-dots').wrap('<div class="container slider-dot-item"><div class="row"><div class="col-lg-9"></div></div></div>');
-        $('#hero-slider .owl-nav').wrap('<div class="container slider-arrow-item"><div class="row"><div class="col-lg-9"></div></div></div>');
+        $('#hero-slider .owl-dots').wrap('<div class="container slider-dot-item"><div class="row"><div class="col-lg-12"></div></div></div>');
+        $('#hero-slider .owl-nav').wrap('<div class="container slider-arrow-item"><div class="row"><div class="col-lg-12"></div></div></div>');
     }
     /* ----------------------------------------------------------- */
 	/*  post slider
