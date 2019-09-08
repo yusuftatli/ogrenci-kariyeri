@@ -124,7 +124,6 @@ namespace SCA.Services
                     filter.Add("seoUrl", seoUrl);
                 }
 
-                DynamicParameters filter = new DynamicParameters();
                 filter.Add("seoUrl", seoUrl);
                 filter.Add("UserId", (userId.HasValue ? userId.ToString() : "null"));
                 _res = await _db.QueryFirstAsync<ContentDetailForDetailPageDTO>(query, new { SeoUrl = seoUrl });

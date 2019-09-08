@@ -209,6 +209,7 @@ $(function ($) {
             dots: false,
             loop: true,
             nav: true,
+            autoplay:true,
             autoplayHoverPause: true,
             mouseDrag: false,
             touchDrag:false,
@@ -280,6 +281,7 @@ $(function ($) {
             dots: true,
             slideSpeed: 600,
             autoplayHoverPause: true,
+            autoplay:true,
             mouseDrag: false,
             touchDrag:false,
             responsive: {
@@ -313,18 +315,22 @@ $(function ($) {
             loop: true,
             dots: true,
             dotsData:true,
-            nav: true,
+            nav: false,
             autoplay: true,
             items: 1,
+            center:true,
             autoplayHoverPause: true,
             mouseDrag: true,
             touchDrag:false,
             animateOut: 'slideOutLeft',
             navText: ["<i class='icon-arrow-left'></i>", "<i class='icon-arrow-right'></i>"],
         });
-
-        $('#hero-slider .owl-dots').wrap('<div class="container slider-dot-item"><div class="row"><div class="col-lg-12"></div></div></div>');
+        
+        $('#hero-slider .owl-dots').wrap('<div class="container slider-dot-item text-center"><div class="col-lg-12"></div></div>');
         $('#hero-slider .owl-nav').wrap('<div class="container slider-arrow-item"><div class="row"><div class="col-lg-12"></div></div></div>');
+        $("#hero-slider .owl-dots .dot-class").hover(function(){
+            $(this).click();
+        }, function(){});
     }
     /* ----------------------------------------------------------- */
 	/*  post slider
