@@ -187,9 +187,10 @@ namespace SCA.Services
                 filter.Add("EmailAddress", email);
                 filter.Add("Password", MD5Hash(password));
 
-                var result = _db.Query<UserSession>(query).FirstOrDefault();
+                var result = _db.Query<UserSession>(query,filter).FirstOrDefault();
                 if (result != null)
                 {
+                    result.Token = _authManager.GenerateToken(result);
                     _res = Result.ReturnAsSuccess(message: "Hoşgeldin " + result.Name + "!", data: result);
                 }
                 else
