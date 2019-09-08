@@ -207,8 +207,8 @@ app.controller("assayController", function ($scope, $http, $filter) {
                     $scope.assayCreate.eventId = e.data.eventId;
                     $scope.assayCreate.internId = e.data.internId;
                     $scope.assayCreate.visibleId = e.data.visibleId;
-                    $scope.categoryValue = e.data.category != null ? e.data.category.split(',') : "";
-                    $scope.tagsValue = e.data.tags != null ? e.data.tags.split(',') : "";
+                    $scope.categoryValue = e.data.category !== null ? e.data.category.split(',') : "";
+                    $scope.tagsValue = e.data.tags !== null ? e.data.tags.split(',') : "";
                     CKEDITOR.instances.ckeditorForAssayContent.setData(e.data.contentDescription);
                     $("#roxyField").val(e.data.imagePath);
                     $("#img_roxyField").attr('src', e.data.imagePath);

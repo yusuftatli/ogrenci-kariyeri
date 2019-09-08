@@ -8,6 +8,6 @@ namespace SCA.Services
 {
     public interface INewsletterManager
     {
-        Task<string> CreateNewsletter(NewsletterDto dto)
+        Task<string> CreateNewsletter(NewsletterDto dto);
     }
 }
