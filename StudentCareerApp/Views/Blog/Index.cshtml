@@ -64,7 +64,7 @@
                         <ul class="post-meta-info">
                             <li class="author">
                                 <a href="#">
-                                    <img src="images/avater/author.png" alt=""> @Model.Writer
+                                    <img src="/images/avater/author.png" alt=""> @Model.Writer
                                 </a>
                             </li>
                             <li>
@@ -74,7 +74,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="">
+                                <a href="#commentArea">
                                     <i class="fa fa-comments"></i>
                                     @Model.CommentList.Count
                                 </a>
@@ -170,7 +170,7 @@
                     <!-- post navigation end-->
                 </div>
                 <!--single post end -->
-                <div class="comments-form ts-grid-box">
+                <div class="comments-form ts-grid-box" id="commentArea">
 
                     <h3 class="comments-counter">@Model.CommentList.Count Yorum</h3>
                     <ul class="comments-list">
@@ -178,10 +178,10 @@
                         {
                         <li>
                             <div class="comment">
-                                <img class="comment-avatar float-left" alt="" src="">
+                                <img class="comment-avatar float-left" alt="" src="@(x.ImagePath ?? ((x.GenderId == SCA.Entity.Enums.GenderType.Man) ? "/images/avatar/man.png" : "/images/avatar/woman.png"))">
                                 <div class="comment-body">
                                     <div class="meta-data">
-                                        <span class="comment-author">@x.userName</span><span class="comment-date">@x.CreatedDate.ToShortDateString()</span>
+                                        <span class="comment-author">@x.UserName</span><span class="comment-date">@x.PostDate.ToShortDateString()</span>
                                     </div>
                                     <div class="comment-content">
                                         <p>@x.Description</p>
@@ -215,7 +215,7 @@
                             <!-- Col end -->
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <textarea class="form-control msg-box" id="message" placeholder="Yorumunuz..." rows="10" required=""></textarea>
+                                    <textarea class="form-control msg-box" name="Description" id="message" placeholder="Yorumunuz..." rows="10" required=""></textarea>
                                 </div>
                             </div>
                         </div>

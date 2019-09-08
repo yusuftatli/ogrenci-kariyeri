@@ -113,14 +113,14 @@ namespace SCA.Services
                     $"from Content _c where PlatformType <> 1 and seoUrl='{seoUrl}'";
                 DynamicParameters filter = new DynamicParameters();
                 _res = await _db.QueryFirstAsync<ContentDetailForDetailPageDTO>(query, new { SeoUrl = seoUrl });
-                
+
 
                 query = $"select  * from  Content where  PlatformType <> 1 order by PublishDate desc limit 10;";
 
                 var result2 = await _db.QueryAsync<ContentForHomePageDTO>(query) as List<ContentForHomePageDTO>;
                 _res.MostPopularItems = result2;
 
-                query = $"select * from Comments where ArticleId={_res.Id}";
+                query = $"select _c.*, concat(_u.Name, _u.Surname) as UserName, _u.GenderId from Comments as _c left join Users as _u on _u.Id = _c.UserID where ArticleId = {_res.Id}";
                 _res.CommentList = await _db.QueryAsync<CommentForUIDto>(query) as List<CommentForUIDto>;
             }
             catch (Exception ex)

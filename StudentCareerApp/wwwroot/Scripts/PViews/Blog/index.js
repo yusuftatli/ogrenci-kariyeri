@@ -1,8 +1,8 @@
 ﻿$(document).on('submit', '#commentForm', function(e){
+    debugger;
     e.preventDefault();
-
     $.ajax({
-        url: '',
+        url: '/Blog/PostComment',
         type: 'post',
         data: $("#commentForm").serialize(),
         success: function(res){
