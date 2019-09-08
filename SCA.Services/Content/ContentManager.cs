@@ -430,7 +430,7 @@ namespace SCA.Services
 
                 else if (hitTypes == HitTypes.Manset)
                 {
-                    query = $"select  * from  Content where  PlatformType <> 1 order by Id asc limit {count};";
+                    query = $"select  * from  Content where  PlatformType <> 1 and IsManset = 1 order by Id asc limit {count};";
                 }
 
                 else if (hitTypes == HitTypes.MostPopuler)
@@ -445,7 +445,7 @@ namespace SCA.Services
 
                 else if (hitTypes == HitTypes.HeadLine)
                 {
-                    query = $"select  * from  Content where  PlatformType <> 1 order by Id asc limit {count};";
+                    query = $"select  * from  Content where  PlatformType <> 1  and IsHeadLine = 1 order by Id asc limit {count};";
                 }
                 listData = _db.Query<ContentForHomePageDTO>(query, filter).ToList();
             }
