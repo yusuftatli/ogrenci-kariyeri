@@ -12,6 +12,8 @@ namespace SCA.Entity.DTO
         public string Category { get; set; }
         public string Header { get; set; }
         public string Writer { get; set; }
+        public string WriterImagePath { get; set; }
+        public string WriterBiography { get; set; }
         public GenderType GenderId { get; set; }
         public DateTime PublishDate { get; set; }
         public int ReadCount { get; set; }
