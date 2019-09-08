@@ -72,14 +72,9 @@ namespace SCA.Services
                     filter.Add("UserId", session.Id);
                 }
 
-                var dataList = _db.Query<ContentShortListDto>(query).ToList();
+                var dataList = _db.Query<ContentShortListDto>(query, filter).ToList();
                 if (dataList.Count > 0)
                 {
-                    dataList.ForEach(x =>
-                    {
-                        x.PublishStateTypeDes = x.PublishStateType.GetDescription();
-                        x.PlatformTypeDes = x.PlatformType.GetDescription();
-                    });
                 }
 
                 return Result.ReturnAsSuccess(session.RoleTypeId.ToString(), message: AlertResource.SuccessfulOperation, dataList);
@@ -176,8 +171,30 @@ namespace SCA.Services
         }
         public async Task<ServiceResult> GetContent(long id)
         {
-            var listData = _mapper.Map<ContentDto>(_contentRepo.Get(x => x.Id == id));
-            return Result.ReturnAsSuccess(null, null, listData);
+            ServiceResult _res = new ServiceResult();
+            try
+            {
+                string query = "Select *From Content where Id=@Id";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("Id", id);
+
+                var resultData = await _db.QueryFirstAsync<ContentDto>(query, filter);
+
+                if (resultData != null)
+                {
+                    _res = Result.ReturnAsSuccess(data: resultData);
+                }
+                else
+                {
+                    _res = Result.ReturnAsFail(message: "Yüklenecek herhangi bir makale detayı bulunamadı");
+                }
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString());
+                _res = Result.ReturnAsFail(message: "Makale detay bilgisi yüklenirken hata meydana geldi");
+            }
+            return _res;
         }
         public async Task<ServiceResult> GetContent(string url)
         {
@@ -186,23 +203,23 @@ namespace SCA.Services
         }
         public async Task<ServiceResult> UpdateContentPublish(publishStateDto dto, UserSession session)
         {
-            if (dto.publishState.Equals(PublishState.Publish))
+            ServiceResult _res = new ServiceResult();
+            try
             {
-                var data = _contentRepo.Get(x => x.Id == dto.id);
-                data.PublishStateType = (PublishState)dto.publishState;
-                data.ConfirmUserId = 1;
-                data.ConfirmUserName = session.Name + " " + session.Surname;
-                _contentRepo.Update(data);
-                _unitOfWork.SaveChanges();
+                string query = "Update Content set PublishStateType = @PublishStateType where Id=@Id";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("Id", dto.Id);
+                filter.Add("PublishStateType", dto.publishState);
+
+                var resultData = _db.Execute(query, filter);
+                _res = Result.ReturnAsSuccess();
             }
-            else
+            catch (Exception ex)
             {
-                var data = _contentRepo.Get(x => x.Id == dto.id);
-                data.PublishStateType = (PublishState)dto.publishState;
-                _contentRepo.Update(data);
-                var res = _unitOfWork.SaveChanges();
+               await _errorManagement.SaveError(ex.ToString());
+                _res = Result.ReturnAsFail();
             }
-            return Result.ReturnAsSuccess(null, null, null);
+            return _res;
         }
         /// <summary>
         /// Makaleleri içerikleri ile birlikte listeler

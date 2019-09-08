@@ -25,10 +25,10 @@ namespace SCA.Services
 				when _c.PlatformType = 1 then 'Mobil'
                 when _c.PlatformType = 2 then 'Web'
                 else 'Web/Mobil' 
-			end as PublishStateTypeDes,
+			end as PlatformTypeDes,
             _c.ConfirmUserName
             from Content _c 
-            where _c.PublishDate >='@PublishStartDate' and _c.PublishDate <= '@PublishEndate'  order by _c.PublishDate desc Limit 100";
+            where _c.PublishDate >=@PublishStartDate and _c.PublishDate <= @PublishEndate  order by _c.PublishDate desc";
 
         public static string ContentListQueryWithUser = @"select 		
             _c.Id,
@@ -49,10 +49,10 @@ namespace SCA.Services
 				when _c.PlatformType = 1 then 'Mobil'
                 when _c.PlatformType = 2 then 'Web'
                 else 'Web/Mobil' 
-			end as PublishStateTypeDes,
+			end as PlatformTypeDes,
             _c.ConfirmUserName
             from Content _c 
-            where _c.PublishDate >='@PublishStartDate' and _c.PublishDate <= '@PublishEndate' and _c.UserId=@UserId order by _c.PublishDate desc Limit 100";
+            where _c.PublishDate >='@PublishStartDate' and _c.PublishDate <= '@PublishEndate' and _c.UserId=@UserId order by _c.PublishDate desc";
 
     }
 }
