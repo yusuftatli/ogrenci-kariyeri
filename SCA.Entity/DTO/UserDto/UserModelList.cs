@@ -14,7 +14,6 @@ namespace SCA.Entity.DTO
         public string ImagePath { get; set; }
         public string EmailAddress { get; set; }
         public long RoleTypeId { get; set; }
-        public string RoleType { get; set; }
         public string RoleDescription { get; set; }
         public bool IsActive { get; set; }
         public string Durum { get; set; }
