@@ -1,4 +1,5 @@
-﻿@model SCA.Entity.DTO.ContentDetailForDetailPageDTO
+﻿@using SCA.Common;
+@model SCA.Entity.DTO.ContentDetailForDetailPageDTO
 
 @{
     ViewData["Title"] = "Index";
@@ -14,28 +15,35 @@
         border-radius: 5px;
         box-shadow: 0px 0px 5px 0px;
     }
-    .heart-box i{
-        width:35px;
+
+    .heart-box i {
+        width: 35px;
         height: 35px;
         -webkit-border-radius: 50%;
-        text-align:center;
-        vertical-align:sub;
-        font-size:28px !important;
+        text-align: center;
+        vertical-align: sub;
+        font-size: 28px !important;
         line-height: 28px !important;
+        cursor: pointer;
     }
-    .heart-box a:hover, heart-box a.active{
-        color: #e31b23 !important;
+
+    .heart-box {
+        color: unset !important;
     }
+
+        .heart-box a:hover, .heart-box a.active {
+            color: #e31b23 !important;
+        }
 </style>
 
 <!-- single post start -->
 <section class="single-post-wrapper post-layout-1">
     <div class="container">
         @*<div class="row">
-                <div class="col-lg-12">
-                    <div class="single-big-img mb-30" style="background-image: url(@Model.ImagePath)"></div>
-                </div>
-            </div>*@
+            <div class="col-lg-12">
+                <div class="single-big-img mb-30" style="background-image: url(@Model.ImagePath)"></div>
+            </div>
+        </div>*@
         <div class="row">
             <div class="col-lg-9">
                 @*<div class="single-big-img mb-30" style="background-image: url(@Model.ImagePath)"></div>*@
@@ -45,10 +53,10 @@
                             <span>
                                 @if (!string.IsNullOrEmpty(Model.Category))
                                 {
-                                    foreach (var x in Model.Category.Split(","))
-                                    {
-                                        <a href="@Url.Action("Index", "Category")" class="post-cat ts-green-bg">@x</a>
-                                    }
+                                foreach (var x in Model.Category.Split(","))
+                                {
+                                <a href="@Url.Action(" Index", "Category" )" class="post-cat ts-green-bg">@x</a>
+                                }
                                 }
                             </span>
                         </div>
@@ -68,7 +76,7 @@
                             <li>
                                 <a href="">
                                     <i class="fa fa-comments"></i>
-                                    5 comments
+                                    @Model.CommentList.Count
                                 </a>
                             </li>
                             <li class="active">
@@ -80,11 +88,23 @@
                                     <i class="fa fa-share"></i>
                                 </a>
                             </li>
+
                             <li class="heart-box">
-                                <a href="" class="@(Model.IsFavoriteContent ? "active" : "")">
-                                    <i class="fa fa-heart"></i>
-                                </a>
+                                @if (Context.GetSessionData<SCA.Entity.DTO.UserSession>
+                                    ("userInfo")?.Id > 0)
+                                    {
+                                    <a id="addFavorite" data-id="@Model.Id" class="@(Model.IsFavoriteContent ? "active" : "" )">
+                                        <i class="fa fa-heart"></i>
+                                    </a>
+                                    }
+                                    else
+                                    {
+                                    <a class="openLoginMagnific">
+                                        <i class="fa fa-heart"></i>
+                                    </a>
+                                    }
                             </li>
+
                         </ul>
                     </div>
                     <!-- single post header end-->
@@ -96,81 +116,6 @@
                         </div>
                         <div class="entry-content">
                             @Html.Raw(Model.ContentDescription)
-                            @*<p>
-                                    <span class="tie-dropcap">A</span> farmers in the US’s South—faced with continued failure in their efforts to run on successful farms their
-                                    launched a lawsuit claiming that “white racism” is to the blame for their inability to produce crop yields.
-                                </p>
-                                <p>
-                                    Black farmers in the US’s South—
-                                    <span>faced with continued failure their efforts to run successful farms</span> their launched a lawsuit claiming that
-                                    “white racism” is to blame for their inability to the produce crop yields and on equivalent to that switched seeds.
-                                </p>
-                                <blockquote>
-                                    Black farmers in the US’s South faced with continued failure in their efforts to run the successful farms launched a lawsuit
-                                    <cite>Steve Jobs</cite>
-                                </blockquote>
-                                <h3>
-                                    For the first time the Swiss State Secretart for Economic Affair (SECO) has indicated that Uber taxi drivers should
-                                </h3>
-                                <p>
-                                    Black farmers in the US’s South—
-                                    <span>faced with continued failure their efforts to run successful farms</span> their launched a lawsuit claiming that
-                                    “white racism” is to blame for their inability to the produce crop yields and on equivalent to that switched seeds.
-                                </p>
-
-
-                                <p>
-                                    Black farmers in the US’s South—
-                                    <span>faced with continued failure their efforts to run successful farms</span> their launched a lawsuit claiming that
-                                    “white racism” is to blame for their inability to the produce crop yields and on equivalent to that switched seeds.
-                                </p>
-                                <div class="post-video">
-                                    <img class="img-fluid" src="images/news/travel/travel9.jpg" alt="">
-                                    <div class="post-video-content">
-                                        <a href="https://www.youtube.com/watch?v=_0UO1NcheAE" class="ts-play-btn">
-                                            <i class="fa fa-play" aria-hidden="true"></i>
-                                        </a>
-                                        <h3>
-                                            <a href=""> For the first time the Swiss State Secretart for Economic indicated that Uber taxi</a>
-                                        </h3>
-                                    </div>
-                                </div>
-                                <h3>
-                                    For the first time the Swiss State Secretart for Economic Affair (SECO) has indicated that Uber taxi drivers should be classed
-                                    as employees
-                                </h3>
-                                <p>
-                                    Black farmers in the US’s South—faced with continued failure in their efforts to run successful farms their launched a lawsuit
-                                    claiming that “white racism” is to blame for their inability to produce crop yields and on equivalent to that switched
-                                    seeds in order to sell black farmers a subpar product at the Mid-South Farm & Gin Show in March 2017. Despite above
-                                    average rainfall, the black farmers saw limited soybean yield from the Stine seeds during the 2017 harvest.
-                                </p>
-                                <p>
-                                    <a href="">
-                                        <img class="img-fluid" src="images/banner/banner2.jpg" alt="">
-                                    </a>
-                                </p>
-                                <h3>
-                                    For the first time the Swiss State Secretart for Economic Affair
-                                </h3>
-                                <ul>
-                                    <li>
-                                        But there was also no shortage of news for the worlds of film.
-                                    </li>
-                                    <li>
-                                        Prasad made these comments on behalf of the Treasury benches.
-                                    </li>
-                                    <li>
-                                        He gave details of the answers provided by Defence.
-                                    </li>
-                                    <li>
-                                        The government has been forthcoming in declaring the aircraft.
-                                    </li>
-                                </ul>
-                                <p>
-                                    Black farmers in the US’s South—faced with continued failure in their efforts to run successful farms their launched a lawsuit
-                                    claiming that “white racism” is to blame for their inability
-                                </p>*@
                         </div>
                         <!-- entry content end-->
                     </div>
@@ -227,42 +172,26 @@
                 <!--single post end -->
                 <div class="comments-form ts-grid-box">
 
-                    <h3 class="comments-counter">03 Comments</h3>
+                    <h3 class="comments-counter">@Model.CommentList.Count Yorum</h3>
                     <ul class="comments-list">
+                        @foreach (var x in Model.CommentList)
+                        {
                         <li>
                             <div class="comment">
-                                <img class="comment-avatar float-left" alt="" src="images/avater/author.png">
+                                <img class="comment-avatar float-left" alt="" src="">
                                 <div class="comment-body">
                                     <div class="meta-data">
-                                        <span class="float-right"><a class="comment-reply" href="#"><i class="fa fa-mail-reply-all"></i> Reply</a></span>
-                                        <span class="comment-author">Demon Lion</span><span class="comment-date">October 31, 2018</span>
+                                        <span class="comment-author">@x.userName</span><span class="comment-date">@x.CreatedDate.ToShortDateString()</span>
                                     </div>
                                     <div class="comment-content">
-                                        <p>There’s such a thing as “too much information”, especially for the companies scaling out their sales operations. That’s why Attentive was help sales teams </p>
+                                        <p>@x.Description</p>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Comments end-->
-                            <ul class="comments-reply">
-                                <li>
-                                    <div class="comment">
-                                        <img class="comment-avatar float-left" alt="" src="images/avater/author2.png">
-                                        <div class="comment-body reply-bg">
-                                            <div class="meta-data">
-                                                <span class="float-right"><a class="comment-reply" href="#"><i class="fa fa-mail-reply-all"></i> Reply</a></span>
-                                                <span class="comment-author">Henry kendel</span><span class="comment-date">October 31, 2018</span>
-                                            </div>
-                                            <div class="comment-content">
-                                                <p>There’s such a thing as “too much information”, especially for the companies scaling out their sales operations. That’s why Attentive was born</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Comments end-->
-                                </li>
-                            </ul>
-                            <!-- comments-reply end-->
                         </li>
+                        }
                         <!-- Comments-list li end-->
+                        @*
                         <li>
                             <div class="comment last">
                                 <img class="comment-avatar float-left" alt="" src="images/avater/author.png">
@@ -276,44 +205,32 @@
                                     </div>
                                 </div>
                             </div><!-- Comments last end-->
-                        </li>
+                        </li>*@
                     </ul>
                     <!-- Comments-list ul end-->
 
-                    <h3 class="comment-reply-title">Add Comment</h3>
-                    <form role="form" class="ts-form">
+                    <h3 class="comment-reply-title">Yorum Yap</h3>
+                    <form role="form" class="ts-form" id="commentForm">
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <input class="form-control" name="name" id="name" placeholder="Your Name" type="text" required="">
-                                </div>
-                                <!-- form group end-->
-                                <div class="form-group">
-                                    <input class="form-control" name="email" id="email" placeholder="Your Email" type="email" required="">
-                                </div>
-                                <!-- form group end-->
-                                <div class="form-group">
-                                    <input class="form-control" placeholder="Your Website" type="text" required="">
-                                </div>
-                                <!-- form group end-->
-                            </div>
-                            <!-- Col end -->
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <textarea class="form-control msg-box" id="message" placeholder="Your Comment" rows="10" required=""></textarea>
-                                </div>
-                            </div>
                             <!-- Col end -->
                             <div class="col-md-12">
-                                <p class="comment-form-cookies-consent">
-                                    <input id="wp-comment-cookies-consent" name="wp-comment-cookies-consent" type="checkbox" value="yes">
-                                    <label for="wp-comment-cookies-consent">Save my name, email, and website in this browser for the next time I comment.</label>
-                                </p>
+                                <div class="form-group">
+                                    <textarea class="form-control msg-box" id="message" placeholder="Yorumunuz..." rows="10" required=""></textarea>
+                                </div>
                             </div>
                         </div>
                         <!-- Form row end -->
                         <div class="clearfix">
-                            <button class="comments-btn btn btn-primary" type="submit">Post Comment</button>
+                            @if (Context.GetSessionData<SCA.Entity.DTO.UserSession>
+                                ("userInfo")?.Id > 0)
+                                {
+                                <input class="hidden" type="hidden" name="ArticleId" value="@Model.Id" />
+                                <button class="comments-btn btn btn-primary" type="submit">Yorum Yap</button>
+                                }
+                                else
+                                {
+                                <button class="comments-btn btn btn-primary openLoginMagnific" type="button">Yorum Yap</button>
+                                }
                         </div>
                     </form>
                     <!-- Form end -->
@@ -338,3 +255,7 @@
     <!-- container-->
 </section>
 <!-- single post end-->
+
+@section Scripts{
+    <script src="~/Scripts/PViews/Blog/index.js"></script>
+}

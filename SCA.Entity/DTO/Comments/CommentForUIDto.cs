@@ -10,6 +10,8 @@ namespace SCA.Entity.DTO
         public long UserID { get; set; }
         public long ArticleId { get; set; }
         public string Description { get; set; }
+        public string userName { get; set; }
 
+        public DateTime CreatedDate { get; set; }
     }
 }

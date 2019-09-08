@@ -25,7 +25,7 @@ namespace SCA.Common
 
         public static T GetSessionData<T>(this HttpContext context, string sessionName) where T : class
         {
-            return JsonConvert.DeserializeObject<T>(context.Session.GetString("userInfo"));
+            return JsonConvert.DeserializeObject<T>(context.Session.GetString("userInfo") ?? "");
         }
 
         public static string FriendlyUrl(this string url)

@@ -56,7 +56,7 @@ namespace SCA.Services
             try
             {
                 string query = "select * from Category where IsActive=true";
-                var lisData = _db.QueryAsync<MainCategoryDto>(query);
+                var lisData = await _db.QueryAsync<MainCategoryDto>(query) as List<MainCategoryDto>;
                 _res = Result.ReturnAsSuccess(data: lisData);
             }
             catch (Exception ex)

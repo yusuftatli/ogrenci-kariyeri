@@ -109,19 +109,19 @@ namespace SCA.Services
             ContentDetailForDetailPageDTO _res = new ContentDetailForDetailPageDTO();
             try
             {
-                string query = $"select *, IFNULL((select Id from Favorite _f where _f.UserId = {userId} and _f.ContentId = _c.Id and _f.IsActive = 1),0) as IsFavoriteContent " +
+                string query = $"select *, IFNULL((select Id from Favorite _f where _f.UserId = {(userId.HasValue ? userId.ToString() : "null")} and _f.ContentId = _c.Id and _f.IsActive = 1),0) as IsFavoriteContent " +
                     $"from Content _c where PlatformType <> 1 and seoUrl='{seoUrl}'";
                 DynamicParameters filter = new DynamicParameters();
                 _res = await _db.QueryFirstAsync<ContentDetailForDetailPageDTO>(query, new { SeoUrl = seoUrl });
-
+                
 
                 query = $"select  * from  Content where  PlatformType <> 1 order by PublishDate desc limit 10;";
 
-                var result2 = await _db.QueryFirstAsync<List<ContentForHomePageDTO>>(query);
+                var result2 = await _db.QueryAsync<ContentForHomePageDTO>(query) as List<ContentForHomePageDTO>;
                 _res.MostPopularItems = result2;
 
-                query = $"select * from Comments where ArticleId={GetContentId(seoUrl)}";
-                _res.CommentList = _db.Query<CommentForUIDto>(query) as List<CommentForUIDto>;
+                query = $"select * from Comments where ArticleId={_res.Id}";
+                _res.CommentList = await _db.QueryAsync<CommentForUIDto>(query) as List<CommentForUIDto>;
             }
             catch (Exception ex)
             {
@@ -132,9 +132,9 @@ namespace SCA.Services
 
         public async Task<long> GetContentId(string seoUrl)
         {
-            string query = $"select * from content where seoUrl={seoUrl}";
-            var data = _db.Query<ContentDto>(query).FirstOrDefault();
-            return data.Id;
+            string query = $"select top 1 ContentId from content where seoUrl={seoUrl}";
+            var data = await _db.ExecuteScalarAsync<long>(query);
+            return data;
         }
         public async Task<ServiceResult> GetContentForMobil(string seoUrl)
         {
@@ -450,6 +450,12 @@ namespace SCA.Services
             return listData;
         }
 
+        public async Task<List<ContentForHomePageDTO>> GetUsersFavoriteContents(long userId, int count)
+        {
+            string query = $"select * from Content where Id in (select ContentId from Favorite where UserId = {userId} and IsActive = 1) limit {count} order by PublishDate desc";
+            var listData = await _db.QueryAsync<ContentForHomePageDTO>(query) as List<ContentForHomePageDTO>;
+            return listData;
+        }
 
         public async Task<bool> CreateFavorite(FavoriteDto dto)
         {
