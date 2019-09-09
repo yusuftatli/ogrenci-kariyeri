@@ -11,6 +11,7 @@ namespace SCA.Entity.DTO
         public string UserName { get; set; }
         public string EmailAddress { get; set; }
         public string Name { get; set; }
+        public string Category { get; set; }
         public string Surname { get; set; }
         public long RoleTypeId { get; set; }
         public string Token { get; set; }

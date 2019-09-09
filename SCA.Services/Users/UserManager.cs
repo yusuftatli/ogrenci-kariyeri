@@ -62,8 +62,8 @@ namespace SCA.Services
                 filter.Add("userId", userId);
                 filter.Add("Category", category);
 
-                var result = _db.Execute(query, filter);
-                _res = Result.ReturnAsSuccess(message: "iİlgi alanları güncelleme işlemi başarılı");
+                var result = await _db.ExecuteAsync(query, filter);
+                _res = Result.ReturnAsSuccess(message: "İlgi alanları güncelleme işlemi başarılı");
             }
             catch (Exception ex)
             {

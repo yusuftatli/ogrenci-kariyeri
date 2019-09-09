@@ -97,9 +97,17 @@ namespace SCA.UI.Controllers
                 };
                 var res = await _userManager.RegisterUser(model);
                 if (res.IsSuccess())
-                    return View();
+                {
+                    var loginRes = await _userManager.CheckUserForLogin(model.EmailAddress, model.Password);
+                    if (loginRes.IsSuccess())
+                    {
+                        HttpContext.Session.SetString("userInfo", Newtonsoft.Json.JsonConvert.SerializeObject(res.Data));
+                        return RedirectToAction("SetCategories", "User");
+                    }
+                }
+                
             }
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
     }

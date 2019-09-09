@@ -1,4 +1,6 @@
-﻿@{
+﻿@using SCA.Common;
+
+@{
     ViewData["Title"] = "SetCategories";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -23,7 +25,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="row">
-                    <div class="col-lg-4 col-md-4 mb-30" v-for="x,index in categories" v-if="x.parentId == null">
+                    <div class="col-lg-4 col-md-4 mb-30" v-for="x,index in categories" v-if="x.parentId == 0">
                         <div class="item post-content-box">
                             <div class="post-content">
                                 <a class="post-cat orange-color no-bg" href="#">{{x.description}}</a>
@@ -31,7 +33,7 @@
                                     <a href="#"><span style="text-transform:capitalize;">{{x.description}}</span> kategorisini keşfet!</a>
                                 </h3>
                                 <div class="form-group">
-                                    <input type="checkbox" class="js-switch" :id="'categorySelection'+x.id" data-color="#00c292" v-init="lastClickedMainCategory == null ? switcher(1, '#categorySelection'+x.id) : ''" />
+                                    <input type="checkbox" class="js-switch" :id="'categorySelection'+x.id" :data-id="x.id" data-color="#00c292" v-init="lastClickedMainCategory == 0 ? switcher(1, 'categorySelection'+x.id) : ''" />
                                 </div>
                                 <div v-if="categories.filter(z=>z.parentId == x.id).length > 0 ">
                                     <div v-if="lastClickedMainCategory != x.id">
@@ -41,7 +43,7 @@
                                         <a class="arrow-down no-bg"><i class="fa fa-2x fa-arrow-up" v-on:click="lastClickedMainCategory = -1"></i></a>
                                         <div class="form-group" v-for="y,index2 in categories" v-if="y.parentId == x.id">
                                             <label>{{y.description}}</label>
-                                            <input type="checkbox" class="js-switch" :id="index+'subCategorySelection'+y.id" data-color="#00c292" v-init="switcher(1, '#'+index+'subCategorySelection'+y.id)" />
+                                            <input type="checkbox" class="js-switch" :id="index+'subCategorySelection'+y.id" :data-id="y.id" data-color="#00c292" v-init="switcher(1, index+'subCategorySelection'+y.id)" />
                                         </div>
                                     </div>
                                 </div>
@@ -54,6 +56,9 @@
                     </div>
                 </div>
             </div>
+            <div class="col-lg-12 text-center">
+                <button class="btn btn-primary" v-on:click="postCategories">İlgi Alanlarımı Kaydet</button>
+            </div>
         </div>
         <!-- row end-->
     </div>
@@ -62,7 +67,7 @@
 <!-- block area end-->
 
 
-<span id="infoArea" class="hidden" hidden></span>
+<span id="infoArea" data-selected-categories="@(Context.GetSessionData<SCA.Entity.DTO.UserSession>("userInfo").Category)" class="hidden" hidden></span>
 <!-- block wrapper end-->
 @section Scripts{
     <script src="~/Scripts/PViews/User/setCategory.js"></script>
