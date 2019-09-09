@@ -309,7 +309,7 @@ namespace SCA.Services
                 }
                 else
                 {
-                    _res = Result.ReturnAsFail(message: "Sınıf bilgisi yüklenemedi");
+                    _res = Result.ReturnAsSuccess(message: "Sınıf bilgisi yüklenemedi");
                 }
             }
             catch (Exception ex)
@@ -335,19 +335,15 @@ namespace SCA.Services
             {
                 if (dto.Id == 0)
                 {
-                    query = @"Insert Into StudentClass ( CreatedUserId, CreatedDate, Description) values
-                        ( CreatedUserId=@CreatedUserId, CreatedDate=@CreatedDate,Description=@Description)";
-                    filter.Add("CreatedUserId", session.Id);
-                    filter.Add("CreatedDate", DateTime.Now);
+                    query = @"Insert Into StudentClass ( Description) values
+                        ( Description=@Description)";
                     filter.Add("Description", dto.Description);
                     resultMessage = "Kayıt işlemi başarılı";
                 }
                 else
                 {
-                    query = "update StudentClass set UpdatedUserId=@UpdatedUserId,UpdatedDate=@UpdatedDate ,Description=@Description where Id=@Id";
+                    query = "update StudentClass set Description=@Description where Id=@Id";
                     filter.Add("Id", dto.Id);
-                    filter.Add("UpdatedDate", session.Id);
-                    filter.Add("CreatedDate", DateTime.Now);
                     filter.Add("Description", dto.Description);
                     resultMessage = "Güncelleme işlemi başarılı";
                 }

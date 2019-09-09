@@ -57,7 +57,6 @@ app.controller('DefinitonManagerController', function ($scope, $http, $filter) {
     };
 
     $scope.getClassTypeList = function () {
-        Loading(true);
         $.ajax({
             url: _link + "/Definition/education-getstudentclass",
             type: "GET",
@@ -65,11 +64,10 @@ app.controller('DefinitonManagerController', function ($scope, $http, $filter) {
             contentType: ContentType_,
             success: function (e) {
                 if (e.resultCode === 200) {
-                    if (e.data.length > 0) {
+                    if (e.data !== undefined) {
                         $scope.classTypeModel.classTypeList = e.data;
                     }
                     $scope.$apply();
-                    Loading(false);
                 }
             }
         });
