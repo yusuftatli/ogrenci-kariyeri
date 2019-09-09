@@ -1,0 +1,131 @@
+﻿@model SCA.Entity.DTO.SliderContentDto
+
+
+<style>
+    .slider-dot-item {
+        padding-left: unset !important;
+        padding-right:0 !important;
+        top: unset !important;
+        bottom: 5px !important;
+    }
+
+        .slider-dot-item .owl-dots {
+            position: relative !important;
+            top: unset !important;
+        }
+
+        .slider-dot-item .dot-class {
+            background: #1a3458;
+            color: white;
+            border: unset;
+            border-radius: 10px;
+            width:30px;
+        }
+
+            .slider-dot-item .dot-class:hover, .slider-dot-item .owl-dot.active .dot-class {
+                background: #e31b23;
+            }
+
+    .slider-arrow-item {
+        bottom: 10px !important;
+        top: unset !important;
+    }
+
+        .slider-arrow-item .owl-prev {
+            float: left;
+            margin: 0 !important;
+        }
+
+        .slider-arrow-item .owl-next {
+            float: right;
+        }
+
+            .slider-arrow-item .owl-next i, .slider-arrow-item .owl-prev i {
+                background: #1a3458;
+                border-radius: 999px;
+                padding-left: 10px !important;
+                padding-right: 10px !important;
+                padding-top: 5px !important;
+                padding-bottom: 5px !important;
+            }
+</style>
+
+<div class="col-lg-8 pr-0">
+    <section class="block-wrapper hero-area owl-carousel" id="hero-slider">
+        @foreach (var x in Model.SliderContents)
+        {
+            @* <a href="@Url.Action("Index", "Blog", new { seoUrl = x.SeoUrl})"> *@
+            <div class="featured-slider-item" data-dot="<button class='dot-class'>@(Model.SliderContents.IndexOf(x) + 1)</button>" style="background-image: url(@x.ImagePath)">
+                <div class="featured-table">
+                    <div class="table-cell">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <div class="hero-content">
+                                        <a href="#" class="post-cat">@x.Category</a>
+                                        <h2>
+                                            @x.Header
+                                        </h2>
+                                    </div>
+                                </div>
+                                <!-- col end-->
+                            </div>
+                            <!-- row end-->
+                        </div>
+                        <!-- container end-->
+                    </div>
+                </div>
+            </div>
+            @*</a>*@
+        }
+    </section>
+    <!-- ts overlay end-->
+</div>
+<!-- col end-->
+<div class="col-lg-4 ts-grid-style-3 featured-post p-1">
+    @if (Model.TopContent != null)
+    {
+        <div class="ts-overlay-style">
+            <div class="item" style="background-image: url(@Model.TopContent.ImagePath);">
+                <a class="post-cat ts-pink-bg" href="#">@Model.TopContent.Category</a>
+                <div class="overlay-post-content">
+                    <div class="post-content">
+
+                        <h3 class="post-title md">
+                            <a href="@Url.Action("Index", "Blog", new { seoUrl = Model.TopContent.SeoUrl})">@Model.TopContent.Header</a>
+                        </h3>
+                        <span class="post-date-info">
+                            <i class="fa fa-clock-o"></i>
+                            @Model.TopContent.PublishDate.ToShortDateString()
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <!-- end item-->
+        </div>
+    }
+
+    @if (Model.BottomContent != null)
+    {
+        <!-- ts overly end-->
+        <div class="ts-overlay-style">
+            <div class="item" style="background-image: url(@Model.BottomContent.ImagePath);">
+                <a class="post-cat ts-green-bg" href="#">@Model.BottomContent.Category</a>
+                <div class="overlay-post-content">
+                    <div class="post-content">
+
+                        <h3 class="post-title md">
+                            <a href="@Url.Action("Index", "Blog", new { seoUrl = Model.BottomContent.SeoUrl})">@Model.BottomContent.Header</a>
+                        </h3>
+                        <span class="post-date-info">
+                            <i class="fa fa-clock-o"></i>
+                            @Model.BottomContent.PublishDate.ToShortDateString()
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <!-- end item-->
+        </div>
+    }
+    <!-- ts overly end-->
+</div>

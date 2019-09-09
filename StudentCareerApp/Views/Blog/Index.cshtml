@@ -76,7 +76,7 @@
                             <li>
                                 <a href="#commentArea">
                                     <i class="fa fa-comments"></i>
-                                    @Model.CommentList.Count
+                                    @Model.CommentList?.Count
                                 </a>
                             </li>
                             <li class="active">
@@ -171,7 +171,7 @@
                 <!--single post end -->
                 <div class="comments-form ts-grid-box" id="commentArea">
 
-                    <h3 class="comments-counter">@Model.CommentList.Count Yorum</h3>
+                    <h3 class="comments-counter">@Model.CommentList?.Count Yorum</h3>
                     <ul class="comments-list">
                         @foreach (var x in Model.CommentList)
                         {
