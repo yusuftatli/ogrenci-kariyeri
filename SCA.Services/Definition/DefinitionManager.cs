@@ -52,34 +52,79 @@ namespace SCA.Services
         #region Department
         public async Task<ServiceResult> GetDepartment()
         {
-            return Result.ReturnAsSuccess(null, null, _mapper.Map<List<DepartmentDto>>(_departmentRepo.GetAll().ToList()));
+            ServiceResult _res = new ServiceResult();
+            try
+            {
+                string query = "select Id, Description as DepartmentName from Departmnet";
+                var result = _db.Query<DepartmentDto>(query).ToList();
+
+                if (result.Count > 0)
+                {
+                    _res = Result.ReturnAsSuccess(data: result);
+                }
+                else
+                {
+                    _res = Result.ReturnAsFail(message: "Departman bilgisi yüklenemedi");
+                }
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString());
+                _res = Result.ReturnAsFail(message: "Departman bilgisi yüklenirken hata meydana geldi");
+            }
+            return _res;
         }
 
         public async Task<List<DepartmentDto>> GetDepartmentForUI()
         {
-            return _mapper.Map<List<DepartmentDto>>(_departmentRepo.GetAll().ToList());
+            List<DepartmentDto> _res = new List<DepartmentDto>();
+            try
+            {
+                string query = "select * from Departmnet";
+                var result = _db.Query<DepartmentDto>(query).ToList();
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString());
+            }
+            return _res;
         }
 
-        public async Task<ServiceResult> CreateDepartment(DepartmentDto dto)
+        public async Task<ServiceResult> CreateDepartment(DepartmentDto dto, UserSession session)
         {
+            ServiceResult _res = new ServiceResult();
+            string query = "";
+            DynamicParameters filter = new DynamicParameters();
             string resultMessage = "";
-            if (dto == null)
+            try
             {
-                Result.ReturnAsFail(AlertResource.NoChanges, null);
+                if (dto.Id == 0)
+                {
+                    query = @"Insert Into Departmnet ( CreatedUserId, CreatedDate, Description) values
+                        ( CreatedUserId=@CreatedUserId, CreatedDate=@CreatedDate,Description=@Description)";
+                    filter.Add("CreatedUserId", session.Id);
+                    filter.Add("CreatedDate", DateTime.Now);
+                    filter.Add("Description", dto.DepartmentName);
+                    resultMessage = "Kayıt işlemi başarılı";
+                }
+                else
+                {
+                    query = "update Departmnet set UpdatedUserId=@UpdatedUserId,UpdatedDate=@UpdatedDate ,Description=@Description where Id=@Id";
+                    filter.Add("Id", dto.Id);
+                    filter.Add("UpdatedDate", session.Id);
+                    filter.Add("CreatedDate", DateTime.Now);
+                    filter.Add("Description", dto.DepartmentName);
+                    resultMessage = "Güncelleme işlemi başarılı";
+                }
+                var res = _db.Execute(query, filter);
+                _res = Result.ReturnAsSuccess(message: resultMessage);
             }
-            if (dto.Id == 0)
+            catch (Exception ex)
             {
-                dto.IsActive = true;
-                _departmentRepo.Add(_mapper.Map<Department>(dto));
-                resultMessage = AlertResource.CreateIsOk;
+                await _errorManagement.SaveError(ex.ToString());
+                _res = Result.ReturnAsFail(message: "Departman bilgisi kayıt işlemi sırasında hata meydana geldi.");
             }
-            else
-            {
-                _departmentRepo.Update(_mapper.Map<Department>(dto));
-                resultMessage = AlertResource.UpdateIsOk;
-            }
-            _unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess(null, resultMessage, null);
+            return _res;
         }
 
         public async Task<ServiceResult> UpdateDepartmentIsActive(long Id, bool IsActive)
@@ -96,85 +141,82 @@ namespace SCA.Services
         }
         #endregion
 
-        #region EducationStatus
-        public async Task<ServiceResult> GetEducationStatus()
-        {
-            return Result.ReturnAsSuccess(null, null, _mapper.Map<List<EducationStatusDto>>(_educationStatusRepo.GetAll().ToList()));
-        }
-
-        public async Task<List<EducationStatusDto>> GetEducationStatusForUI()
-        {
-            return _mapper.Map<List<EducationStatusDto>>(_educationStatusRepo.GetAll().ToList());
-        }
-
-        public async Task<ServiceResult> CreateEducationStatus(EducationStatusDto dto)
-        {
-            string resultMessage = "";
-            if (dto == null)
-            {
-                Result.ReturnAsFail(AlertResource.NoChanges, null);
-            }
-            if (dto.Id == 0)
-            {
-                _educationStatusRepo.Add(_mapper.Map<EducationStatus>(dto));
-                resultMessage = AlertResource.CreateIsOk;
-            }
-            else
-            {
-                _educationStatusRepo.Update(_mapper.Map<EducationStatus>(dto));
-                resultMessage = AlertResource.UpdateIsOk;
-            }
-            _unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess(null, resultMessage, null);
-        }
-
-        public async Task<ServiceResult> UpdateEducationStatusIsActive(long Id, bool IsActive)
-        {
-            string resultMessage = "";
-
-            var data = _educationStatusRepo.Get(x => x.Id == Id);
-            data.IsActive = IsActive;
-
-            _educationStatusRepo.Update(_mapper.Map<EducationStatus>(data));
-            _unitOfWork.SaveChanges();
-            resultMessage = AlertResource.UpdateIsOk;
-            return Result.ReturnAsSuccess(null, resultMessage, null);
-        }
-        #endregion
-
         #region Faculty
         public async Task<ServiceResult> GetFaculty()
         {
-            var dataList = _mapper.Map<List<FacultyDto>>(_facultyRepo.GetAll().ToList());
-            return Result.ReturnAsSuccess(null, null, dataList);
+            ServiceResult _res = new ServiceResult();
+            try
+            {
+                string query = "select * from Faculty";
+                var result = _db.Query<FacultyDto>(query).ToList();
+
+                if (result.Count > 0)
+                {
+                    _res = Result.ReturnAsSuccess(data: result);
+                }
+                else
+                {
+                    _res = Result.ReturnAsFail(message: "Fakülte bilgisi yüklenemedi");
+                }
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString());
+                _res = Result.ReturnAsFail(message: "Fakülte bilgisi yüklenirken hata meydana geldi");
+            }
+            return _res;
         }
 
         public async Task<List<FacultyDto>> GetFacultyForUI()
         {
-            var dataList = _mapper.Map<List<FacultyDto>>(_facultyRepo.GetAll().ToList());
-            return dataList;
+            List<FacultyDto> _res = new List<FacultyDto>();
+            try
+            {
+                string query = "select Id, Description as FacultyName from Faculty";
+                var result = _db.Query<FacultyDto>(query).ToList();
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString());
+            }
+            return _res;
         }
 
-        public async Task<ServiceResult> CreateFaculty(FacultyDto dto)
+        public async Task<ServiceResult> CreateFaculty(FacultyDto dto, UserSession session)
         {
+            ServiceResult _res = new ServiceResult();
+            string query = "";
+            DynamicParameters filter = new DynamicParameters();
             string resultMessage = "";
-            if (dto == null)
+            try
             {
-                dto.IsActive = true;
-                Result.ReturnAsFail(AlertResource.NoChanges, null);
+                if (dto.Id == 0)
+                {
+                    query = @"Insert Into Faculty ( CreatedUserId, CreatedDate, Description) values
+                        ( CreatedUserId=@CreatedUserId, CreatedDate=@CreatedDate,Description=@Description)";
+                    filter.Add("CreatedUserId", session.Id);
+                    filter.Add("CreatedDate", DateTime.Now);
+                    filter.Add("Description", dto.FacultyName);
+                    resultMessage = "Kayıt işlemi başarılı";
+                }
+                else
+                {
+                    query = "update Faculty set UpdatedUserId=@UpdatedUserId,UpdatedDate=@UpdatedDate ,Description=@Description where Id=@Id";
+                    filter.Add("Id", dto.Id);
+                    filter.Add("UpdatedDate", session.Id);
+                    filter.Add("CreatedDate", DateTime.Now);
+                    filter.Add("Description", dto.FacultyName);
+                    resultMessage = "Güncelleme işlemi başarılı";
+                }
+                var res = _db.Execute(query, filter);
+                _res = Result.ReturnAsSuccess(message: resultMessage);
             }
-            if (dto.Id == 0)
+            catch (Exception ex)
             {
-                _facultyRepo.Add(_mapper.Map<Faculty>(dto));
-                resultMessage = AlertResource.CreateIsOk;
+                await _errorManagement.SaveError(ex.ToString());
+                _res = Result.ReturnAsFail(message: "Fakülte bilgisi kayıt işlemi sırasında hata meydana geldi.");
             }
-            else
-            {
-                _facultyRepo.Update(_mapper.Map<Faculty>(dto));
-                resultMessage = AlertResource.UpdateIsOk;
-            }
-            _unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess(null, resultMessage, null);
+            return _res;
         }
 
         public async Task<ServiceResult> UpdateFacultIsActive(long Id, bool IsActive)
@@ -255,7 +297,27 @@ namespace SCA.Services
         #region StudentClass
         public async Task<ServiceResult> GetStudentClass()
         {
-            return Result.ReturnAsSuccess(null, null, _mapper.Map<List<StudentClassDto>>(_classTypeRepo.GetAll().ToList()));
+            ServiceResult _res = new ServiceResult();
+            try
+            {
+                string query = "select * from StudentClass";
+                var result = _db.Query<StudentClassDto>(query).ToList();
+
+                if (result.Count > 0)
+                {
+                    _res = Result.ReturnAsSuccess(data: result);
+                }
+                else
+                {
+                    _res = Result.ReturnAsFail(message: "Sınıf bilgisi yüklenemedi");
+                }
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString());
+                _res = Result.ReturnAsFail(message: "Sınıf bilgisi yüklenirken hata meydana geldi");
+            }
+            return _res;
         }
 
         public async Task<List<StudentClassDto>> GetStudentClassForUI()
@@ -263,29 +325,46 @@ namespace SCA.Services
             return _mapper.Map<List<StudentClassDto>>(_classTypeRepo.GetAll().ToList());
         }
 
-        public async Task<ServiceResult> CreateStudentClass(StudentClassDto dto)
+        public async Task<ServiceResult> CreateStudentClass(StudentClassDto dto, UserSession session)
         {
+            ServiceResult _res = new ServiceResult();
+            string query = "";
+            DynamicParameters filter = new DynamicParameters();
             string resultMessage = "";
-            if (dto == null)
+            try
             {
-                Result.ReturnAsFail(AlertResource.NoChanges, null);
+                if (dto.Id == 0)
+                {
+                    query = @"Insert Into StudentClass ( CreatedUserId, CreatedDate, Description) values
+                        ( CreatedUserId=@CreatedUserId, CreatedDate=@CreatedDate,Description=@Description)";
+                    filter.Add("CreatedUserId", session.Id);
+                    filter.Add("CreatedDate", DateTime.Now);
+                    filter.Add("Description", dto.Description);
+                    resultMessage = "Kayıt işlemi başarılı";
+                }
+                else
+                {
+                    query = "update StudentClass set UpdatedUserId=@UpdatedUserId,UpdatedDate=@UpdatedDate ,Description=@Description where Id=@Id";
+                    filter.Add("Id", dto.Id);
+                    filter.Add("UpdatedDate", session.Id);
+                    filter.Add("CreatedDate", DateTime.Now);
+                    filter.Add("Description", dto.Description);
+                    resultMessage = "Güncelleme işlemi başarılı";
+                }
+                var res = _db.Execute(query, filter);
+                _res = Result.ReturnAsSuccess(message: resultMessage);
             }
-            if (dto.Id == 0)
+            catch (Exception ex)
             {
-                _classTypeRepo.Add(_mapper.Map<StudentClass>(dto));
-                resultMessage = AlertResource.CreateIsOk;
+                await _errorManagement.SaveError(ex.ToString());
+                _res = Result.ReturnAsFail(message: "Sınıf bilgisi kayıt işlemi sırasında hata meydana geldi.");
             }
-            else
-            {
-                _classTypeRepo.Update(_mapper.Map<StudentClass>(dto));
-                resultMessage = AlertResource.UpdateIsOk;
-            }
-            _unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess(null, resultMessage, null);
+            return _res;
         }
 
         public async Task<ServiceResult> UpdateStudentClassIsActive(long Id, bool IsActive)
         {
+
             string resultMessage = "";
 
             var data = _educationStatusRepo.Get(x => x.Id == Id);

@@ -36,33 +36,13 @@ namespace StudentCareerApp.Areas.Api.Controller
         [HttpPost, Route("education-cretadepartment")]
         public async Task<ServiceResult> CreateDepartment([FromBody] DepartmentDto dto)
         {
-            return await _definitionManager.CreateDepartment(dto);
+            return await _definitionManager.CreateDepartment(dto, JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
         }
 
         [HttpPost, Route("education-Update-DepartmentIsActive")]
         public async Task<ServiceResult> UpdateDepartmentIsActive(long Id, bool IsActive)
         {
             return await _definitionManager.UpdateDepartmentIsActive(Id, IsActive);
-        }
-        #endregion
-
-        #region Education Status
-        [HttpGet, Route("education-educationstatus")]
-        public async Task<ServiceResult> GetEducationStatus()
-        {
-            return await _definitionManager.GetEducationStatus();
-        }
-
-        [HttpPost, Route("education-createeducationstatus")]
-        public async Task<ServiceResult> CreateEducationStatus(EducationStatusDto dto)
-        {
-            return await _definitionManager.CreateEducationStatus(dto);
-        }
-
-        [HttpPost, Route("education-Update-EducationStatusIsActive")]
-        public async Task<ServiceResult> UpdateEducationStatusIsActive(long Id, bool IsActive)
-        {
-            return await _definitionManager.UpdateEducationStatusIsActive(Id, IsActive);
         }
         #endregion
 
@@ -76,7 +56,7 @@ namespace StudentCareerApp.Areas.Api.Controller
         [HttpPost, Route("education-createfaculty")]
         public async Task<ServiceResult> CreateFaculty(FacultyDto dto)
         {
-            return await _definitionManager.CreateFaculty(dto);
+            return await _definitionManager.CreateFaculty(dto, JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
         }
 
         [HttpPost, Route("education-Update-FacultIsActive")]
@@ -116,7 +96,7 @@ namespace StudentCareerApp.Areas.Api.Controller
         [HttpPost, Route("education-createstudentclass")]
         public async Task<ServiceResult> CreateStudentClass(StudentClassDto dto)
         {
-            return await _definitionManager.CreateStudentClass(dto);
+            return await _definitionManager.CreateStudentClass(dto, JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
         }
 
         [HttpPost, Route("education-Update-StudentClassIsActive")]

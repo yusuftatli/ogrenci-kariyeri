@@ -12,17 +12,12 @@ namespace SCA.Services
     {
         Task<ServiceResult> GetDepartment();
         Task<List<DepartmentDto>> GetDepartmentForUI();
-        Task<ServiceResult> CreateDepartment(DepartmentDto dto);
+        Task<ServiceResult> CreateDepartment(DepartmentDto dto, UserSession session);
         Task<ServiceResult> UpdateDepartmentIsActive(long Id, bool IsActive);
-
-        Task<ServiceResult> GetEducationStatus();
-        Task<List<EducationStatusDto>> GetEducationStatusForUI();
-        Task<ServiceResult> CreateEducationStatus(EducationStatusDto dto);
-        Task<ServiceResult> UpdateEducationStatusIsActive(long Id, bool IsActive);
 
         Task<ServiceResult> GetFaculty();
         Task<List<FacultyDto>> GetFacultyForUI();
-        Task<ServiceResult> CreateFaculty(FacultyDto dto);
+        Task<ServiceResult> CreateFaculty(FacultyDto dto, UserSession session);
         Task<ServiceResult> UpdateFacultIsActive(long Id, bool IsActive);
 
         Task<ServiceResult> GetHighSchool();
@@ -32,7 +27,7 @@ namespace SCA.Services
 
         Task<ServiceResult> GetStudentClass();
         Task<List<StudentClassDto>> GetStudentClassForUI();
-        Task<ServiceResult> CreateStudentClass(StudentClassDto dto);
+        Task<ServiceResult> CreateStudentClass(StudentClassDto dto, UserSession session);
         Task<ServiceResult> UpdateStudentClassIsActive(long Id, bool IsActive);
 
         Task<ServiceResult> GetUniversity();
