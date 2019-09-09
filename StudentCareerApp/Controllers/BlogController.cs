@@ -25,7 +25,7 @@ namespace SCA.UI.Controllers
         #endregion
 
 
-        [Route("{SeoUrl}"), HttpGet]
+        [Route("haber/{SeoUrl}"), HttpGet]
         public async Task<IActionResult> Index(string seoUrl)
         {
             var res = await _contentManager.GetContentUI(seoUrl, HttpContext.GetSessionData<UserSession>("userInfo")?.Id);
