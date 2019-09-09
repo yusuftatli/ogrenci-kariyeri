@@ -27,13 +27,15 @@ namespace SCA.Services
         private IGenericRepository<SocialMedia> _socialMediaRepo;
         private IGenericRepository<CompanyClubs> _companyClubsRepo;
         private readonly IErrorManagement _errorManagement;
+        private readonly ISocialMediaManager _socialmanager;
         private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
 
-        public CompanyClubManager(IUnitofWork unitOfWork, IMapper mapper, IAddressManager addressManager, IErrorManagement errorManagement)
+        public CompanyClubManager(IUnitofWork unitOfWork, IMapper mapper, IAddressManager addressManager, IErrorManagement errorManagement, ISocialMediaManager socialManager)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _errorManagement = errorManagement;
+            _socialmanager = socialManager;
             _companyClubsRepo = unitOfWork.GetRepository<CompanyClubs>();
             _socialMediaRepo = _unitOfWork.GetRepository<SocialMedia>();
         }
@@ -96,7 +98,7 @@ namespace SCA.Services
             return Result.ReturnAsSuccess(null, message: AlertResource.SuccessfulOperation, data);
         }
 
-        public async Task<ServiceResult> CreateCompanyClubs(CompanyClubsDto dto, long userId)
+        public async Task<ServiceResult> CreateCompanyClubs(CompanyClubsDto dto, UserSession session)
         {
             ServiceResult _res = new ServiceResult();
             string resultMessage = "";
@@ -109,23 +111,58 @@ namespace SCA.Services
 
             try
             {
-                query = $"insert into CompanyClubs (CompanyClupType, ShortName, SectorType, SeoUrl, HeaderImage, SectorId, UserId, CreateUserName, Description, WebSite, PhoneNumber,EmailAddress,CreatedUserId,CreatedDate) values " +
-                    $"insert into CompanyClubs (@CompanyClupType, @ShortName, @SectorType, @SeoUrl, @HeaderImage, @SectorId, @UserId, @CreateUserName, @Description, @WebSite, @PhoneNumber,@EmailAddress,@CreatedUserId,@CreatedDate";
-                filter.Add("CompanyClupType", dto.CompanyClupType);
-                //filter.Add("ShortName", dto.ShortName);
-                //filter.Add("SectorType", dto.sec
-                //filter.Add("SeoUrl", 
-                //filter.Add("HeaderImage", 
-                //filter.Add("SectorId", 
-                //filter.Add("UserId", 
-                //filter.Add("CreateUserName", 
-                //filter.Add("Description", 
-                //filter.Add("WebSite", 
-                //filter.Add("PhoneNumber",
-                //filter.Add("EmailAddress",
-                //filter.Add("CreatedUserId",
-                //filter.Add("CreatedDate",
+                if (dto.Id == 0)
+                {
+                    query = $"insert into CompanyClubs (CompanyClupType, ShortName, SectorType, SeoUrl, HeaderImage, SectorId, UserId, CreateUserName, Description, WebSite, PhoneNumber,EmailAddress,CreatedUserId,CreatedDate) values " +
+                    $"insert into CompanyClubs (@CompanyClupType, @ShortName, @SectorType, @SeoUrl, @HeaderImage, @SectorId, @UserId, @CreateUserName, @Description, @WebSite, @PhoneNumber,@EmailAddress,@CreatedUserId,@CreatedDate; SELECT LAST_INSERT_ID();";
+                    filter.Add("CompanyClupType", dto.CompanyClupType);
+                    filter.Add("ShortName", dto.ShortName);
+                    filter.Add("SectorType", dto.SectorType);
+                    filter.Add("SeoUrl", dto.SeoUrl);
+                    filter.Add("SectorId", dto.SectorId);
+                    filter.Add("UserId", session.Id);
+                    filter.Add("CreateUserName", session.Name);
+                    filter.Add("Description", dto.Description);
+                    filter.Add("WebSite", dto.WebSite);
+                    filter.Add("PhoneNumber", dto.PhoneNumber);
+                    filter.Add("EmailAddress", dto.EmailAddress);
+                    filter.Add("CreatedUserId", session.Id);
+                    filter.Add("CreatedDate", DateTime.Now);
+                }
+                else
+                {
+                    query = $"Update CompanyClubs set  CompanyClupType=@CompanyClupType, ShortName=@ShortName, SectorType=@SectorType, SeoUrl=@SeoUrl, HeaderImage=@HeaderImage, SectorId=@SectorId, UserId=@UserId, UpdatedUserId=@UpdatedUserId, UpdatedDate=@UpdatedDate, " +
+                        $"Description=@Description, WebSite=@WebSite, PhoneNumber=@PhoneNumber,EmailAddress=@EmailAddress where Id=@Id";
+                    filter.Add("Id", dto.Id);
+                    filter.Add("CompanyClupType", dto.CompanyClupType);
+                    filter.Add("ShortName", dto.ShortName);
+                    filter.Add("SectorType", dto.SectorType);
+                    filter.Add("SeoUrl", dto.SeoUrl);
+                    filter.Add("SectorId", dto.SectorId);
+                    filter.Add("UserId", session.Id);
+                    filter.Add("CreateUserName", session.Name);
+                    filter.Add("Description", dto.Description);
+                    filter.Add("WebSite", dto.WebSite);
+                    filter.Add("PhoneNumber", dto.PhoneNumber);
+                    filter.Add("EmailAddress", dto.EmailAddress);
+                    filter.Add("UpdatedUserId", session.Id);
+                    filter.Add("UpdatedDate", DateTime.Now);
+                }
 
+                var res = _db.Execute(query, filter);
+
+                List<SocialMediaDto> socialData = new List<SocialMediaDto>();
+                socialData.Add(new SocialMediaDto { CompanyClupId = res, IsActive = true, SocialMediaType = SocialMediaType.Facebook, Url = dto.Facebook, UserId = null });
+                socialData.Add(new SocialMediaDto { CompanyClupId = res, IsActive = true, SocialMediaType = SocialMediaType.Linkedin, Url = dto.Linkedin, UserId = null });
+                socialData.Add(new SocialMediaDto { CompanyClupId = res, IsActive = true, SocialMediaType = SocialMediaType.Instagram, Url = dto.Instagram, UserId = null });
+
+
+                foreach (var item in socialData)
+                {
+                  await  _socialmanager.CreateSocialMedia(item, session.Id);
+                }
+                string flag = (dto.CompanyClupType == CompanyClupType.Club) ? "Şirket" : "Klüp";
+                _res = Result.ReturnAsSuccess(message: flag+" Başarıyla kaydedildi");
             }
             catch (Exception)
             {
@@ -151,26 +188,6 @@ namespace SCA.Services
                 {
                     _socialMediaRepo.Delete(item);
                 }
-            }
-            var result = _unitOfWork.SaveChanges();
-
-            List<SocialMediaDto> socialData = new List<SocialMediaDto>();
-            socialData.Add(new SocialMediaDto { CompanyClupId = resData.Id, IsActive = true, SocialMediaType = SocialMediaType.Facebook, Url = dto.Facebook, UserId = null });
-            socialData.Add(new SocialMediaDto { CompanyClupId = resData.Id, IsActive = true, SocialMediaType = SocialMediaType.Linkedin, Url = dto.Linkedin, UserId = null });
-            socialData.Add(new SocialMediaDto { CompanyClupId = resData.Id, IsActive = true, SocialMediaType = SocialMediaType.Instagram, Url = dto.Instagram, UserId = null });
-
-            _socialMediaRepo.AddRange(_mapper.Map<List<SocialMedia>>(socialData));
-            _unitOfWork.SaveChanges();
-
-
-            if (result.ResultCode != HttpStatusCode.OK)
-            {
-                await _errorManagement.SaveError(result.Message);
-                _res = Result.ReturnAsFail(message: AlertResource.AnErrorOccurredWhenProcess, null);
-            }
-            else
-            {
-                _res = Result.ReturnAsSuccess(null, message: resultMessage, null);
             }
             return _res;
         }

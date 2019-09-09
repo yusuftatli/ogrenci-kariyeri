@@ -17,7 +17,7 @@ namespace SCA.Services
              case 
 				when _c.PublishStateType = 1 then 'Taslak'
                 when _c.PublishStateType = 2 then 'Yayın Aşamasında'
-                when _c.PublishStateType = 2 then 'Yayında Değil'
+                when _c.PublishStateType = 3 then 'Yayında Değil'
                 else 'Yayında' 
 			end as PublishStateTypeDes,
             _c.PlatformType,
@@ -41,7 +41,7 @@ namespace SCA.Services
              case 
 				when _c.PublishStateType = 1 then 'Taslak'
                 when _c.PublishStateType = 2 then 'Yayın Aşamasında'
-                when _c.PublishStateType = 2 then 'Yayında Değil'
+                when _c.PublishStateType = 3 then 'Yayında Değil'
                 else 'Yayında' 
 			end as PublishStateTypeDes,
             _c.PlatformType,

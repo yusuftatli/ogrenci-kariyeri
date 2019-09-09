@@ -32,7 +32,6 @@ namespace SCA.Services
         private IPictureManager _pictureManager;
         private IUserValidation _userValidation;
         private IAuthManager _authManager;
-        private IEnumerable<ContentShortListDto> dataList;
         private readonly IErrorManagement _errorManagement;
         private readonly IRoleManager _roleManager;
         private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
@@ -187,7 +186,7 @@ namespace SCA.Services
                 filter.Add("EmailAddress", email);
                 filter.Add("Password", MD5Hash(password));
 
-                var result = _db.Query<UserSession>(query,filter).FirstOrDefault();
+                var result = _db.Query<UserSession>(query, filter).FirstOrDefault();
                 if (result != null)
                 {
                     result.Token = _authManager.GenerateToken(result);
@@ -235,34 +234,45 @@ namespace SCA.Services
                 return _res;
             }
 
-            var userData = _mapper.Map<Users>(dto);
-            userData.IsStudent = true;
-            userData.RoleExpiresDate = DateTime.Now.AddYears(20);
-            userData.RoleType = null;
-            userData.RoleTypeId = 3;
+            string imagePath = "";
 
-            userData.IsActive = false;
-            userData.HighSchoolTypeId = dto.HighSchoolTypeId == 0 ? null : dto.HighSchoolTypeId;
-            userData.FacultyId = dto.FacultyId == 0 ? null : dto.FacultyId;
-            userData.UniversityId = dto.UniversityId == 0 ? null : dto.UniversityId;
-            userData.DepartmentId = dto.DepartmentId == 0 ? null : dto.DepartmentId;
-            userData.ClassId = dto.ClassId == 0 ? null : dto.ClassId;
+            string query = "Insert Into Users (Name,Surname,EmailAddress,PhoneNumber,Password,ImagePath,RoleTypeId,RoleExpiresDate,GenderId," +
+                "EducationStatusId,HighSchoolTypeId,UniversityId,FacultyId,DepartmentId,ClassId,IsStudent,Biography,CityId,IsActive," +
+                "ReferanceCode,EnrollPlatformTypeId,BirthDate) values (" +
+                "@Name,@Surname,@EmailAddress,@PhoneNumber,@Password,@ImagePath,@RoleTypeId,@RoleExpiresDate,@GenderId,@EducationStatusId," +
+                "@HighSchoolTypeId,@UniversityId,@FacultyId,@DepartmentId,@ClassId,@IsStudent,@Biography,@CityId,@IsActive,@ReferanceCode" +
+                "@EnrollPlatformTypeId,@BirthDate); SELECT LAST_INSERT_ID();";
 
+            DynamicParameters filter = new DynamicParameters();
+            filter.Add("Name", dto.Name);
+            filter.Add("Surname", dto.Surname);
+            filter.Add("EmailAddress", dto.EmailAddress);
+            filter.Add("PhoneNumber", dto.IsPhoneSend);
+            filter.Add("Password", dto.Password);
+            filter.Add("ImagePath", imagePath);
+            filter.Add("RoleTypeId", "3");
+            filter.Add("RoleExpiresDate", DateTime.Now.AddYears(50));
+            filter.Add("GenderId", dto.GenderId);
+            filter.Add("EducationStatusId", dto.EducationStatusId);
+            filter.Add("HighSchoolTypeId", dto.HighSchoolTypeId);
+            filter.Add("UniversityId", dto.UniversityId);
+            filter.Add("FacultyId", dto.FacultyId);
+            filter.Add("DepartmentId", dto.DepartmentId);
+            filter.Add("ClassId", dto.ClassId);
+            filter.Add("IsStudent", 1);
+            filter.Add("Biography", dto.Biography);
+            filter.Add("CityId", dto.CityId);
+            filter.Add("IsActive", dto.IsActive);
+            filter.Add("ReferanceCode", dto.ReferanceCode);
+            filter.Add("EnrollPlatformTypeId", 2);
+            filter.Add("BirthDate", dto.BirthDate);
 
-            var userRes = _userRepo.Add(_mapper.Map<Users>(userData));
-            var result = _unitOfWork.SaveChanges();
+            var result = _db.ExecuteAsync(query, filter);
 
-            if (result.ResultCode != HttpStatusCode.OK)
-            {
-                await _errorManagement.SaveError(result.Message);
-                _res = Result.ReturnAsFail(message: AlertResource.AnErrorOccurredWhenProcess, null);
-            }
-            else
-            {
-                _res = Result.ReturnAsSuccess(null, message: resultMessage, userRes.Id);
-            }
             return _res;
         }
+
+
 
         /// <summary>
         /// verilen idlere göre kullanıcıları listeler

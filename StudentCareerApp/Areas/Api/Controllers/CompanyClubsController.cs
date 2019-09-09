@@ -56,7 +56,7 @@ namespace StudentCareerApp.Areas.Api.Controller
         public async Task<ServiceResult> CreateCompany(CompanyClubsDto dto)
         {
             dto.CompanyClupType = CompanyClupType.Company;
-            return await _companyClubsManager.CreateCompanyClubs(dto, JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")).Id);
+            return await _companyClubsManager.CreateCompanyClubs(dto, JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
         }
 
         [Consumes("multipart/form-data")]
@@ -64,7 +64,7 @@ namespace StudentCareerApp.Areas.Api.Controller
         public async Task<ServiceResult> CreateClubs([FromForm]CompanyClubsDto dto)
         {
             dto.CompanyClupType = CompanyClupType.Club;
-            return await _companyClubsManager.CreateCompanyClubs(dto, JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")).Id);
+            return await _companyClubsManager.CreateCompanyClubs(dto, JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
         }
     }
 }
