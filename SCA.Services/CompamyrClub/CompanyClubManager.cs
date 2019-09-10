@@ -101,7 +101,6 @@ namespace SCA.Services
         public async Task<ServiceResult> CreateCompanyClubs(CompanyClubsDto dto, UserSession session)
         {
             ServiceResult _res = new ServiceResult();
-            string resultMessage = "";
             DynamicParameters filter = new DynamicParameters();
             string query = "";
             if (dto.Equals(null))
@@ -117,6 +116,7 @@ namespace SCA.Services
                     $"                              (@CompanyClupType, @ShortName, @SectorType, @SeoUrl, @HeaderImage, @SectorId, @UserId, @CreateUserName, @Description, @WebSite, @PhoneNumber,@EmailAddress,@CreatedUserId,@CreatedDate); SELECT LAST_INSERT_ID();";
                     filter.Add("CompanyClupType", dto.CompanyClupType);
                     filter.Add("ShortName", dto.ShortName);
+                    filter.Add("ImageDirectory", dto.ImageDirectory);
                     filter.Add("SectorType", dto.SectorType);
                     filter.Add("SeoUrl", dto.SeoUrl);
                     filter.Add("SectorId", dto.SectorId);
@@ -132,11 +132,12 @@ namespace SCA.Services
                 }
                 else
                 {
-                    query = $"Update CompanyClubs set  CompanyClupType=@CompanyClupType, ShortName=@ShortName, SectorType=@SectorType, SeoUrl=@SeoUrl, HeaderImage=@HeaderImage, SectorId=@SectorId, UserId=@UserId, UpdatedUserId=@UpdatedUserId, UpdatedDate=@UpdatedDate, " +
+                    query = $"Update CompanyClubs set  CompanyClupType=@CompanyClupType, ImageDirectory=@ImageDirectory, ShortName=@ShortName, SectorType=@SectorType, SeoUrl=@SeoUrl, HeaderImage=@HeaderImage, SectorId=@SectorId, UserId=@UserId, UpdatedUserId=@UpdatedUserId, UpdatedDate=@UpdatedDate, " +
                         $"Description=@Description, WebSite=@WebSite, PhoneNumber=@PhoneNumber,EmailAddress=@EmailAddress where Id=@Id";
                     filter.Add("Id", dto.Id);
                     filter.Add("CompanyClupType", dto.CompanyClupType);
                     filter.Add("ShortName", dto.ShortName);
+                    filter.Add("ImageDirectory", dto.ImageDirectory);
                     filter.Add("SectorType", dto.SectorType);
                     filter.Add("SeoUrl", dto.SeoUrl);
                     filter.Add("SectorId", dto.SectorId);

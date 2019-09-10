@@ -89,52 +89,17 @@ namespace SCA.Services
 
         public async Task<List<UserModelList>> GetUserList()
         {
-            string query = "";
-
-
-
-
-            var roleTypes = await _roleManager.GetRoles();
-            var data = _mapper.Map<List<UserModelList>>(_userRepo.GetAll(x => x.RoleTypeId != 1).ToList());
-
-            data.ForEach(x =>
+            List<UserModelList> _res = new List<UserModelList>();
+            try
             {
-                x.GenderDescription = x.GenderId.GetDescription();
-                if (x.RoleTypeId == 2)
-                {
-                    x.RoleDescription = "Admin";
-                    ;
-                }
-                else if (x.RoleTypeId == 3)
-                {
-                    x.RoleDescription = "Öğrenci";
-                }
-                else if (x.RoleTypeId == 4)
-                {
-                    x.RoleDescription = "Editör";
-                }
-                else if (x.RoleTypeId == 5)
-                {
-                    x.RoleDescription = "Yazar";
-                }
-                else
-                {
-                    x.RoleDescription = "Yok";
-                }
-
-
-
-                if (x.EducationStatusId != 0)
-                {
-                    x.EducationDescription = x.EducationStatusId.GetDescription();
-                }
-                else
-                {
-                    x.EducationDescription = "Girilmemiş";
-                }
-                x.Durum = x.IsActive == true ? "Aktif" : "Pasif";
-            });
-            return data;
+                var listData = await _db.QueryAsync<UserModelList>("Users_ListAll", new { type = 1 }, commandType: CommandType.StoredProcedure) as List<UserModelList>;
+                _res = listData;
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString());
+            }
+            return _res;
         }
 
         /// <summary>
@@ -142,10 +107,21 @@ namespace SCA.Services
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        public UsersDTO GetUserInfo(long Id)
+        public async Task<UsersDTO> GetUserInfo(long Id)
         {
-            var dataResult = _mapper.Map<UsersDTO>((_userRepo.Get(x => x.Id == Id)));
-            return dataResult;
+            UsersDTO _res = new UsersDTO();
+            try
+            {
+                string query = "select * from User where Id=@Id";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("Id", Id);
+                var data = await _db.QueryFirstAsync<UsersDTO>(query, filter);
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString());
+            }
+            return _res;
         }
 
         public async Task<ServiceResult> UserLoginByMobil(MobilUserLoginDto dto)
@@ -154,9 +130,6 @@ namespace SCA.Services
             try
             {
                 string query = "";
-
-
-
 
             }
             catch (Exception)
