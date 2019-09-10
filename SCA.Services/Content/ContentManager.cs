@@ -160,14 +160,14 @@ namespace SCA.Services
         public async Task<ServiceResult> GetContentForMobil(string seoUrl)
         {
             ContentForUIDto result = new ContentForUIDto();
-            var contentData = _mapper.Map<ContenUIDto>(_contentRepo.Get(x => x.SeoUrl == seoUrl && x.PlatformType == PlatformType.Mobil));
+            //var contentData = _mapper.Map<ContenUIDto>(_contentRepo.Get(x => x.SeoUrl == seoUrl && x.PlatformType == PlatformType.Mobil));
 
-            var userData = _userManager.GetUserInfo(contentData.CreatedUserId);
+            //var userData = _userManager.GetUserInfo(contentData.CreatedUserId);
 
-            contentData.WriterName = userData.Name + " " + userData.Surname;
-            contentData.WriterImagePath = userData.ImagePath;
+            //contentData.WriterName = userData.Name + " " + userData.Surname;
+            //contentData.WriterImagePath = userData.ImagePath;
 
-            return Result.ReturnAsSuccess(null, null, contentData);
+            return Result.ReturnAsSuccess(null, null, null);
         }
         public async Task<ServiceResult> GetContent(long id)
         {

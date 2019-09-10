@@ -21,7 +21,7 @@ namespace SCA.Services
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        UsersDTO GetUserInfo(long Id);
+        Task<UsersDTO> GetUserInfo(long Id);
 
         /// <summary>
         /// verilen idlere göre kullanıcıları listeler

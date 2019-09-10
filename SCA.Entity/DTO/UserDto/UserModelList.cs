@@ -22,6 +22,7 @@ namespace SCA.Entity.DTO
         public EducationType EducationStatusId { get; set; }
         public string EducationDescription { get; set; }
         public DateTime BirthDate { get; set; }
+        public DateTime LastEntrance { get; set; }
         public DateTime CreatedDate { get; set; }
     }
 }

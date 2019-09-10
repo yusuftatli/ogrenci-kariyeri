@@ -13,6 +13,7 @@ namespace SCA.Entity.DTO
         public CompanyClupType CompanyClupType { get; set; }
         public string ShortName { get; set; }
         public SectorType SectorType { get; set; }
+        public string ImageDirectory { get; set; }
 
         public string SeoUrl { get; set; }
         public string HeaderImage { get; set; }
