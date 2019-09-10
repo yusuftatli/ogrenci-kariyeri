@@ -401,12 +401,12 @@ namespace SCA.Services
                 filter.Add("RoleTypeId", dto.RoleTypeId);
                 filter.Add("Id", dto.userId);
 
-                var data =await _db.ExecuteAsync(query, filter);
+                var data = _db.ExecuteAsync(query, filter);
                 _res = Result.ReturnAsSuccess(message: resultMessage);
             }
             else
             {
-                await _errorManagement.SaveError("Bu işlemi yapmak için yetkiniz bulunmamaktadır.");
+                _errorManagement.SaveError("Bu işlemi yapmak için yetkiniz bulunmamaktadır.");
                 _res = Result.ReturnAsFail(message: "Bu işlemi yapmak için yetkiniz bulunmamaktadır.");
             }
             return _res;

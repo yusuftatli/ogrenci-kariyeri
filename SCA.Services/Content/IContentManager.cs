@@ -62,8 +62,7 @@ namespace SCA.Services
         /// </summary>
         /// <param name="seoUrl"></param>
         /// <returns></returns>
-        Task<ContentDetailForDetailPageDTO> GetContentUI(string seoUrl, long? userId = null);
-
+        Task<ContentDetailForDetailPageDTO> GetContentUI(string seoUrl, long? userId = null, string ip = "");
         /// <summary>
         /// mobil makale detay servisi
         /// </summary>

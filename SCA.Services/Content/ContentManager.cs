@@ -111,38 +111,14 @@ namespace SCA.Services
 
             return Result.ReturnAsSuccess(null, null, dataList);
         }
-        public async Task<ContentDetailForDetailPageDTO> GetContentUI(string seoUrl, long? userId = null)
+        public async Task<ContentDetailForDetailPageDTO> GetContentUI(string seoUrl, long? userId = null, string ip = "")
         {
             ContentDetailForDetailPageDTO _res = new ContentDetailForDetailPageDTO();
             try
             {
-                string query = "";
-                DynamicParameters filter = new DynamicParameters();
-                if (userId != null)
-                {
-                    query = $"select *,IFNULL((select Id from Favorite _f where _f.UserId =@UserId and _f.ContentId = _c.Id and _f.IsActive = 1),0) as IsFavoriteContent " +
-                        $"from Content _c where PlatformType <> 1 and _c.seoUrl = '@seoUrl'";
-                    filter.Add("seoUrl", seoUrl);
-                    filter.Add("UserId", userId);
-                }
-                else
-                {
-                    query = "select * from Content _c where PlatformType <> 1 and _c.seoUrl='@seoUrl'";
-                    filter.Add("seoUrl", seoUrl);
-                }
-
-                filter.Add("seoUrl", seoUrl);
-                filter.Add("UserId", (userId.HasValue ? userId.ToString() : "null"));
-                _res = await _db.QueryFirstAsync<ContentDetailForDetailPageDTO>(query, new { SeoUrl = seoUrl });
-
-
-                query = $"select  * from  Content where  PlatformType <> 1 order by PublishDate desc limit 10;";
-
-                var result2 = await _db.QueryAsync<ContentForHomePageDTO>(query) as List<ContentForHomePageDTO>;
-                _res.MostPopularItems = result2;
-
-                query = $"select _c.*, concat(_u.Name, _u.Surname) as UserName, _u.GenderId from Comments as _c left join Users as _u on _u.Id = _c.UserID where ArticleId = {_res.Id}";
-                _res.CommentList = await _db.QueryAsync<CommentForUIDto>(query) as List<CommentForUIDto>;
+                _res = await _db.QueryFirstAsync<ContentDetailForDetailPageDTO>("Content_ListBySeoUrl", new { type = 1, SeoUrl = seoUrl, Ip = ip, UserId = userId, ContentId = 0 , count =10}, commandType: CommandType.StoredProcedure) as ContentDetailForDetailPageDTO;
+                _res.MostPopularItems = _db.Query<ContentForHomePageDTO>("Content_ListBySeoUrl", new { type = 1, SeoUrl = seoUrl, Ip = ip, UserId = userId, ContentId = 0 , count =10}, commandType: CommandType.StoredProcedure).ToList();
+                _res.CommentList = _db.Query<CommentForUIDto>("Content_ListBySeoUrl", new { type = 1, SeoUrl = seoUrl, Ip = ip, UserId = userId, ContentId = _res.Id, count = 10 }, commandType: CommandType.StoredProcedure).ToList();
             }
             catch (Exception ex)
             {
@@ -457,42 +433,12 @@ namespace SCA.Services
             List<ContentForHomePageDTO> listData = new List<ContentForHomePageDTO>();
             try
             {
-                string query = "";
-                DynamicParameters filter = new DynamicParameters();
-                filter.Add("hitTypes", hitTypes);
-                filter.Add("count", count);
-
-                if (hitTypes == HitTypes.LastAssay)
-                {
-                    query = $"select  * from  Content where  PlatformType <> 1 order by PublishDate desc limit {count};";
-                }
-
-                else if (hitTypes == HitTypes.Manset)
-                {
-                    query = $"select  * from  Content where  PlatformType <> 1 and IsManset = 1 order by Id asc limit {count};";
-                }
-
-                else if (hitTypes == HitTypes.MostPopuler)
-                {
-                    query = $"select  * from  Content where  PlatformType <> 1 order by ReadCount asc limit {count};";
-                }
-
-                else if (hitTypes == HitTypes.DailyMostPopuler)
-                {
-                    query = $"select  * from  Content where  PlatformType <> 1 order by Id asc limit {count};";
-                }
-
-                else if (hitTypes == HitTypes.HeadLine)
-                {
-                    query = $"select  * from  Content where  PlatformType <> 1  and IsHeadLine = 1 order by Id asc limit {count};";
-                }
-                listData = _db.Query<ContentForHomePageDTO>(query, filter).ToList();
+                listData = await _db.QueryAsync<ContentForHomePageDTO>("Content_ListAll", new { hitType = 1, count = count }, commandType: CommandType.StoredProcedure) as List<ContentForHomePageDTO>;
             }
             catch (Exception ex)
             {
                 await _errorManagement.SaveError(ex.ToString());
             }
-
             return listData;
         }
 
