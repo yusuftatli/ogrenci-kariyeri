@@ -119,6 +119,7 @@ namespace StudentCareerApp
             services.AddTransient<IAddressManager, AddressManager>();
             services.AddTransient<IDefinitionManager, DefinitionManager>();
             services.AddTransient<ICategoryManager, CategoryManager>();
+            services.AddTransient<ISocialMediaManager, SocialMediaManager>();
             services.AddTransient<ISender, SenderManager>();
             services.AddTransient<IAuthManager, AuthManager>();
             services.AddTransient<IUserManager, UserManager>();

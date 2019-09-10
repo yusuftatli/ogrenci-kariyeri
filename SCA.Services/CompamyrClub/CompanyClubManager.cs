@@ -112,14 +112,15 @@ namespace SCA.Services
             {
                 if (dto.Id == 0)
                 {
-                    query = $"insert into CompanyClubs (CompanyClupType, ImageDirectory, ShortName, SectorType, SeoUrl, HeaderImage, SectorId, UserId, CreateUserName, Description, WebSite, PhoneNumber,EmailAddress,CreatedUserId,CreatedDate) values " +
-                    $"insert into CompanyClubs (@CompanyClupType, @ImageDirectory, @ShortName, @SectorType, @SeoUrl, @HeaderImage, @SectorId, @UserId, @CreateUserName, @Description, @WebSite, @PhoneNumber,@EmailAddress,@CreatedUserId,@CreatedDate; SELECT LAST_INSERT_ID();";
+                    query = $"insert into CompanyClubs (CompanyClupType, ShortName, SectorType, SeoUrl, HeaderImage, SectorId, UserId, CreateUserName, Description, WebSite, PhoneNumber,EmailAddress,CreatedUserId,CreatedDate) values " +
+                    $"                              (@CompanyClupType, @ShortName, @SectorType, @SeoUrl, @HeaderImage, @SectorId, @UserId, @CreateUserName, @Description, @WebSite, @PhoneNumber,@EmailAddress,@CreatedUserId,@CreatedDate); SELECT LAST_INSERT_ID();";
                     filter.Add("CompanyClupType", dto.CompanyClupType);
                     filter.Add("ShortName", dto.ShortName);
                     filter.Add("ImageDirectory", dto.ImageDirectory);
                     filter.Add("SectorType", dto.SectorType);
                     filter.Add("SeoUrl", dto.SeoUrl);
                     filter.Add("SectorId", dto.SectorId);
+                    filter.Add("HeaderImage", dto.HeaderImage);
                     filter.Add("UserId", session.Id);
                     filter.Add("CreateUserName", session.Name);
                     filter.Add("Description", dto.Description);
@@ -165,7 +166,7 @@ namespace SCA.Services
                 string flag = (dto.CompanyClupType == CompanyClupType.Club) ? "Şirket" : "Klüp";
                 _res = Result.ReturnAsSuccess(message: flag+" Başarıyla kaydedildi");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
                 throw;

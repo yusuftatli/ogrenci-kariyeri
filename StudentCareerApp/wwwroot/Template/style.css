@@ -19275,9 +19275,6 @@ blockquote {
         height: 35px
     }
 
-select.form-control:not([size]):not([multiple]) {
-    height: calc(3.85rem)
-}
 
 .datepicker td, .datepicker th, .table-condensed td, .table-condensed th {
     padding: 5px

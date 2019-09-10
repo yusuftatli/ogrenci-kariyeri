@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SCA.Services
 {
-    public class SocialMediaManager
+    public class SocialMediaManager : ISocialMediaManager
     {
 
         private readonly IErrorManagement _em;

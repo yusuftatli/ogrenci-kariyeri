@@ -39,6 +39,29 @@ app.controller('comapanyController', function ($scope, $http, $filter) {
     getSectorType();
     getAllCompany();
 
+    
+    var trMap = {
+        çÇ: "c",
+        ğĞ: "g",
+        şŞ: "s",
+        üÜ: "u",
+        ıİ: "i",
+        öÖ: "o"
+    };
+
+    $scope.RegexSeo = function (link) {
+        if (link === undefined) {
+            link = "-";
+        }
+        for (var key in trMap) {
+            link = link.replace(new RegExp("[" + key + "]", "g"), trMap[key]);
+        }
+        return link
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-+|-+$/g, "-")
+            .replace(/^-+|-+$/g, "");
+    };
 
     $scope.onClikSave = function () {
         $scope.showSaveLoading = true;
@@ -47,6 +70,7 @@ app.controller('comapanyController', function ($scope, $http, $filter) {
                 if ($scope.companyModel.WebSite !== null && $scope.companyModel.WebSite !== undefined && $scope.companyModel.WebSite !== "") {
                     if ($scope.companyModel.PhoneNumber !== null && $scope.companyModel.PhoneNumber !== undefined && $scope.companyModel.PhoneNumber !== "") {
                         if ($scope.companyModel.EmailAddress !== null && $scope.companyModel.EmailAddress !== undefined && $scope.companyModel.EmailAddress !== "") {
+                            $scope.companyModel.SeoUrl = $scope.RegexSeo($scope.companyModel.ShortName);
                             $http(CompanyCreateRequest()).then(function (res) {
                                 if (res.data.resultCode === 200) {
                                     shortMessage(res.data.message, "s");
@@ -107,7 +131,7 @@ app.controller('comapanyController', function ($scope, $http, $filter) {
                         $scope.$apply();
                     }
                 } else {
-                    shortMessage(res.data.message, "e");
+                    shortMessage(e.message, "e");
                     $scope.showTable = false;
                 }
             }
