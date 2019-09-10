@@ -486,7 +486,7 @@ namespace SCA.Services
                 if (dto.Id == 0)
                 {
                     query = @"Insert Into Sector (SectorTypeId, CreatedUserId, CreatedDate, Description) values
-                        (SectorTypeId=@SectorTypeId, CreatedUserId=@CreatedUserId, CreatedDate=@CreatedDate,Description=@Description)";
+                        (@SectorTypeId, @CreatedUserId, @CreatedDate, @Description)";
                     filter.Add("SectorTypeId", dto.SectorTypeId);
                     filter.Add("CreatedUserId", session.Id);
                     filter.Add("CreatedDate", DateTime.Now);
