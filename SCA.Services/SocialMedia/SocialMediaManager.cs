@@ -54,7 +54,7 @@ namespace SCA.Services
 
                     var delete = _db.Execute(query, filter);
 
-                    query = "update SocialMedia set @UserId,@CompanyClupId,@Url,@IsActive,@SocialMediaType,UpdatedUserId=@UpdatedUserId,UpdatedDate=@UpdatedDate where Id=@Id";
+                    query = "update SocialMedia set UserId=@UserId,CompanyClupId=@CompanyClupId,Url=@Url,IsActive=@IsActive,SocialMediaType=@SocialMediaType,UpdatedUserId=@UpdatedUserId,UpdatedDate=@UpdatedDate where Id=@Id";
                     filter.Add("Id", dto.Id);
                     filter.Add("UserId", userId);
                     filter.Add("CompanyClupId", dto.CompanyClupId);
