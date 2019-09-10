@@ -102,6 +102,7 @@ namespace SCA.Services
         {
             ServiceResult _res = new ServiceResult();
             DynamicParameters filter = new DynamicParameters();
+            string resultMessage = "";
             string query = "";
             if (dto.Equals(null))
             {

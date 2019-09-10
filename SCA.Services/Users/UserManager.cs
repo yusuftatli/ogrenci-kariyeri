@@ -396,17 +396,18 @@ namespace SCA.Services
             string resultMessage = "";
             if (session.RoleTypeId == 1 || session.RoleTypeId == 2)
             {
-                var data = _userRepo.Get(x => x.Id == dto.userId);
-                data.RoleTypeId = dto.RoleTypeId;
-                _userRepo.Update(data);
-                var res = _unitOfWork.SaveChanges();
-                resultMessage = "Kullanıcı Rol Atama Başarı ile gerçekleşmiştir.";
+                string query = "update Users set RoleTypeId = @RoleTypeId where Id = @Id";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("RoleTypeId", dto.RoleTypeId);
+                filter.Add("Id", dto.userId);
+
+                var data =await _db.ExecuteAsync(query, filter);
                 _res = Result.ReturnAsSuccess(message: resultMessage);
             }
             else
             {
-                resultMessage = "Bu işlemi yapmak için yetkiniz bulunmamaktadır.";
-                _res = Result.ReturnAsFail(message: resultMessage);
+                await _errorManagement.SaveError("Bu işlemi yapmak için yetkiniz bulunmamaktadır.");
+                _res = Result.ReturnAsFail(message: "Bu işlemi yapmak için yetkiniz bulunmamaktadır.");
             }
             return _res;
         }
