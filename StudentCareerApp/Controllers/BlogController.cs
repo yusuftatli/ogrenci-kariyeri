@@ -28,7 +28,8 @@ namespace SCA.UI.Controllers
         [Route("haber/{SeoUrl}"), HttpGet]
         public async Task<IActionResult> Index(string seoUrl)
         {
-            var res = await _contentManager.GetContentUI(seoUrl, HttpContext.GetSessionData<UserSession>("userInfo")?.Id);
+            var ip = HttpContext.Connection.RemoteIpAddress.ToString();
+            var res = await _contentManager.GetContentUI(seoUrl, HttpContext.GetSessionData<UserSession>("userInfo")?.Id, ip: ip);
             return View(res);
         }
 

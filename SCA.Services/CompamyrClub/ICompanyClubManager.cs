@@ -13,5 +13,7 @@ namespace SCA.Services
         Task<ServiceResult> GetAllCompaniesClubs(CompanyClupType companyClupType);
         Task<ServiceResult> GetCompanyId(string seourl);
         Task<ServiceResult> CreateCompanyClubs(CompanyClubsDto dto, UserSession session);
+
+        Task<ServiceResult> GetCompanyHeader(string seoUrl);
     }
 }

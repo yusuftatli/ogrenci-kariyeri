@@ -119,8 +119,10 @@ namespace SCA.UI.Controllers
             };
         }
 
-        public IActionResult Company()
+        [Route("{seoUrl}")]
+        public IActionResult Company(string seoUrl)
         {
+            ViewBag.SeoUrl = seoUrl;
             var model = FakeContentList();
             return View(model);
         }

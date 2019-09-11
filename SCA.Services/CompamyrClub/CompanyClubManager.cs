@@ -194,5 +194,23 @@ namespace SCA.Services
             }
             return _res;
         }
+
+        public async Task<ServiceResult> GetCompanyHeader(string seoUrl)
+        {
+            try
+            {
+                using(var multi = await _db.QueryMultipleAsync("GetCompanyHeader", new { seoUrl = seoUrl}, commandType: CommandType.StoredProcedure))
+                {
+                    var companyHeader = await multi.ReadFirstOrDefaultAsync<CompClubHeaderDto>();
+                    companyHeader.SocialMedias = await multi.ReadAsync<SocialMediaDto>() as List<SocialMediaDto>;
+                    return Result.ReturnAsSuccess(data: companyHeader);
+                }
+            }
+            catch(Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString());
+                return Result.ReturnAsFail(message: "Hata");
+            }
+        }
     }
 }
