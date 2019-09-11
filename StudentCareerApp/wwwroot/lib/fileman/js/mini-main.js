@@ -747,8 +747,8 @@ function Directory(fullPath, numDirs, numFiles){
   };
   this.GetHtml = function(){
      var html = '<li data-path="'+this.fullPath+'" data-dirs="'+this.dirs+'" data-files="'+this.files+'" class="directory">';
-     html += '<div><img src="images/'+(this.dirs > 0?'dir-plus.png':'blank.gif')+'" class="dirPlus" width="9" height="9">';
-     html += '<img src="images/folder.png" class="dir"><span class="name">'+this.name+' ('+this.files+')</span></div>';
+     html += '<div><img src="~/images/'+(this.dirs > 0?'dir-plus.png':'blank.gif')+'" class="dirPlus" width="9" height="9">';
+     html += '<img src="~/images/folder.png" class="dir"><span class="name">'+this.name+' ('+this.files+')</span></div>';
      html += '</li>';
 
     return html;
@@ -1266,7 +1266,7 @@ function makeDragFile(e){
 }
 function makeDragDir(e){
   var f = new Directory($(e.target).attr('data-path')?$(e.target).attr('data-path'):$(e.target).closest('li').attr('data-path'));
-  return '<div class="pnlDragDir" data-path="'+f.fullPath+'"><img src="images/folder.png" align="absmiddle">&nbsp;'+f.name+'</div>';
+  return '<div class="pnlDragDir" data-path="'+f.fullPath+'"><img src="~/images/folder.png" align="absmiddle">&nbsp;'+f.name+'</div>';
 }
 function moveDir(e, ui, obj){
   var dir = Directory.Parse(ui.draggable.attr('data-path'));

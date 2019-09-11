@@ -56,6 +56,7 @@ namespace SCA.UI.Controllers
                 HttpContext.Session.SetString("userInfo", Newtonsoft.Json.JsonConvert.SerializeObject(res.Data));
                 JsonSerializer serializer = new JsonSerializer();
                 var result = JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo"));
+                HttpContext.Session.SetString("NameSurname", result.Name + " " + result.Surname);
                 return Json(res);
             }
             else
@@ -105,7 +106,7 @@ namespace SCA.UI.Controllers
                         return RedirectToAction("SetCategories", "User");
                     }
                 }
-                
+
             }
             return RedirectToAction("Index", "Home");
         }

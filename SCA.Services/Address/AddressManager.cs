@@ -25,14 +25,16 @@ namespace SCA.Services
         private readonly IUnitofWork _unitOfWork;
         private IGenericRepository<Cities> _citiesRepo;
         private IGenericRepository<District> _districtRepo;
+        private readonly IErrorManagement _errorManagement;
         private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
 
-        public AddressManager(IUnitofWork unitOfWork, IMapper mapper)
+        public AddressManager(IUnitofWork unitOfWork, IMapper mapper, IErrorManagement errorManagement)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _citiesRepo = unitOfWork.GetRepository<Cities>();
             _districtRepo = unitOfWork.GetRepository<District>();
+            _errorManagement = errorManagement;
         }
         public async Task<ServiceResult> GetCities()
         {
@@ -46,6 +48,7 @@ namespace SCA.Services
             }
             catch (Exception ex)
             {
+                await _errorManagement.SaveError(ex.ToString());
                 _res = Result.ReturnAsFail(message: "İl bilgileri çekilirken hata meydana geldi");
             }
             return _res;
@@ -66,6 +69,7 @@ namespace SCA.Services
             }
             catch (Exception ex)
             {
+                await _errorManagement.SaveError(ex.ToString());
                 _res = Result.ReturnAsFail(message: "İlçe bilgileri çekilirken hata meydana geldi");
             }
             return _res;
@@ -73,7 +77,17 @@ namespace SCA.Services
 
         public async Task<List<CitiesDto>> CityList()
         {
-            return _mapper.Map<List<CitiesDto>>(_citiesRepo.GetAll());
+            List<CitiesDto> _res = new List<CitiesDto>();
+            try
+            {
+                string query = "select * from Cities";
+                _res = _db.Query<CitiesDto>(query).ToList();
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString());
+            }
+            return _res;
         }
 
 

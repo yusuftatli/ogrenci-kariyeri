@@ -35,7 +35,6 @@
                         <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
                         <li class="breadcrumb-item active">Kullanıcılar</li>
                     </ol>
-                    <button type="button" class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i> Create New</button>
                 </div>
             </div>
         </div>
@@ -55,8 +54,9 @@
                             <div class="col-md-6 col-lg-3 col-xlg-3">
                                 <div class="card">
                                     <div class="box bg-info text-center">
-                                        <h1 class="font-light text-white">2,064</h1>
-                                        <h6 class="text-white">Total Tickets</h6>
+                                        <span ng-hide="DashboardData.length>0"><i class="fa fa-spinner fa-spin"></i></span>
+                                        <h1 ng-show="DashboardData.length>0" class="font-light text-white"><span ng-bind="DashboardData[0].count+DashboardData[1].count+DashboardData[2].count+DashboardData[3].count"></span></h1>
+                                        <h6 ng-show="DashboardData.length>0" class="text-white">Toplam Kullanıcı</h6>
                                     </div>
                                 </div>
                             </div>
@@ -64,8 +64,9 @@
                             <div class="col-md-6 col-lg-3 col-xlg-3">
                                 <div class="card">
                                     <div class="box bg-primary text-center">
-                                        <h1 class="font-light text-white">1,738</h1>
-                                        <h6 class="text-white">Responded</h6>
+                                        <span ng-hide="DashboardData.length>0"><i class="fa fa-spinner fa-spin"></i></span>
+                                        <h1 ng-show="DashboardData.length>0" class="font-light text-white"><span ng-bind="DashboardData[0].count"></span></h1>
+                                        <h6 ng-show="DashboardData.length>0" class="text-white"><span ng-bind="DashboardData[0].description"></span></h6>
                                     </div>
                                 </div>
                             </div>
@@ -73,8 +74,9 @@
                             <div class="col-md-6 col-lg-3 col-xlg-3">
                                 <div class="card">
                                     <div class="box bg-success text-center">
-                                        <h1 class="font-light text-white">1100</h1>
-                                        <h6 class="text-white">Resolve</h6>
+                                        <span ng-hide="DashboardData.length>0"><i class="fa fa-spinner fa-spin"></i></span>
+                                        <h1 ng-show="DashboardData.length>0" class="font-light text-white"><span ng-bind="DashboardData[1].count"></span></h1>
+                                        <h6 ng-show="DashboardData.length>0" class="text-white"><span ng-bind="DashboardData[1].description"></span></h6>
                                     </div>
                                 </div>
                             </div>
@@ -82,18 +84,35 @@
                             <div class="col-md-6 col-lg-3 col-xlg-3">
                                 <div class="card">
                                     <div class="box bg-dark text-center">
-                                        <h1 class="font-light text-white">964</h1>
-                                        <h6 class="text-white">Pending</h6>
+                                        <span ng-hide="DashboardData.length>0"><i class="fa fa-spinner fa-spin"></i></span>
+                                        <h1 ng-show="DashboardData.length>0" class="font-light text-white"><span ng-bind="DashboardData[2].count"></span></h1>
+                                        <h6 ng-show="DashboardData.length>0" class="text-white"><span ng-bind="DashboardData[2].description"></span></h6>
                                     </div>
                                 </div>
                             </div>
                             <!-- Column -->
                         </div>
-                        <div class="table-responsive">
-                            <div class="center" ng-show="showTable">
-                                <span><i class="fa fa-spinner fa-spin"></i></span>
-                            </div>
+                        <div class="center" ng-hide="assayList.length>0">
+                            <span><i class="fa fa-spinner fa-spin"></i></span>
+                        </div>
+                        <div class="table-responsive" ng-show="assayList.length>0">
 
+                            <h4 class="card-title">Makaleler Listesi</h4>
+                            <h6 class="card-subtitle">Makale Sayısı : <code><span ng-bind="assayList.length"></span></code></h6>
+                            <h4><input type="text" class="form-control" name="site-search" id="getData" ng-model="search" ng-keypress="getData($event)" placeholder="Ara..."></h4>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <button class="btn btn-block btn-primary" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">Önceki </button>
+                                    </td>
+                                    <td>
+                                        &nbsp;{{currentPage+1}}/{{numberOfPages()}}&nbsp;
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-block btn-primary" ng-disabled="currentPage >= getData().length/pageSize - 1" ng-click="currentPage=currentPage+1"> Sonraki</button>
+                                    </td>
+                                </tr>
+                            </table>
                             <table id="demo-foo-addrow" class="table m-t-30 table-hover no-wrap contact-list" data-paging="true" data-paging-size="7" ng-show="!showTable">
                                 <thead>
                                     <tr>
@@ -109,7 +128,7 @@
                                         <th>Detay</th>
                                         @if (ViewBag.showColumn == 1 || ViewBag.showColumn == 2)
                                         {
-                                        <th>İşlem</th>
+                                            <th>İşlem</th>
                                         }
                                     </tr>
                                 </thead>
@@ -142,9 +161,9 @@
                                         </td>
                                         @if (ViewBag.showColumn == 1 || ViewBag.showColumn == 2)
                                         {
-                                        <td>
-                                            <button ng-click="onClikckProcess(x)" type="button" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#userProcessModal">İşlem</button>
-                                        </td>
+                                            <td>
+                                                <button ng-click="onClikckProcess(x)" type="button" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#userProcessModal">İşlem</button>
+                                            </td>
                                         }
                                     </tr>
                                 </tbody>

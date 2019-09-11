@@ -51,6 +51,24 @@ namespace SCA.Services
             _roleManager = roleManager;
         }
 
+        public async Task<ServiceResult> Dashboard(UserSession session)
+        {
+            ServiceResult _res = new ServiceResult();
+            try
+            {
+                string query = "SELECT r.Description ,count(u.Id) as Count FROM Users u inner join RoleType r on u.RoleTypeId=r.Id where r.Id <> 1 GROUP BY RoleTypeId";
+
+                var result = await _db.QueryAsync<ContentDashboardDto>(query);
+
+                _res = Result.ReturnAsSuccess(data: result);
+            }
+            catch (Exception ex)
+            {
+                _res = _res = Result.ReturnAsFail(message: "Kullanıcı dashboard bilgisi yüklenemedi");
+                await _errorManagement.SaveError(ex.ToString(), session.Id, "User/Dashboard", PlatformType.Web);
+            }
+            return _res;
+        }
         public async Task<ServiceResult> UpdateUserCategory(long userId, string category)
         {
             ServiceResult _res = new ServiceResult();

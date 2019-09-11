@@ -47,5 +47,6 @@ namespace SCA.Services
         /// <param name="category">kategori</param>
         /// <returns></returns>
         Task<ServiceResult> UpdateUserCategory(long userId, string category);
+        Task<ServiceResult> Dashboard(UserSession session);
     }
 }

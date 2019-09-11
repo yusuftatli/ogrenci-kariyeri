@@ -84,5 +84,11 @@ namespace StudentCareerApp.Areas.Api.Controller
         {
             return Result.ReturnAsSuccess(data: JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")).Token);
         }
+
+        [HttpGet("get-dashboard")]
+        public async Task<ServiceResult> Dashboard()
+        {
+            return await _userManager.Dashboard(JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
+        }
     }
 }

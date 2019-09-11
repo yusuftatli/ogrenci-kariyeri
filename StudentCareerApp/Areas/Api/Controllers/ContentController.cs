@@ -76,5 +76,7 @@ namespace StudentCareerApp.Areas.Api.Controller
         {
             return await _contentManager.GetContent(id);
         }
+
+       
     }
 }

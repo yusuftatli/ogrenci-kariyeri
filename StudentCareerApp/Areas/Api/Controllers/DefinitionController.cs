@@ -30,7 +30,7 @@ namespace StudentCareerApp.Areas.Api.Controller
         [HttpGet, Route("education-getdepartment")]
         public async Task<ServiceResult> GetDepartment()
         {
-            return await _definitionManager.GetDepartment();
+            return await _definitionManager.GetDepartment(JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
         }
 
         [HttpPost, Route("education-cretadepartment")]
@@ -50,7 +50,7 @@ namespace StudentCareerApp.Areas.Api.Controller
         [HttpGet, Route("education-getfaculty")]
         public async Task<ServiceResult> GetFaculty()
         {
-            return await _definitionManager.GetFaculty();
+            return await _definitionManager.GetFaculty(JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
         }
 
         [HttpPost, Route("education-createfaculty")]
@@ -70,13 +70,13 @@ namespace StudentCareerApp.Areas.Api.Controller
         [HttpGet, Route("education-gethighschool")]
         public async Task<ServiceResult> GetHighSchool()
         {
-            return await _definitionManager.GetHighSchool();
+            return await _definitionManager.GetHighSchool(JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
         }
 
         [HttpPost, Route("education-createhighschool")]
         public async Task<ServiceResult> CreateHighSchool([FromBody]HighSchoolDto dto)
         {
-            return await _definitionManager.CreateHighSchool(dto);
+            return await _definitionManager.CreateHighSchool(dto, JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
         }
 
         [HttpPost, Route("education-Update-highSchoolIsActive")]
@@ -90,7 +90,7 @@ namespace StudentCareerApp.Areas.Api.Controller
         [HttpGet, Route("education-getstudentclass")]
         public async Task<ServiceResult> GetStudentClass()
         {
-            return await _definitionManager.GetStudentClass();
+            return await _definitionManager.GetStudentClass(JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
         }
 
         [HttpPost, Route("education-createstudentclass")]
@@ -110,13 +110,13 @@ namespace StudentCareerApp.Areas.Api.Controller
         [HttpGet, Route("education-getuniversity")]
         public async Task<ServiceResult> GetUniversity()
         {
-            return await _definitionManager.GetUniversity();
+            return await _definitionManager.GetUniversity(JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
         }
 
         [HttpPost, Route("education-createuniversity")]
         public async Task<ServiceResult> CreateUniversity(UniversityDto dto)
         {
-            return await _definitionManager.CreateUniversity(dto);
+            return await _definitionManager.CreateUniversity(dto, JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
         }
 
         [HttpPost, Route("education-Update-UniversityIsActive")]
@@ -130,7 +130,7 @@ namespace StudentCareerApp.Areas.Api.Controller
         [HttpGet, Route("getallsector")]
         public async Task<ServiceResult> GetAllSector()
         {
-            return await _definitionManager.GetAllSector();
+            return await _definitionManager.GetAllSector(JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
         }
 
         [HttpPost, Route("createsektor")]

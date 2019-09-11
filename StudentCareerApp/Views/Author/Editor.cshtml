@@ -53,7 +53,7 @@
             <div class="col-lg-3">
                 <div class="right-sidebar">
                     @await Component.InvokeAsync("SocialMedia")
-                    @await Component.InvokeAsync("Banner", new { url = "#", imagePath = "images/banner/sidebar-banner1.jpg" })
+                    @await Component.InvokeAsync("Banner", new { url = "#", imagePath = "~/images/banner/sidebar-banner1.jpg" })
                     @await Component.InvokeAsync("RecentAndFavorites")
                     @await Component.InvokeAsync("PopularContents", new { count = 5})
                     @await Component.InvokeAsync("PopularCategories")

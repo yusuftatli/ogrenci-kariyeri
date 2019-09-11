@@ -6,7 +6,7 @@ app.controller('userListController', function ($scope, $http, $filter) {
     getUserList();
 
     $scope.roleTypes = [{ id: 0, description: '-----' }, { id: 2, description: 'Admin' }, { id: 3, description: 'Öğrenci' }, { id: 4, description: 'Editör' }, { id: 5, description: 'Yazar' }];
-
+    getDashboard();
 
     function getUserList() {
         $scope.showTable = true;
@@ -22,6 +22,20 @@ app.controller('userListController', function ($scope, $http, $filter) {
             } else {
                 shortMessage(res.data.message, "e");
                 $scope.showTable = false;
+            }
+        });
+    }
+
+    function getDashboard() {
+        $http({
+            method: "get",
+            url: _link + "/User/get-dashboard",
+            headers: Headers
+        }).then(function (res) {
+            if (res.status === 200) {
+                $scope.DashboardData = res.data.data;
+            } else {
+                shortMessage(res.data.message, "e");
             }
         });
     }

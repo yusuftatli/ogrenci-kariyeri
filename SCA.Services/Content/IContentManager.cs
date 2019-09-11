@@ -77,5 +77,7 @@ namespace SCA.Services
         Task<List<ContentForHomePageDTO>> GetUsersFavoriteContents(long userId, int count);  
 
         Task<bool> CreateFavorite(FavoriteDto dto);
+
+       
     }
 }

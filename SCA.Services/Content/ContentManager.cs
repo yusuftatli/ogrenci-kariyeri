@@ -42,6 +42,9 @@ namespace SCA.Services
             _errorManagement = errorManagement;
             _contentRepo = unitOfWork.GetRepository<Content>();
         }
+
+       
+
         /// <summary>
         /// makale kısa açıklamalarını listeler
         /// </summary>
@@ -116,8 +119,8 @@ namespace SCA.Services
             ContentDetailForDetailPageDTO _res = new ContentDetailForDetailPageDTO();
             try
             {
-                _res = await _db.QueryFirstAsync<ContentDetailForDetailPageDTO>("Content_ListBySeoUrl", new { type = 1, SeoUrl = seoUrl, Ip = ip, UserId = userId, ContentId = 0 , count =10}, commandType: CommandType.StoredProcedure) as ContentDetailForDetailPageDTO;
-                _res.MostPopularItems = _db.Query<ContentForHomePageDTO>("Content_ListBySeoUrl", new { type = 1, SeoUrl = seoUrl, Ip = ip, UserId = userId, ContentId = 0 , count =10}, commandType: CommandType.StoredProcedure).ToList();
+                _res = await _db.QueryFirstAsync<ContentDetailForDetailPageDTO>("Content_ListBySeoUrl", new { type = 1, SeoUrl = seoUrl, Ip = ip, UserId = userId, ContentId = 0, count = 10 }, commandType: CommandType.StoredProcedure) as ContentDetailForDetailPageDTO;
+                _res.MostPopularItems = _db.Query<ContentForHomePageDTO>("Content_ListBySeoUrl", new { type = 1, SeoUrl = seoUrl, Ip = ip, UserId = userId, ContentId = 0, count = 10 }, commandType: CommandType.StoredProcedure).ToList();
                 _res.CommentList = _db.Query<CommentForUIDto>("Content_ListBySeoUrl", new { type = 1, SeoUrl = seoUrl, Ip = ip, UserId = userId, ContentId = _res.Id, count = 10 }, commandType: CommandType.StoredProcedure).ToList();
             }
             catch (Exception ex)

@@ -82,8 +82,8 @@ function Directory(fullPath, numDirs, numFiles){
   };
   this.GetHtml = function(){
      var html = '<li data-path="'+this.fullPath+'" data-dirs="'+this.dirs+'" data-files="'+this.files+'" class="directory">';
-     html += '<div><img src="images/'+(this.dirs > 0?'dir-plus.png':'blank.gif')+'" class="dirPlus" width="9" height="9">';
-     html += '<img src="images/folder.png" class="dir"><span class="name">'+this.name+' ('+this.files+')</span></div>';
+     html += '<div><img src="~/images/'+(this.dirs > 0?'dir-plus.png':'blank.gif')+'" class="dirPlus" width="9" height="9">';
+     html += '<img src="~/images/folder.png" class="dir"><span class="name">'+this.name+' ('+this.files+')</span></div>';
      html += '</li>';
 
     return html;

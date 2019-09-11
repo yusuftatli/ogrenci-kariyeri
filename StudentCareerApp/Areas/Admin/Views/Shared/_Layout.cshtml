@@ -1,5 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 <head>
     <meta charset="utf-8">
@@ -371,7 +373,7 @@
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
                         <li class="user-pro">
-                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><img src="~/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"><span class="hide-menu">Mark Jeckson</span></a>
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><img src="~/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"><span class="hide-menu"> @HttpContextAccessor.HttpContext.Session.GetString("NameSurname")</span></a>
                             <ul aria-expanded="false" class="collapse">
                                 <li><a href="javascript:void(0)"><i class="ti-user"></i> My Profile</a></li>
                                 <li><a href="javascript:void(0)"><i class="ti-wallet"></i> My Balance</a></li>
@@ -380,9 +382,8 @@
                                 <li><a href="javascript:void(0)"><i class="fa fa-power-off"></i> Logout</a></li>
                             </ul>
                         </li>
-                        <li class="nav-small-cap">--- PERSONAL</li>
                         <li>
-                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="icon-speedometer"></i><span class="hide-menu">Dashboard <span class="badge badge-pill badge-cyan ml-auto">4</span></span></a>
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="icon-speedometer"></i><span class="hide-menu">Dashboard </span></a>
                             <ul aria-expanded="false" class="collapse">
                                 <li><a href="index.html">Minimal </a></li>
                                 <li><a href="index2.html">Analytical</a></li>
@@ -390,7 +391,6 @@
                                 <li><a href="index4.html">Modern</a></li>
                             </ul>
                         </li>
-                        <li class="nav-small-cap">--- Kullanıcılar</li>
                         <li>
                             <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i><span>Kullanıcılar</span></a>
                             <ul aria-expanded="false" class="collapse">
@@ -398,9 +398,8 @@
                                 <li><a href="~/Admin/User/CreateUser">Ekle</a></li>
                             </ul>
                         </li>
-                        <li class="nav-small-cap">--- Sayfa Yönetimi</li>
                         <li>
-                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i><span>Kullanıcılar</span></a>
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i><span>Sayfa Yönetimi</span></a>
                             <ul aria-expanded="false" class="collapse">
                                 <li><a href="~/Admin/Pages/Index">Basit Sayfalar</a></li>
                             </ul>
@@ -422,7 +421,6 @@
                             </ul>
                         </li>
 
-                        <li class="nav-small-cap">--- Tanımlar</li>
                         <li>
                             <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i><span>Ayarlar</span></a>
                             <ul aria-expanded="false" class="collapse">
@@ -433,16 +431,15 @@
                             </ul>
                         </li>
 
-                        <li class="nav-small-cap">--- Şirket/Kulüp</li>
                         <li>
-                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i><span>Ayarlar</span></a>
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i><span>Şirket Kulüp</span></a>
                             <ul aria-expanded="false" class="collapse">
                                 <li><a href="~/Admin/CompanyClub/Company">Şirket</a></li>
                                 <li><a href="~/Admin/CompanyClub/Clubs">Kulüp</a></li>
                             </ul>
                         </li>
 
-                        <li class="nav-small-cap">--- SUPPORT</li>
+                        <li class="nav-small-cap">--- Destek</li>
                         <li> <a class="waves-effect waves-dark" href="../documentation/documentation.html" aria-expanded="false"><i class="far fa-circle text-danger"></i><span class="hide-menu">Documentation</span></a></li>
                         <li> <a class="waves-effect waves-dark" href="pages-login.html" aria-expanded="false"><i class="far fa-circle text-success"></i><span class="hide-menu">Log Out</span></a></li>
                         <li> <a class="waves-effect waves-dark" href="pages-faq.html" aria-expanded="false"><i class="far fa-circle text-info"></i><span class="hide-menu">FAQs</span></a></li>
@@ -502,7 +499,7 @@
     <script src="~/Template/ckeditor/ckeditor.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
     <script src="~/Scripts/toastr.min.js"></script>
-
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script><script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script>
         $(function () {
             // Switchery

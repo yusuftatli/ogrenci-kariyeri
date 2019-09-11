@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Dapper;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using SCA.Common.Resource;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
+using SCA.Entity.Enums;
 using SCA.Entity.Model;
 using SCA.Model;
 using SCA.Repository.Repo;
@@ -50,26 +52,17 @@ namespace SCA.Services
         }
 
         #region Department
-        public async Task<ServiceResult> GetDepartment()
+        public async Task<ServiceResult> GetDepartment(UserSession session)
         {
             ServiceResult _res = new ServiceResult();
             try
             {
                 string query = "select Id, Description as DepartmentName from Departmnet";
-                var result = _db.Query<DepartmentDto>(query).ToList();
-
-                if (result.Count > 0)
-                {
-                    _res = Result.ReturnAsSuccess(data: result);
-                }
-                else
-                {
-                    _res = Result.ReturnAsFail(message: "Departman bilgisi yüklenemedi");
-                }
+                var result = await _db.QueryAsync<DepartmentDto>(query) as List<DepartmentDto>;
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
+                await _errorManagement.SaveError(ex.ToString(), session.Id, "GetDepartment", PlatformType.Web);
                 _res = Result.ReturnAsFail(message: "Departman bilgisi yüklenirken hata meydana geldi");
             }
             return _res;
@@ -80,8 +73,8 @@ namespace SCA.Services
             List<DepartmentDto> _res = new List<DepartmentDto>();
             try
             {
-                string query = "select * from Departmnet";
-                var result = _db.Query<DepartmentDto>(query).ToList();
+                string query = "select Id, Description as DepartmentName from Departmnet";
+                _res = await _db.QueryAsync<DepartmentDto>(query) as List<DepartmentDto>;
             }
             catch (Exception ex)
             {
@@ -100,19 +93,15 @@ namespace SCA.Services
             {
                 if (dto.Id == 0)
                 {
-                    query = @"Insert Into Departmnet ( CreatedUserId, CreatedDate, Description) values
-                        ( CreatedUserId=@CreatedUserId, CreatedDate=@CreatedDate,Description=@Description)";
-                    filter.Add("CreatedUserId", session.Id);
-                    filter.Add("CreatedDate", DateTime.Now);
+                    query = @"Insert Into Departmnet (Description) values
+                        ( Description=@Description)";
                     filter.Add("Description", dto.DepartmentName);
                     resultMessage = "Kayıt işlemi başarılı";
                 }
                 else
                 {
-                    query = "update Departmnet set UpdatedUserId=@UpdatedUserId,UpdatedDate=@UpdatedDate ,Description=@Description where Id=@Id";
+                    query = "update Departmnet set Description=@Description where Id=@Id";
                     filter.Add("Id", dto.Id);
-                    filter.Add("UpdatedDate", session.Id);
-                    filter.Add("CreatedDate", DateTime.Now);
                     filter.Add("Description", dto.DepartmentName);
                     resultMessage = "Güncelleme işlemi başarılı";
                 }
@@ -121,7 +110,7 @@ namespace SCA.Services
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
+                await _errorManagement.SaveError(ex.ToString(), session.Id, "CreateDepartment", PlatformType.Web);
                 _res = Result.ReturnAsFail(message: "Departman bilgisi kayıt işlemi sırasında hata meydana geldi.");
             }
             return _res;
@@ -142,26 +131,18 @@ namespace SCA.Services
         #endregion
 
         #region Faculty
-        public async Task<ServiceResult> GetFaculty()
+        public async Task<ServiceResult> GetFaculty(UserSession session)
         {
             ServiceResult _res = new ServiceResult();
             try
             {
                 string query = "select * from Faculty";
-                var result = _db.Query<FacultyDto>(query).ToList();
-
-                if (result.Count > 0)
-                {
-                    _res = Result.ReturnAsSuccess(data: result);
-                }
-                else
-                {
-                    _res = Result.ReturnAsFail(message: "Fakülte bilgisi yüklenemedi");
-                }
+                var reullt = await _db.QueryAsync<FacultyDto>(query) as List<FacultyDto>;
+                _res = Result.ReturnAsSuccess(data: reullt);
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
+                await _errorManagement.SaveError(ex.ToString(), session.Id, "GetFaculty", PlatformType.Web);
                 _res = Result.ReturnAsFail(message: "Fakülte bilgisi yüklenirken hata meydana geldi");
             }
             return _res;
@@ -173,7 +154,7 @@ namespace SCA.Services
             try
             {
                 string query = "select Id, Description as FacultyName from Faculty";
-                var result = _db.Query<FacultyDto>(query).ToList();
+                _res = await _db.QueryAsync<FacultyDto>(query) as List<FacultyDto>;
             }
             catch (Exception ex)
             {
@@ -192,19 +173,15 @@ namespace SCA.Services
             {
                 if (dto.Id == 0)
                 {
-                    query = @"Insert Into Faculty ( CreatedUserId, CreatedDate, Description) values
-                        ( CreatedUserId=@CreatedUserId, CreatedDate=@CreatedDate,Description=@Description)";
-                    filter.Add("CreatedUserId", session.Id);
-                    filter.Add("CreatedDate", DateTime.Now);
+                    query = @"Insert Into Faculty (Description) values
+                        (Description=@Description)";
                     filter.Add("Description", dto.FacultyName);
                     resultMessage = "Kayıt işlemi başarılı";
                 }
                 else
                 {
-                    query = "update Faculty set UpdatedUserId=@UpdatedUserId,UpdatedDate=@UpdatedDate ,Description=@Description where Id=@Id";
+                    query = "update Faculty set Description=@Description where Id=@Id";
                     filter.Add("Id", dto.Id);
-                    filter.Add("UpdatedDate", session.Id);
-                    filter.Add("CreatedDate", DateTime.Now);
                     filter.Add("Description", dto.FacultyName);
                     resultMessage = "Güncelleme işlemi başarılı";
                 }
@@ -213,7 +190,7 @@ namespace SCA.Services
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
+                await _errorManagement.SaveError(ex.ToString(), session.Id, "CreateFaculty", PlatformType.Web);
                 _res = Result.ReturnAsFail(message: "Fakülte bilgisi kayıt işlemi sırasında hata meydana geldi.");
             }
             return _res;
@@ -235,48 +212,68 @@ namespace SCA.Services
         #endregion
 
         #region HighSchool
-        public async Task<ServiceResult> GetHighSchool()
+        public async Task<ServiceResult> GetHighSchool(UserSession session)
         {
-            var dataList = _mapper.Map<List<HighSchoolDto>>(_highSchoolTypeRepo.GetAll().ToList());
-            var cityList = await _addressManager.CityList();
-            dataList.ForEach(x =>
+            ServiceResult _res = new ServiceResult();
+            try
             {
-                x.CityName = cityList.Where(a => a.CityId == x.CityId).Select(s => s.CityName).FirstOrDefault();
-            });
-            return Result.ReturnAsSuccess(null, null, dataList);
+                string query = "select Id, Description as SchoolName from HighSchool";
+                var result = await _db.QueryAsync<HighSchoolDto>(query) as List<HighSchoolDto>;
+                _res = Result.ReturnAsSuccess(data: result);
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString(), session.Id, "GetHighSchool", PlatformType.Web);
+                _res = Result.ReturnAsFail(message: "Lise bilgisi yüklenirken hata meydana geldi");
+            }
+            return _res;
         }
 
         public async Task<List<HighSchoolDto>> GetHighSchoolForUI()
         {
-            var dataList = _mapper.Map<List<HighSchoolDto>>(_highSchoolTypeRepo.GetAll().ToList());
-            var cityList = await _addressManager.CityList();
-            dataList.ForEach(x =>
+            List<HighSchoolDto> _res = new List<HighSchoolDto>();
+            try
             {
-                x.CityName = cityList.Where(a => a.CityId == x.CityId).Select(s => s.CityName).FirstOrDefault();
-            });
-            return dataList;
+                string query = "select Id, Description as SchoolName from HighSchool";
+                _res = await _db.QueryAsync<HighSchoolDto>(query) as List<HighSchoolDto>;
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString());
+            }
+            return _res;
         }
 
-        public async Task<ServiceResult> CreateHighSchool(HighSchoolDto dto)
+        public async Task<ServiceResult> CreateHighSchool(HighSchoolDto dto, UserSession session)
         {
+            ServiceResult _res = new ServiceResult();
+            string query = "";
+            DynamicParameters filter = new DynamicParameters();
             string resultMessage = "";
-            if (dto == null)
+            try
             {
-                Result.ReturnAsFail(AlertResource.NoChanges, null);
+                if (dto.Id == 0)
+                {
+                    query = @"Insert Into HighSchool (  Description) values ( Description=@Description)";
+                    filter.Add("Description", dto.SchoolName);
+                    resultMessage = "Kayıt işlemi başarılı";
+                }
+                else
+                {
+                    query = "update HighSchool set Description=@Description where Id=@Id";
+                    filter.Add("Id", dto.Id);
+                    filter.Add("Description", dto.SchoolName);
+                    resultMessage = "Güncelleme işlemi başarılı";
+                }
+                var res = _db.Execute(query, filter);
+                _res = Result.ReturnAsSuccess(message: resultMessage);
             }
-            if (dto.Id == 0)
+            catch (Exception ex)
             {
-                dto.IsActive = true;
-                _highSchoolTypeRepo.Add(_mapper.Map<HighSchool>(dto));
-                resultMessage = AlertResource.CreateIsOk;
+                await _errorManagement.SaveError(ex.ToString(), session.Id, "CreateHighSchool", PlatformType.Web);
+                _res = Result.ReturnAsFail(message: "Lise bilgisi kayıt işlemi sırasında hata meydana geldi.");
             }
-            else
-            {
-                _highSchoolTypeRepo.Update(_mapper.Map<HighSchool>(dto));
-                resultMessage = AlertResource.UpdateIsOk;
-            }
-            _unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess(null, resultMessage, null);
+            return _res;
         }
 
         public async Task<ServiceResult> UpdatehighSchoolIsActive(long Id, bool IsActive)
@@ -295,13 +292,13 @@ namespace SCA.Services
         #endregion
 
         #region StudentClass
-        public async Task<ServiceResult> GetStudentClass()
+        public async Task<ServiceResult> GetStudentClass(UserSession session)
         {
             ServiceResult _res = new ServiceResult();
             try
             {
                 string query = "select * from StudentClass";
-                var result = _db.Query<StudentClassDto>(query).ToList();
+                var result = await _db.QueryAsync<StudentClassDto>(query) as List<StudentClassDto>;
 
                 if (result.Count > 0)
                 {
@@ -314,7 +311,7 @@ namespace SCA.Services
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
+                await _errorManagement.SaveError(ex.ToString(), session.Id, "GetStudentClass", PlatformType.Web);
                 _res = Result.ReturnAsFail(message: "Sınıf bilgisi yüklenirken hata meydana geldi");
             }
             return _res;
@@ -322,7 +319,18 @@ namespace SCA.Services
 
         public async Task<List<StudentClassDto>> GetStudentClassForUI()
         {
-            return _mapper.Map<List<StudentClassDto>>(_classTypeRepo.GetAll().ToList());
+            List<StudentClassDto> _res = new List<StudentClassDto>();
+            try
+            {
+                string query = "select * from StudentClass";
+                _res = await _db.QueryAsync<StudentClassDto>(query) as List<StudentClassDto>;
+
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString());
+            }
+            return _res;
         }
 
         public async Task<ServiceResult> CreateStudentClass(StudentClassDto dto, UserSession session)
@@ -352,7 +360,7 @@ namespace SCA.Services
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
+                await _errorManagement.SaveError(ex.ToString(), session.Id, "CreateStudentClass", PlatformType.Web);
                 _res = Result.ReturnAsFail(message: "Sınıf bilgisi kayıt işlemi sırasında hata meydana geldi.");
             }
             return _res;
@@ -375,48 +383,69 @@ namespace SCA.Services
         #endregion
 
         #region University
-        public async Task<ServiceResult> GetUniversity()
+        public async Task<ServiceResult> GetUniversity(UserSession session)
         {
-            var dataList = _mapper.Map<List<UniversityDto>>(_universityRepo.GetAll().ToList());
-            var cityList = await _addressManager.CityList();
-            dataList.ForEach(x =>
+            ServiceResult _res = new ServiceResult();
+            try
             {
-                x.CityName = cityList.Where(a => a.CityId == x.CityId).Select(s => s.CityName).FirstOrDefault();
-            });
-            return Result.ReturnAsSuccess(null, null, dataList);
+                string query = "select Id, Description as UniversityName from Universities";
+                var data = _db.Query<StudentClassDto>(query).ToList();
+                _res = Result.ReturnAsSuccess(data: data);
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString(), session.Id, "GetUniversity", PlatformType.Web);
+                _res = Result.ReturnAsFail(message: "Sınıf bilgisi yüklenirken hata meydana geldi");
+            }
+            return _res;
         }
 
         public async Task<List<UniversityDto>> GetUniversityForUI()
         {
-            var dataList = _mapper.Map<List<UniversityDto>>(_universityRepo.GetAll().ToList());
-            var cityList = await _addressManager.CityList();
-            dataList.ForEach(x =>
+            List<UniversityDto> _res = new List<UniversityDto>();
+            try
             {
-                x.CityName = cityList.Where(a => a.CityId == x.CityId).Select(s => s.CityName).FirstOrDefault();
-            });
-            return dataList;
+                string query = "select Id, Description as UniversityName from Universities";
+                _res = await _db.QueryAsync<UniversityDto>(query) as List<UniversityDto>;
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString());
+            }
+            return _res;
         }
 
-        public async Task<ServiceResult> CreateUniversity(UniversityDto dto)
+        public async Task<ServiceResult> CreateUniversity(UniversityDto dto, UserSession session)
         {
+            ServiceResult _res = new ServiceResult();
+            string query = "";
+            DynamicParameters filter = new DynamicParameters();
             string resultMessage = "";
-            if (dto == null)
+            try
             {
-                Result.ReturnAsFail(AlertResource.NoChanges, null);
+                if (dto.Id == 0)
+                {
+                    query = @"Insert Into Universities ( Description) values
+                        ( Description=@Description)";
+                    filter.Add("Description", dto.UniversityName);
+                    resultMessage = "Kayıt işlemi başarılı";
+                }
+                else
+                {
+                    query = "update Universities set Description=@Description where Id=@Id";
+                    filter.Add("Id", dto.Id);
+                    filter.Add("Description", dto.UniversityName);
+                    resultMessage = "Güncelleme işlemi başarılı";
+                }
+                var res = _db.Execute(query, filter);
+                _res = Result.ReturnAsSuccess(message: resultMessage);
             }
-            if (dto.Id == 0)
+            catch (Exception ex)
             {
-                dto.IsActive = true;
-                _universityRepo.Add(_mapper.Map<University>(dto));
-                resultMessage = AlertResource.CreateIsOk;
+                await _errorManagement.SaveError(ex.ToString(), session.Id, "CreateUniversity", PlatformType.Web);
+                _res = Result.ReturnAsFail(message: "Üniversite bilgisi kayıt işlemi sırasında hata meydana geldi.");
             }
-            else
-            {
-                _universityRepo.Update(_mapper.Map<University>(dto));
-                resultMessage = AlertResource.UpdateIsOk;
-            }
-            _unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess(null, resultMessage, null);
+            return _res;
         }
 
         public async Task<ServiceResult> UpdateUniversityIsActive(long Id, bool IsActive)
@@ -435,26 +464,18 @@ namespace SCA.Services
         #endregion
 
         #region Sector
-        public async Task<ServiceResult> GetAllSector()
+        public async Task<ServiceResult> GetAllSector(UserSession session)
         {
             ServiceResult _res = new ServiceResult();
             try
             {
                 string query = "select * from Sector";
-                var result = _db.Query<SectorDto>(query).ToList();
-
-                if (result.Count > 0)
-                {
-                    _res = Result.ReturnAsSuccess(data: result);
-                }
-                else
-                {
-                    _res = Result.ReturnAsFail(message: "Sektör bilgisi yüklenemedi");
-                }
+                var result = await _db.QueryAsync<SectorDto>(query) as List<SectorDto>;
+                _res = Result.ReturnAsSuccess(data: result);
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
+                await _errorManagement.SaveError(ex.ToString(), session.Id, "GetAllSector", PlatformType.Web);
                 _res = Result.ReturnAsFail(message: "Sektör bilgisi yüklenirken hata meydana geldi");
             }
             return _res;
@@ -462,17 +483,17 @@ namespace SCA.Services
 
         public async Task<List<SectorDto>> GetAllSectorForUI()
         {
-            List<SectorDto> listData = new List<SectorDto>();
+            List<SectorDto> _res = new List<SectorDto>();
             try
             {
                 string query = "select * from Sector";
-                listData = _db.Query<SectorDto>(query).ToList();
+                _res = await _db.QueryAsync<SectorDto>(query) as List<SectorDto>;
             }
             catch (Exception ex)
             {
                 await _errorManagement.SaveError(ex.ToString());
             }
-            return listData;
+            return _res;
         }
 
         public async Task<ServiceResult> CreateSector(SectorDto dto, UserSession session)
@@ -508,7 +529,7 @@ namespace SCA.Services
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
+                await _errorManagement.SaveError(ex.ToString(), session.Id, "CreateSector", PlatformType.Web);
                 _res = Result.ReturnAsFail(message: "Sektör bilgisi kayıt işlemi sırasında hata meydana geldi.");
             }
             return _res;

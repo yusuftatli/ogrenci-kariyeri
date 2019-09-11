@@ -61,7 +61,7 @@ function makeDragFile(e){
 }
 function makeDragDir(e){
   var f = new Directory($(e.target).attr('data-path')?$(e.target).attr('data-path'):$(e.target).closest('li').attr('data-path'));
-  return '<div class="pnlDragDir" data-path="'+f.fullPath+'"><img src="images/folder.png" align="absmiddle">&nbsp;'+f.name+'</div>';
+  return '<div class="pnlDragDir" data-path="'+f.fullPath+'"><img src="~/images/folder.png" align="absmiddle">&nbsp;'+f.name+'</div>';
 }
 function moveDir(e, ui, obj){
   var dir = Directory.Parse(ui.draggable.attr('data-path'));
