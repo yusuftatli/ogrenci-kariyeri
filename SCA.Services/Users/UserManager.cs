@@ -56,11 +56,19 @@ namespace SCA.Services
             ServiceResult _res = new ServiceResult();
             try
             {
+                List<ContentDashboardDto> data = new List<ContentDashboardDto>();
+                ContentDashboardDto d = new ContentDashboardDto()
+                {
+                    Description = "Toplam Kullanıcı",
+                    Count = 0
+                };
+
+                data.Add(d);
                 string query = "SELECT r.Description ,count(u.Id) as Count FROM Users u inner join RoleType r on u.RoleTypeId=r.Id where r.Id <> 1 GROUP BY RoleTypeId";
 
                 var result = await _db.QueryAsync<ContentDashboardDto>(query);
-
-                _res = Result.ReturnAsSuccess(data: result);
+                data.AddRange(result);
+                _res = Result.ReturnAsSuccess(data: data);
             }
             catch (Exception ex)
             {
