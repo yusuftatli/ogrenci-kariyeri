@@ -18,7 +18,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
     $scope.visibleList = [{ id: 1, description: 'Herkese Açık' }, { id: 1, description: 'Parola Korumalı' }, { id: 1, description: 'Özel' }];
     $scope.confirmType = [{ id: 0, description: '-----' }, { id: 1, description: 'Taslak' }, { id: 2, description: 'Yayın Aşamasında' }, { id: 3, description: 'Yayında Değil' }, { id: 4, description: 'Yayında' }];
     $scope.events = [{ id: 0, description: '-----' }, { id: 1, description: 'Mentor' }, { id: 2, description: 'Kariyer Sohbetleri' }];
-    $scope.platformType = [{ id: 0, description: '-----' }, { id: 1, description: 'Mobil' }, { id: 2, description: 'Web' }, { id: 2, description: 'Web/Mobil' }];
+    $scope.platformType = [{ id: 0, description: '-----' }, { id: 1, description: 'Mobil' }, { id: 2, description: 'Web' }, { id: 3, description: 'Web/Mobil' }];
 
 
     var trMap = {
@@ -65,9 +65,12 @@ app.controller("assayController", function ($scope, $http, $filter) {
         $("#AssayCreate").hide();
         $("#home").show();
         getContentShortList();
+       
     };
 
     $scope.onClickContent = function () {
+        $("#AssayCreate").show();
+        $("#home").hide();
         getMainCategories();
         getTags();
     };
@@ -99,6 +102,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
                         // } else {
                         $scope.showSaveLoading = true;
                         postAssay();
+                       
                         // }
                     } else {
                         shortMessage("İçerik Girilmek Zorundadır", "e");
@@ -123,7 +127,6 @@ app.controller("assayController", function ($scope, $http, $filter) {
         $http(MainCategoriesReq()).then(function (res) {
             $scope.MainCategories = res.data.data;
             $scope.options = $scope.NestedCategory(0);
-            console.log($scope.options);
         });
     }
 
@@ -240,8 +243,10 @@ app.controller("assayController", function ($scope, $http, $filter) {
     function postAssay() {
         $http(PostAssayReq()).then(function (res) {
             if (res.data.resultCode === 200) {
-                shortMessage("Kayıt İşlemi Başarılı", "s");
+                shortMessage(res.message, "s");
                 $scope.showSaveLoading = false;
+            } else {
+                shortMessage(res.errorMessage, "e");
             }
         });
     }

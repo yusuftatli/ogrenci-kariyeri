@@ -43,7 +43,7 @@ namespace SCA.Services
             _contentRepo = unitOfWork.GetRepository<Content>();
         }
 
-       
+
 
         /// <summary>
         /// makale kısa açıklamalarını listeler
@@ -119,9 +119,9 @@ namespace SCA.Services
             ContentDetailForDetailPageDTO _res = new ContentDetailForDetailPageDTO();
             try
             {
-                _res = await _db.QueryFirstAsync<ContentDetailForDetailPageDTO>("Content_ListBySeoUrl", new { type = 1, SeoUrl = seoUrl, Ip = ip, UserId = userId, ContentId = 0, count = 10 }, commandType: CommandType.StoredProcedure) as ContentDetailForDetailPageDTO;
-                _res.MostPopularItems = _db.Query<ContentForHomePageDTO>("Content_ListBySeoUrl", new { type = 1, SeoUrl = seoUrl, Ip = ip, UserId = userId, ContentId = 0, count = 10 }, commandType: CommandType.StoredProcedure).ToList();
-                _res.CommentList = _db.Query<CommentForUIDto>("Content_ListBySeoUrl", new { type = 1, SeoUrl = seoUrl, Ip = ip, UserId = userId, ContentId = _res.Id, count = 10 }, commandType: CommandType.StoredProcedure).ToList();
+                _res = await _db.QueryFirstAsync<ContentDetailForDetailPageDTO>("Content_ListBySeoUrl", new { type = 1, SeoUrl = seoUrl, Ip = ip, UserId = (userId == null) ? 0 : userId, ContentId = 0, count = 10 }, commandType: CommandType.StoredProcedure) as ContentDetailForDetailPageDTO;
+                _res.MostPopularItems = _db.Query<ContentForHomePageDTO>("Content_ListBySeoUrl", new { type = 2, SeoUrl = seoUrl, Ip = ip, UserId = userId, ContentId = _res.Id, count = 10 }, commandType: CommandType.StoredProcedure).ToList();
+                _res.CommentList = _db.Query<CommentForUIDto>("Content_ListBySeoUrl", new { type = 3, SeoUrl = seoUrl, Ip = ip, UserId = userId, ContentId = _res.Id, count = 10 }, commandType: CommandType.StoredProcedure).ToList();
             }
             catch (Exception ex)
             {
@@ -216,6 +216,7 @@ namespace SCA.Services
         public async Task<ServiceResult> ContentCreate(ContentDto dto, UserSession session)
         {
             ServiceResult _res = new ServiceResult();
+            long _contentId = 0;
             if (dto == null)
             {
                 _res = Result.ReturnAsFail(AlertResource.NoChanges, null);
@@ -239,7 +240,7 @@ namespace SCA.Services
                     string query = "";
                     DynamicParameters filter = new DynamicParameters();
                     GetContentQuery(CrudType.Insert, dto, session, ref query, ref filter);
-                    var contenId = _db.Execute(query, filter);
+                    _contentId = _db.Query<long>(query, filter).FirstOrDefault();
 
                     resultMessage = (dto.IsSendConfirm) ? "Makale Yönetici Tarafına Onaya Gönderildi." : "Makale Taslak Olarak Kayıt Edildi.";
                 }
@@ -253,9 +254,24 @@ namespace SCA.Services
                     resultMessage = (dto.IsSendConfirm) ? "Makale Yönetici Tarafına Onaya Gönderildi." : "Makale Taslak Olarak Güncellendi.";
                 }
 
-                await _tagManager.CreateTag(dto.Tags, res.Id, ReadType.Content, session);
-                await _categoryManager.CreateCategoryRelation(dto.Category, res.Id, ReadType.Content, session);
-                _res = Result.ReturnAsSuccess(message: resultMessage);
+                if (_contentId > 0)
+                {
+                    _res = Result.ReturnAsSuccess(message: resultMessage);
+                    ServiceResult _resTag = await _tagManager.CreateTag(dto.Tags, _contentId, ReadType.Content, session);
+                    if (_resTag.ResultCode != HttpStatusCode.OK)
+                    {
+                        _res = Result.ReturnAsFail("Makale kayıt edildi fakat etiket bilgileri kayıt edilirken hata meydana geldi, lütfen tekrar deneyiniz.");
+                    }
+                    ServiceResult _resCategory = await _categoryManager.CreateCategoryRelation(dto.Category, _contentId, ReadType.Content, session);
+                    if (_resCategory.ResultCode != HttpStatusCode.OK)
+                    {
+                        _res = Result.ReturnAsFail("Makale kayıt edildi fakat categori bilgileri kayıt edilirken hata meydana geldi, lütfen daha sonra tekrar deneyiniz.");
+                    }
+                }
+                else
+                {
+                    _res = Result.ReturnAsFail(message: resultMessage);
+                }
             }
             catch (Exception ex)
             {
@@ -309,8 +325,8 @@ namespace SCA.Services
 
         public void GetContentQuery(CrudType crudType, ContentDto dto, UserSession session, ref string query, ref DynamicParameters filter)
         {
-            query = @"INSERT INTO Content (UserId, PublishStateType, SycnId, ReadCount,ImagePath, SeoUrl, Header, Writer, ConfirmUserId, ConfirmUserName, Category, ContentDescription, PlatformType, IsHeadLine, IsManset, IsMainMenu, IsConstantMainMenu, EventId, InternId, VisibleId, CreatedUserId, CreatedDate)
-                           VALUES (@UserId, @PublishStateType, @SycnId, @ReadCount, @ImagePath, @SeoUrl, @Header, @Writer, @ConfirmUserId, @ConfirmUserName, @Category, @ContentDescription, @PlatformType, @IsHeadLine, @IsManset, @IsMainMenu, @IsConstantMainMenu, @EventId, @InternId, @VisibleId, @CreatedUserId, @CreatedDate);";
+            query = @"INSERT INTO Content (UserId, PublishDate, PublishStateType, SycnId, ReadCount,ImagePath, SeoUrl, Header, Writer, ConfirmUserId, ConfirmUserName, Category, ContentDescription, PlatformType, IsHeadLine, IsManset, IsMainMenu, IsConstantMainMenu, EventId, InternId, VisibleId, CreatedUserId, CreatedDate)
+                           VALUES (@UserId, @PublishDate, @PublishStateType, @SycnId, @ReadCount, @ImagePath, @SeoUrl, @Header, @Writer, @ConfirmUserId, @ConfirmUserName, @Category, @ContentDescription, @PlatformType, @IsHeadLine, @IsManset, @IsMainMenu, @IsConstantMainMenu, @EventId, @InternId, @VisibleId, @CreatedUserId, @CreatedDate);";
 
             if (crudType == CrudType.Insert)
             {
@@ -320,6 +336,7 @@ namespace SCA.Services
             var _filter = new DynamicParameters();
 
             _filter.Add("UserId", dto.UserId);
+            _filter.Add("PublishDate", dto.PublishDate);
             _filter.Add("PublishStateType", dto.PublishStateType);
             _filter.Add("SycnId", dto.SycnId);
             _filter.Add("ReadCount", dto.ReadCount);
@@ -343,14 +360,12 @@ namespace SCA.Services
             {
                 _filter.Add("CreatedUserId", session.Id);
                 _filter.Add("CreatedDate", DateTime.Now);
-                _filter.Add("IsDeleted", false);
             }
 
             if (crudType == CrudType.Update)
             {
                 _filter.Add("UpdatedUserId", session.Id);
                 _filter.Add("UpdatedDate", DateTime.Now);
-                _filter.Add("IsDeleted", false);
             }
 
             if (crudType == CrudType.Delete)

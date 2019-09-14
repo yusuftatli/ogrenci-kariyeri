@@ -178,7 +178,7 @@ namespace SCA.Services
             if (crudType == CrudType.Insert)
             {
                 query = $"Insert Into CategoryRelation  (CategoryId,TagContentId,ReadType) Values" +
-                    $"({dto.CategoryId},{dto.TagContentId},{dto.ReadType},{session.Id},{DateTime.Now})";
+                    $"({dto.CategoryId},{dto.TagContentId},'{dto.ReadType}')";
             }
 
             if (crudType == CrudType.Update)
@@ -188,21 +188,31 @@ namespace SCA.Services
             return query;
         }
 
-        public async Task<bool> CreateCategoryRelation(string data, long Id, ReadType readType, UserSession session)
+        public async Task<ServiceResult> CreateCategoryRelation(string data, long Id, ReadType readType, UserSession session)
         {
-            string[] data_ = data.Replace("[", "").Replace("]", "").Replace("\"", "").Replace("\"", "").Split(',');
-            foreach (var item in data_)
+            ServiceResult _res = new ServiceResult();
+            try
             {
-                var relationData = new CategoryRelationDto()
+                string[] data_ = data.Replace("[", "").Replace("]", "").Replace("\"", "").Replace("\"", "").Split(',');
+                foreach (var item in data_)
                 {
-                    CategoryId = Convert.ToInt64(item),
-                    TagContentId = Id,
-                    ReadType = readType
-                };
-                string query = GetCategoryRelationQuery(CrudType.Insert, relationData, session);
-                var res = _db.Execute(query);
+                    var relationData = new CategoryRelationDto()
+                    {
+                        CategoryId = Convert.ToInt64(item),
+                        TagContentId = Id,
+                        ReadType = readType
+                    };
+                    string query = GetCategoryRelationQuery(CrudType.Insert, relationData, session);
+                    var res = _db.Execute(query);
+                }
+                _res = Result.ReturnAsSuccess();
             }
-            return true;
+            catch (Exception ex)
+            {
+                await _errorManagent.SaveError(ex.ToString(), session.Id, "Kategori relation insert; " + data, PlatformType.Web);
+                _res = Result.ReturnAsFail();
+            }
+            return _res;
         }
     }
 }

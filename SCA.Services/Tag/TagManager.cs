@@ -41,15 +41,10 @@ namespace SCA.Services
         public async Task<ServiceResult> GetTags()
         {
             ServiceResult _res = new ServiceResult();
-            List<TagDto> listData = new List<TagDto>();
             try
             {
-                Task t = new Task(() =>
-                            {
-                                listData = _db.Query<TagDto>("select * from Tags").ToList();
-                                _res = Result.ReturnAsSuccess(data: listData);
-                            });
-                t.Start();
+                var lisData = await _db.QueryAsync<TagDto>("select * from Tags") as List<TagDto>;
+                _res = Result.ReturnAsSuccess(data: lisData);
             }
             catch (Exception ex)
             {
@@ -78,13 +73,13 @@ namespace SCA.Services
             string query = "";
             if (crudType == CrudType.Insert)
             {
-                query = $"Insert Into Tags (Description, Hit, CreatedUserId,CreatedDate,DeletedDate) VALUES " +
-                   $"( {dto.Description}, {dto.Hit}, {session.Id}, {DateTime.Now},  {false}); SELECT LAST_INSERT_ID();";
+                query = $"Insert Into Tags (Description, Hit, CreatedUserId,CreatedDate) VALUES " +
+                   $"( '{dto.Description}', {dto.Hit}, {session.Id}, '{DateTime.Now}'); SELECT LAST_INSERT_ID();";
             }
 
             if (crudType == CrudType.Update)
             {
-                query = $"Update Tags set Description={dto.Description}, Hit={dto.Hit},UpdatedUserId={session.Id},UpdatedDate={DateTime.Now} where Id={dto.Id}";
+                query = $"Update Tags set Description='{dto.Description}', Hit={dto.Hit},UpdatedUserId={session.Id},UpdatedDate='{DateTime.Now}' where Id={dto.Id}";
             }
             return query;
         }
@@ -95,13 +90,13 @@ namespace SCA.Services
             if (crudType == CrudType.Insert)
             {
                 query = $" Insert Into TagRelation (TagId,TagContentId,ReadType,CreatedUserId,CreatedDate) VALUES" +
-                    $" ({dto.TagId},{dto.TagContentId},{dto.ReadType},{session.Id},{DateTime.Now}) ; SELECT LAST_INSERT_ID();";
+                    $" ({dto.TagId},{dto.TagContentId},'{dto.ReadType}',{session.Id},'{DateTime.Now}') ; SELECT LAST_INSERT_ID();";
             }
 
             if (crudType == CrudType.Update)
             {
 
-                query = $"Update TagRelation SET TagId={dto.TagId},TagContentId={dto.TagContentId},ReadType={dto.ReadType},UpdatedUserId={session.Id},UpdatedDate={DateTime.Now} where Id={dto.Id}";
+                query = $"Update TagRelation SET TagId={dto.TagId},TagContentId={dto.TagContentId},ReadType= '{dto.ReadType}',UpdatedUserId={session.Id},UpdatedDate={DateTime.Now} where Id={dto.Id}";
             }
             return query;
         }
@@ -110,45 +105,54 @@ namespace SCA.Services
         {
             ServiceResult _res = new ServiceResult();
             List<TagRelationDto> tagRelationList = new List<TagRelationDto>();
-            string query = "";
-            string[] _tags = tags.Replace("[", "").Replace("]", "").Replace("\"", "").Replace("\"", "").Split(',');
-
-            foreach (var item in _tags)
+            try
             {
-                TagRelation relation = new TagRelation();
-                if (IsInteger(item))
-                {
-                    var relationData = new TagRelationDto()
-                    {
-                        TagId = Convert.ToInt64(item),
-                        TagContentId = tagContentId,
-                        ReadType = ReadType
-                    };
-                    query = GetTagRelationQuery(CrudType.Insert, relationData, session);
-                    var relationId = _db.Execute(query);
-                }
-                else
-                {
-                    var data = new Tags()
-                    {
-                        Id = 0,
-                        Description = item,
-                        Hit = 1
-                    };
+                string query = "";
+                string[] _tags = tags.Replace("[", "").Replace("]", "").Replace("\"", "").Replace("\"", "").Split(',');
 
-                    query = GetTagQuery(CrudType.Insert, data, session);
-                    var tagId = _db.Execute(query);
-
-                    var relationData = new TagRelationDto()
+                foreach (var item in _tags)
+                {
+                    TagRelation relation = new TagRelation();
+                    if (IsInteger(item))
                     {
-                        TagId = tagId,
-                        TagContentId = tagContentId,
-                        ReadType = ReadType
-                    };
-                    query = GetTagRelationQuery(CrudType.Insert, relationData, session);
-                    var relationId = _db.Execute(query); ;
+                        var relationData = new TagRelationDto()
+                        {
+                            TagId = Convert.ToInt64(item),
+                            TagContentId = tagContentId,
+                            ReadType = ReadType
+                        };
+                        query = GetTagRelationQuery(CrudType.Insert, relationData, session);
+                        var relationId = _db.Query<long>(query).FirstOrDefault();
+                    }
+                    else
+                    {
+                        var data = new Tags()
+                        {
+                            Description = item,
+                            Hit = 1
+                        };
+
+                        query = GetTagQuery(CrudType.Insert, data, session);
+                        var tagId = _db.Query<long>(query).FirstOrDefault();
+
+                        var relationData = new TagRelationDto()
+                        {
+                            TagId = tagId,
+                            TagContentId = tagContentId,
+                            ReadType = ReadType
+                        };
+                        query = GetTagRelationQuery(CrudType.Insert, relationData, session);
+                        var relationId = _db.Execute(query); ;
+                    }
                 }
+                _res = Result.ReturnAsSuccess();
             }
+            catch (Exception ex)
+            {
+                _res = Result.ReturnAsFail(message: "Makale bağlı taglar kayıt edilirken hata meydana geldi");
+                await _errorManager.SaveError(ex.ToString(), session.Id, "TagCreate;" + tags, PlatformType.Web);
+            }
+
             return _res;
         }
 
