@@ -44,7 +44,20 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> MainCategoryList(long? id)
         {
-            return Result.ReturnAsSuccess(null, null, _mapper.Map<List<MainCategoryDto>>(_categoryRepo.GetAll(x => x.IsDeleted.Equals(false) && x.ParentId.Equals(id)).ToList()));
+            ServiceResult _res = new ServiceResult();
+            try
+            {
+                string query = "select * from Category where Id=@_Id";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("_Id", id);
+                var lisData = await _db.QueryAsync<MainCategoryDto>(query, filter) as List<MainCategoryDto>;
+                _res = Result.ReturnAsSuccess(data: lisData);
+            }
+            catch (Exception ex)
+            {
+                await _errorManagent.SaveError(ex.ToString());
+            }
+            return _res;
         }
         /// <summary>
         /// Kategorileri listeler, parenttan bağımsız tüm kategoriler
@@ -55,7 +68,7 @@ namespace SCA.Services
             ServiceResult _res = new ServiceResult();
             try
             {
-                string query = "select * from Category where IsActive=true";
+                string query = "select * from Category where IsActive = true";
                 var lisData = await _db.QueryAsync<MainCategoryDto>(query) as List<MainCategoryDto>;
                 _res = Result.ReturnAsSuccess(data: lisData);
             }

@@ -53,5 +53,11 @@ namespace StudentCareerApp.Areas.Api.Controller
         }
 
         #endregion
+
+        [HttpGet("role-GetScreens")]
+        public async Task<ServiceResult> GetScreens()
+        {
+            return await _roleManager.GetScreens();
+        }
     }
 }

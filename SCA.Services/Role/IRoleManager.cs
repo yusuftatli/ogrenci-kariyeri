@@ -14,6 +14,7 @@ namespace SCA.Services
         Task<ServiceResult> GetRoleTypes();
         Task<ServiceResult> CreateRoleType(RoleTypeDto dto);
         Task<List<RoleTypeDto>> GetRoles();
+        Task<ServiceResult> GetScreens();
 
         #endregion
 

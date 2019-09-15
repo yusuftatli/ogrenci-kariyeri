@@ -137,7 +137,7 @@ app.controller('categoryController', function ($scope, $http, $filter) {
         };
 
         $.ajax({
-            url: _link + "/Category/MainCategoryList",
+            url: _link + "/Category/MainCategoryListWithParents",
             type: 'GET',
             contentType: 'application/json',
             headers: Header,
