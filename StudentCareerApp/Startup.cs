@@ -129,7 +129,6 @@ namespace StudentCareerApp
             services.AddTransient<IPictureManager, PictureManager>();
             services.AddTransient<ITagManager, TagManager>();
             services.AddTransient<IRoleManager, RoleManager>();
-            services.AddTransient<IMenuManager, MenuManager>();
             services.AddTransient<IAnalysisManager, AnalysisManager>();
             services.AddTransient<IB2CManagerUI, B2CManagerUI>();
             services.AddTransient<IUserValidation, UserValidation>();
@@ -234,12 +233,6 @@ namespace StudentCareerApp
                 cfg.CreateMap<Comments, CommentsDto>().ReverseMap();
                 #endregion
 
-                #region Screen
-
-                cfg.CreateMap<ScreenMaster, ScreenMasterDto>().ReverseMap();
-                cfg.CreateMap<ScreenDetail, ScreenDetailDto>().ReverseMap();
-
-                #endregion
 
                 #region SocialMedia
 
