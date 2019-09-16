@@ -6,7 +6,7 @@
             <div class="col-lg-12">
                 <div class="ts-grid-box">
                     <div class="author-box author-box-item">
-                        <img class="author-img" src="@Model.CompanyUserImage" alt="Öğrenci Kariyeri - Şirket Bilgileri - @Model.ShortName">
+                        <img class="author-img" src="@(!string.IsNullOrEmpty(Model.CompanyUserImage) ? Model.CompanyUserImage : "/images/avatar/man.png")" alt="Öğrenci Kariyeri - Şirket Bilgileri - @Model.ShortName">
                         <div class="author-info">
                             <div class="author-name">
                                 <h4>@Model.ShortName</h4>

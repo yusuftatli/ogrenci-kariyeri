@@ -295,7 +295,8 @@ function openCustomRoxy2(id) {
     $(id).dialog({ modal: true, width: 875, height: 600 });
 }
 function closeCustomRoxy2(id) {
-    $(id).dialog('close');
+    if($(id).length > 0)
+        $(id).dialog('close');
 }
 
 function getCookie(cname) {

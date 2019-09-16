@@ -162,10 +162,10 @@ namespace SCA.Services
 
                 foreach (var item in socialData)
                 {
-                  await  _socialmanager.CreateSocialMedia(item, session.Id);
+                    await _socialmanager.CreateSocialMedia(item, session.Id);
                 }
                 string flag = (dto.CompanyClupType == CompanyClupType.Club) ? "Şirket" : "Klüp";
-                _res = Result.ReturnAsSuccess(message: flag+" Başarıyla kaydedildi");
+                _res = Result.ReturnAsSuccess(message: flag + " Başarıyla kaydedildi");
             }
             catch (Exception ex)
             {
@@ -199,18 +199,50 @@ namespace SCA.Services
         {
             try
             {
-                using(var multi = await _db.QueryMultipleAsync("GetCompanyHeader", new { seoUrl = seoUrl}, commandType: CommandType.StoredProcedure))
+                using (var multi = await _db.QueryMultipleAsync("GetCompanyHeader", new { seoUrl = seoUrl }, commandType: CommandType.StoredProcedure))
                 {
                     var companyHeader = await multi.ReadFirstOrDefaultAsync<CompClubHeaderDto>();
                     companyHeader.SocialMedias = await multi.ReadAsync<SocialMediaDto>() as List<SocialMediaDto>;
                     return Result.ReturnAsSuccess(data: companyHeader);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await _errorManagement.SaveError(ex.ToString());
                 return Result.ReturnAsFail(message: "Hata");
             }
+        }
+
+        public async Task<ServiceResult> GetCompanyInformation(string seoUrl)
+        {
+            try
+            {
+                var res = await _db.QueryFirstOrDefaultAsync<CompanyClubInformationDto>("GetCompanyInformation", new { seoUrl }, commandType: CommandType.StoredProcedure);
+                return Result.ReturnAsSuccess(data: res);
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString());
+                return Result.ReturnAsFail(message: "Hata");
+            }
+        }
+
+        public async Task<ServiceResult> GetCompanyAnnouncements(string seoUrl)
+        {
+            var res = await _db.QueryAsync<AnouncementDto>("GetCompanyAnnouncements", new { seoUrl }, commandType: CommandType.StoredProcedure) as List<AnouncementDto>;
+            return Result.ReturnAsSuccess(data: res);
+        }
+
+        public async Task<ServiceResult> AddOrUpdateAnnouncement(AnouncementDto model)
+        {
+            var res = await _db.ExecuteScalarAsync<long>("AdDOrUpdateCompanyAnnouncement", model, commandType: CommandType.StoredProcedure);
+            return Result.ReturnAsSuccess(data: res);
+        }
+
+        public async Task<ServiceResult> GetCompanyYoutubePlayList(string seoUrl)
+        {
+            var res = await _db.QueryAsync<YoutubeVideo>("GetCompanyYoutubePlaylist", new { seoUrl }, commandType: CommandType.StoredProcedure) as List<YoutubeVideo>;
+            return Result.ReturnAsSuccess(data: res);
         }
     }
 }

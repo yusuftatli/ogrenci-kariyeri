@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 using SCA.Common;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
+using SCA.Entity.Model;
 using SCA.Services;
 using SCA.Services.Interface;
 
 namespace StudentCareerApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Route("[area]/[controller]")]
     public class CompanyClubController : Controller
     {
 
@@ -23,15 +23,33 @@ namespace StudentCareerApp.Areas.Admin.Controllers
             _companyClubManager = companyClubManager;
         }
 
-        [HttpGet("Company")]
         public IActionResult Company()
         {
             return View();
         }
 
-        public async Task<JsonResult> AddOrUpdateCompany(CompanyClubsDto model)
+        public PartialViewResult CompanyAnnouncements(string seoUrl)
+        {
+            ViewBag.SeoUrl = seoUrl;
+            return PartialView();
+        }
+
+        public async Task<JsonResult> AddOrUpdateCompany([FromBody]CompanyClubsDto model)
         {
             var res = await _companyClubManager.CreateCompanyClubs(model, HttpContext.GetSessionData<UserSession>("userInfo"));
+            return Json(res);
+        }
+
+        public async Task<JsonResult> GetCompanyAnnouncements(string seoUrl)
+        {
+            var res = await _companyClubManager.GetCompanyAnnouncements(seoUrl);
+            return Json(res);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> AddOrUpdateCompanyAnnouncement(AnouncementDto model)
+        {
+            var res = await _companyClubManager.AddOrUpdateAnnouncement(model);
             return Json(res);
         }
 

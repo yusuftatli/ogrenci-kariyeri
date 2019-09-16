@@ -6,6 +6,8 @@ namespace SCA.Entity.DTO
 {
     public class AnouncementDto
     {
+        public long Id { get; set; }
+
         public string ImagePath { get; set; }
 
         public string Url { get; set; }
@@ -13,7 +15,9 @@ namespace SCA.Entity.DTO
         public string Title { get; set; }
 
         public string Description { get; set; }
+
         public DateTime EndDate { get; set; }
+
         public DateTime CreatedDate { get; set; }
     }
 }

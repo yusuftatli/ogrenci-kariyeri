@@ -15,5 +15,13 @@ namespace SCA.Services
         Task<ServiceResult> CreateCompanyClubs(CompanyClubsDto dto, UserSession session);
 
         Task<ServiceResult> GetCompanyHeader(string seoUrl);
+
+        Task<ServiceResult> GetCompanyInformation(string seoUrl);
+
+        Task<ServiceResult> GetCompanyAnnouncements(string seoUrl);
+
+        Task<ServiceResult> GetCompanyYoutubePlayList(string seoUrl);
+
+        Task<ServiceResult> AddOrUpdateAnnouncement(AnouncementDto model);
     }
 }
