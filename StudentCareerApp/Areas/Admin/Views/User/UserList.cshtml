@@ -3,19 +3,19 @@
     ViewBag.Title = "Kullanıcı Liste";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
-<head>
-    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <head>
+        <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="//cdn.ckeditor.com/4.7.1/standard/ckeditor.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="//cdn.ckeditor.com/4.7.1/standard/ckeditor.js"></script>
 
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 
-    <script src="~/ScriptController/userListController.js"></script>
-</head>
+        <script src="~/ScriptController/userListController.js"></script>
+    </head>
 
 <div class="page-wrapper" ng-app="MyApp" ng-controller="userListController">
     <!-- ============================================================== -->
@@ -54,7 +54,7 @@
                             <div class="col-md-6 col-lg-3 col-xlg-3">
                                 <div class="card">
                                     <div class="box bg-info text-center">
-                                        <h1 class="font-light text-white"> <span ng-hide="DashboardData.length>0"><i class="fa fa-spinner fa-spin fa-5x"></i></span><span ng-show="DashboardData.length>0" ng-bind="DashboardData[0].count+DashboardData[1].count+DashboardData[2].count+DashboardData[3].count"></span></h1>
+                                        <h1 class="font-light text-white"> <span ng-hide="DashboardData.length>0"><i class="fa fa-spinner fa-spin fa-spin"></i></span><span ng-show="DashboardData.length>0" ng-bind="DashboardData[0].count+DashboardData[1].count+DashboardData[2].count+DashboardData[3].count"></span></h1>
                                         <h6 class="text-white"><span ng-bind="DashboardData[0].description"></span></h6>
                                     </div>
                                 </div>

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Dapper;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using SCA.Common.Resource;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
@@ -148,8 +149,8 @@ namespace SCA.Services
                     _l.Details = _d;
                     ListData.Add(_l);
                 }
-                _res = Result.ReturnAsSuccess(data: ListData);
-
+                string value = JsonConvert.SerializeObject(ListData);
+                _res = Result.ReturnAsSuccess(data: value);
             }
             catch (Exception ex)
             {
