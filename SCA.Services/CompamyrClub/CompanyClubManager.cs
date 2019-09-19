@@ -226,7 +226,7 @@ namespace SCA.Services
                 return Result.ReturnAsFail(message: "Hata");
             }
         }
-
+        #region Announcement
         public async Task<ServiceResult> GetCompanyAnnouncements(string seoUrl)
         {
             var res = await _db.QueryAsync<AnouncementDto>("GetCompanyAnnouncements", new { seoUrl }, commandType: CommandType.StoredProcedure) as List<AnouncementDto>;
@@ -235,14 +235,36 @@ namespace SCA.Services
 
         public async Task<ServiceResult> AddOrUpdateAnnouncement(AnouncementDto model)
         {
-            var res = await _db.ExecuteScalarAsync<long>("AdDOrUpdateCompanyAnnouncement", model, commandType: CommandType.StoredProcedure);
+            var res = await _db.ExecuteScalarAsync<long>("AddOrUpdateCompanyAnnouncement", model, commandType: CommandType.StoredProcedure);
+            return Result.ReturnAsSuccess(data: res);
+        }
+        public async Task<ServiceResult> DeleteCompanyAnnouncement(long id)
+        {
+            await _db.ExecuteAsync("DeleteCompanyAnnouncement", new { AnnouncementId = id }, commandType: CommandType.StoredProcedure);
+            return Result.ReturnAsSuccess();
+        }
+        #endregion
+
+        #region Youtube Playlist
+        public async Task<ServiceResult> GetCompanyYoutubePlayList(string seoUrl)
+        {
+            var res = await _db.QueryAsync<YoutubeVideo>("GetCompanyYoutubePlaylist", new { seoUrl = seoUrl }, commandType: CommandType.StoredProcedure) as List<YoutubeVideo>;
             return Result.ReturnAsSuccess(data: res);
         }
 
-        public async Task<ServiceResult> GetCompanyYoutubePlayList(string seoUrl)
+        public async Task<ServiceResult> AddOrUpdateYoutubePlaylist(YoutubeVideo model)
         {
-            var res = await _db.QueryAsync<YoutubeVideo>("GetCompanyYoutubePlaylist", new { seoUrl }, commandType: CommandType.StoredProcedure) as List<YoutubeVideo>;
+            var res = await _db.ExecuteScalarAsync<long>("AddOrUpdateYoutubePlaylist", model, commandType: CommandType.StoredProcedure);
             return Result.ReturnAsSuccess(data: res);
         }
+
+        public async Task<ServiceResult> DeleteYoutubePlaylistItem(long id)
+        {
+            await _db.ExecuteAsync("DeleteYoutubePlaylistItem", new { ItemId = id }, commandType: CommandType.StoredProcedure);
+            return Result.ReturnAsSuccess();
+        }
+        #endregion
+
+
     }
 }

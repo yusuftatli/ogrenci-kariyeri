@@ -37,7 +37,7 @@ function FileSelected(file) {
   $(window.parent.document).find('#' + fieldId).attr('value', file.fullPath);
   $(window.parent.document).find('#img_' + fieldId).attr('src', file.fullPath);
   fieldId == 'roxyFieldAnnouncement'
-    ? window.parent.closeCustomRoxy2('#roxyCustomPanel3')
+    ? window.parent.closeCustomRoxy2('.'+fieldId)
     : window.parent.closeCustomRoxy2('#roxyCustomPanel2');
 }
 function GetSelectedValue() {

@@ -119,7 +119,7 @@ namespace SCA.Services
             ContentDetailForDetailPageDTO _res = new ContentDetailForDetailPageDTO();
             try
             {
-                _res = await _db.QueryFirstAsync<ContentDetailForDetailPageDTO>("Content_ListBySeoUrl", new { type = 1, _SeoUrl = seoUrl, _Ip = ip, _UserId = (userId == null) ? 0 : userId, ContentId = 0, count = 10 }, commandType: CommandType.StoredProcedure) as ContentDetailForDetailPageDTO;
+                _res = await _db.QueryFirstAsync<ContentDetailForDetailPageDTO>("Content_ListBySeoUrl", new { type = 1, _SeoUrl = seoUrl, _Ip = ip, _UserId = (userId == null) ? 0 : userId, ContentId = 0, count = 10 }, commandType: CommandType.StoredProcedure);
                 _res.MostPopularItems = _db.Query<ContentForHomePageDTO>("Content_ListBySeoUrl", new { type = 2, _SeoUrl = seoUrl, _Ip = ip, _UserId = userId, ContentId = _res.Id, count = 10 }, commandType: CommandType.StoredProcedure).ToList();
                 _res.CommentList = _db.Query<CommentForUIDto>("Content_ListBySeoUrl", new { type = 3, _SeoUrl = seoUrl, _Ip = ip, _UserId = userId, ContentId = _res.Id, count = 10 }, commandType: CommandType.StoredProcedure).ToList();
             }

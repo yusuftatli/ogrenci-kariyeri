@@ -1,60 +1,56 @@
-﻿var vCompanyAnnouncement = new Vue({
-    el: '#vue-company-announcement',
+﻿var vYoutube = new Vue({
+    el: '#vue-company-youtube',
     data: {
         model: {},
-        announcements: [],
-        seoUrl: $("#announcement-info-area").attr('data-seo-url'),
+        playlist: [],
+        seoUrl: $("#youtube-info-area").attr('data-seo-url'),
         urls: {
-            getCompanyAnnouncement: '/admin/companyclub/getcompanyannouncements/',
-            addOrUpdateCompanyAnnouncement: '/admin/companyclub/addorupdatecompanyannouncement/',
-            deleteCompanyAnnouncement: '/admin/companyclub/DeleteCompanyAnnouncement/'
+            getYoutubePlaylist: '/admin/companyclub/GetCompanyYoutubePlayList/',
+            addOrUpdateCompanyYoutubePlaylist: '/admin/companyclub/AddOrUpdateCompanyYoutubePlaylist/',
+            deleteCompanyYoutubePlaylistItem: '/admin/companyclub/DeleteCompanyYoutubePlaylistItem/'
         }
     },
     mounted: function () {
-        this.getCompanyAnnouncement();
+        this.getYoutubePlaylist();
     },
     methods: {
-        getCompanyAnnouncement: function () {
+        getYoutubePlaylist: function () {
             var ths = this;
             $.ajax({
-                url: this.urls.getCompanyAnnouncement,
+                url: this.urls.getYoutubePlaylist,
                 data: { seoUrl: this.seoUrl },
                 success: function (res) {
                     if (res.resultCode == 200)
-                        ths.announcements = res.data;
+                        ths.playlist = res.data;
                 }
             })
         },
-        setAnnouncementUpdateModel: function (id) {
-            var announcement = this.announcements.find(x => x.id == id);
-            this.model = Object.assign({}, announcement, {
-                endDate: moment(announcement.endDate).format('YYYY-MM-DD'),
-                createdDate: moment(announcement.createdDate).format('YYYY-MM-DD')
-            });
-            $("#roxyFieldAnnouncement").val(announcement.imagePath);
+        setYoutubeUpdateModel: function (id) {
+            this.model = this.playlist.find(x => x.pId == id);
+            $("#roxyFieldAnnouncement").val(this.model.imagePath);
         },
-        addOrUpdateAnnouncement: function () {
-            this.model.SeoUrl = this.seoUrl;
-            this.model.ImagePath = $("#roxyFieldAnnouncement").val();
+        addOrUpdateCompanyYoutubePlaylist: function () {
+            this.model.seoUrl = this.seoUrl;
+            this.model.imagePath = $("#roxyFieldAnnouncement").val();
             var ths = this;
             $.ajax({
-                url: this.urls.addOrUpdateCompanyAnnouncement,
+                url: this.urls.addOrUpdateCompanyYoutubePlaylist,
                 data: { model: this.model },
                 type: 'post',
                 success: function (res) {
                     if (res.resultCode == 200) {
                         ths.model = {};
                         $("#roxyFieldAnnouncement").val("");
-                        ths.getCompanyAnnouncement();
+                        ths.getYoutubePlaylist();
                     }
                 }
             })
         },
-        deleteAnnouncement: function (id) {
+        deleteYoutubePlaylistItem: function (id) {
             var ths = this;
             Swal.fire({
                 title: 'Emin misiniz?',
-                text: ths.announcements.find(x=>x.id == id).title + " başlıklı duyurunuz silinecektir.",
+                text: ths.playlist.find(x=>x.pId == id).title + " başlıklı duyurunuz silinecektir.",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -64,13 +60,13 @@
             }).then((result) => {
                 if (result.value) {
                     $.ajax({
-                        url: this.urls.deleteCompanyAnnouncement,
+                        url: this.urls.deleteCompanyYoutubePlaylistItem,
                         type: 'post',
                         data: {id: id},
                         success: function(res){
                             if(res.resultCode == 200){
-                                ths.getCompanyAnnouncement();
-                                ths.model.announcementId = 0;
+                                ths.getYoutubePlaylist();
+                                ths.model.pId = 0;
                                 toastr["success"]("Silme işlemi başarılı!");
                             }
                         }

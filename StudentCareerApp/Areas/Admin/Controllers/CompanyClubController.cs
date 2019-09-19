@@ -28,16 +28,21 @@ namespace StudentCareerApp.Areas.Admin.Controllers
             return View();
         }
 
-        public PartialViewResult CompanyAnnouncements(string seoUrl)
-        {
-            ViewBag.SeoUrl = seoUrl;
-            return PartialView();
-        }
+      
+
+       
 
         public async Task<JsonResult> AddOrUpdateCompany([FromBody]CompanyClubsDto model)
         {
             var res = await _companyClubManager.CreateCompanyClubs(model, HttpContext.GetSessionData<UserSession>("userInfo"));
             return Json(res);
+        }
+
+        #region Announcement
+        public PartialViewResult CompanyAnnouncements(string seoUrl)
+        {
+            ViewBag.SeoUrl = seoUrl;
+            return PartialView();
         }
 
         public async Task<JsonResult> GetCompanyAnnouncements(string seoUrl)
@@ -52,6 +57,41 @@ namespace StudentCareerApp.Areas.Admin.Controllers
             var res = await _companyClubManager.AddOrUpdateAnnouncement(model);
             return Json(res);
         }
+
+        [HttpPost]
+        public async Task<JsonResult> DeleteCompanyAnnouncement(long id)
+        {
+            var res = await _companyClubManager.DeleteCompanyAnnouncement(id);
+            return Json(res);
+        }
+        #endregion
+
+        #region Youtube Playlist
+        public PartialViewResult CompanyYoutubePlaylist(string seoUrl)
+        {
+            ViewBag.SeoUrl = seoUrl;
+            return PartialView();
+        }
+
+        public async Task<JsonResult> GetCompanyYoutubePlaylist(string seoUrl)
+        {
+            var res = await _companyClubManager.GetCompanyYoutubePlayList(seoUrl);
+            return Json(res);
+        }
+
+        public async Task<JsonResult> AddOrUpdateCompanyYoutubePlaylist(YoutubeVideo model)
+        {
+            var res = await _companyClubManager.AddOrUpdateYoutubePlaylist(model);
+            return Json(res);
+        }
+
+        public async Task<JsonResult> DeleteCompanyYoutubePlaylistItem(long id)
+        {
+            var res = await _companyClubManager.DeleteYoutubePlaylistItem(id);
+            return Json(res);
+        }
+        #endregion
+
 
         [HttpGet("Clubs")]
         public IActionResult Clubs()
