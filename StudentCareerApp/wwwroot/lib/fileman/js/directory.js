@@ -155,7 +155,9 @@ function Directory(fullPath, numDirs, numFiles){
   this.SetOpened = function(){
     var li = this.GetElement();
     if(li.find('li').length < 1)
-      li.children('div').children('.dirPlus').prop('src', 'images/blank.gif');
+        li.children('div').children('.dirPlus').prop('src', 'images/blank.gif');
+
+
     else if(this.IsExpanded())
       li.children('div').children('.dirPlus').prop('src', 'images/dir-minus.png');
     else
