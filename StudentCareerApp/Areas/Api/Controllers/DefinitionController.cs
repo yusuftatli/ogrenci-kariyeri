@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SCA.Common;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
 using SCA.Services;
@@ -27,19 +29,21 @@ namespace StudentCareerApp.Areas.Api.Controller
 
 
         #region Department
-        [HttpGet, Route("education-getdepartment")]
+        [Authorize]
+        [HttpGet("education-getdepartment")]
         public async Task<ServiceResult> GetDepartment()
         {
-            return await _definitionManager.GetDepartment(JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
+
+            return await _definitionManager.GetDepartment(await HttpContext.GetTokenAsync("access_token"));
         }
 
-        [HttpPost, Route("education-cretadepartment")]
+        [HttpPost("education-cretadepartment")]
         public async Task<ServiceResult> CreateDepartment([FromBody] DepartmentDto dto)
         {
-            return await _definitionManager.CreateDepartment(dto, JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
+            return await _definitionManager.CreateDepartment(dto, await HttpContext.GetTokenAsync("access_token"));
         }
 
-        [HttpPost, Route("education-Update-DepartmentIsActive")]
+        [HttpPost("education-Update-DepartmentIsActive")]
         public async Task<ServiceResult> UpdateDepartmentIsActive(long Id, bool IsActive)
         {
             return await _definitionManager.UpdateDepartmentIsActive(Id, IsActive);
@@ -47,19 +51,19 @@ namespace StudentCareerApp.Areas.Api.Controller
         #endregion
 
         #region Faculty
-        [HttpGet, Route("education-getfaculty")]
+        [HttpGet("education-getfaculty")]
         public async Task<ServiceResult> GetFaculty()
         {
-            return await _definitionManager.GetFaculty(JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
+            return await _definitionManager.GetFaculty(await HttpContext.GetTokenAsync("access_token"));
         }
 
-        [HttpPost, Route("education-createfaculty")]
+        [HttpPost("education-createfaculty")]
         public async Task<ServiceResult> CreateFaculty(FacultyDto dto)
         {
-            return await _definitionManager.CreateFaculty(dto, JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
+            return await _definitionManager.CreateFaculty(dto, await HttpContext.GetTokenAsync("access_token"));
         }
 
-        [HttpPost, Route("education-Update-FacultIsActive")]
+        [HttpPost("education-Update-FacultIsActive")]
         public async Task<ServiceResult> UpdateFacultIsActive(long Id, bool IsActive)
         {
             return await _definitionManager.UpdateFacultIsActive(Id, IsActive);
@@ -67,19 +71,19 @@ namespace StudentCareerApp.Areas.Api.Controller
         #endregion
 
         #region High Schooll
-        [HttpGet, Route("education-gethighschool")]
+        [HttpGet("education-gethighschool")]
         public async Task<ServiceResult> GetHighSchool()
         {
-            return await _definitionManager.GetHighSchool(JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
+            return await _definitionManager.GetHighSchool(await HttpContext.GetTokenAsync("access_token"));
         }
 
-        [HttpPost, Route("education-createhighschool")]
+        [HttpPost("education-createhighschool")]
         public async Task<ServiceResult> CreateHighSchool([FromBody]HighSchoolDto dto)
         {
-            return await _definitionManager.CreateHighSchool(dto, JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
+            return await _definitionManager.CreateHighSchool(dto, await HttpContext.GetTokenAsync("access_token"));
         }
 
-        [HttpPost, Route("education-Update-highSchoolIsActive")]
+        [HttpPost("education-Update-highSchoolIsActive")]
         public async Task<ServiceResult> UpdatehighSchoolIsActive(long Id, bool IsActive)
         {
             return await _definitionManager.UpdatehighSchoolIsActive(Id, IsActive);
@@ -87,19 +91,19 @@ namespace StudentCareerApp.Areas.Api.Controller
         #endregion
 
         #region Student Class
-        [HttpGet, Route("education-getstudentclass")]
+        [HttpGet("education-getstudentclass")]
         public async Task<ServiceResult> GetStudentClass()
         {
-            return await _definitionManager.GetStudentClass(JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
+            return await _definitionManager.GetStudentClass(await HttpContext.GetTokenAsync("access_token"));
         }
 
-        [HttpPost, Route("education-createstudentclass")]
+        [HttpPost("education-createstudentclass")]
         public async Task<ServiceResult> CreateStudentClass(StudentClassDto dto)
         {
-            return await _definitionManager.CreateStudentClass(dto, JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
+            return await _definitionManager.CreateStudentClass(dto, await HttpContext.GetTokenAsync("access_token"));
         }
 
-        [HttpPost, Route("education-Update-StudentClassIsActive")]
+        [HttpPost("education-Update-StudentClassIsActive")]
         public async Task<ServiceResult> UpdateStudentClassIsActive(long Id, bool IsActive)
         {
             return await _definitionManager.UpdateStudentClassIsActive(Id, IsActive);
@@ -107,19 +111,19 @@ namespace StudentCareerApp.Areas.Api.Controller
         #endregion
 
         #region University
-        [HttpGet, Route("education-getuniversity")]
+        [HttpGet("education-getuniversity")]
         public async Task<ServiceResult> GetUniversity()
         {
-            return await _definitionManager.GetUniversity(JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
+            return await _definitionManager.GetUniversity(await HttpContext.GetTokenAsync("access_token"));
         }
 
-        [HttpPost, Route("education-createuniversity")]
+        [HttpPost("education-createuniversity")]
         public async Task<ServiceResult> CreateUniversity(UniversityDto dto)
         {
-            return await _definitionManager.CreateUniversity(dto, JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
+            return await _definitionManager.CreateUniversity(dto, await HttpContext.GetTokenAsync("access_token"));
         }
 
-        [HttpPost, Route("education-Update-UniversityIsActive")]
+        [HttpPost("education-Update-UniversityIsActive")]
         public async Task<ServiceResult> UpdateUniversityIsActive(long Id, bool IsActive)
         {
             return await _definitionManager.UpdateUniversityIsActive(Id, IsActive);
@@ -127,16 +131,16 @@ namespace StudentCareerApp.Areas.Api.Controller
         #endregion
 
         #region Sector
-        [HttpGet, Route("getallsector")]
+        [HttpGet("getallsector")]
         public async Task<ServiceResult> GetAllSector()
         {
-            return await _definitionManager.GetAllSector(JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
+            return await _definitionManager.GetAllSector(await HttpContext.GetTokenAsync("access_token"));
         }
 
-        [HttpPost, Route("createsektor")]
+        [HttpPost("createsektor")]
         public async Task<ServiceResult> CreateSector([FromBody]SectorDto dto)
         {
-            return await _definitionManager.CreateSector(dto, JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
+            return await _definitionManager.CreateSector(dto, await HttpContext.GetTokenAsync("access_token"));
         }
         #endregion
 

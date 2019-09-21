@@ -43,6 +43,30 @@ namespace SCA.Services
             _contentRepo = unitOfWork.GetRepository<Content>();
         }
 
+        /// <summary>
+        /// makale kısa açıklamalarını listeler
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ServiceResult> ContentShortListByMobil(ContentSearchByMoilDto dto, string token)
+        {
+            ServiceResult _res = new ServiceResult();
+            long userId = JwtToken.GetUserId(token);
+            try
+            {
+                string query = "";
+
+                var listData = await _db.QueryAsync<ContentForHomePageDTO>("Content_ListAllByMobil", new { Type = dto.Type, StartDate = dto.StartDate, EndDate = dto.EndDate, searhCategoryIds = dto.searhCategoryIds, limit = dto.limit }, commandType: CommandType.StoredProcedure) as List<ContentForHomePageDTO>;
+
+                _res = Result.ReturnAsSuccess(data: listData);
+             
+            }
+            catch (Exception _ex)
+            {
+                 await _errorManagement.SaveError(_ex.ToString(), userId, "ContentShortListByMobil",PlatformType.Mobil);
+                _res = Result.ReturnAsFail(message: "Mobil Content bilgileri yüklenirken hata meydana geldi");
+            }
+            return _res;
+        }
 
 
         /// <summary>

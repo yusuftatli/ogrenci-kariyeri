@@ -42,7 +42,7 @@ namespace SCA.Services
             List<CitiesDto> dataList = new List<CitiesDto>();
             try
             {
-                string query = "select * from Cities";
+                string query = "select Id as CityId, CityName as CityName from Cities";
                 dataList = _db.Query<CitiesDto>(query).ToList();
                 _res = Result.ReturnAsSuccess(data: dataList);
             }

@@ -99,18 +99,94 @@ namespace SCA.Services
         }
         public async Task<ServiceResult> CreateUserByMobil(UserMobilDto dto)
         {
+            ServiceResult _res = new ServiceResult();
+            _res = Result.ReturnAsSuccess();
             if (dto.Equals(null))
             {
-                Result.ReturnAsFail();
+                _res = Result.ReturnAsFail(message: AlertResource.NoChanges);
+            }
+            if (await UserDataControl(dto.EmailAddress) == true)
+            {
+                _res = Result.ReturnAsFail(message: "Email adresi zaten kayıtlı");
             }
 
-            var user = _mapper.Map<Users>(dto);
-            user.IsActive = true;
-            user.IsStudent = true;
+            if (_res.ResultCode!=HttpStatusCode.OK)
+            {
+                return _res;
+            }
 
-            _userRepo.Add(user);
-            return _unitOfWork.SaveChanges();
+            try
+            {
+                string imagePath = "";
 
+                string query = "Insert Into Users (Id,Name,Surname,EmailAddress,PhoneNumber,Password,ImagePath,Category,RoleTypeId,RoleExpiresDate,GenderId," +
+                    "EducationStatusId,HighSchoolTypeId,UniversityId,FacultyId,DepartmentId,ClassId,IsStudent,Biography,CityId,IsActive," +
+                    "ReferanceCode,EnrollPlatformTypeId,BirthDate) values (" +
+                    "@Id,@Name,@Surname,@EmailAddress,@PhoneNumber,@Password,@ImagePath,@RoleTypeId,@Category,@RoleExpiresDate,@GenderId,@EducationStatusId," +
+                    "@HighSchoolTypeId,@UniversityId,@FacultyId,@DepartmentId,@ClassId,@IsStudent,@Biography,@CityId,@IsActive,@ReferanceCode," +
+                    "@EnrollPlatformTypeId,@BirthDate); SELECT LAST_INSERT_ID();";
+
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("Id", GetUserId());
+                filter.Add("Name", dto.Name);
+                filter.Add("Surname", dto.Surname);
+                filter.Add("EmailAddress", dto.EmailAddress);
+                filter.Add("PhoneNumber", dto.PhoneNumber);
+                filter.Add("Password", dto.Password);
+                filter.Add("Category", dto.Category);
+                filter.Add("ImagePath", imagePath);
+                filter.Add("RoleTypeId", "3");
+                filter.Add("RoleExpiresDate", DateTime.Now.AddYears(50));
+                filter.Add("GenderId", dto.GenderId);
+                filter.Add("EducationStatusId", dto.EducationStatusId);
+                filter.Add("HighSchoolTypeId", dto.HighSchoolTypeId);
+                filter.Add("UniversityId", dto.UniversityId);
+                filter.Add("FacultyId", dto.FacultyId);
+                filter.Add("DepartmentId", dto.DepartmentId);
+                filter.Add("ClassId", dto.ClassId);
+                filter.Add("IsStudent", 1);
+                filter.Add("Biography", dto.Biography);
+                filter.Add("CityId", dto.CityId);
+                filter.Add("IsActive", true);
+                filter.Add("ReferanceCode", dto.ReferanceCode);
+                filter.Add("EnrollPlatformTypeId", 1);
+                filter.Add("BirthDate", dto.BirthDate);
+
+                var userId = _db.Execute(query, filter);
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString(), 0, "UserKayıt", PlatformType.Mobil);
+                _res = Result.ReturnAsFail(message: "Kulanıcı kaydı yapılırken hata meydana geldi.");
+            }
+            return _res;
+        }
+
+        public long GetUserId()
+        {
+            string query = "select Id  from Users order by  Id desc limit 1";
+            var _res = _db.Query<UsersDTO>(query).FirstOrDefault();
+            return _res.Id+1;
+        }
+
+        public async Task<bool> UserDataControl(string emailAddress)
+        {
+            bool _res = false; ;
+            string query = "select * from Users where Emailaddress=@Emailaddress";
+            DynamicParameters filter = new DynamicParameters();
+            filter.Add("Emailaddress", emailAddress);
+
+            var result = await _db.QueryAsync<UsersDTO>(query, filter);
+
+            if (result.Count() > 0)
+            {
+                _res = true;
+            }
+            else
+            {
+                _res = false;
+            }
+            return _res;
         }
 
         public async Task<List<UserModelList>> GetUserList()
@@ -155,24 +231,28 @@ namespace SCA.Services
             ServiceResult _res = new ServiceResult();
             try
             {
-                string query = "";
+                string query = "select * from Users where EmailAddress=@EmailAddress and Password=@Password";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("EmailAddress", dto.username);
+                filter.Add("Password", MD5Hash(dto.password));
 
+                var result = _db.Query<UserSession>(query, filter).FirstOrDefault();
+                if (result != null)
+                {
+                    result.Token = _authManager.GenerateToken(result);
+                    _res = Result.ReturnAsSuccess(message: "Hoşgeldin " + result.Name + "!", data: result);
+                }
+                else
+                {
+                    _res = Result.ReturnAsFail(message: "Kullanıcı adı veya şifre hatalı");
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                _res = Result.ReturnAsFail(message: "Sisteme erişim sırasında hata meydana geldi");
+                await _errorManagement.SaveError(ex.ToString());
             }
-
-
-            if (_userRepo.Any(x => x.Password.Equals(dto.password) && x.EmailAddress.Equals(dto.username)))
-            {
-                var res = _mapper.Map<UserSession>(_userRepo.Get(x => x.EmailAddress.Equals(dto.username) && x.Password.Equals(dto.password)));
-                res.Token = _authManager.GenerateToken(res);
-                return Result.ReturnAsSuccess(null, "Hoşgeldin " + res.Name + "!", res);
-            }
-            else
-                return Result.ReturnAsFail("Kullanıcı Adı veya Şifre Hatalı");
+            return _res;
         }
 
         public async Task<ServiceResult> CheckUserForLogin(string email, string password)
@@ -193,7 +273,7 @@ namespace SCA.Services
                 }
                 else
                 {
-                    _res = Result.ReturnAsFail(message: "Kullanıc adı veya şifre hatalı");
+                    _res = Result.ReturnAsFail(message: "Kullanıcı adı veya şifre hatalı");
                 }
             }
             catch (Exception ex)

@@ -8,6 +8,5 @@ namespace SCA.Entity.DTO
     {
         public long CityId { get; set; }
         public string CityName { get; set; }
-        public int Status { get; set; }
     }
 }

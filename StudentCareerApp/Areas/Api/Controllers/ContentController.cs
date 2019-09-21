@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +33,13 @@ namespace StudentCareerApp.Areas.Api.Controller
         public async Task<ServiceResult> GetTags()
         {
             return await _tagManager.GetTags();
+        }
+
+        [Authorize()]
+        [HttpPost("content-shotlist-mobil")]
+        public async Task<ServiceResult> ContentShortListByMobil(ContentSearchByMoilDto dto)
+        {
+            return await _contentManager.ContentShortListByMobil(dto, await HttpContext.GetTokenAsync("access_token"));
         }
 
         //[Authorize()]
@@ -77,6 +85,6 @@ namespace StudentCareerApp.Areas.Api.Controller
             return await _contentManager.GetContent(id);
         }
 
-       
+
     }
 }
