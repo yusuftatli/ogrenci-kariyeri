@@ -55,14 +55,42 @@ namespace SCA.Services
             {
                 string query = "";
 
-                var listData = await _db.QueryAsync<ContentForHomePageDTO>("Content_ListAllByMobil", new { Type = dto.Type, StartDate = dto.StartDate, EndDate = dto.EndDate, searhCategoryIds = dto.searhCategoryIds, limit = dto.limit }, commandType: CommandType.StoredProcedure) as List<ContentForHomePageDTO>;
+                var listData = await _db.QueryAsync<ContentForHomePageDTO>("Content_ListAllByMobil", new { _Type = dto.Type, _StartDate = dto.StartDate, _EndDate = dto.EndDate, _searhCategoryIds = dto.searhCategoryIds, _limit = dto.limit }, commandType: CommandType.StoredProcedure) as List<ContentForHomePageDTO>;
 
                 _res = Result.ReturnAsSuccess(data: listData);
-             
+
             }
             catch (Exception _ex)
             {
-                 await _errorManagement.SaveError(_ex.ToString(), userId, "ContentShortListByMobil",PlatformType.Mobil);
+                await _errorManagement.SaveError(_ex.ToString(), userId, "ContentShortListByMobil", PlatformType.Mobil);
+                _res = Result.ReturnAsFail(message: "Mobil Content bilgileri yüklenirken hata meydana geldi");
+            }
+            return _res;
+        }
+
+        /// <summary>
+        /// makale kısa açıklamalarını listeler
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ServiceResult> ContentShortListFavoriByMobil(int count, string token)
+        {
+            ServiceResult _res = new ServiceResult();
+            long userId = JwtToken.GetUserId(token);
+            try
+            {
+                string query = "select * from Favorite f left join Content c on f.ContentId = c.Id where f.UserId=@UserId limit @count";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("UserId", userId);
+                filter.Add("count", count);
+
+                var dataList =await _db.QueryAsync<ContentForHomePageDTO>(query, filter) as List<ContentForHomePageDTO>;
+
+                _res = Result.ReturnAsSuccess(data: dataList);
+
+            }
+            catch (Exception _ex)
+            {
+                await _errorManagement.SaveError(_ex.ToString(), userId, "ContentShortListByMobil", PlatformType.Mobil);
                 _res = Result.ReturnAsFail(message: "Mobil Content bilgileri yüklenirken hata meydana geldi");
             }
             return _res;
@@ -138,6 +166,40 @@ namespace SCA.Services
 
             return Result.ReturnAsSuccess(null, null, dataList);
         }
+
+        public async Task<ServiceResult> GetContentByMobil(ContentDetailMobilDto dto, string token)
+        {
+            ServiceResult _res = new ServiceResult();
+            if (dto.Equals(null))
+            {
+                _res = Result.ReturnAsFail(message: "Model boş olamaz.");
+                return _res;
+            }
+
+            if (string.IsNullOrEmpty(dto.seoUrl))
+            {
+                _res = Result.ReturnAsFail(message: "Seo url boş olamaz.");
+                return _res;
+            }
+
+            ContentDetailForDetailPageDTO _model = new ContentDetailForDetailPageDTO();
+            long userId = JwtToken.GetUserId(token);
+            try
+            {
+                _model = await _db.QueryFirstAsync<ContentDetailForDetailPageDTO>("Content_ListBySeoUrl", new { type = 1, _SeoUrl = dto.seoUrl, _Ip = dto.ip, _UserId = userId, ContentId = 0, count = dto.count }, commandType: CommandType.StoredProcedure);
+                _model.MostPopularItems = _db.Query<ContentForHomePageDTO>("Content_ListBySeoUrl", new { type = 2, _SeoUrl = dto.seoUrl, _Ip = dto.ip, _UserId = userId, ContentId = _model.Id, count = dto.count }, commandType: CommandType.StoredProcedure).ToList();
+                _model.CommentList = _db.Query<CommentForUIDto>("Content_ListBySeoUrl", new { type = 3, _SeoUrl = dto.seoUrl, _Ip = dto.ip, _UserId = userId, ContentId = _model.Id, count = dto.count }, commandType: CommandType.StoredProcedure).ToList();
+
+                _res = Result.ReturnAsSuccess(data: _model);
+            }
+            catch (Exception ex)
+            {
+                _res = Result.ReturnAsFail(message: "İçerik detayı yüklenirken hata meydana geldi.");
+                await _errorManagement.SaveError(ex.ToString(), userId, "GetContentByMobil", PlatformType.Mobil);
+            }
+            return _res;
+        }
+
         public async Task<ContentDetailForDetailPageDTO> GetContentUI(string seoUrl, long? userId = null, string ip = "")
         {
             ContentDetailForDetailPageDTO _res = new ContentDetailForDetailPageDTO();
@@ -513,6 +575,59 @@ namespace SCA.Services
 
             var res = await _db.ExecuteAsync(query);
             return (res != -1) ? true : false;
+        }
+
+        public async Task<ServiceResult> GetFavoriteContents(int count, string token)
+        {
+            ServiceResult _res = new ServiceResult();
+            long userId = JwtToken.GetUserId(token);
+            try
+            {
+                int _count = count == 0 ? 10 : count;
+                string query = $"select * from Favorite where UserId=@UserId limit @count";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("count", count);
+                filter.Add("UserId", userId);
+                var listData = await _db.QueryAsync<FavoriteDto>(query, filter) as List<FavoriteDto>;
+                _res = Result.ReturnAsSuccess(data: listData);
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString(), userId, "GetFavoriteContents", PlatformType.Mobil);
+                _res = Result.ReturnAsFail(message: "Favori listesi yüklenirken hata meydana geldi");
+            }
+            return _res;
+        }
+        public async Task<ServiceResult> CreateFavorite(FavoriteMobilDto dto, string token)
+        {
+            ServiceResult _res = new ServiceResult();
+
+            if (dto.ContentId == 0)
+            {
+                return Result.ReturnAsFail(message: "İçerik boş geçilemez");
+            }
+            long userId = JwtToken.GetUserId(token);
+            try
+            {
+                string query = "";
+                if (await FavoriteControl(userId, dto.ContentId) == false)
+                {
+                    query = $"Insert Into Favorite (UserId,ContentId,IsActive) values ({userId},{dto.ContentId},{dto.IsActive})";
+                }
+                else
+                {
+                    query = $"Update Favorite  set IsActive={dto.IsActive} where UserId={userId} and ContentId={dto.ContentId}";
+                }
+
+                var res = await _db.ExecuteAsync(query);
+                _res = Result.ReturnAsSuccess(message: "Favorilerinize eklendi");
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString(), userId, "CreateFavorite", PlatformType.Mobil);
+                _res = Result.ReturnAsSuccess(message: "İçerik favoriye alınırken hata meydana geldi.");
+            }
+            return _res;
         }
 
         public async Task<bool> FavoriteControl(long userId, long cotentId)

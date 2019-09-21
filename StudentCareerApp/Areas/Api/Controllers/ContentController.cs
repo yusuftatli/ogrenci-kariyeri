@@ -29,6 +29,28 @@ namespace StudentCareerApp.Areas.Api.Controller
             _tagManager = tagManager;
         }
 
+        [Authorize()]
+        [HttpGet("content-list-favori")]
+        public async Task<ServiceResult> GetFavoriteContents(int count)
+        {
+            return await _contentManager.GetFavoriteContents(count, await HttpContext.GetTokenAsync("access_token"));
+        }
+
+
+        [Authorize()]
+        [HttpGet("content-favori-list")]
+        public async Task<ServiceResult> ContentShortListFavoriByMobil(int count)
+        {
+            return await _contentManager.ContentShortListFavoriByMobil(count, await HttpContext.GetTokenAsync("access_token"));
+        }
+
+        [Authorize()]
+        [HttpPost("content-create-favori")]
+        public async Task<ServiceResult> CreateFavorite(FavoriteMobilDto dto)
+        {
+            return await _contentManager.CreateFavorite(dto, await HttpContext.GetTokenAsync("access_token"));
+        }
+
         [HttpGet("GetTags")]
         public async Task<ServiceResult> GetTags()
         {
@@ -40,6 +62,13 @@ namespace StudentCareerApp.Areas.Api.Controller
         public async Task<ServiceResult> ContentShortListByMobil(ContentSearchByMoilDto dto)
         {
             return await _contentManager.ContentShortListByMobil(dto, await HttpContext.GetTokenAsync("access_token"));
+        }
+
+        [Authorize()]
+        [HttpPost("content-Detail-mobil")]
+        public async Task<ServiceResult> GetContentByMobil(ContentDetailMobilDto dto)
+        {
+            return await _contentManager.GetContentByMobil(dto, await HttpContext.GetTokenAsync("access_token"));
         }
 
         //[Authorize()]
