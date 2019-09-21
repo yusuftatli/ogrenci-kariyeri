@@ -10,7 +10,7 @@
                     <div class="tab-content clearfix">
                         @foreach (var x in Model)
                         {
-                            <div class="tab-pane fade @(x.Equals(Model.First()) ? "in active" : "") " id="1a">
+                            <div class="tab-pane fade @(x.Equals(Model.First()) ? "in active" : "") " id="1a@(Model.IndexOf(x))">
                                 <div class="video-item" style="background-image: url(@x.ImagePath)">
                                     <div class="post-video">
                                         <a href="@x.VideoLink" class="ts-play-btn">
@@ -31,7 +31,7 @@
                             @foreach (var x in Model)
                             {
                                 <li @(x.Equals(Model.First()) ? "class='active'" : "") class="active">
-                                    <a href="#1a" data-toggle="tab">
+                                    <a href="#1a@(Model.IndexOf(x))" data-toggle="tab">
                                         <div class="post-content media">
                                             <img class="d-flex sidebar-img" src="@x.ImagePath" alt="">
                                             <div class="media-body align-self-center">

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SCA.Entity.DTO;
+using SCA.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,17 @@ namespace StudentCareerApp.Components.YoutubePlaylist
 {
     public class YoutubePlaylistViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke(List<YoutubeVideo> model = null)
+        private readonly ICompanyClubManager _companyManager;
+
+        public YoutubePlaylistViewComponent(ICompanyClubManager companyManager)
         {
-            var returnModel = model ?? FakeData();
-            return View("_YoutubePlaylist", returnModel);
+            _companyManager = companyManager;
+        }
+
+        public async Task<IViewComponentResult> InvokeAsync(string seoUrl, List<YoutubeVideo> model = null)
+        {
+            var returnModel = await _companyManager.GetCompanyYoutubePlayList(seoUrl);
+            return View("_YoutubePlaylist", returnModel.Data as List<YoutubeVideo>);
         }
 
         public List<YoutubeVideo> FakeData()

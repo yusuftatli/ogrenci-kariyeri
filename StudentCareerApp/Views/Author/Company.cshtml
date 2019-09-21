@@ -33,11 +33,11 @@
 
 @await  Component.InvokeAsync("ImageGalery")
 
-@await  Component.InvokeAsync("Anouncement")
+@await  Component.InvokeAsync("Anouncement", new { seoUrl = ViewBag.SeoUrl})
 
-@await  Component.InvokeAsync("CompanyClubInformation")
+@await  Component.InvokeAsync("CompanyClubInformation", new { seoUrl = ViewBag.SeoUrl})
 
-@await  Component.InvokeAsync("YoutubePlaylist")
+@await  Component.InvokeAsync("YoutubePlaylist", new { seourl = ViewBag.SeoUrl})
 
 <section class="block-wrapper">
     <div class="container">

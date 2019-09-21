@@ -918,7 +918,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\AdminFiles\CMS\Temp\" />
-    <Folder Include="wwwroot\Template\PViews\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,61 @@
+﻿<style>
+    body > div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.ui-draggable.ui-resizable {
+        z-index: 9999 !important;
+    }
+
+    #toast-container > .toast-info {
+        background-image: unset !important;
+    }
+</style>
+
+<div id="vue-company-youtube">
+    <div class="modal-body">
+        <input class="hidden" v-model="model.pId" />
+        <div class="form-group col-md-6">
+            <label for="recipient-name" class="control-label">Başlık:</label>
+            <input type="text" class="form-control" v-model="model.title">
+        </div>
+        <div class="form-group col-md-6">
+            <label>Duyuru Resmi</label>
+            <input type="text" class="form-control" id="roxyFieldAnnouncement" onclick="openCustomRoxy2('.roxyFieldAnnouncement')" />
+        </div>
+        <div class="form-group col-md-12">
+            <label>Url</label>
+            <input type="text" class="form-control" v-model="model.videoLink" />
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Başlık</th>
+                        <th>Video Link</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="x in playlist">
+                        <td>{{x.title}}</td>
+                        <td>{{x.videoLink}}</td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-primary" type="button" v-on:click="setYoutubeUpdateModel(x.pId)"><i class="fa fa-edit"></i></button>
+                                <button type="button" class="btn btn-primary" v-on:click="deleteYoutubePlaylistItem(x.pId)"><i class="fa fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" v-on:click="resetForm">Formu Temizle</button>
+        <button type="button" class="btn btn-primary" v-on:click="addOrUpdateCompanyYoutubePlaylist()">Kaydet</button>
+    </div>
+    <span class="hidden" id="youtube-info-area" data-seo-url="@ViewBag.SeoUrl"></span>
+</div>
+
+<div class="roxyFieldAnnouncement" style="display: none;">
+    <iframe src="/lib/fileman/index.html?integration=custom&txtFieldId=roxyFieldAnnouncement" style="width:100%;height:100%" frameborder="0"></iframe>
+</div>
+
+<script src="~/Template/PViews/Company/companyYoutubePlaylist.js"></script>

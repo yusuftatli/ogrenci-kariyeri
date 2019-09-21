@@ -19,7 +19,7 @@
 
   Contact: Lyubomir Arsov, liubo (at) web-lobby.com
 */
-function FileSelected(file){
+function FileSelected(file) {
   /**
    * file is an object containing following properties:
    * 
@@ -33,16 +33,18 @@ function FileSelected(file){
    * height - if the file is image, this will be the height of the original image, 0 otherwise
    * 
    */
-    var fieldId = RoxyUtils.GetUrlParam('txtFieldId');
-    $(window.parent.document).find('#' + fieldId).attr('value', file.fullPath);
-    $(window.parent.document).find('#img_' + fieldId).attr('src', file.fullPath);
-    window.parent.closeCustomRoxy2('#roxyCustomPanel2');
+  var fieldId = RoxyUtils.GetUrlParam('txtFieldId');
+  $(window.parent.document).find('#' + fieldId).attr('value', file.fullPath);
+  $(window.parent.document).find('#img_' + fieldId).attr('src', file.fullPath);
+  fieldId == 'roxyFieldAnnouncement'
+    ? window.parent.closeCustomRoxy2('.'+fieldId)
+    : window.parent.closeCustomRoxy2('#roxyCustomPanel2');
 }
-function GetSelectedValue(){
+function GetSelectedValue() {
   /**
   * This function is called to retrieve selected value when custom integration is used.
   * Url parameter selected will override this value.
   */
-  
+
   return "";
 }
