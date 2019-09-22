@@ -913,6 +913,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SCA.BLLServices\SCA.BLLServices.csproj" />
     <ProjectReference Include="..\SCA.Services\SCA.Services.csproj" />
   </ItemGroup>
 

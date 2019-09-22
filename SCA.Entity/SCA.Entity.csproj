@@ -8,4 +8,8 @@
     <PackageReference Include="Microsoft.NETCore.DotNetHostPolicy" Version="2.2.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="SPModels\SPRequest\" />
+  </ItemGroup>
+
 </Project>

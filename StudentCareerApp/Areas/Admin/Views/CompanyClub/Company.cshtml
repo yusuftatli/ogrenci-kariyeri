@@ -108,8 +108,8 @@
                                                         <td>
                                                             <div class="btn-group">
                                                                 <button ng-click="showContentDetail(x.id)" type="button" class="btn btn-primary">Aç</button>
-                                                                <button class="btn btn-primary lazyload showModal" type="button" data-size="modal-lg" data-url="/Admin/CompanyClub/CompanyAnnouncements?seoUrl={{x.seoUrl}}">Duyurular</button>
-                                                                <button class="btn btn-primary lazyload showModal" type="button" data-size="modal-lg" data-url="/Admin/CompanyClub/CompanyYoutubePlaylist?seoUrl={{x.seoUrl}}">Playlist</button>
+                                                                <button class="btn btn-primary lazyload showModal" type="button" data-size="modal-lg" data-url="/Admin/CompanyClub/CompanyAnnouncements?companyId={{x.id}}&seoUrl={{x.seoUrl}}">Duyurular</button>
+                                                                <button class="btn btn-primary lazyload showModal" type="button" data-size="modal-lg" data-url="/Admin/CompanyClub/CompanyYoutubePlaylist?companyId={{x.id}}&seoUrl={{x.seoUrl}}">Playlist</button>
                                                                 <button data-toggle="modal" @*data-target="#addSubCategoryModal" *@ type="button" class="btn btn-primary">Diğer</button>
                                                             </div>
                                                         </td>

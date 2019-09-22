@@ -9,7 +9,8 @@
 
 <div id="vue-company-announcement">
     <div class="modal-body">
-        <input class="hidden" v-model="model.announcementId" />
+        <input class="hidden" v-model="model.id" />
+        <input class="hidden" v-model="model.CompanyId" />
         <div class="form-group col-md-6">
             <label for="recipient-name" class="control-label">Başlık:</label>
             <input type="text" class="form-control" v-model="model.title">
@@ -52,8 +53,8 @@
                         <td>{{moment(x.endDate).format('DD.MM.YYYY')}}</td>
                         <td>
                             <div class="btn-group">
-                                <button class="btn btn-primary" type="button" v-on:click="setAnnouncementUpdateModel(x.id)"><i class="fa fa-edit"></i></button>
-                                <button type="button" class="btn btn-primary" v-on:click="deleteAnnouncement(x.id)"><i class="fa fa-trash"></i></button>
+                                <button class="btn btn-primary" type="button" v-on:click="setAnnouncementUpdateModel(x.announcementId)"><i class="fa fa-edit"></i></button>
+                                <button type="button" class="btn btn-primary" v-on:click="deleteAnnouncement(x.announcementId)"><i class="fa fa-trash"></i></button>
                             </div>
                         </td>
                     </tr>
@@ -65,7 +66,7 @@
         <button type="button" class="btn btn-default" v-on:click="resetForm">Formu Temizle</button>
         <button type="button" class="btn btn-primary" v-on:click="addOrUpdateAnnouncement()">Kaydet</button>
     </div>
-    <span class="hidden" id="announcement-info-area" data-seo-url="@ViewBag.SeoUrl"></span>
+    <span class="hidden" id="announcement-info-area" data-company="@ViewBag.CompanyId" data-seo-url="@ViewBag.SeoUrl"></span>
 </div>
 
 <div class="roxyFieldAnnouncement" style="display: none;">

@@ -4,6 +4,7 @@
         model: {},
         announcements: [],
         seoUrl: $("#announcement-info-area").attr('data-seo-url'),
+        companyId: $("#announcement-info-area").attr('data-company'),
         urls: {
             getCompanyAnnouncement: '/admin/companyclub/getcompanyannouncements/',
             addOrUpdateCompanyAnnouncement: '/admin/companyclub/addorupdatecompanyannouncement/',
@@ -26,7 +27,7 @@
             })
         },
         setAnnouncementUpdateModel: function (id) {
-            var announcement = this.announcements.find(x => x.id == id);
+            var announcement = this.announcements.find(x => x.announcementId == id);
             this.model = Object.assign({}, announcement, {
                 endDate: moment(announcement.endDate).format('YYYY-MM-DD'),
                 createdDate: moment(announcement.createdDate).format('YYYY-MM-DD')
@@ -35,6 +36,8 @@
         },
         addOrUpdateAnnouncement: function () {
             this.model.SeoUrl = this.seoUrl;
+            this.model.CompanyId = this.companyId;
+            this.model.Id = this.model.announcementId;
             this.model.ImagePath = $("#roxyFieldAnnouncement").val();
             var ths = this;
             $.ajax({
@@ -54,7 +57,7 @@
             var ths = this;
             Swal.fire({
                 title: 'Emin misiniz?',
-                text: ths.announcements.find(x=>x.id == id).title + " başlıklı duyurunuz silinecektir.",
+                text: ths.announcements.find(x=>x.announcementId == id).title + " başlıklı duyurunuz silinecektir.",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',

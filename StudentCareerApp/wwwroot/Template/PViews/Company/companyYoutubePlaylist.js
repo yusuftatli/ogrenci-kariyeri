@@ -4,6 +4,7 @@
         model: {},
         playlist: [],
         seoUrl: $("#youtube-info-area").attr('data-seo-url'),
+        companyId: $("#youtube-info-area").attr('data-company'),
         urls: {
             getYoutubePlaylist: '/admin/companyclub/GetCompanyYoutubePlayList/',
             addOrUpdateCompanyYoutubePlaylist: '/admin/companyclub/AddOrUpdateCompanyYoutubePlaylist/',
@@ -26,11 +27,12 @@
             })
         },
         setYoutubeUpdateModel: function (id) {
-            this.model = this.playlist.find(x => x.pId == id);
+            this.model = this.playlist.find(x => x.id == id);
             $("#roxyFieldAnnouncement").val(this.model.imagePath);
         },
         addOrUpdateCompanyYoutubePlaylist: function () {
             this.model.seoUrl = this.seoUrl;
+            this.model.CompanyId = this.companyId;
             this.model.imagePath = $("#roxyFieldAnnouncement").val();
             var ths = this;
             $.ajax({
@@ -50,7 +52,7 @@
             var ths = this;
             Swal.fire({
                 title: 'Emin misiniz?',
-                text: ths.playlist.find(x=>x.pId == id).title + " başlıklı duyurunuz silinecektir.",
+                text: ths.playlist.find(x=>x.id == id).title + " başlıklı duyurunuz silinecektir.",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -66,7 +68,7 @@
                         success: function(res){
                             if(res.resultCode == 200){
                                 ths.getYoutubePlaylist();
-                                ths.model.pId = 0;
+                                ths.model.id = 0;
                                 toastr["success"]("Silme işlemi başarılı!");
                             }
                         }
