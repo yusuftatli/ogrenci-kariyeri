@@ -19,6 +19,10 @@
 
   Contact: Lyubomir Arsov, liubo (at) web-lobby.com
 */
+$.ajax({
+  url: '/Admin/RoxyFileman/SetRootDirectory',
+  data: {'path': '/Images'},
+})
 var FileTypes = new Array();
 FileTypes['image'] = new Array('jpg', 'jpeg', 'png', 'gif');
 FileTypes['media'] = new Array('avi', 'flv', 'swf', 'wmv', 'mp3', 'wma', 'mpg','mpeg');

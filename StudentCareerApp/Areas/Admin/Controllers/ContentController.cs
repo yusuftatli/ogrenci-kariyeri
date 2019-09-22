@@ -10,10 +10,8 @@ using System.Web;
 namespace StudentCareerApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Route("[area]/[controller]")]
     public class ContentController : Controller
     {
-        [HttpGet("Assay")]
         public IActionResult Assay()
         {
             var value = HttpContext.Session.GetString("userInfo");
@@ -29,13 +27,11 @@ namespace StudentCareerApp.Areas.Admin.Controllers
             }
         }
 
-        [HttpGet("AssayConfirm")]
         public IActionResult AssayConfirm()
         {
             return View();
         }
 
-        [HttpGet("Question")]
         public IActionResult Question()
         {
             return View();

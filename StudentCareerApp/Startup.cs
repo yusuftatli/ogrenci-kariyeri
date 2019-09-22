@@ -44,7 +44,7 @@ namespace StudentCareerApp
         public void ConfigureServices(IServiceCollection services)
         {
 
-
+            
 
             services.AddAuthentication(options =>
             {
