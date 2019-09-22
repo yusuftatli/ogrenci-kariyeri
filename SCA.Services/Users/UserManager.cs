@@ -51,6 +51,56 @@ namespace SCA.Services
             _roleManager = roleManager;
         }
 
+        public async Task<ServiceResult> PasswordRenew(string emailAddress)
+        {
+            ServiceResult _res = new ServiceResult();
+            try
+            {
+                if (await UserDataControl(emailAddress) == true)
+                {
+                    _res = Result.ReturnAsFail("Email Kayıtlı değil");
+                    return _res;
+                }
+
+                string query = "update Users set Password = @Password  where EmailAddress='yusufcantatli@hotmail.com'";
+                DynamicParameters filter = new DynamicParameters();
+                string _pas = MD5Hash(RandomString(10, false));
+                filter.Add("Password", _pas);
+
+                var data = _db.Execute(query, filter);
+
+                EmailsDto emailData = new EmailsDto
+                {
+                    Body = "Öğrenci kariyeri erişim şifreniz: " + _pas,
+                    Subject = "Öğrenci Kariyer Şifre Yenileme",
+                    ToEmail = emailAddress,
+                };
+                await _sender.SaveEmails(emailData);
+                _res = Result.ReturnAsSuccess(message: "yenileme şifreniz başarıyla email adresinize gönderilmiştir.");
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString());
+                _res = Result.ReturnAsFail(message: "Şifre yenileme sırasında hata meydana geldi.");
+            }
+            return _res;
+        }
+
+        public string RandomString(int size, bool lowerCase)
+        {
+            StringBuilder builder = new StringBuilder();
+            Random random = new Random();
+            char ch;
+            for (int i = 0; i < size; i++)
+            {
+                ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65)));
+                builder.Append(ch);
+            }
+            if (lowerCase)
+                return builder.ToString().ToLower();
+            return builder.ToString();
+        }
+
         public async Task<ServiceResult> Dashboard(UserSession session)
         {
             ServiceResult _res = new ServiceResult();
@@ -110,7 +160,7 @@ namespace SCA.Services
                 _res = Result.ReturnAsFail(message: "Email adresi zaten kayıtlı");
             }
 
-            if (_res.ResultCode!=HttpStatusCode.OK)
+            if (_res.ResultCode != HttpStatusCode.OK)
             {
                 return _res;
             }
@@ -166,7 +216,7 @@ namespace SCA.Services
         {
             string query = "select Id  from Users order by  Id desc limit 1";
             var _res = _db.Query<UsersDTO>(query).FirstOrDefault();
-            return _res.Id+1;
+            return _res.Id + 1;
         }
 
         public async Task<bool> UserDataControl(string emailAddress)
@@ -218,6 +268,7 @@ namespace SCA.Services
                 DynamicParameters filter = new DynamicParameters();
                 filter.Add("Id", Id);
                 var data = await _db.QueryFirstAsync<UsersDTO>(query, filter);
+                _res = data;
             }
             catch (Exception ex)
             {

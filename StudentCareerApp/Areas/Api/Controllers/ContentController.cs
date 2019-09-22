@@ -23,11 +23,21 @@ namespace StudentCareerApp.Areas.Api.Controller
     {
         IContentManager _contentManager;
         ITagManager _tagManager;
-        public ContentController(IContentManager contentManager, ITagManager tagManager)
+        ICommentManager _commentManager;
+        public ContentController(IContentManager contentManager, ITagManager tagManager, ICommentManager commentManager)
         {
             _contentManager = contentManager;
             _tagManager = tagManager;
+            _commentManager = commentManager;
         }
+
+        [Authorize()]
+        [HttpPost("content-create-comment")]
+        public async Task<ServiceResult> CreateCommentsByMobil(CommentMobilDto dto)
+        {
+            return await _commentManager.CreateCommentsByMobil(dto, await HttpContext.GetTokenAsync("access_token"));
+        }
+
 
         [Authorize()]
         [HttpGet("content-list-favori")]

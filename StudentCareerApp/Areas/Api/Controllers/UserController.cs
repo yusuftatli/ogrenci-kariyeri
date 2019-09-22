@@ -25,6 +25,13 @@ namespace StudentCareerApp.Areas.Api.Controller
             _userManager = userManager;
         }
 
+        [Authorize()]
+        [HttpPost("user-forgetpassword")]
+        public async Task<ServiceResult> PasswordRenew(string emailAddress)
+        {
+            return await _userManager.PasswordRenew(emailAddress);
+        }
+
         [HttpPost("CreateUser")]
         public async Task<ActionResult<ServiceResult>> CreateUser([FromBody]UsersDTO dto)
         {

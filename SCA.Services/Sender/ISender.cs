@@ -1,4 +1,5 @@
 ﻿using SCA.Common.Result;
+using SCA.Entity.DTO;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,5 +11,6 @@ namespace SCA.Services
     {
         Task<ServiceResult> SendEmail(string to = "", string subject = "", string emailAddress = "");
         Task<ServiceResult> SendMessage(string phoneNumber);
+        Task<ServiceResult> SaveEmails(EmailsDto dto);
     }
 }

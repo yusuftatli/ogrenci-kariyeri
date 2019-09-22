@@ -16,6 +16,7 @@ namespace SCA.Services
         /// <param name="dto"></param>
         /// <returns></returns>
         Task<ServiceResult> CreateComments(CommentForUIDto dto);
+        Task<ServiceResult> CreateCommentsByMobil(CommentMobilDto dto, string token);
 
         /// <summary>
         /// onayda beykeleyn bütün yorumları çeker

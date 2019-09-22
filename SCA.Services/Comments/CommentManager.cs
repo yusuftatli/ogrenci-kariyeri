@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Dapper;
 using MySql.Data.MySqlClient;
+using SCA.Common;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
 using SCA.Entity.Model;
@@ -30,6 +31,28 @@ namespace SCA.Services
             _errorManagement = errorManagement;
         }
 
+        /// <summary>
+        /// makale veya test için yorum insert yapar 
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        public async Task<ServiceResult> CreateCommentsByMobil(CommentMobilDto dto,string token)
+        {
+            ServiceResult _res = new ServiceResult();
+            long userId = JwtToken.GetUserId(token);
+            try
+            {
+                string query = $"Insert into Comments (ReadType,Description,ArticleId,Approved,UserID, PostDate) values (2,'{dto.Description}',{dto.ArticleId},0,{dto.userId}, NOW())";
+                var result = await _db.ExecuteAsync(query);
+                _res = Result.ReturnAsSuccess();
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString());
+                _res = Result.ReturnAsFail();
+            }
+            return _res;
+        }
 
         /// <summary>
         /// makale veya test için yorum insert yapar 
