@@ -9,6 +9,7 @@ namespace SCA.Services
 {
     public interface IUserManager
     {
+        Task<ServiceResult> PasswordRenew(string emailAddress);
         Task CreateUserLog(UserLogDto dto);
         Task<ServiceResult> CheckUserForLogin(string email, string password);
         Task<ServiceResult> CreateUser(UsersDTO dto);

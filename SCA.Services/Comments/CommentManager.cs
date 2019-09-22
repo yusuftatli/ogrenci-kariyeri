@@ -42,7 +42,7 @@ namespace SCA.Services
             long userId = JwtToken.GetUserId(token);
             try
             {
-                string query = $"Insert into Comments (ReadType,Description,ArticleId,Approved,UserID, PostDate) values (2,'{dto.Description}',{dto.ArticleId},0,{dto.userId}, NOW())";
+                string query = $"Insert into Comments (ReadType,Description,ArticleId,Approv,d,UserID, PostDate) values (2,'{dto.Description}',{dto.ArticleId},0,{userId}, NOW())";
                 var result = await _db.ExecuteAsync(query);
                 _res = Result.ReturnAsSuccess();
             }
