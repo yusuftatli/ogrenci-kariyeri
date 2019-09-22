@@ -2,6 +2,7 @@
 using Dapper;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
+using SCA.Common;
 using SCA.Common.Resource;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
@@ -52,17 +53,19 @@ namespace SCA.Services
         }
 
         #region Department
-        public async Task<ServiceResult> GetDepartment(UserSession session)
+        public async Task<ServiceResult> GetDepartment(string token)
         {
             ServiceResult _res = new ServiceResult();
             try
             {
+                
                 string query = "select Id, Description as DepartmentName from Departmnet";
                 var result = await _db.QueryAsync<DepartmentDto>(query) as List<DepartmentDto>;
+                _res = Result.ReturnAsSuccess(data: result);
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString(), session.Id, "GetDepartment", PlatformType.Web);
+                await _errorManagement.SaveError(ex.ToString(), JwtToken.GetUserId(token), "GetDepartment", PlatformType.Web);
                 _res = Result.ReturnAsFail(message: "Departman bilgisi yüklenirken hata meydana geldi");
             }
             return _res;
@@ -83,7 +86,7 @@ namespace SCA.Services
             return _res;
         }
 
-        public async Task<ServiceResult> CreateDepartment(DepartmentDto dto, UserSession session)
+        public async Task<ServiceResult> CreateDepartment(DepartmentDto dto, string token)
         {
             ServiceResult _res = new ServiceResult();
             string query = "";
@@ -110,7 +113,7 @@ namespace SCA.Services
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString(), session.Id, "CreateDepartment", PlatformType.Web);
+                await _errorManagement.SaveError(ex.ToString(), JwtToken.GetUserId(token), "CreateDepartment", PlatformType.Web);
                 _res = Result.ReturnAsFail(message: "Departman bilgisi kayıt işlemi sırasında hata meydana geldi.");
             }
             return _res;
@@ -131,7 +134,7 @@ namespace SCA.Services
         #endregion
 
         #region Faculty
-        public async Task<ServiceResult> GetFaculty(UserSession session)
+        public async Task<ServiceResult> GetFaculty(string token)
         {
             ServiceResult _res = new ServiceResult();
             try
@@ -142,7 +145,7 @@ namespace SCA.Services
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString(), session.Id, "GetFaculty", PlatformType.Web);
+                await _errorManagement.SaveError(ex.ToString(), JwtToken.GetUserId(token), "GetFaculty", PlatformType.Web);
                 _res = Result.ReturnAsFail(message: "Fakülte bilgisi yüklenirken hata meydana geldi");
             }
             return _res;
@@ -163,7 +166,7 @@ namespace SCA.Services
             return _res;
         }
 
-        public async Task<ServiceResult> CreateFaculty(FacultyDto dto, UserSession session)
+        public async Task<ServiceResult> CreateFaculty(FacultyDto dto, string token)
         {
             ServiceResult _res = new ServiceResult();
             string query = "";
@@ -190,7 +193,7 @@ namespace SCA.Services
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString(), session.Id, "CreateFaculty", PlatformType.Web);
+                await _errorManagement.SaveError(ex.ToString(), JwtToken.GetUserId(token), "CreateFaculty", PlatformType.Web);
                 _res = Result.ReturnAsFail(message: "Fakülte bilgisi kayıt işlemi sırasında hata meydana geldi.");
             }
             return _res;
@@ -212,7 +215,7 @@ namespace SCA.Services
         #endregion
 
         #region HighSchool
-        public async Task<ServiceResult> GetHighSchool(UserSession session)
+        public async Task<ServiceResult> GetHighSchool(string token)
         {
             ServiceResult _res = new ServiceResult();
             try
@@ -223,7 +226,7 @@ namespace SCA.Services
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString(), session.Id, "GetHighSchool", PlatformType.Web);
+                await _errorManagement.SaveError(ex.ToString(), JwtToken.GetUserId(token), "GetHighSchool", PlatformType.Web);
                 _res = Result.ReturnAsFail(message: "Lise bilgisi yüklenirken hata meydana geldi");
             }
             return _res;
@@ -244,7 +247,7 @@ namespace SCA.Services
             return _res;
         }
 
-        public async Task<ServiceResult> CreateHighSchool(HighSchoolDto dto, UserSession session)
+        public async Task<ServiceResult> CreateHighSchool(HighSchoolDto dto, string token)
         {
             ServiceResult _res = new ServiceResult();
             string query = "";
@@ -270,7 +273,7 @@ namespace SCA.Services
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString(), session.Id, "CreateHighSchool", PlatformType.Web);
+                await _errorManagement.SaveError(ex.ToString(), JwtToken.GetUserId(token), "CreateHighSchool", PlatformType.Web);
                 _res = Result.ReturnAsFail(message: "Lise bilgisi kayıt işlemi sırasında hata meydana geldi.");
             }
             return _res;
@@ -292,7 +295,7 @@ namespace SCA.Services
         #endregion
 
         #region StudentClass
-        public async Task<ServiceResult> GetStudentClass(UserSession session)
+        public async Task<ServiceResult> GetStudentClass(string token)
         {
             ServiceResult _res = new ServiceResult();
             try
@@ -300,18 +303,11 @@ namespace SCA.Services
                 string query = "select * from StudentClass";
                 var result = await _db.QueryAsync<StudentClassDto>(query) as List<StudentClassDto>;
 
-                if (result.Count > 0)
-                {
-                    _res = Result.ReturnAsSuccess(data: result);
-                }
-                else
-                {
-                    _res = Result.ReturnAsSuccess(message: "Sınıf bilgisi yüklenemedi");
-                }
+                _res = Result.ReturnAsSuccess(data: result);
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString(), session.Id, "GetStudentClass", PlatformType.Web);
+                await _errorManagement.SaveError(ex.ToString(), JwtToken.GetUserId(token), "GetStudentClass", PlatformType.Web);
                 _res = Result.ReturnAsFail(message: "Sınıf bilgisi yüklenirken hata meydana geldi");
             }
             return _res;
@@ -333,7 +329,7 @@ namespace SCA.Services
             return _res;
         }
 
-        public async Task<ServiceResult> CreateStudentClass(StudentClassDto dto, UserSession session)
+        public async Task<ServiceResult> CreateStudentClass(StudentClassDto dto, string token)
         {
             ServiceResult _res = new ServiceResult();
             string query = "";
@@ -360,7 +356,7 @@ namespace SCA.Services
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString(), session.Id, "CreateStudentClass", PlatformType.Web);
+                await _errorManagement.SaveError(ex.ToString(), JwtToken.GetUserId(token), "CreateStudentClass", PlatformType.Web);
                 _res = Result.ReturnAsFail(message: "Sınıf bilgisi kayıt işlemi sırasında hata meydana geldi.");
             }
             return _res;
@@ -383,18 +379,18 @@ namespace SCA.Services
         #endregion
 
         #region University
-        public async Task<ServiceResult> GetUniversity(UserSession session)
+        public async Task<ServiceResult> GetUniversity(string token)
         {
             ServiceResult _res = new ServiceResult();
             try
             {
                 string query = "select Id, Description as UniversityName from Universities";
-                var data = _db.Query<StudentClassDto>(query).ToList();
+                var data = _db.Query<UniversityDto>(query).ToList();
                 _res = Result.ReturnAsSuccess(data: data);
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString(), session.Id, "GetUniversity", PlatformType.Web);
+                await _errorManagement.SaveError(ex.ToString(), JwtToken.GetUserId(token), "GetUniversity", PlatformType.Web);
                 _res = Result.ReturnAsFail(message: "Sınıf bilgisi yüklenirken hata meydana geldi");
             }
             return _res;
@@ -415,7 +411,7 @@ namespace SCA.Services
             return _res;
         }
 
-        public async Task<ServiceResult> CreateUniversity(UniversityDto dto, UserSession session)
+        public async Task<ServiceResult> CreateUniversity(UniversityDto dto, string token)
         {
             ServiceResult _res = new ServiceResult();
             string query = "";
@@ -442,7 +438,7 @@ namespace SCA.Services
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString(), session.Id, "CreateUniversity", PlatformType.Web);
+                await _errorManagement.SaveError(ex.ToString(), JwtToken.GetUserId(token), "CreateUniversity", PlatformType.Web);
                 _res = Result.ReturnAsFail(message: "Üniversite bilgisi kayıt işlemi sırasında hata meydana geldi.");
             }
             return _res;
@@ -464,7 +460,7 @@ namespace SCA.Services
         #endregion
 
         #region Sector
-        public async Task<ServiceResult> GetAllSector(UserSession session)
+        public async Task<ServiceResult> GetAllSector(string token)
         {
             ServiceResult _res = new ServiceResult();
             try
@@ -475,7 +471,7 @@ namespace SCA.Services
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString(), session.Id, "GetAllSector", PlatformType.Web);
+                await _errorManagement.SaveError(ex.ToString(), JwtToken.GetUserId(token), "GetAllSector", PlatformType.Web);
                 _res = Result.ReturnAsFail(message: "Sektör bilgisi yüklenirken hata meydana geldi");
             }
             return _res;
@@ -496,7 +492,7 @@ namespace SCA.Services
             return _res;
         }
 
-        public async Task<ServiceResult> CreateSector(SectorDto dto, UserSession session)
+        public async Task<ServiceResult> CreateSector(SectorDto dto, string token)
         {
             ServiceResult _res = new ServiceResult();
             string query = "";
@@ -509,7 +505,7 @@ namespace SCA.Services
                     query = @"Insert Into Sector (SectorTypeId, CreatedUserId, CreatedDate, Description) values
                         (@SectorTypeId, @CreatedUserId, @CreatedDate, @Description)";
                     filter.Add("SectorTypeId", dto.SectorTypeId);
-                    filter.Add("CreatedUserId", session.Id);
+                    filter.Add("CreatedUserId", JwtToken.GetUserId(token));
                     filter.Add("CreatedDate", DateTime.Now);
                     filter.Add("Description", dto.Description);
                     resultMessage = "Kayıt işlemi başarılı";
@@ -519,7 +515,7 @@ namespace SCA.Services
                     query = "update Sector set SectorTypeId=@SectorTypeId,UpdatedUserId=@UpdatedUserId,UpdatedDate=@UpdatedDate ,Description=@Description where Id=@Id";
                     filter.Add("Id", dto.Id);
                     filter.Add("SectorTypeId", dto.SectorTypeId);
-                    filter.Add("UpdatedDate", session.Id);
+                    filter.Add("UpdatedDate", JwtToken.GetUserId(token));
                     filter.Add("CreatedDate", DateTime.Now);
                     filter.Add("Description", dto.Description);
                     resultMessage = "Güncelleme işlemi başarılı";
@@ -529,7 +525,7 @@ namespace SCA.Services
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString(), session.Id, "CreateSector", PlatformType.Web);
+                await _errorManagement.SaveError(ex.ToString(), JwtToken.GetUserId(token), "CreateSector", PlatformType.Web);
                 _res = Result.ReturnAsFail(message: "Sektör bilgisi kayıt işlemi sırasında hata meydana geldi.");
             }
             return _res;

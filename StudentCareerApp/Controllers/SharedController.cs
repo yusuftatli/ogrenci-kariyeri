@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -46,6 +47,7 @@ namespace SCA.UI.Controllers
             return PartialView();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<JsonResult> Login(string email, string password)
         {

@@ -74,10 +74,15 @@ namespace SCA.Services
 
         Task<List<FavoriteDto>> GetFavoriteContents(int count);
 
-        Task<List<ContentForHomePageDTO>> GetUsersFavoriteContents(long userId, int count);  
+        Task<List<ContentForHomePageDTO>> GetUsersFavoriteContents(long userId, int count);
 
         Task<bool> CreateFavorite(FavoriteDto dto);
+        Task<ServiceResult> ContentShortListByMobil(ContentSearchByMoilDto dto, string token);
+        Task<ServiceResult> GetContentByMobil(ContentDetailMobilDto dto, string token);
+        Task<ServiceResult> GetFavoriteContents(int count, string token);
+        Task<ServiceResult> CreateFavorite(FavoriteMobilDto dto, string token);
+        Task<ServiceResult> ContentShortListFavoriByMobil(int count, string token);
 
-       
+
     }
 }

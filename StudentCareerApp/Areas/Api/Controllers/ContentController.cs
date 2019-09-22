@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -28,10 +29,46 @@ namespace StudentCareerApp.Areas.Api.Controller
             _tagManager = tagManager;
         }
 
+        [Authorize()]
+        [HttpGet("content-list-favori")]
+        public async Task<ServiceResult> GetFavoriteContents(int count)
+        {
+            return await _contentManager.GetFavoriteContents(count, await HttpContext.GetTokenAsync("access_token"));
+        }
+
+
+        [Authorize()]
+        [HttpGet("content-favori-list")]
+        public async Task<ServiceResult> ContentShortListFavoriByMobil(int count)
+        {
+            return await _contentManager.ContentShortListFavoriByMobil(count, await HttpContext.GetTokenAsync("access_token"));
+        }
+
+        [Authorize()]
+        [HttpPost("content-create-favori")]
+        public async Task<ServiceResult> CreateFavorite(FavoriteMobilDto dto)
+        {
+            return await _contentManager.CreateFavorite(dto, await HttpContext.GetTokenAsync("access_token"));
+        }
+
         [HttpGet("GetTags")]
         public async Task<ServiceResult> GetTags()
         {
             return await _tagManager.GetTags();
+        }
+
+        [Authorize()]
+        [HttpPost("content-shotlist-mobil")]
+        public async Task<ServiceResult> ContentShortListByMobil(ContentSearchByMoilDto dto)
+        {
+            return await _contentManager.ContentShortListByMobil(dto, await HttpContext.GetTokenAsync("access_token"));
+        }
+
+        [Authorize()]
+        [HttpPost("content-Detail-mobil")]
+        public async Task<ServiceResult> GetContentByMobil(ContentDetailMobilDto dto)
+        {
+            return await _contentManager.GetContentByMobil(dto, await HttpContext.GetTokenAsync("access_token"));
         }
 
         //[Authorize()]
@@ -77,6 +114,6 @@ namespace StudentCareerApp.Areas.Api.Controller
             return await _contentManager.GetContent(id);
         }
 
-       
+
     }
 }

@@ -54,6 +54,7 @@ namespace StudentCareerApp.Areas.Api.Controller
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
+        [Authorize]
         [HttpPost("mobil-createuser")]
         public async Task<ServiceResult> CreateUserByMobil(UserMobilDto dto)
         {
@@ -70,7 +71,17 @@ namespace StudentCareerApp.Areas.Api.Controller
         [HttpPost("mobil-userlogin")]
         public async Task<ServiceResult> UserLoginByMobil(MobilUserLoginDto dto)
         {
-            return await _userManager.UserLoginByMobil(dto);
+            var _res = await _userManager.UserLoginByMobil(dto);
+
+            if (_res.IsSuccess())
+            {
+                HttpContext.Session.SetString("userInfo", Newtonsoft.Json.JsonConvert.SerializeObject(_res.Data));
+                JsonSerializer serializer = new JsonSerializer();
+                var result = JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo"));
+                HttpContext.Session.SetString("NameSurname", result.Name + " " + result.Surname);
+                return _res;
+            }
+            return _res;
         }
 
         [HttpPost("web-updateUserRoleType")]
