@@ -24,20 +24,26 @@ namespace StudentCareerApp.Areas.Admin.Controllers
         private string _filesRootVirtual;
         private Dictionary<string, string> _settings;
         private Dictionary<string, string> _lang = null;
+        private IHttpContextAccessor _context;
 
-        public RoxyFilemanController(IHostingEnvironment env)
+        public RoxyFilemanController(IHostingEnvironment env, IHttpContextAccessor context)
         {
             // Setup CMS paths to suit your environment (we usually inject settings for these)
             _systemRootPath = env.ContentRootPath.Split("\\bin")[0];
             _tempPath = _systemRootPath + "\\wwwroot\\AdminFiles\\CMS\\Temp";
-            _filesRootPath = "/wwwroot/AdminFiles/CMS/Content";
-            _filesRootVirtual = "/AdminFiles/CMS/Content";
+            _context = context;
             // Load Fileman settings
             LoadSettings();
         }
 
         private void LoadSettings()
         {
+            if (_context.HttpContext.Session.GetString("roxyPath") == null)
+            {
+                SETROOTDIRECTORY(null);
+            }
+            _filesRootPath = _context.HttpContext.Session.GetString("roxyPath").ToString();
+            _filesRootVirtual = _context.HttpContext.Session.GetString("roxyPath").ToString().Replace("/wwwroot", "");
             _settings = JsonConvert.DeserializeObject<Dictionary<string, string>>(System.IO.File.ReadAllText(_systemRootPath + "/wwwroot/lib/fileman/conf.json"));
             string langFile = _systemRootPath + "/wwwroot/lib/fileman/lang/" + GetSetting("LANG") + ".json";
             if (!System.IO.File.Exists(langFile)) langFile = _systemRootPath + "/wwwroot/lib/fileman/lang/en.json";
@@ -49,6 +55,11 @@ namespace StudentCareerApp.Areas.Admin.Controllers
         public string Get() { return "RoxyFileman - access to API requires Authorisation"; }
 
         #region API Actions
+        public void SETROOTDIRECTORY(string path)
+        {
+            _context.HttpContext.Session.SetString("roxyPath", "/wwwroot/AdminFiles/CMS/Content" + path);
+        }
+
         public IActionResult DIRLIST(string type)
         {
             try
