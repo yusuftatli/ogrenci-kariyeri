@@ -7,7 +7,7 @@ using System.Text;
 
 namespace SCA.DapperRepository
 {
-    public class CompanyClubRepository : GenericRepository<Entity.Entities.CompanyClubs>, ICompanyClub<CompanyClubs>
+    public class CompanyClubRepository : GenericRepository<Entity.Entities.CompanyClubs>, ICompanyClub<Entity.Entities.CompanyClubs>
     {
         public CompanyClubRepository(IOptions<ConnectionStrings> options) : base(options)
         {

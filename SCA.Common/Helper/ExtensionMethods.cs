@@ -76,7 +76,7 @@ namespace SCA.Common
         /// <returns></returns>
         public static string GetPropertiesOfModelAsString<T>(this T model) where T : class
         {
-            MemberInfo[] members = typeof(T).GetMembers().ToList().Where(x => x.MemberType.Equals(MemberTypes.Property)).ToArray();
+            MemberInfo[] members = typeof(T).GetProperties();
             string returnString = "";
             foreach (var item in members)
             {
@@ -100,7 +100,7 @@ namespace SCA.Common
                 {
                     whereParams += param + " = @" + param + "&&";
                 }
-                whereParams.TrimEnd('&', '&');
+                whereParams = whereParams.TrimEnd('&');
             }
             return whereParams;
         }

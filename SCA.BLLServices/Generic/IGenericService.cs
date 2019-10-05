@@ -1,6 +1,7 @@
 ﻿using SCA.Common.Result;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,11 +9,11 @@ namespace SCA.BLLServices.Generic
 {
     public interface IGenericService<U> where U : class
     {
-        Task<ServiceResult> GetByIdAsync<T>(T model, long id) where T : class;
+        Task<ServiceResult> GetByIdAsync<T>(long id) where T : class;
 
         Task<ServiceResult> GetAllAsync<T>(T model) where T : class;
 
-        Task<ServiceResult> GetByWhereParams<TRequest, TResult>(TResult result, TRequest request, params string[] whereParams) where TRequest : class where TResult : class;
+        Task<ServiceResult> GetByWhereParams<TResult>(Expression<Func<U, bool>> predicate) where TResult : class;
 
         Task<ServiceResult> InsertAsync<T>(T model) where T : class;
 

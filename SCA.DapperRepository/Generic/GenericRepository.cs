@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -86,30 +87,30 @@ namespace SCA.DapperRepository.Generic
         {
             using (IDbConnection conn = new MySqlConnection(_connString))
             {
-                var query = model.GenerateSelectQuery(_tableName);
+                var query = model.GenerateSelectQuery<T,U>(_tableName);
                 var res = await conn.QueryAsync<T>(query) as List<T>;
                 return res;
             }
         }
 
         /// <inheritdoc cref="IGenericRepository{T}.GetByIdAsync(T, long)"/>
-        public async Task<T> GetByIdAsync<T>(T model, long id) where T : class
+        public async Task<T> GetByIdAsync<T>(long id) where T : class
         {
             using (IDbConnection conn = new MySqlConnection(_connString))
             {
-                var query = model.GenerateSelectQuery(_tableName, "Id");
+                var query = ((T)Activator.CreateInstance(typeof(T), null)).GenerateSelectQuery<T,U>(_tableName);
                 var res = await conn.QueryFirstOrDefaultAsync<T>(query, new { Id = id });
                 return res;
             }
         }
 
         /// <inheritdoc cref="IGenericRepository{T}.GetByWhereParams(T, string[])"/>
-        public async Task<List<TResult>> GetByWhereParams<TRequest, TResult>(TResult entity, TRequest request, params string[] whereParams) where TRequest : class where TResult : class
+        public async Task<List<TResult>> GetByWhereParams<TResult>(Expression<Func<U, bool>> predicate) where TResult : class
         {
             using (IDbConnection conn = new MySqlConnection(_connString))
             {
-                var query = entity.GenerateSelectQuery(_tableName, whereParams);
-                var res = await conn.QueryAsync<TResult>(query, request) as List<TResult>;
+                var query = ((TResult)Activator.CreateInstance(typeof(TResult), null)).GenerateSelectQuery(_tableName, predicate);
+                var res = await conn.QueryAsync<TResult>(query) as List<TResult>;
                 return res;
             }
         }

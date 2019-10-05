@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SCA.BLLServices.Services
+namespace SCA.BLLServices
 {
     public class CompanyClubService : GenericService<CompanyClubs>, ICompanyClubService<CompanyClubs>
     {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using SCA.Common.Result;
@@ -34,15 +35,15 @@ namespace SCA.BLLServices.Generic
             return Result.ReturnAsSuccess(data: res);
         }
 
-        public async Task<ServiceResult> GetByIdAsync<T>(T model, long id) where T : class
+        public async Task<ServiceResult> GetByIdAsync<T>(long id) where T : class
         {
-            var res = await _repository.GetByIdAsync<T>(model, id);
+            var res = await _repository.GetByIdAsync<T>(id);
             return Result.ReturnAsSuccess(data: res);
         }
 
-        public async Task<ServiceResult> GetByWhereParams<TRequest, TResult>(TResult result, TRequest request, params string[] whereParams) where TRequest : class where TResult : class
+        public async Task<ServiceResult> GetByWhereParams<TResult>(Expression<Func<U, bool>> predicate) where TResult : class
         {
-            var res = await _repository.GetByWhereParams<TRequest, TResult>(result, request, whereParams);
+            var res = await _repository.GetByWhereParams<TResult>(predicate);
             return Result.ReturnAsSuccess(data: res);
         }
 

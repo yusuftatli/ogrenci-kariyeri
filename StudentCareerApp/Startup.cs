@@ -150,6 +150,10 @@ namespace StudentCareerApp
             services.AddTransient<IAnnounsment<Announsment>, AnnounsmentRepository>();
             services.AddTransient<IYoutubePlaylistService<YoutubePlaylist>, YoutubePlaylistService>();
             services.AddTransient<IYoutubePlaylist<YoutubePlaylist>, YoutubePlaylistRepository>();
+            services.AddTransient<ICompanyClubService<SCA.Entity.Entities.CompanyClubs>, CompanyClubService>();
+            services.AddTransient<ICompanyClub<SCA.Entity.Entities.CompanyClubs>, CompanyClubRepository>();
+            services.AddTransient<ISocialMedia<SCA.Entity.Entities.SocialMedia>, SocialMediaRepository>();
+            services.AddTransient<ISocialMediaService<SCA.Entity.Entities.SocialMedia>, SocialMediaService>();
             //generic services
             services.AddSingleton(typeof(IGenericService<>), typeof(GenericService<>));
             services.AddSingleton(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -250,7 +254,7 @@ namespace StudentCareerApp
 
                 #region SocialMedia
 
-                cfg.CreateMap<SocialMedia, SocialMediaDto>().ReverseMap();
+                cfg.CreateMap<SCA.Entity.Model.SocialMedia, SocialMediaDto>().ReverseMap();
 
                 #endregion
 
@@ -280,7 +284,9 @@ namespace StudentCareerApp
 
                 #region CompanyClubs
 
-                cfg.CreateMap<CompanyClubs, CompanyClubsDto>().ReverseMap();
+                cfg.CreateMap<CompanyClubInsertModel, CompanyClubsDto>().ReverseMap();
+                cfg.CreateMap<CompanyClubUpdateModel, CompanyClubsDto>().ReverseMap();
+                cfg.CreateMap<SCA.Entity.Model.CompanyClubs, CompanyClubsDto>().ReverseMap();
 
                 #endregion
 

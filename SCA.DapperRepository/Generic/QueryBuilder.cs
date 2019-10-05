@@ -1,5 +1,7 @@
 ﻿using SCA.Common;
+using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace SCA.DapperRepository.Generic
@@ -50,11 +52,14 @@ namespace SCA.DapperRepository.Generic
         /// <param name="tableName"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public static string GenerateSelectQuery<T>(this T model, string tableName, params string[] parameters) where T : class
+        public static string GenerateSelectQuery<T, U>(this T model, string tableName, Expression<Func<U, bool>> predicate = null) where T : class where U : class
         {
             var props = model.GetPropertiesOfModelAsString<T>();
-            var whereParameters = parameters.SetWhereProperties();
-            var selectQuery = new StringBuilder($"SELECT ({props.Replace('@', ' ')}) FROM {tableName} {whereParameters}");
+            var expBody = new CustomVisitor().Visit(predicate.Body).ToString().Replace("AndAlso", "AND").Replace("OrElse", "OR").Replace("==", "=").Replace("Convert(", "").Replace(", Int32)", "");
+            if (expBody != null)
+                expBody = "WHERE " + expBody.Replace(predicate.Parameters[0].Name + ".", "");
+
+            var selectQuery = new StringBuilder($"SELECT {props.Replace('@', ' ')} FROM {tableName} {expBody}");
             return selectQuery.ToString();
         }
 

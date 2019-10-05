@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace SCA.DapperRepository.Generic
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<T> GetByIdAsync<T>(T model, long id) where T : class;
+        Task<T> GetByIdAsync<T>(long id) where T : class;
 
         /// <summary>
         /// Get list of generic model from db.
@@ -27,7 +28,7 @@ namespace SCA.DapperRepository.Generic
         /// <param name="model"></param>
         /// <param name="whereParams"></param>
         /// <returns></returns>
-        Task<List<TResult>> GetByWhereParams<TRequest, TResult>(TResult entity, TRequest model, params string[] whereParams) where TRequest : class where TResult : class;
+        Task<List<TResult>> GetByWhereParams<TResult>(Expression<Func<U, bool>> predicate) where TResult : class;
 
         /// <summary>
         /// Generic insert.
