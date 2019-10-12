@@ -11,7 +11,10 @@
             <div class="col-lg-6">
                 <div class="item">
                     <div class="ts-post-thumb">
-                        <a class="post-cat ts-orange-bg" href="@Url.Action("Index", "Category")">@Model.FirstOrDefault().Category</a>
+                        @if (!string.IsNullOrEmpty(Model.FirstOrDefault().Category))
+                        {
+                            <a class="post-cat ts-orange-bg" href="@Url.Action("Index", "Category")">@Model.FirstOrDefault().Category</a>
+                        }
                         <a href="@Url.Action("Index", "Blog", new { Model.FirstOrDefault().SeoUrl })">
                             <img class="img-fluid" src="@Model.FirstOrDefault().ImagePath" alt="Öğrenci Kariyeri - @Model.FirstOrDefault().Category: @Model.FirstOrDefault().Header">
                         </a>

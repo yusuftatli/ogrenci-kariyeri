@@ -12,8 +12,10 @@
                     {
                         <div class="tab-pane ts-overlay-style fade @(Model.First().SeoUrl == x.SeoUrl ? "show active" : "") " id="nav-@x.SeoUrl" role="tabpanel" aria-labelledby="nav-@x.SeoUrl-tab">
                             <div class="item" style="background-image: url(@x.ImagePath)">
-
-                                <a class="post-cat ts-orange-bg" href="@Url.Action("Index", "Category", new { x.SeoUrl })">@x.Category</a>
+                                @if (!string.IsNullOrEmpty(x.Category))
+                                {
+                                    <a class="post-cat ts-orange-bg" href="@Url.Action("Index", "Category", new { x.SeoUrl })">@x.Category</a>
+                                }
                                 <a href="https://www.youtube.com/watch?v=_0UO1NcheAE" class="ts-video-btn">
                                     <i class="fa fa-play-circle-o"></i>
                                 </a>

@@ -11,7 +11,10 @@
         {
             <div class="col-lg-6 mb-30">
                 <div class="ts-grid-box ts-grid-content">
-                    <a class="post-cat ts-green-bg" href="@Url.Action("Index", "Category")">@x.Category</a>
+                    @if (!string.IsNullOrEmpty(x.Category))
+                    {
+                        <a class="post-cat ts-green-bg" href="@Url.Action("Index", "Category")">@x.Category</a>
+                    }
                     <div class="ts-post-thumb">
                         <a href="@Url.Action("Index", "Blog", new { x.SeoUrl })">
                             <img class="img-fluid" src="@x.ImagePath" alt="Öğrenci Kariyeri - @x.Category: @x.Header">

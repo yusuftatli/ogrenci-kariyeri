@@ -70,7 +70,7 @@
                             <li>
                                 <a href="">
                                     <i class="fa fa-clock-o"></i>
-                                    @Model.PublishDate.ToString("dd.MM.yyyy")
+                                    @Model.PublishDate.ToString("dd MMMM yyyy")
                                 </a>
                             </li>
                             <li>
@@ -83,11 +83,11 @@
                                 <i class="icon-fire"></i>
                                 @Model.ReadCount
                             </li>
-                            <li class="share-post">
+                            @*<li class="share-post">
                                 <a href="#">
                                     <i class="fa fa-share"></i>
                                 </a>
-                            </li>
+                            </li>*@
 
                             <li class="heart-box">
                                 @if (Context.GetSessionData<SCA.Entity.DTO.UserSession>
@@ -240,10 +240,8 @@
             <!-- col end -->
             <div class="col-lg-3">
                 <div class="right-sidebar">
-                    @await Component.InvokeAsync("SocialMedia")
                     @await Component.InvokeAsync("PopularContents", new { count = 5 })
                     @await Component.InvokeAsync("PopularCategories")
-                    @await Component.InvokeAsync("NewsletterForm")
                 </div>
             </div>
             <!-- right sidebar end-->
