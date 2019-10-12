@@ -18,33 +18,27 @@ namespace SCA.Services
 {
     public class ErrorManagement : IErrorManagement
     {
-        private readonly IMapper _mapper;
-        private readonly IUnitofWork _unitOfWork;
-        private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=ErrorDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
+        private readonly IDbConnection _db = new MySqlConnection("Server = 167.71.46.71; Database = ErrorDbTest; Uid = ogrencikariyeri; Pwd = dXog323!s.?;");
 
 
-        public ErrorManagement(IUnitofWork unitOfWork, IMapper mapper)
+        public ErrorManagement()
         {
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
         }
 
-        public async Task<string> SaveError(string error)
+        public async Task<string> SaveError(string ex)
         {
             try
             {
-                string query = "insert into Errors(Description,PlatformType,ErrorDate) values" +
-                    "(@Description,@PlatformType,CURDATE());";
+                string query = "insert into Errors(UserId,Process,StackTrace) values (@Description,@PlatformType,CURDATE());";
                 DynamicParameters filter = new DynamicParameters();
-                filter.Add("Description", error);
+                filter.Add("Description", "");
                 filter.Add("PlatformType", 2);
                 var result = await _db.ExecuteAsync(query, filter);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                error = ex.ToString();
             }
-            return error;
+            return "";
         }
         public async Task<string> SaveError(string error, long userId, string process, PlatformType platformType)
         {

@@ -80,9 +80,27 @@ namespace SCA.Services
             List<EmailsDto> _res = new List<EmailsDto>();
             try
             {
-                string query = "select * from Emails where IsSend=1";
+                string query = "select * from Emails where IsSend = 0";
                 var resultData = await _db.QueryAsync<EmailsDto>(query) as List<EmailsDto>;
                 _res = resultData;
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex.ToString());
+            }
+            return _res;
+        }
+
+        public async Task<string> GetEmailTemplate(string code)
+        {
+            string _res = string.Empty;
+            try
+            {
+                string query = "select * from EmailTemplate where Code  = @code";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("code", code);
+                var resultData = await _db.QueryFirstAsync<EmailTemplateDto>(query, filter);
+                _res = resultData.Description;
             }
             catch (Exception ex)
             {
@@ -114,25 +132,24 @@ namespace SCA.Services
             ServiceResult _res = new ServiceResult();
             try
             {
-                await SendEmail();
-                EmailSettings _email = await GetEmailSetting("PSRNW");
+               // await SendEmail();
                 string query = "insert into Emails (UserId, Subject, Body, FromEmail, ToEmail, ToEmail, CcEmail, IsSend, SendDate,  Process) values (@UserId, @Subject, @Body, @FromEmail, @ToEmail, @CcEmail, 0, NOW(),  @Process);";
                 DynamicParameters filter = new DynamicParameters();
 
                 filter.Add("UserId", dto.UserId);
                 filter.Add("Subject, ", dto.Subject);
                 filter.Add("Body, ", dto.Body);
-                filter.Add("FromEmail, ", _email.UsernameEmail);
+                filter.Add("FromEmail, ", dto.FromEmail);
                 filter.Add("ToEmail, ", dto.ToEmail);
                 filter.Add("CcEmail, ", dto.CcEmail);
                 filter.Add("Process", dto.Process);
 
-                var result = await _db.ExecuteAsync(query);
+                var result = await _db.ExecuteAsync(query,filter);
                 _res = Result.ReturnAsSuccess();
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
+                await _errorManagement.SaveError(ex.InnerException.ToString());
                 _res = Result.ReturnAsFail(message: "Mail gönderilirken hata meydana geldi.");
             }
             return _res;
