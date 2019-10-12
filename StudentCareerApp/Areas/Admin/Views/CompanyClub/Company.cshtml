@@ -8,21 +8,21 @@
     var a = 1;
 
 }
-    <head>
-        <link href="~/Template/AngularComponents/treeselect/vue-treeselect.css" rel="stylesheet" />
-        <link href="~/Template/assets/node_modules/switchery/dist/switchery.css" rel="stylesheet" />
-        <script src="~/Template/AngularComponents/treeselect/vue.js"></script>
-        <script src="~/Template/AngularComponents/treeselect/vue-treeselect.js"></script>
-        <script src="~/Template/AngularComponents/treeselect/index.js"></script>
-        <script src="~/ScriptController/companyController.js"></script>
-        <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <script src="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.js"></script>
-        <link href="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.css" rel="stylesheet" />
-        <script src="~/js/MTBootstrapLazyLoad.js"></script>
+<head>
+    <link href="~/Template/AngularComponents/treeselect/vue-treeselect.css" rel="stylesheet" />
+    <link href="~/Template/assets/node_modules/switchery/dist/switchery.css" rel="stylesheet" />
+    <script src="~/Template/AngularComponents/treeselect/vue.js"></script>
+    <script src="~/Template/AngularComponents/treeselect/vue-treeselect.js"></script>
+    <script src="~/Template/AngularComponents/treeselect/index.js"></script>
+    <script src="~/ScriptController/companyController.js"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <script src="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.js"></script>
+    <link href="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.css" rel="stylesheet" />
+    <script src="~/js/MTBootstrapLazyLoad.js"></script>
 
-    </head>
+</head>
 
 
 <div class="page-wrapper" ng-app="MyApp" ng-controller="comapanyController">
@@ -95,6 +95,7 @@
                                                         <th>Telefon Numarası</th>
                                                         <th>Oluşturan Kişi</th>
                                                         <th>Oluşturulma Tarihi</th>
+                                                        <th>İşlemler</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -104,14 +105,21 @@
                                                         <td ng-bind="x.sectorDescription"></td>
                                                         <td ng-bind="x.phoneNumber"></td>
                                                         <td ng-bind="x.createUserName"></td>
-                                                        <td ng-bind="x.createdDate| date:'MM/dd/yyyy HH:mm:ss'"></td>
+                                                        <td ng-bind="x.createdDate| date:'dd.MM.yyyy (HH:mm)'"></td>
                                                         <td>
                                                             <div class="btn-group">
-                                                                <button ng-click="showContentDetail(x.id)" type="button" class="btn btn-primary">Aç</button>
-                                                                <button class="btn btn-primary lazyload showModal" type="button" data-size="modal-lg" data-url="/Admin/CompanyClub/CompanyAnnouncements?seoUrl={{x.seoUrl}}">Duyurular</button>
-                                                                <button class="btn btn-primary lazyload showModal" type="button" data-size="modal-lg" data-url="/Admin/CompanyClub/CompanyYoutubePlaylist?seoUrl={{x.seoUrl}}">Playlist</button>
-                                                                <button data-toggle="modal" @*data-target="#addSubCategoryModal" *@ type="button" class="btn btn-primary">Diğer</button>
+                                                                <button ng-click="showContentDetail(x.id)" type="button" class="btn btn-default"><i class="fa fa-edit"></i></button>
+                                                                <button type="button" class="btn btn-default"><i class="fa fa-trash"></i></button>
+                                                                <div class="dropdown">
+                                                                    <button class="btn btn-default dropdown-toggle" id="dropdownOthers" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                                                                    <div class="dropdown-menu" aria-labelledby="dropdownOthers">
+                                                                        <a id="popupModal" class="dropdown-item lazyload showModal" data-size="modal-lg" data-url="/Admin/CompanyClub/CompanyAnnouncements?companyId={{x.id}}&seoUrl={{x.seoUrl}}"><i class="fa fa-info"></i> Duyurular</a>
+                                                                        <a id="popupModal" class="dropdown-item lazyload showModal" data-size="modal-lg" data-url="/Admin/CompanyClub/CompanySocialMedias?companyId={{x.id}}"><i class="fa fa-info"></i> Sosyal Medya</a>
+                                                                        <a id="popupModal" class="dropdown-item lazyload showModal" data-size="modal-lg" data-url="/Admin/CompanyClub/CompanyYoutubePlaylist?companyId={{x.id}}&seoUrl={{x.seoUrl}}"><i class="fa fa-youtube"></i> Youtube Playlist</a>
+                                                                    </div>
+                                                                </div>
                                                             </div>
+                                                          
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -167,14 +175,14 @@
                                                         </div>
                                                         <div class="col-md-12 p-l-0 p-t-20">
                                                             <div class="form-group">
-                                                                <label>Makale Başlık Resim</label>
+                                                                <label>Şirket Header Resmi</label>
                                                                 <input type="text" class="form-control" id="roxyField" onclick="openCustomRoxy2('#roxyCustomPanel2')" />
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <hr>
-                                             
+
                                             </div>
                                         </div>
                                         <div class="card">

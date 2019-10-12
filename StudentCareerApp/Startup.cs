@@ -21,10 +21,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using SCA.BLLServices;
+using SCA.BLLServices.Generic;
+using SCA.DapperRepository;
+using SCA.DapperRepository.Generic;
 using SCA.DataAccess.Context;
 using SCA.Entity.Dto;
 using SCA.Entity.DTO;
 using SCA.Entity.DTO.ErrorDb;
+using SCA.Entity.Entities;
 using SCA.Entity.Model;
 using SCA.Repository.UoW;
 using SCA.Services;
@@ -44,7 +49,7 @@ namespace StudentCareerApp
         public void ConfigureServices(IServiceCollection services)
         {
 
-            
+            services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
 
             services.AddAuthentication(options =>
             {
@@ -140,6 +145,19 @@ namespace StudentCareerApp
             services.AddTransient<INewsletterManager, NewsletterManager>();
             services.AddTransient<IPageManager, PageManager>();
             services.AddTransient<ICommentManager, CommentManager>();
+            //services which implements generic service and repository
+            services.AddTransient<IAnnounsmentService<Announsment>, AnnounsmentService>();
+            services.AddTransient<IAnnounsment<Announsment>, AnnounsmentRepository>();
+            services.AddTransient<IYoutubePlaylistService<YoutubePlaylist>, YoutubePlaylistService>();
+            services.AddTransient<IYoutubePlaylist<YoutubePlaylist>, YoutubePlaylistRepository>();
+            services.AddTransient<ICompanyClubService<SCA.Entity.Entities.CompanyClubs>, CompanyClubService>();
+            services.AddTransient<ICompanyClub<SCA.Entity.Entities.CompanyClubs>, CompanyClubRepository>();
+            services.AddTransient<ISocialMedia<SCA.Entity.Entities.SocialMedia>, SocialMediaRepository>();
+            services.AddTransient<ISocialMediaService<SCA.Entity.Entities.SocialMedia>, SocialMediaService>();
+            //generic services
+            services.AddSingleton(typeof(IGenericService<>), typeof(GenericService<>));
+            services.AddSingleton(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
             #endregion
 
             #region Auto Mapper
@@ -236,7 +254,7 @@ namespace StudentCareerApp
 
                 #region SocialMedia
 
-                cfg.CreateMap<SocialMedia, SocialMediaDto>().ReverseMap();
+                cfg.CreateMap<SCA.Entity.Model.SocialMedia, SocialMediaDto>().ReverseMap();
 
                 #endregion
 
@@ -266,7 +284,9 @@ namespace StudentCareerApp
 
                 #region CompanyClubs
 
-                cfg.CreateMap<CompanyClubs, CompanyClubsDto>().ReverseMap();
+                cfg.CreateMap<CompanyClubInsertModel, CompanyClubsDto>().ReverseMap();
+                cfg.CreateMap<CompanyClubUpdateModel, CompanyClubsDto>().ReverseMap();
+                cfg.CreateMap<SCA.Entity.Model.CompanyClubs, CompanyClubsDto>().ReverseMap();
 
                 #endregion
 
@@ -305,6 +325,8 @@ namespace StudentCareerApp
             {
                 // app.UseDeveloperExceptionPage();
             }
+
+            app.UseDeveloperExceptionPage();
 
             app.UseStaticFiles(new StaticFileOptions() { FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot")) });
 
