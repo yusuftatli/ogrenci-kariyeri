@@ -30,13 +30,7 @@ namespace StudentCareerApp.Areas.Api.Controller
         [HttpPost("user-forgetpassword")]
         public async Task<ServiceResult> PasswordRenew(string emailAddress)
         {
-            return await _userManager.PasswordRenew(emailAddress);
-        }
-
-        [HttpPost("CreateUser")]
-        public async Task<ActionResult<ServiceResult>> CreateUser([FromBody]UsersDTO dto)
-        {
-            return await _userManager.CreateUser(dto);
+            return await _userManager.PasswordRenew(emailAddress, await HttpContext.GetTokenAsync("access_token"));
         }
 
         [HttpGet("web-getallusers")]
@@ -45,11 +39,6 @@ namespace StudentCareerApp.Areas.Api.Controller
             return await _userManager.GetUserList();
         }
 
-        [HttpDelete("DeleteUser/{userId}")]
-        public async Task<ActionResult<ServiceResult>> DeleteUser(long userId)
-        {
-            return await _userManager.DeleteUser(userId);
-        }
 
         [HttpPost("update-user-statu")]
         public async Task<ServiceResult> UpdateUserStatu(long id, bool value)

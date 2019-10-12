@@ -12,5 +12,7 @@ namespace SCA.Services
         Task<ServiceResult> SendEmail(string to = "", string subject = "", string emailAddress = "");
         Task<ServiceResult> SendMessage(string phoneNumber);
         Task<ServiceResult> SaveEmails(EmailsDto dto);
+        Task<string> GetEmailTemplate(string code);
+        Task<EmailSettings> GetEmailSetting(string code);
     }
 }
