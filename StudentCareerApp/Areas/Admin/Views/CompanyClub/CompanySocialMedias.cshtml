@@ -10,15 +10,15 @@
     }
 </style>
 
-<div id="vue-company-youtube">
+<div id="vue-company-social-media">
     <div class="modal-body">
         <input class="hidden" v-model="model.id" />
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-12">
             <label for="recipient-name" class="control-label">Social Media URL:</label>
             <input type="text" class="form-control" v-model="model.url">
         </div>
         <div class="form-group col-md-12">
-            <select class="form-control">
+            <select class="form-control" v-model="model.socialMediaType">
                 @foreach(SCA.Entity.Enums.SocialMediaType x in (SCA.Entity.Enums.SocialMediaType[]) Enum.GetValues(typeof(SCA.Entity.Enums.SocialMediaType)))
                 {
                     <option value="@((int)x)">@x</option>
@@ -30,13 +30,13 @@
                 <thead>
                     <tr>
                         <th>Url</th>
-                        <th>İşlemler</th>
+                        <th class="text-right">İşlemler</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="x in socialMedias">
                         <td>{{x.url}}</td>
-                        <td>
+                        <td class="text-right">
                             <div class="btn-group">
                                 <button class="btn btn-primary" type="button" v-on:click="setSocialMediaUpdateModel(x.id)"><i class="fa fa-edit"></i></button>
                                 <button type="button" class="btn btn-primary" v-on:click="deleteSocialMedia(x.id)"><i class="fa fa-trash"></i></button>
@@ -54,4 +54,4 @@
     <span class="hidden" id="socialmedia-info-area" data-company="@ViewBag.CompanyId"></span>
 </div>
 
-<script src="~/Template/PViews/Company/companyYoutubePlaylist.js"></script>
+<script src="~/Template/PViews/Company/companySocialMedia.js"></script>

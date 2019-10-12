@@ -160,7 +160,7 @@ namespace StudentCareerApp.Areas.Admin.Controllers
 
         public async Task<JsonResult> GetCompanySocialMedias(long companyId)
         {
-            var res = await _socialMediaService.GetByWhereParams<SocialMediaVM>(x=>(int)x.SocialMediaType == (int)SCA.Entity.Enums.SocialMediaType.Instagram);
+            var res = await _socialMediaService.GetByWhereParams<SocialMediaVM>(x=> x.CompanyClupId == companyId);
             return Json(res);
         }
 

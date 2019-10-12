@@ -5,9 +5,9 @@
         socialMedias: [],
         companyId: $("#socialmedia-info-area").attr('data-company'),
         urls: {
-            getCompanySocialMedias: "/CompanyClub/GetCompanySocialMedias",
-            addOrUpdateCompanySocialMedia: "/CompanyClub/AddOrUpdateCompanySocialMedia",
-            deleteSocialMedia: "/CompanyClub/DeleteSocialMedia"
+            getCompanySocialMedias: "/Admin/CompanyClub/GetCompanySocialMedias",
+            addOrUpdateCompanySocialMedia: "/Admin/CompanyClub/AddOrUpdateCompanySocialMedia",
+            deleteSocialMedia: "/Admin/CompanyClub/DeleteSocialMedia"
         }
     },
     mounted: function(){
@@ -25,10 +25,11 @@
             })
         },
         setSocialMediaUpdateModel: function(id){
-            this.model = this.socialMedias.find(x=>x.companyId == id);
+            this.model = this.socialMedias.find(x=>x.id == id);
         },
         addOrUpdateCompanySocialMedia: function(){
-            this.model.companyId = this.companyId;
+            this.model.companyClupId = this.companyId;
+            this.model.isActive = true;
             $.ajax({
                 url: this.urls.addOrUpdateCompanySocialMedia,
                 data: { model: this.model},
@@ -37,6 +38,7 @@
                     if (res.resultCode == 200){
                         this.model = {};
                         this.getCompanySocialMedias();
+                        toastr["success"]("Kayıt başarılı!");
                     }
                     else
                         toastr["error"]("Kayıt sırasında bir hata oluştu!");
