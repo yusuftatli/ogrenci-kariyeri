@@ -71,6 +71,8 @@ app.controller('comapanyController', function ($scope, $http, $filter) {
                     if ($scope.companyModel.PhoneNumber !== null && $scope.companyModel.PhoneNumber !== undefined && $scope.companyModel.PhoneNumber !== "") {
                         if ($scope.companyModel.EmailAddress !== null && $scope.companyModel.EmailAddress !== undefined && $scope.companyModel.EmailAddress !== "") {
                             $scope.companyModel.SeoUrl = $scope.RegexSeo($scope.companyModel.ShortName);
+                            $scope.companyModel.HeaderImage = $("#roxyField").val();
+                            $scope.companyModel.ImageDirectory = '/AdminFiles/CMS/Content/Companies/' + $scope.RegexSeo($scope.companyModel.ShortName);
                             $http(CompanyCreateRequest()).then(function (res) {
                                 if (res.data.resultCode === 200) {
                                     shortMessage(res.data.message, "s");
@@ -109,7 +111,7 @@ app.controller('comapanyController', function ($scope, $http, $filter) {
     var CompanyCreateRequest = function () {
         return {
             method: "post",
-            url: _link + "/CompanyClubs/web-create-company",
+            url: "/Admin/CompanyClub/AddOrUpdateCompany",
             headers: Headers,
             data: $scope.companyModel
         };

@@ -1,6 +1,6 @@
-﻿namespace SCA.Entity.DTO
+﻿namespace SCA.Entity.Entities
 {
-    public class YoutubeVideo
+    public class YoutubePlaylist
     {
         public long Id { get; set; }
 
@@ -10,8 +10,6 @@
 
         public string Title { get; set; }
 
-        public int CompanyId { get; set; }
+        public long CompanyId { get; set; }
     }
-
-    
 }

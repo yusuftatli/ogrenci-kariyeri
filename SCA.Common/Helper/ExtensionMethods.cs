@@ -3,7 +3,8 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
+using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace SCA.Common
@@ -66,5 +67,43 @@ namespace SCA.Common
                 url = url.Replace("--", "-");
             return url;
         }
+
+        /// <summary>
+        /// Getting properties of a model as a string
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public static string GetPropertiesOfModelAsString<T>(this T model) where T : class
+        {
+            MemberInfo[] members = typeof(T).GetProperties();
+            string returnString = "";
+            foreach (var item in members)
+            {
+                returnString += "@" + item.Name + ",";
+            }
+            return returnString.TrimEnd(',');
+        }
+
+        /// <summary>
+        /// Setting properties
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public static string SetWhereProperties(this string[] parameters)
+        {
+            var whereParams = "";
+            if (parameters.Length > 0)
+            {
+                whereParams += "WHERE ";
+                foreach (var param in parameters)
+                {
+                    whereParams += param + " = @" + param + "&&";
+                }
+                whereParams = whereParams.TrimEnd('&');
+            }
+            return whereParams;
+        }
+
     }
 }

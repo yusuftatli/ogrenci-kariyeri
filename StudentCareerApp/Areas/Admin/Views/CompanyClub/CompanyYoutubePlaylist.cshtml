@@ -10,7 +10,7 @@
 
 <div id="vue-company-youtube">
     <div class="modal-body">
-        <input class="hidden" v-model="model.pId" />
+        <input class="hidden" v-model="model.id" />
         <div class="form-group col-md-6">
             <label for="recipient-name" class="control-label">Başlık:</label>
             <input type="text" class="form-control" v-model="model.title">
@@ -38,8 +38,8 @@
                         <td>{{x.videoLink}}</td>
                         <td>
                             <div class="btn-group">
-                                <button class="btn btn-primary" type="button" v-on:click="setYoutubeUpdateModel(x.pId)"><i class="fa fa-edit"></i></button>
-                                <button type="button" class="btn btn-primary" v-on:click="deleteYoutubePlaylistItem(x.pId)"><i class="fa fa-trash"></i></button>
+                                <button class="btn btn-primary" type="button" v-on:click="setYoutubeUpdateModel(x.id)"><i class="fa fa-edit"></i></button>
+                                <button type="button" class="btn btn-primary" v-on:click="deleteYoutubePlaylistItem(x.id)"><i class="fa fa-trash"></i></button>
                             </div>
                         </td>
                     </tr>
@@ -51,7 +51,7 @@
         <button type="button" class="btn btn-default" v-on:click="resetForm">Formu Temizle</button>
         <button type="button" class="btn btn-primary" v-on:click="addOrUpdateCompanyYoutubePlaylist()">Kaydet</button>
     </div>
-    <span class="hidden" id="youtube-info-area" data-seo-url="@ViewBag.SeoUrl"></span>
+    <span class="hidden" id="youtube-info-area" data-seo-url="@ViewBag.SeoUrl" data-company="@ViewBag.CompanyId"></span>
 </div>
 
 <div class="roxyFieldAnnouncement" style="display: none;">

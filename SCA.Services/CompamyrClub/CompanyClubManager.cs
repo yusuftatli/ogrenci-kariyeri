@@ -100,6 +100,7 @@ namespace SCA.Services
 
         public async Task<ServiceResult> CreateCompanyClubs(CompanyClubsDto dto, UserSession session)
         {
+
             ServiceResult _res = new ServiceResult();
             DynamicParameters filter = new DynamicParameters();
             string resultMessage = "";
