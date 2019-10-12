@@ -7,8 +7,6 @@ using SCA.Common.Result;
 using SCA.Entity.DTO;
 using SCA.Entity.Enums;
 using SCA.Entity.Model;
-using SCA.Repository.Repo;
-using SCA.Repository.UoW;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -21,28 +19,19 @@ namespace SCA.Services
 {
     public class CompanyClubManager : ICompanyClubManager
     {
-        private readonly IMapper _mapper;
-        private readonly IUnitofWork _unitOfWork;
-        private readonly IAddressManager _addressManager;
-        private IGenericRepository<SocialMedia> _socialMediaRepo;
-        private IGenericRepository<CompanyClubs> _companyClubsRepo;
         private readonly IErrorManagement _errorManagement;
         private readonly ISocialMediaManager _socialmanager;
         private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
 
-        public CompanyClubManager(IUnitofWork unitOfWork, IMapper mapper, IAddressManager addressManager, IErrorManagement errorManagement, ISocialMediaManager socialManager)
+        public CompanyClubManager(IErrorManagement errorManagement, ISocialMediaManager socialManager)
         {
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
             _errorManagement = errorManagement;
             _socialmanager = socialManager;
-            _companyClubsRepo = unitOfWork.GetRepository<CompanyClubs>();
-            _socialMediaRepo = _unitOfWork.GetRepository<SocialMedia>();
         }
 
         public async Task<ServiceResult> GetAllCompaniesClubs(CompanyClupType companyClupType)
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
             string flag = (companyClupType == CompanyClupType.Club) ? "Şirket" : "Klüp";
             try
             {
@@ -53,24 +42,24 @@ namespace SCA.Services
 
                 if (resultData.Count > 0)
                 {
-                    _res = Result.ReturnAsSuccess(data: resultData);
+                    res = Result.ReturnAsSuccess(data: resultData);
                 }
                 else
                 {
-                    _res = Result.ReturnAsFail(message: $"{flag} bilgisi yüklenirken hata meydana geldi");
+                    res = Result.ReturnAsFail(message: $"{flag} bilgisi yüklenirken hata meydana geldi");
                 }
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
-                _res = Result.ReturnAsFail(message: $"{flag} bilgisi yüklenirken hata meydana geldi");
+                await _errorManagement.SaveError(ex, 0, "MainCategoryListWithParents ", Entity.Enums.PlatformType.Web);
+                res = Result.ReturnAsFail(message: $"{flag} bilgisi yüklenirken hata meydana geldi");
             }
-            return _res;
+            return res;
         }
 
         public async Task<ServiceResult> GetCompanyId(string seoUrl)
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
             try
             {
                 string query = "select * from CompanyClubs where SeoUrl=@SeoUrl";
@@ -80,34 +69,32 @@ namespace SCA.Services
                 var result = _db.Query<CompanyClubsDto>(query, filter).FirstOrDefault();
                 if (result != null)
                 {
-                    _res = Result.ReturnAsSuccess(data: result);
+                    res = Result.ReturnAsSuccess(data: result);
                 }
                 else
                 {
-                    _res = Result.ReturnAsFail(message: "Aranılan şirket bulunamadı");
+                    res = Result.ReturnAsFail(message: "Aranılan şirket bulunamadı");
                 }
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
-                _res = Result.ReturnAsFail(message: "Şirket bilgisi yüklenirken hata meydana geldi.");
+                await _errorManagement.SaveError(ex, 0, "MainCategoryListWithParents ", Entity.Enums.PlatformType.Web);
+                res = Result.ReturnAsFail(message: "Şirket bilgisi yüklenirken hata meydana geldi.");
             }
 
-
-            var data = _companyClubsRepo.Get(x => x.Id == 0);
-            return Result.ReturnAsSuccess(null, message: AlertResource.SuccessfulOperation, data);
+            // var data = _companyClubsRepo.Get(x => x.Id == 0);
+            return Result.ReturnAsSuccess(null, message: AlertResource.SuccessfulOperation, data: null);
         }
 
         public async Task<ServiceResult> CreateCompanyClubs(CompanyClubsDto dto, UserSession session)
         {
 
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
             DynamicParameters filter = new DynamicParameters();
-            string resultMessage = "";
             string query = "";
             if (dto.Equals(null))
             {
-                return Result.ReturnAsFail(null, null);
+                return Result.ReturnAsFail();
             }
 
             try
@@ -153,12 +140,12 @@ namespace SCA.Services
                     filter.Add("UpdatedDate", DateTime.Now);
                 }
 
-                var res = _db.Execute(query, filter);
+                var result = _db.Execute(query, filter);
 
                 List<SocialMediaDto> socialData = new List<SocialMediaDto>();
-                socialData.Add(new SocialMediaDto { CompanyClupId = res, IsActive = true, SocialMediaType = SocialMediaType.Facebook, Url = dto.Facebook, UserId = null });
-                socialData.Add(new SocialMediaDto { CompanyClupId = res, IsActive = true, SocialMediaType = SocialMediaType.Linkedin, Url = dto.Linkedin, UserId = null });
-                socialData.Add(new SocialMediaDto { CompanyClupId = res, IsActive = true, SocialMediaType = SocialMediaType.Instagram, Url = dto.Instagram, UserId = null });
+                socialData.Add(new SocialMediaDto { CompanyClupId = result, IsActive = true, SocialMediaType = SocialMediaType.Facebook, Url = dto.Facebook, UserId = null });
+                socialData.Add(new SocialMediaDto { CompanyClupId = result, IsActive = true, SocialMediaType = SocialMediaType.Linkedin, Url = dto.Linkedin, UserId = null });
+                socialData.Add(new SocialMediaDto { CompanyClupId = result, IsActive = true, SocialMediaType = SocialMediaType.Instagram, Url = dto.Instagram, UserId = null });
 
 
                 foreach (var item in socialData)
@@ -166,34 +153,34 @@ namespace SCA.Services
                     await _socialmanager.CreateSocialMedia(item, session.Id);
                 }
                 string flag = (dto.CompanyClupType == CompanyClupType.Club) ? "Şirket" : "Klüp";
-                _res = Result.ReturnAsSuccess(message: flag + " Başarıyla kaydedildi");
+                res = Result.ReturnAsSuccess(message: flag + " Başarıyla kaydedildi");
             }
             catch (Exception ex)
             {
 
-                throw;
+                await _errorManagement.SaveError(ex, 0, "MainCategoryListWithParents ", Entity.Enums.PlatformType.Web);
             }
 
 
-            dto.UserId = 30;//userId;
+            dto.UserId = session.Id;
             CompanyClubs resData = new CompanyClubs();
 
-            if (dto.Id == 0)
-            {
-                resData = _companyClubsRepo.Add(_mapper.Map<CompanyClubs>(dto));
-                resultMessage = "Kayıt İşlemi Başarılı";
-            }
-            else
-            {
-                _companyClubsRepo.Update(_mapper.Map<CompanyClubs>(dto));
-                resultMessage = "Güncelleme İşlemi Başarılı";
-                var updataSocialData = _socialMediaRepo.GetAll(x => x.CompanyClupId == dto.Id);
-                foreach (var item in updataSocialData)
-                {
-                    _socialMediaRepo.Delete(item);
-                }
-            }
-            return _res;
+            //if (dto.Id == 0)
+            //{
+            //    resData = _companyClubsRepo.Add(_mapper.Map<CompanyClubs>(dto));
+            //    resultMessage = "Kayıt İşlemi Başarılı";
+            //}
+            //else
+            //{
+            //    _companyClubsRepo.Update(_mapper.Map<CompanyClubs>(dto));
+            //    resultMessage = "Güncelleme İşlemi Başarılı";
+            //    var updataSocialData = _socialMediaRepo.GetAll(x => x.CompanyClupId == dto.Id);
+            //    foreach (var item in updataSocialData)
+            //    {
+            //        _socialMediaRepo.Delete(item);
+            //    }
+            //}
+            return res;
         }
 
         public async Task<ServiceResult> GetCompanyHeader(string seoUrl)
@@ -209,7 +196,7 @@ namespace SCA.Services
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
+                await _errorManagement.SaveError(ex, 0, "MainCategoryListWithParents ", Entity.Enums.PlatformType.Web);
                 return Result.ReturnAsFail(message: "Hata");
             }
         }
@@ -223,7 +210,7 @@ namespace SCA.Services
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
+                await _errorManagement.SaveError(ex, 0, "MainCategoryListWithParents ", Entity.Enums.PlatformType.Web);
                 return Result.ReturnAsFail(message: "Hata");
             }
         }

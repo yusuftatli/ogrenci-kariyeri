@@ -8,8 +8,6 @@ using SCA.Entity.DTO;
 using SCA.Entity.DTO.Sync;
 using SCA.Entity.Enums;
 using SCA.Entity.Model;
-using SCA.Repository.Repo;
-using SCA.Repository.UoW;
 using SCA.Services.Sync;
 using System;
 using System.Collections.Generic;
@@ -26,24 +24,17 @@ namespace SCA.Services
     public class SyncManager : ISyncManager
     {
         private readonly IMapper _mapper;
-        private readonly IUnitofWork _unitOfWork;
-        private IGenericRepository<Content> _contentRepo;
-        private IGenericRepository<Comments> _commentRepo;
         private readonly IApiManager _apiService;
         private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;Convert Zero Datetime=True");
 
-        public SyncManager(IUnitofWork unitOfWork, IMapper mapper, IApiManager apiService)
+        public SyncManager( IApiManager apiService)
         {
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
-            _contentRepo = unitOfWork.GetRepository<Content>();
-            _commentRepo = unitOfWork.GetRepository<Comments>();
             _apiService = apiService;
         }
 
         public async Task<ServiceResult> SyncUser()
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
             try
             {
                 string query = "select * from ogrencikariyeri.tf_uyeler";
@@ -52,10 +43,10 @@ namespace SCA.Services
             }
             catch (Exception ex)
             {
-                _res = Result.ReturnAsFail(message: ex.ToString());
+                res = Result.ReturnAsFail(message: ex.ToString());
 
             }
-            return _res;
+            return res;
         }
 
         public async Task<ServiceResult> SyncAssay()
@@ -143,7 +134,7 @@ namespace SCA.Services
                         {
                             dto.PlatformType = PlatformType.WebMobil;
                         }
-                        CreateContentSyncData(dto);
+                      await  CreateContentSyncData(dto);
                     }
                 }
             }
@@ -177,7 +168,7 @@ namespace SCA.Services
 
         public async Task<ServiceResult> CreateContentSyncData(ContentDto dto)
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
             try
             {
                 UserSession session = new UserSession()
@@ -194,9 +185,9 @@ namespace SCA.Services
             catch (Exception ex)
             {
 
-                _res = Result.ReturnAsFail(message: ex.ToString());
+                res = Result.ReturnAsFail(message: ex.ToString());
             }
-            return _res;
+            return res;
         }
 
 

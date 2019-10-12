@@ -2,6 +2,7 @@
 using MySql.Data.MySqlClient;
 using SCA.Common.Result;
 using SCA.Entity;
+using SCA.Entity.Enums;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -22,14 +23,14 @@ namespace SCA.Services
 
         public async Task<string> CreateNewsletter(NewsletterDto dto)
         {
-            string _res = "";
+            string res = "";
             try
             {
                 bool data = await GetNewsletter(dto.EmailAddress);
 
                 if (data == true)
                 {
-                    _res = "Zaten bültene kaydınız var";
+                    res = "Zaten bültene kaydınız var";
                 }
                 else
                 {
@@ -40,19 +41,19 @@ namespace SCA.Services
 
                     var resultData = _db.Execute(query, filter);
 
-                    _res = "Bültene kaydınız başarıyla yapıldı";
+                    res = "Bültene kaydınız başarıyla yapıldı";
                 }
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
+                await _errorManagement.SaveError(ex, null, "CreateNewsletter", PlatformType.Mobil);
             }
-            return _res;
+            return res;
         }
 
         public async Task<bool> GetNewsletter(string emailAddress)
         {
-            bool _res = false;
+            bool res = false;
             try
             {
                 string query = "Select * from Newsletter where EmailAddress=@EmailAddress";
@@ -62,18 +63,18 @@ namespace SCA.Services
                 var result = _db.QueryFirstOrDefaultAsync<NewsletterDto>(query, filter);
                 if (result != null)
                 {
-                    _res = true;
+                    res = true;
                 }
                 else
                 {
-                    _res = false;
+                    res = false;
                 }
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
+                await _errorManagement.SaveError(ex, null, "GetNewsletter", PlatformType.Mobil);
             }
-            return _res;
+            return res;
         }
     }
 }

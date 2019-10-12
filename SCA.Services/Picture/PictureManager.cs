@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using SCA.Common.Result;
+using SCA.Entity.Enums;
 using SCA.Services.Interface;
 using System;
 using System.Collections.Generic;
@@ -13,16 +14,17 @@ namespace SCA.Services
 {
     public class PictureManager : IPictureManager
     {
-        public PictureManager()
+        private readonly IErrorManagement _errorManagement;
+
+        public PictureManager(IErrorManagement errorManagement)
         {
+            _errorManagement = errorManagement;
+
         }
 
-        public string SaveImage(string ImgStr, string ImgName)
-
+        public  string SaveImage(string ImgStr, string ImgName)
         {
             string imagePath = "";
-            try
-            {
                 var webRoot = "";
                 var PathWithFolderName = System.IO.Path.Combine(webRoot, "UserPhotos");
 
@@ -35,12 +37,6 @@ namespace SCA.Services
 
                 byte[] bytes = Convert.FromBase64String(Base64String);
                 ConvertImageToByteArray(bytes);
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
             return imagePath;
         }
 

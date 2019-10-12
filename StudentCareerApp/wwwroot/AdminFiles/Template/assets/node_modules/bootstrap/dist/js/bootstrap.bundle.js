@@ -4923,9 +4923,9 @@
       this._showBackdrop(function () {
         $(document.body).removeClass(ClassName$5.OPEN);
 
-        _this7._resetAdjustments();
+        _this7.resetAdjustments();
 
-        _this7._resetScrollbar();
+        _this7.resetScrollbar();
 
         $(_this7._element).trigger(Event$5.HIDDEN);
       });
@@ -5025,7 +5025,7 @@
       }
     };
 
-    _proto._resetAdjustments = function _resetAdjustments() {
+    _proto.resetAdjustments = function resetAdjustments() {
       this._element.style.paddingLeft = '';
       this._element.style.paddingRight = '';
     };
@@ -5065,7 +5065,7 @@
       $(document.body).addClass(ClassName$5.OPEN);
     };
 
-    _proto._resetScrollbar = function _resetScrollbar() {
+    _proto.resetScrollbar = function resetScrollbar() {
       // Restore fixed content padding
       var fixedContent = [].slice.call(document.querySelectorAll(Selector$5.FIXED_CONTENT));
       $(fixedContent).each(function (index, element) {

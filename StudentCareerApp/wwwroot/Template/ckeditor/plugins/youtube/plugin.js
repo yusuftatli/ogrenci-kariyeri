@@ -151,7 +151,7 @@
 												id : 'chkResponsive',
 												type : 'checkbox',
 												label : editor.lang.youtube.txtResponsive,
-												'default' : editor.config.youtube_responsive != null ? editor.config.youtube_responsive : false
+												'default' : editor.config.youtuberesponsive != null ? editor.config.youtuberesponsive : false
 											},
 											{
 												id : 'chkNoEmbed',

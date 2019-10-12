@@ -30,7 +30,7 @@ namespace SCA.Services
                     }
                 }
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
             }
             return data;

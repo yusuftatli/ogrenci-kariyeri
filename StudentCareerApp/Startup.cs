@@ -31,7 +31,6 @@ using SCA.Entity.DTO;
 using SCA.Entity.DTO.ErrorDb;
 using SCA.Entity.Entities;
 using SCA.Entity.Model;
-using SCA.Repository.UoW;
 using SCA.Services;
 using SCA.Services.Interface;
 
@@ -90,7 +89,7 @@ namespace StudentCareerApp
                 // Add XML Content Negotiation
                 config2.RespectBrowserAcceptHeader = true;
                 config2.ReturnHttpNotAcceptable = true;
-                config2.InputFormatters.Add(new XmlSerializerInputFormatter());
+               // config2.InputFormatters.Add(new XmlSerializerInputFormatter());
                 config2.OutputFormatters.Add(new XmlSerializerOutputFormatter());
             });
 
@@ -120,7 +119,6 @@ namespace StudentCareerApp
             #endregion
 
             #region Service Register
-            services.AddTransient<IUnitofWork, UnitofWork>();
             services.AddTransient<IAddressManager, AddressManager>();
             services.AddTransient<IDefinitionManager, DefinitionManager>();
             services.AddTransient<ICategoryManager, CategoryManager>();
@@ -134,7 +132,6 @@ namespace StudentCareerApp
             services.AddTransient<IPictureManager, PictureManager>();
             services.AddTransient<ITagManager, TagManager>();
             services.AddTransient<IRoleManager, RoleManager>();
-            services.AddTransient<IAnalysisManager, AnalysisManager>();
             services.AddTransient<IB2CManagerUI, B2CManagerUI>();
             services.AddTransient<IUserValidation, UserValidation>();
             services.AddTransient<ISyncManager, SyncManager>();

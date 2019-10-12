@@ -6392,14 +6392,14 @@ var $$AnimateRunnerFactoryProvider = /** @this */ function() {
         if (this.host.end) {
           this.host.end();
         }
-        this._resolve(true);
+        this.resolve(true);
       },
 
       cancel: function() {
         if (this.host.cancel) {
           this.host.cancel();
         }
-        this._resolve(false);
+        this.resolve(false);
       },
 
       complete: function(response) {
@@ -6407,12 +6407,12 @@ var $$AnimateRunnerFactoryProvider = /** @this */ function() {
         if (self._state === INITIAL_STATE) {
           self._state = DONE_PENDING_STATE;
           self._tick(function() {
-            self._resolve(response);
+            self.resolve(response);
           });
         }
       },
 
-      _resolve: function(response) {
+      resolve: function(response) {
         if (this._state !== DONE_COMPLETE_STATE) {
           forEach(this._doneCallbacks, function(fn) {
             fn(response);

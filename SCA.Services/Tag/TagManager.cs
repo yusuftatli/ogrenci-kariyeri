@@ -8,8 +8,6 @@ using SCA.DataAccess.Context;
 using SCA.Entity.DTO;
 using SCA.Entity.Enums;
 using SCA.Entity.Model;
-using SCA.Repository.Repo;
-using SCA.Repository.UoW;
 using SCA.Services.Interface;
 using System;
 using System.Collections.Generic;
@@ -22,36 +20,28 @@ namespace SCA.Services
 {
     public class TagManager : ITagManager
     {
-        private readonly IMapper _mapper;
-        private readonly IUnitofWork _unitOfWork;
-        private IGenericRepository<Tags> _tagRepo;
-        private IGenericRepository<TagRelation> _tagRrlationRepo;
-        private readonly IErrorManagement _errorManager;
+        private readonly IErrorManagement _errorManagement;
         private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
 
-        public TagManager(IUnitofWork unitOfWork, IMapper mapper, IErrorManagement errorManager)
+        public TagManager( IErrorManagement errorManager)
         {
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
-            _tagRepo = unitOfWork.GetRepository<Tags>();
-            _tagRrlationRepo = unitOfWork.GetRepository<TagRelation>();
-            _errorManager = errorManager;
+            _errorManagement = errorManager;
         }
 
         public async Task<ServiceResult> GetTags()
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
             try
             {
                 var lisData = await _db.QueryAsync<TagDto>("select * from Tags") as List<TagDto>;
-                _res = Result.ReturnAsSuccess(data: lisData);
+                res = Result.ReturnAsSuccess(data: lisData);
             }
             catch (Exception ex)
             {
-                await _errorManager.SaveError(ex.ToString());
+                await _errorManagement.SaveError(ex, null, "GetTags", PlatformType.Web);
             }
 
-            return _res;
+            return res;
         }
 
         public bool IsInteger(string value)
@@ -103,7 +93,7 @@ namespace SCA.Services
 
         public async Task<ServiceResult> CreateTag(string tags, long tagContentId, ReadType ReadType, UserSession session)
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
             List<TagRelationDto> tagRelationList = new List<TagRelationDto>();
             try
             {
@@ -145,40 +135,40 @@ namespace SCA.Services
                         var relationId = _db.Execute(query); ;
                     }
                 }
-                _res = Result.ReturnAsSuccess();
+                res = Result.ReturnAsSuccess();
             }
             catch (Exception ex)
             {
-                _res = Result.ReturnAsFail(message: "Makale bağlı taglar kayıt edilirken hata meydana geldi");
-                await _errorManager.SaveError(ex.ToString(), session.Id, "TagCreate;" + tags, PlatformType.Web);
+                res = Result.ReturnAsFail(message: "Makale bağlı taglar kayıt edilirken hata meydana geldi");
+                await _errorManagement.SaveError(ex, session.Id, "TagCreate;" + tags, PlatformType.Web);
             }
 
-            return _res;
+            return res;
         }
 
         public async void CreateTagRelation(List<TagRelationDto> dto)
         {
             Task t = new Task(() =>
             {
-                _tagRrlationRepo.AddRange(_mapper.Map<List<TagRelation>>(dto));
+                //_tagRrlationRepo.AddRange(_mapper.Map<List<TagRelation>>(dto));
             });
             t.Start();
         }
 
         public async void UpdateTagRelation(List<TagRelationDto> dto)
         {
-            Task t = new Task(() =>
-            {
-                foreach (var item in dto)
-                {
-                    var data = _tagRrlationRepo.GetById(item.TagContentId);
-                    _tagRrlationRepo.Delete(data);
-                }
+            //Task t = new Task(() =>
+            //{
+            //    foreach (var item in dto)
+            //    {
+            //        var data = _tagRrlationRepo.GetById(item.TagContentId);
+            //        _tagRrlationRepo.Delete(data);
+            //    }
 
-                _tagRrlationRepo.AddRange(_mapper.Map<List<TagRelation>>(dto));
-                _unitOfWork.SaveChanges();
-            });
-            t.Start();
+            //    _tagRrlationRepo.AddRange(_mapper.Map<List<TagRelation>>(dto));
+            //    _unitOfWork.SaveChanges();
+            //});
+            //t.Start();
         }
 
         public Task<ServiceResult> CreateTag(string tags)

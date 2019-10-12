@@ -2,8 +2,6 @@
 using SCA.Common.Result;
 using SCA.Entity.DTO;
 using SCA.Entity.Model;
-using SCA.Repository.Repo;
-using SCA.Repository.UoW;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,14 +12,8 @@ namespace SCA.Services
     public class PageManager : IPageManager
     {
         private readonly IMapper _mapper;
-        private readonly IAnalysisManager _analysisManager;
-        private readonly IUnitofWork _unitOfWork;
-        private IGenericRepository<BasicPages> _basicPageRepo;
-        public PageManager(IUnitofWork unitOfWork, IMapper mapper)
+        public PageManager()
         {
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
-            _basicPageRepo = unitOfWork.GetRepository<BasicPages>();
         }
 
         public async Task<ServiceResult> GetAllBasicPages()
@@ -29,11 +21,11 @@ namespace SCA.Services
             List<BasicPagesDto> listData = new List<BasicPagesDto>();
             await Task.Run(() =>
             {
-                listData = _mapper.Map<List<BasicPagesDto>>(_basicPageRepo.GetAll());
-                listData.ForEach(x =>
-                {
-                    x.ActiveDescription = x.IsActive ? "Aktif" : "Pasif";
-                });
+               // listData = _mapper.Map<List<BasicPagesDto>>(_basicPageRepo.GetAll());
+                //listData.ForEach(x =>
+                //{
+                //    x.ActiveDescription = x.IsActive ? "Aktif" : "Pasif";
+                //});
             });
             return Result.ReturnAsSuccess(data: listData);
         }
@@ -41,10 +33,10 @@ namespace SCA.Services
         public async Task<List<BasicPagesDto>> GetAllBasicPageForUI()
         {
             List<BasicPagesDto> listData = new List<BasicPagesDto>();
-            await Task.Run(() =>
-            {
-                listData = _mapper.Map<List<BasicPagesDto>>(_basicPageRepo.GetAll());
-            });
+            //await Task.Run(() =>
+            //{
+            //    listData = _mapper.Map<List<BasicPagesDto>>(_basicPageRepo.GetAll());
+            //});
             return listData;
         }
 
@@ -55,23 +47,23 @@ namespace SCA.Services
                 return Result.ReturnAsFail(message: "model null olamaz");
             }
             string resultMessage = "";
-            await Task.Run(() =>
-            {
-                if (dto.Id == 0)
-                {
-                    var data = _mapper.Map<BasicPages>(dto);
-                    _basicPageRepo.Add(data);
-                    _unitOfWork.SaveChanges();
-                    resultMessage = "Kayıt işlemi başarılı";
-                }
-                else
-                {
-                    var data = _mapper.Map<BasicPages>(dto);
-                    _basicPageRepo.Update(data);
-                    _unitOfWork.SaveChanges();
-                    resultMessage = "Güncelleme işlemi başarılı";
-                }
-            });
+            //await Task.Run(() =>
+            //{
+            //    if (dto.Id == 0)
+            //    {
+            //        var data = _mapper.Map<BasicPages>(dto);
+            //        _basicPageRepo.Add(data);
+            //        _unitOfWork.SaveChanges();
+            //        resultMessage = "Kayıt işlemi başarılı";
+            //    }
+            //    else
+            //    {
+            //        var data = _mapper.Map<BasicPages>(dto);
+            //        _basicPageRepo.Update(data);
+            //        _unitOfWork.SaveChanges();
+            //        resultMessage = "Güncelleme işlemi başarılı";
+            //    }
+            //});
             return Result.ReturnAsSuccess(message: resultMessage);
         }
 
@@ -83,9 +75,9 @@ namespace SCA.Services
             }
             await Task.Run(() =>
             {
-                var data = _basicPageRepo.Get(x => x.Id == id);
-                data.IsActive = state;
-                _unitOfWork.SaveChanges();
+                //var data = _basicPageRepo.Get(x => x.Id == id);
+                //data.IsActive = state;
+                //_unitOfWork.SaveChanges();
             });
             return Result.ReturnAsSuccess(message: "Ekran aktif/Pasif durumu güncellendi.");
         }

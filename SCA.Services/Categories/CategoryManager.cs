@@ -7,8 +7,6 @@ using SCA.Entity.Dto;
 using SCA.Entity.DTO;
 using SCA.Entity.Enums;
 using SCA.Entity.Model;
-using SCA.Repository.Repo;
-using SCA.Repository.UoW;
 using SCA.Services.Interface;
 using System;
 using System.Collections.Generic;
@@ -21,21 +19,13 @@ namespace SCA.Services
 {
     public class CategoryManager : ICategoryManager
     {
-        private readonly IMapper _mapper;
-        private readonly IUnitofWork _unitOfWork;
-        private IGenericRepository<Category> _categoryRepo;
-        private IGenericRepository<CategoryRelation> _categoryRelationRepo;
-        private readonly IErrorManagement _errorManagent;
+        private readonly IErrorManagement _errorManagement;
         private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
 
 
-        public CategoryManager(IUnitofWork unitOfWork, IMapper mapper, IErrorManagement errorManagement)
+        public CategoryManager(IErrorManagement errorManagement)
         {
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
-            _categoryRepo = unitOfWork.GetRepository<Category>();
-            _categoryRelationRepo = unitOfWork.GetRepository<CategoryRelation>();
-            _errorManagent = errorManagement;
+            _errorManagement = errorManagement;
         }
         #region MainCategory
         /// <summary>
@@ -44,20 +34,20 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> MainCategoryList(long? id)
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
             try
             {
                 string query = "select * from Category where Id=@_Id";
                 DynamicParameters filter = new DynamicParameters();
                 filter.Add("_Id", id);
                 var lisData = await _db.QueryAsync<MainCategoryDto>(query, filter) as List<MainCategoryDto>;
-                _res = Result.ReturnAsSuccess(data: lisData);
+                res = Result.ReturnAsSuccess(data: lisData);
             }
             catch (Exception ex)
             {
-                await _errorManagent.SaveError(ex.ToString());
+                await _errorManagement.SaveError(ex, 0, "MainCategoryList "+id, Entity.Enums.PlatformType.Web);
             }
-            return _res;
+            return res;
         }
         /// <summary>
         /// Kategorileri listeler, parenttan bağımsız tüm kategoriler
@@ -65,18 +55,18 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> MainCategoryListWithParents()
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
             try
             {
                 string query = "select * from Category where IsActive = true";
                 var lisData = await _db.QueryAsync<MainCategoryDto>(query) as List<MainCategoryDto>;
-                _res = Result.ReturnAsSuccess(data: lisData);
+                res = Result.ReturnAsSuccess(data: lisData);
             }
             catch (Exception ex)
             {
-                await _errorManagent.SaveError(ex.ToString());
+                await _errorManagement.SaveError(ex, 0, "MainCategoryListWithParents ", Entity.Enums.PlatformType.Web);
             }
-            return _res;
+            return res;
         }
         /// <summary>
         /// Kategori ekler
@@ -85,23 +75,23 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> MainCategoryCreate(MainCategoryDto dto)
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
             if (dto == null)
             {
-                _res = Result.ReturnAsFail(AlertResource.NoChanges, null);
+                res = Result.ReturnAsFail(AlertResource.NoChanges, null);
             }
             try
             {
                 string query = GetCategoryQuery(CrudType.Insert, null, null);
                 var result = _db.Execute(query);
-                _res = Result.ReturnAsSuccess(message: "Kategori Kayıt İşlemi Başarılı");
+                res = Result.ReturnAsSuccess(message: "Kategori Kayıt İşlemi Başarılı");
             }
             catch (Exception ex)
             {
-                await _errorManagent.SaveError(ex.ToString());
-                _res = Result.ReturnAsFail(message: "Kategori kayıt İşlemi Sırasında Hata Meydana Geldi.");
+                await _errorManagement.SaveError(ex, 0, "MainCategoryCreate ", Entity.Enums.PlatformType.Web);
+                res = Result.ReturnAsFail(message: "Kategori kayıt İşlemi Sırasında Hata Meydana Geldi.");
             }
-            return _res;
+            return res;
         }
         /// <summary>
         /// kategori bilgileri güncellenir
@@ -110,35 +100,25 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> MainCategoryUpdate(MainCategoryDto dto)
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
             if (dto == null)
             {
-                _res = Result.ReturnAsFail(AlertResource.NoChanges, null);
+                res = Result.ReturnAsFail(AlertResource.NoChanges, null);
             }
             try
             {
                 string query = GetCategoryQuery(CrudType.Update, null, null);
                 var result = _db.Execute(query);
-                _res = Result.ReturnAsSuccess(message: "Kategori Güncelleme İşlem Başarılı");
+                res = Result.ReturnAsSuccess(message: "Kategori Güncelleme İşlem Başarılı");
             }
             catch (Exception ex)
             {
-                await _errorManagent.SaveError(ex.ToString());
-                _res = Result.ReturnAsFail(message: "Kategori Güncelleme İşlemi Sırasında Hata Meydana Geldi");
+                await _errorManagement.SaveError(ex, 0, "MainCategoryUpdate ", Entity.Enums.PlatformType.Web);
+                res = Result.ReturnAsFail(message: "Kategori Güncelleme İşlemi Sırasında Hata Meydana Geldi");
             }
-            return _res;
+            return res;
         }
-        /// <summary>
-        /// Kategori siler
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public async Task<ServiceResult> MainCategoryDelete(long id)
-        {
-            var deleteData = _categoryRepo.GetAll().Where(x => x.Id == id);
-            var result = _unitOfWork.SaveChanges();
-            return result;
-        }
+        
         /// <summary>
         /// Kategori durumunu aktif pasif yapar
         /// </summary>
@@ -147,20 +127,20 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> MainCategoryStatusUpdate(int id, bool state)
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
             string flag = state == true ? "Aktif" : "Pasif";
             try
             {
                 string query = $"Update Category set IsActive={state} where Id={id}";
                 var result = _db.Execute(query);
-                _res = Result.ReturnAsSuccess(message: $"Kategori Başarılı Bir Şekilde {flag} Edildi");
+                res = Result.ReturnAsSuccess(message: $"Kategori Başarılı Bir Şekilde {flag} Edildi");
             }
             catch (Exception ex)
             {
-                await _errorManagent.SaveError(ex.ToString());
-                _res = Result.ReturnAsFail(message: $"Kategori {flag} Edilirken hata meydane geldi");
+                await _errorManagement.SaveError(ex, 0, "MainCategoryStatusUpdate ", Entity.Enums.PlatformType.Web);
+                res = Result.ReturnAsFail(message: $"Kategori {flag} Edilirken hata meydane geldi");
             }
-            return _res;
+            return res;
         }
         #endregion
 
@@ -203,7 +183,7 @@ namespace SCA.Services
 
         public async Task<ServiceResult> CreateCategoryRelation(string data, long Id, ReadType readType, UserSession session)
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
             try
             {
                 string[] data_ = data.Replace("[", "").Replace("]", "").Replace("\"", "").Replace("\"", "").Split(',');
@@ -216,16 +196,16 @@ namespace SCA.Services
                         ReadType = readType
                     };
                     string query = GetCategoryRelationQuery(CrudType.Insert, relationData, session);
-                    var res = _db.Execute(query);
+                    var result = _db.Execute(query);
                 }
-                _res = Result.ReturnAsSuccess();
+                res = Result.ReturnAsSuccess();
             }
             catch (Exception ex)
             {
-                await _errorManagent.SaveError(ex.ToString(), session.Id, "Kategori relation insert; " + data, PlatformType.Web);
-                _res = Result.ReturnAsFail();
+                await _errorManagement.SaveError(ex, 0, "MainCategoryStatusUpdate ", Entity.Enums.PlatformType.Web);
+                res = Result.ReturnAsFail();
             }
-            return _res;
+            return res;
         }
     }
 }

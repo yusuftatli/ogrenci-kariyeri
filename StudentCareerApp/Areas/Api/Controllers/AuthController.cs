@@ -24,30 +24,5 @@ namespace StudentCareerApp.Areas.Api.Controller
             _authManager = IauthManager;
         }
 
-        //[HttpPost("UserLogin")]
-        //public async Task<ActionResult<ServiceResult>> UserLogin([FromBody]LoginModel dto)
-        //{
-        //    return await _authManager.UserLogin(dto);
-        //}
-
-        [AllowAnonymous]
-        [HttpPost]
-        [Route("token")]
-        public async Task<ServiceResult> UserLogin([FromBody]LoginDto dto)
-        {
-            return await _authManager.UserLogin(dto);
-        }
-
-        [HttpPost("PasswordForget/{emailAddress}")]
-        public async Task<ActionResult<ServiceResult>> PasswordForget(string emailAddress)
-        {
-            return await _authManager.PasswordForget(emailAddress);
-        }
-
-        [HttpPost("ReNewPassword")]
-        public async Task<ActionResult<ServiceResult>> ReNewPassword([FromBody]string guidValue)
-        {
-            return await _authManager.ReNewPassword(guidValue);
-        }
     }
 }

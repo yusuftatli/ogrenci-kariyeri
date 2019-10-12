@@ -2,8 +2,6 @@
 using SCA.Entity.DTO;
 using SCA.Entity.DTO.ErrorDb;
 using SCA.Entity.Model;
-using SCA.Repository.Repo;
-using SCA.Repository.UoW;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,17 +11,13 @@ namespace SCA.Services
 {
     public class UserValidation : IUserValidation
     {
-        private IGenericRepository<Users> _userRepo;
-        private readonly IUnitofWork _unitOfWork;
-        public UserValidation(IUnitofWork unitOfWork)
+        public UserValidation()
         {
-            _unitOfWork = unitOfWork;
-            _userRepo = _unitOfWork.GetRepository<Users>();
         }
 
         public ServiceResult UserLoginValidation(LoginDto dto)
         {
-            ServiceResult _res = Result.ReturnAsSuccess();
+            ServiceResult res = Result.ReturnAsSuccess();
             List<ErrorList> _er = new List<ErrorList>();
 
             if (string.IsNullOrEmpty(dto.username))
@@ -38,29 +32,29 @@ namespace SCA.Services
 
             if (_er.Count > 0)
             {
-                _res = Result.ReturnAsFail(null, _er);
+                res = Result.ReturnAsFail(null, _er);
             }
 
-            return _res;
+            return res;
         }
 
         public ServiceResult UserDataValidation(UsersDTO dto)
         {
-            ServiceResult _res = Result.ReturnAsSuccess();
+            ServiceResult res = Result.ReturnAsSuccess();
 
             if (dto.IsActive == true)
             {
-                _res = Result.ReturnAsFail(message: "Sisteme Girişiniz Yetkiniz Bulunmamaktadır.", null);
+                res = Result.ReturnAsFail(message: "Sisteme Girişiniz Yetkiniz Bulunmamaktadır.", null);
             }
 
-            return _res;
+            return res;
         }
 
         public ServiceResult CreateUserValidation(UsersDTO dto)
         {
-            ServiceResult _res = Result.ReturnAsSuccess();
+            ServiceResult res = Result.ReturnAsSuccess();
             List<ErrorList> _er = new List<ErrorList>();
-            _res = Result.ReturnAsSuccess();
+            res = Result.ReturnAsSuccess();
 
             if (string.IsNullOrEmpty( dto.Name))
             {
@@ -77,28 +71,28 @@ namespace SCA.Services
                 _er.Add(new ErrorList { Error = "Email boş geçiemez" });
             }
 
-            if (_userRepo.Any(x => x.EmailAddress == dto.EmailAddress))
-            {
-                _er.Add(new ErrorList { Error = "Email adresi zaten kayıtlı" });
-            }
-            if (_userRepo.Any(x => x.UserName == dto.UserName))
-            {
-                _er.Add(new ErrorList { Error = "Kullanıcı adı zaten kayıtlı" });
-            }
+            //if (_userRepo.Any(x => x.EmailAddress == dto.EmailAddress))
+            //{
+            //    _er.Add(new ErrorList { Error = "Email adresi zaten kayıtlı" });
+            //}
+            //if (_userRepo.Any(x => x.UserName == dto.UserName))
+            //{
+            //    _er.Add(new ErrorList { Error = "Kullanıcı adı zaten kayıtlı" });
+            //}
 
             if (_er.Count > 0)
             {
-                _res = Result.ReturnAsFail(null, _er);
+                res = Result.ReturnAsFail(null, _er);
             }
 
-            return _res;
+            return res;
         }
 
         public ServiceResult UserRegisterValidation(UserRegisterDto dto)
         {
-            ServiceResult _res = Result.ReturnAsSuccess();
+            ServiceResult res = Result.ReturnAsSuccess();
             List<ErrorList> _er = new List<ErrorList>();
-            _res = Result.ReturnAsSuccess();
+            res = Result.ReturnAsSuccess();
 
             if (string.IsNullOrEmpty(dto.Name))
             {
@@ -115,22 +109,22 @@ namespace SCA.Services
                 _er.Add(new ErrorList { Error = "Email boş geçiemez" });
             }
 
-            if (_userRepo.Any(x => x.UserName.Equals(dto.UserName)))
-            {
-                _er.Add(new ErrorList { Error = "Bu kullanıcı adı daha önce alınmış." });
-            }
+            //if (_userRepo.Any(x => x.UserName.Equals(dto.UserName)))
+            //{
+            //    _er.Add(new ErrorList { Error = "Bu kullanıcı adı daha önce alınmış." });
+            //}
 
-            if (_userRepo.Any(x=>x.EmailAddress.Equals(dto.EmailAddress)))
-            {
-                _er.Add(new ErrorList { Error = "Email adresi zaten kayıtlı" });
-            }
+            //if (_userRepo.Any(x=>x.EmailAddress.Equals(dto.EmailAddress)))
+            //{
+            //    _er.Add(new ErrorList { Error = "Email adresi zaten kayıtlı" });
+            //}
 
             if (_er.Count > 0)
             {
-                _res = Result.ReturnAsFail(null, _er);
+                res = Result.ReturnAsFail(null, _er);
             }
 
-            return _res;
+            return res;
         }
 
     }

@@ -7,7 +7,6 @@ namespace SCA.Entity.DTO
 {
     public class CommentForUIDto
     {
-        private string imagePath;
         public long Id { get; set; }
         public long UserID { get; set; }
         public long ArticleId { get; set; }

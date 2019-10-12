@@ -2504,19 +2504,19 @@ describe('basic usage', function() {
 
   describe('failure mode', function() {
     var ERROR_CODE = 500,
-        ERROR_RESPONSE = 'Server Error',
+        ERRORresPONSE = 'Server Error',
         errorCB;
 
     beforeEach(function() {
       errorCB = jasmine.createSpy('error').and.callFake(function(response) {
-        expect(response.data).toBe(ERROR_RESPONSE);
+        expect(response.data).toBe(ERRORresPONSE);
         expect(response.status).toBe(ERROR_CODE);
       });
     });
 
 
     it('should call the error callback if provided on non 2xx response', function() {
-      $httpBackend.expect('GET', '/CreditCard/123').respond(ERROR_CODE, ERROR_RESPONSE);
+      $httpBackend.expect('GET', '/CreditCard/123').respond(ERROR_CODE, ERRORresPONSE);
 
       CreditCard.get({id:123}, callback, errorCB);
       $httpBackend.flush();
@@ -2526,7 +2526,7 @@ describe('basic usage', function() {
 
 
     it('should call the error callback if provided on non 2xx response (without data)', function() {
-      $httpBackend.expect('GET', '/CreditCard').respond(ERROR_CODE, ERROR_RESPONSE);
+      $httpBackend.expect('GET', '/CreditCard').respond(ERROR_CODE, ERRORresPONSE);
 
       CreditCard.get(callback, errorCB);
       $httpBackend.flush();

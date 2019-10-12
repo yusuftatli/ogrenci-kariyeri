@@ -6,8 +6,6 @@ using SCA.Common.Resource;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
 using SCA.Entity.Model;
-using SCA.Repository.Repo;
-using SCA.Repository.UoW;
 using SCA.Services.Interface;
 using System;
 using System.Collections.Generic;
@@ -21,42 +19,34 @@ namespace SCA.Services
 {
     public class AddressManager : IAddressManager
     {
-        private readonly IMapper _mapper;
-        private readonly IUnitofWork _unitOfWork;
-        private IGenericRepository<Cities> _citiesRepo;
-        private IGenericRepository<District> _districtRepo;
         private readonly IErrorManagement _errorManagement;
         private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
 
-        public AddressManager(IUnitofWork unitOfWork, IMapper mapper, IErrorManagement errorManagement)
+        public AddressManager( IErrorManagement errorManagement)
         {
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
-            _citiesRepo = unitOfWork.GetRepository<Cities>();
-            _districtRepo = unitOfWork.GetRepository<District>();
             _errorManagement = errorManagement;
         }
         public async Task<ServiceResult> GetCities()
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
             List<CitiesDto> dataList = new List<CitiesDto>();
             try
             {
                 string query = "select Id as CityId, CityName as CityName from Cities";
                 dataList = _db.Query<CitiesDto>(query).ToList();
-                _res = Result.ReturnAsSuccess(data: dataList);
+                res = Result.ReturnAsSuccess(data: dataList);
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
-                _res = Result.ReturnAsFail(message: "İl bilgileri çekilirken hata meydana geldi");
+                await _errorManagement.SaveError(ex, 0, "GetCities", Entity.Enums.PlatformType.Web);
+                res = Result.ReturnAsFail(message: "İl bilgileri çekilirken hata meydana geldi");
             }
-            return _res;
+            return res;
         }
 
         public async Task<ServiceResult> GetDistrict(int cityId)
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
             List<DistrictDto> dataList = new List<DistrictDto>();
             try
             {
@@ -65,29 +55,29 @@ namespace SCA.Services
                 fitler.Add("cityId", cityId);
 
                 dataList = _db.Query<DistrictDto>(query, fitler).ToList();
-                _res = Result.ReturnAsSuccess(data: dataList);
+                res = Result.ReturnAsSuccess(data: dataList);
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
-                _res = Result.ReturnAsFail(message: "İlçe bilgileri çekilirken hata meydana geldi");
+                await _errorManagement.SaveError(ex, 0, "GetDistrict " + cityId, Entity.Enums.PlatformType.Web);
+                res = Result.ReturnAsFail(message: "İlçe bilgileri çekilirken hata meydana geldi");
             }
-            return _res;
+            return res;
         }
 
         public async Task<List<CitiesDto>> CityList()
         {
-            List<CitiesDto> _res = new List<CitiesDto>();
+            List<CitiesDto> res = new List<CitiesDto>();
             try
             {
                 string query = "select * from Cities";
-                _res = _db.Query<CitiesDto>(query).ToList();
+                res = _db.Query<CitiesDto>(query).ToList();
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
+                await _errorManagement.SaveError(ex, 0, "CityList " , Entity.Enums.PlatformType.Web);
             }
-            return _res;
+            return res;
         }
 
 

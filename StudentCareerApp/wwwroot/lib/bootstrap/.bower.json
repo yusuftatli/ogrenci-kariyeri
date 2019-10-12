@@ -33,7 +33,7 @@
   },
   "version": "3.3.7",
   "_release": "3.3.7",
-  "_resolution": {
+  "resolution": {
     "type": "version",
     "tag": "v3.3.7",
     "commit": "0b9c4a4007c44201dce9a6cc1a38407005c26c86"

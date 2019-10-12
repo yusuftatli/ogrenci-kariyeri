@@ -29,12 +29,6 @@ namespace SCA.Services
         /// <returns></returns>
         Task<ServiceResult> ContentCreate(ContentDto dto, UserSession session);
 
-        /// <summary>
-        /// makale siler
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <returns></returns>
-        Task<ServiceResult> ContentDelete(long Id);
 
         /// <summary>
         /// makalelerin yayınlanma durumunu günceller

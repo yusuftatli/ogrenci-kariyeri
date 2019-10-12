@@ -6,8 +6,6 @@ using Newtonsoft.Json;
 using SCA.Entity.DTO;
 using SCA.Entity.Enums;
 using SCA.Entity.Model;
-using SCA.Repository.Repo;
-using SCA.Repository.UoW;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -25,39 +23,33 @@ namespace SCA.Services
         {
         }
 
-        public async Task<string> SaveError(string ex)
+        public async Task<string> SaveError(Exception ex, long? userId, string process, PlatformType platformType)
         {
+            string res = string.Empty;
             try
             {
-                string query = "insert into Errors(UserId,Process,StackTrace) values (@Description,@PlatformType,CURDATE());";
-                DynamicParameters filter = new DynamicParameters();
-                filter.Add("Description", "");
-                filter.Add("PlatformType", 2);
-                var result = await _db.ExecuteAsync(query, filter);
-            }
-            catch (Exception)
-            {
-            }
-            return "";
-        }
-        public async Task<string> SaveError(string error, long userId, string process, PlatformType platformType)
-        {
-            try
-            {
-                string query = "insert into Errors(UserId,Process,Description,PlatformType,ErrorDate) values" +
-                    "(@UserId,@Process,@Description,@PlatformType,CURDATE());";
+                string query = @"insert into Errors (UserId, Process, StackTrace, Source, Message, InnerException, HResult, Data, TargetSite, HelpLink, PlatformType, ErrorDate) values 
+                              (@UserId, @Process, @StackTrace, @Source, @Message, @InnerException, @HResult, @Data, @TargetSite, @HelpLink, @PlatformType, CURDATE());";
                 DynamicParameters filter = new DynamicParameters();
                 filter.Add("UserId", userId);
                 filter.Add("Process", process);
-                filter.Add("Description", error);
+                filter.Add("StackTrace", ex.StackTrace);
+                filter.Add("Source", ex.Source);
+                filter.Add("Message", ex.Message);
+                filter.Add("InnerException", ex.InnerException);
+                filter.Add("HResult", ex.HResult);
+                filter.Add("Data", ex.Data);
+                filter.Add("TargetSite", ex.TargetSite);
+                filter.Add("HelpLink", ex.HelpLink);
                 filter.Add("PlatformType", platformType);
+
                 var result = await _db.ExecuteAsync(query, filter);
             }
-            catch (Exception ex)
+            catch (Exception ex1)
             {
-                error = ex.ToString();
+                res = ex1.InnerException.ToString();
             }
-            return error;
+            return res;
         }
     }
 }

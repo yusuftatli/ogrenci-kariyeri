@@ -68,8 +68,12 @@ namespace SCA.UI.Controllers
         [HttpGet]
         public async Task<JsonResult> Logout()
         {
-            HttpContext.Session.Remove("userInfo");
+            await Task.Run(() =>
+            {
+                HttpContext.Session.Remove("userInfo");
+            });
             return Json(new { message = "Çıkış yapıldı. Umarız tekrar dönersiniz :)" });
+
         }
 
         [ValidateAntiForgeryToken]

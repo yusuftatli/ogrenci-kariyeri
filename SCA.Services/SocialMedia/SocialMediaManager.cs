@@ -2,6 +2,7 @@
 using MySql.Data.MySqlClient;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
+using SCA.Entity.Enums;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,25 +14,25 @@ namespace SCA.Services
     public class SocialMediaManager : ISocialMediaManager
     {
 
-        private readonly IErrorManagement _em;
+        private readonly IErrorManagement _errorManagement;
         private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
 
         public SocialMediaManager(IErrorManagement em)
         {
-            _em = em;
+            _errorManagement = em;
         }
 
 
         public async Task<ServiceResult> CreateSocialMedia(SocialMediaDto dto, long userId)
         {
-            ServiceResult _res =new ServiceResult();
+            ServiceResult res =new ServiceResult();
            
             DynamicParameters filter = new DynamicParameters();
             try
             {
-                string query = "";
-                string deleteQuery = "";
-                string em = "";
+                string query = string.Empty;
+                string deleteQuery = string.Empty;
+                string em = string.Empty;
                 if (dto.Id == 0)
                 {
                     query = @"insert into SocialMedia (UserId,CompanyClupId,Url,IsActive,SocialMediaType,CreatedUserId,CreatedDate)
@@ -44,7 +45,7 @@ namespace SCA.Services
                     filter.Add("SocialMediaType", dto.SocialMediaType);
                     filter.Add("CreatedUserId", userId);
                     filter.Add("CreatedDate", DateTime.Now);
-                    var res = _db.Execute(query, filter);
+                    var result = _db.Execute(query, filter);
                     em = "Sosyal medya url kayıt işlemi başarılı";
                 }
                 else
@@ -66,15 +67,15 @@ namespace SCA.Services
                     var addSocialData = _db.Execute(query, filter);
                     em = "Sosyal meyda url güncelleme işlemi başarlı";
 
-                    _res = Result.ReturnAsSuccess(message:em);
+                    res = Result.ReturnAsSuccess(message:em);
                 }
             }
             catch (Exception ex)
             {
-               await _em.SaveError(ex.ToString());
-                _res = Result.ReturnAsFail(message:"Sosyal medya url kayıt işlemi sırasında hata meydana geldi.");
+                await _errorManagement.SaveError(ex, null, "CreateSocialMedia", PlatformType.Web);
+                res = Result.ReturnAsFail(message:"Sosyal medya url kayıt işlemi sırasında hata meydana geldi.");
             }
-            return _res;
+            return res;
         }
     }
 }

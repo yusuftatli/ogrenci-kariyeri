@@ -100,12 +100,6 @@ namespace StudentCareerApp.Areas.Api.Controller
             return await _contentManager.ContentCreate(dto, JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
         }
 
-        [HttpDelete("ContentDelete")]
-        public async Task<ServiceResult> ContentDelete(long Id)
-        {
-            return await _contentManager.ContentDelete(Id);
-        }
-
         [HttpPost("UpdateAssayState")]
         public async Task<ServiceResult> UpdateAssayState(long Id, PublishState publishState)
         {

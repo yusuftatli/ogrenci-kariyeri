@@ -40,12 +40,6 @@ namespace SCA.Services
         /// <returns></returns>
         Task<ServiceResult> MainCategoryUpdate(MainCategoryDto dto);
 
-        /// <summary>
-        /// Kategori siler
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        Task<ServiceResult> MainCategoryDelete(long id);
 
         /// <summary>
         /// Kategori durumunu aktif pasif yapar

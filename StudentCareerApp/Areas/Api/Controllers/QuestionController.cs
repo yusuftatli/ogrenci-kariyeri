@@ -25,7 +25,7 @@ namespace StudentCareerApp.Areas.Api.Controller
         [HttpPost("CreateTest")]
         public async Task<ServiceResult> CreateTest([FromBody]QuestionCrudDto model)
         {
-            _questionManager.CreateQuestion(model);
+           await _questionManager.CreateQuestion(model);
             return new ServiceResult
             {
                 Data = model

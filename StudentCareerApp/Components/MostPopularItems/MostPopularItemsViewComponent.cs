@@ -22,14 +22,7 @@ namespace StudentCareerApp.Components.MostPopularItems
         public async Task<IViewComponentResult> InvokeAsync(int count, List<ContentForHomePageDTO> model = null)
         {
             List<ContentForHomePageDTO> res = new List<ContentForHomePageDTO>();
-            try
-            {
                 res = model ?? await _contentManager.GetContentForHomePage(HitTypes.MostPopuler, count);
-            }
-            catch (Exception ex)
-            {
-
-            }
 
             return View("_MostPopularItems", res);
         }

@@ -958,8 +958,8 @@
     <None Include="wwwroot\AdminFiles\Template\assets\node_modules\bootstrap-rtl-master\scss\mixins\_nav-divider.scss" />
     <None Include="wwwroot\AdminFiles\Template\assets\node_modules\bootstrap-rtl-master\scss\mixins\_navbar-align.scss" />
     <None Include="wwwroot\AdminFiles\Template\assets\node_modules\bootstrap-rtl-master\scss\mixins\_pagination.scss" />
-    <None Include="wwwroot\AdminFiles\Template\assets\node_modules\bootstrap-rtl-master\scss\mixins\_reset-text.scss" />
-    <None Include="wwwroot\AdminFiles\Template\assets\node_modules\bootstrap-rtl-master\scss\mixins\_resize.scss" />
+    <None Include="wwwroot\AdminFiles\Template\assets\node_modules\bootstrap-rtl-master\scss\mixins\reset-text.scss" />
+    <None Include="wwwroot\AdminFiles\Template\assets\node_modules\bootstrap-rtl-master\scss\mixins\resize.scss" />
     <None Include="wwwroot\AdminFiles\Template\assets\node_modules\bootstrap-rtl-master\scss\mixins\_screen-reader.scss" />
     <None Include="wwwroot\AdminFiles\Template\assets\node_modules\bootstrap-rtl-master\scss\mixins\_size.scss" />
     <None Include="wwwroot\AdminFiles\Template\assets\node_modules\bootstrap-rtl-master\scss\mixins\_table-row.scss" />
@@ -1318,8 +1318,8 @@
     <None Include="wwwroot\AdminFiles\Template\assets\node_modules\bootstrap\scss\mixins\_lists.scss" />
     <None Include="wwwroot\AdminFiles\Template\assets\node_modules\bootstrap\scss\mixins\_nav-divider.scss" />
     <None Include="wwwroot\AdminFiles\Template\assets\node_modules\bootstrap\scss\mixins\_pagination.scss" />
-    <None Include="wwwroot\AdminFiles\Template\assets\node_modules\bootstrap\scss\mixins\_reset-text.scss" />
-    <None Include="wwwroot\AdminFiles\Template\assets\node_modules\bootstrap\scss\mixins\_resize.scss" />
+    <None Include="wwwroot\AdminFiles\Template\assets\node_modules\bootstrap\scss\mixins\reset-text.scss" />
+    <None Include="wwwroot\AdminFiles\Template\assets\node_modules\bootstrap\scss\mixins\resize.scss" />
     <None Include="wwwroot\AdminFiles\Template\assets\node_modules\bootstrap\scss\mixins\_screen-reader.scss" />
     <None Include="wwwroot\AdminFiles\Template\assets\node_modules\bootstrap\scss\mixins\_size.scss" />
     <None Include="wwwroot\AdminFiles\Template\assets\node_modules\bootstrap\scss\mixins\_table-row.scss" />
@@ -1764,7 +1764,7 @@
     <None Include="wwwroot\AdminFiles\Template\assets\node_modules\dropify\src\sass\demo\helpers\_shortcuts.scss" />
     <None Include="wwwroot\AdminFiles\Template\assets\node_modules\dropify\src\sass\demo\_grid.scss" />
     <None Include="wwwroot\AdminFiles\Template\assets\node_modules\dropify\src\sass\demo\_normalize.scss" />
-    <None Include="wwwroot\AdminFiles\Template\assets\node_modules\dropify\src\sass\demo\_reset.scss" />
+    <None Include="wwwroot\AdminFiles\Template\assets\node_modules\dropify\src\sass\demo\reset.scss" />
     <None Include="wwwroot\AdminFiles\Template\assets\node_modules\dropify\src\sass\demo\_typo.scss" />
     <None Include="wwwroot\AdminFiles\Template\assets\node_modules\dropify\src\sass\demo\_variables.scss" />
     <None Include="wwwroot\AdminFiles\Template\assets\node_modules\dropify\src\sass\dropify.scss" />

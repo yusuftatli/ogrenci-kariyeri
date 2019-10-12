@@ -9,8 +9,6 @@ using SCA.Entity.Dto;
 using SCA.Entity.DTO;
 using SCA.Entity.Enums;
 using SCA.Entity.Model;
-using SCA.Repository.Repo;
-using SCA.Repository.UoW;
 using SCA.Services.Interface;
 using System;
 using System.Collections.Generic;
@@ -24,23 +22,17 @@ namespace SCA.Services
 {
     public class ContentManager : IContentManager
     {
-        private readonly IMapper _mapper;
         private readonly ITagManager _tagManager;
-        private readonly IUnitofWork _unitOfWork;
         private readonly ICategoryManager _categoryManager;
         private readonly IUserManager _userManager;
         private readonly IErrorManagement _errorManagement;
-        private IGenericRepository<Content> _contentRepo;
         private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
-        public ContentManager(IUnitofWork unitOfWork, IMapper mapper, ITagManager tagManager, ICategoryManager categoryManager, IUserManager userManager, IErrorManagement errorManagement)
+        public ContentManager( IMapper mapper, ITagManager tagManager, ICategoryManager categoryManager, IUserManager userManager, IErrorManagement errorManagement)
         {
-            _mapper = mapper;
             _tagManager = tagManager;
             _userManager = userManager;
-            _unitOfWork = unitOfWork;
             _categoryManager = categoryManager;
             _errorManagement = errorManagement;
-            _contentRepo = unitOfWork.GetRepository<Content>();
         }
 
         /// <summary>
@@ -49,23 +41,22 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> ContentShortListByMobil(ContentSearchByMoilDto dto, string token)
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
             long userId = JwtToken.GetUserId(token);
             try
             {
-                string query = "";
 
                 var listData = await _db.QueryAsync<ContentForHomePageDTO>("Content_ListAllByMobil", new { _Type = dto.Type, _StartDate = dto.StartDate, _EndDate = dto.EndDate, _searhCategoryIds = dto.searhCategoryIds, _limit = dto.limit }, commandType: CommandType.StoredProcedure) as List<ContentForHomePageDTO>;
 
-                _res = Result.ReturnAsSuccess(data: listData);
+                res = Result.ReturnAsSuccess(data: listData);
 
             }
             catch (Exception _ex)
             {
-                await _errorManagement.SaveError(_ex.ToString(), userId, "ContentShortListByMobil", PlatformType.Mobil);
-                _res = Result.ReturnAsFail(message: "Mobil Content bilgileri yüklenirken hata meydana geldi");
+                await _errorManagement.SaveError(_ex, userId, "ContentShortListByMobil", PlatformType.Mobil);
+                res = Result.ReturnAsFail(message: "Mobil Content bilgileri yüklenirken hata meydana geldi");
             }
-            return _res;
+            return res;
         }
 
         /// <summary>
@@ -74,7 +65,7 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> ContentShortListFavoriByMobil(int count, string token)
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
             long userId = JwtToken.GetUserId(token);
             try
             {
@@ -83,17 +74,17 @@ namespace SCA.Services
                 filter.Add("UserId", userId);
                 filter.Add("count", count);
 
-                var dataList =await _db.QueryAsync<ContentForHomePageDTO>(query, filter) as List<ContentForHomePageDTO>;
+                var dataList = await _db.QueryAsync<ContentForHomePageDTO>(query, filter) as List<ContentForHomePageDTO>;
 
-                _res = Result.ReturnAsSuccess(data: dataList);
+                res = Result.ReturnAsSuccess(data: dataList);
 
             }
             catch (Exception _ex)
             {
-                await _errorManagement.SaveError(_ex.ToString(), userId, "ContentShortListByMobil", PlatformType.Mobil);
-                _res = Result.ReturnAsFail(message: "Mobil Content bilgileri yüklenirken hata meydana geldi");
+                await _errorManagement.SaveError(_ex, userId, "ContentShortListByMobil", PlatformType.Mobil);
+                res = Result.ReturnAsFail(message: "Mobil Content bilgileri yüklenirken hata meydana geldi");
             }
-            return _res;
+            return res;
         }
 
 
@@ -103,7 +94,7 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> ContentShortList(ContentSearchDto dto, UserSession session)
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
             try
             {
                 string query = "";
@@ -136,10 +127,10 @@ namespace SCA.Services
             }
             catch (Exception _ex)
             {
-                string res = await _errorManagement.SaveError(_ex.ToString());
-                _res = Result.ReturnAsFail(message: res, null);
+                await _errorManagement.SaveError(_ex, 0, "ContentShortList ", Entity.Enums.PlatformType.Web);
+                res = Result.ReturnAsFail(message: "Haberler yüklenirken hata meydana geldi.");
             }
-            return _res;
+            return res;
         }
         /// <summary>
         /// UI için makaleleri short list olarak kullanıcı bilgileri ile birlikte döner 
@@ -147,39 +138,42 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> ContentShortListForUI()
         {
-            var dataList = _mapper.Map<List<ContentShortListUIDto>>(_contentRepo.GetAll(x => x.IsDeleted.Equals(false)).ToList());
-            List<long> ids = new List<long>();
-
-            foreach (ContentShortListUIDto item in dataList)
+            ServiceResult res = new ServiceResult();
+            await Task.Run(() =>
             {
-                ids.Add(item.Id);
-            }
+                var dataList = 0;//_mapper.Map<List<ContentShortListUIDto>>(_contentRepo.GetAll(x => x.IsDeleted.Equals(false)).ToList());
+                List<long> ids = new List<long>();
 
-            var users = _userManager.GetShortUserInfo(ids);
+                //foreach (ContentShortListUIDto item in dataList)
+                //{
+                //    ids.Add(item.Id);
+                //}
 
-            dataList.ForEach(x =>
-            {
-                x.Writer = users.Where(a => a.Id == x.CreatedUserId).Select(s => s.Name + " " + s.Surname).FirstOrDefault();
-                x.WriterImagePath = users.Where(a => a.Id == x.CreatedUserId).Select(s => s.ImagePath).FirstOrDefault();
+                var users = _userManager.GetShortUserInfo(ids);
+
+                //dataList.ForEach(x =>
+                //{
+                //    x.Writer = users.Where(a => a.Id == x.CreatedUserId).Select(s => s.Name + " " + s.Surname).FirstOrDefault();
+                //    x.WriterImagePath = users.Where(a => a.Id == x.CreatedUserId).Select(s => s.ImagePath).FirstOrDefault();
+                //});
+                res = Result.ReturnAsSuccess(data: dataList);
             });
-
-
-            return Result.ReturnAsSuccess(null, null, dataList);
+            return res;
         }
 
         public async Task<ServiceResult> GetContentByMobil(ContentDetailMobilDto dto, string token)
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
             if (dto.Equals(null))
             {
-                _res = Result.ReturnAsFail(message: "Model boş olamaz.");
-                return _res;
+                res = Result.ReturnAsFail(message: "Model boş olamaz.");
+                return res;
             }
 
             if (string.IsNullOrEmpty(dto.seoUrl))
             {
-                _res = Result.ReturnAsFail(message: "Seo url boş olamaz.");
-                return _res;
+                res = Result.ReturnAsFail(message: "Seo url boş olamaz.");
+                return res;
             }
 
             ContentDetailForDetailPageDTO _model = new ContentDetailForDetailPageDTO();
@@ -190,30 +184,30 @@ namespace SCA.Services
                 _model.MostPopularItems = _db.Query<ContentForHomePageDTO>("Content_ListBySeoUrl", new { type = 2, _SeoUrl = dto.seoUrl, _Ip = dto.ip, _UserId = userId, ContentId = _model.Id, count = dto.count }, commandType: CommandType.StoredProcedure).ToList();
                 _model.CommentList = _db.Query<CommentForUIDto>("Content_ListBySeoUrl", new { type = 3, _SeoUrl = dto.seoUrl, _Ip = dto.ip, _UserId = userId, ContentId = _model.Id, count = dto.count }, commandType: CommandType.StoredProcedure).ToList();
 
-                _res = Result.ReturnAsSuccess(data: _model);
+                res = Result.ReturnAsSuccess(data: _model);
             }
             catch (Exception ex)
             {
-                _res = Result.ReturnAsFail(message: "İçerik detayı yüklenirken hata meydana geldi.");
-                await _errorManagement.SaveError(ex.ToString(), userId, "GetContentByMobil", PlatformType.Mobil);
+                res = Result.ReturnAsFail(message: "İçerik detayı yüklenirken hata meydana geldi.");
+                await _errorManagement.SaveError(ex, userId, "GetContentByMobil", PlatformType.Mobil);
             }
-            return _res;
+            return res;
         }
 
         public async Task<ContentDetailForDetailPageDTO> GetContentUI(string seoUrl, long? userId = null, string ip = "")
         {
-            ContentDetailForDetailPageDTO _res = new ContentDetailForDetailPageDTO();
+            ContentDetailForDetailPageDTO res = new ContentDetailForDetailPageDTO();
             try
             {
-                _res = await _db.QueryFirstAsync<ContentDetailForDetailPageDTO>("Content_ListBySeoUrl", new { type = 1, _SeoUrl = seoUrl, _Ip = ip, _UserId = (userId == null) ? 0 : userId, ContentId = 0, count = 10 }, commandType: CommandType.StoredProcedure);
-                _res.MostPopularItems = _db.Query<ContentForHomePageDTO>("Content_ListBySeoUrl", new { type = 2, _SeoUrl = seoUrl, _Ip = ip, _UserId = userId, ContentId = _res.Id, count = 10 }, commandType: CommandType.StoredProcedure).ToList();
-                _res.CommentList = _db.Query<CommentForUIDto>("Content_ListBySeoUrl", new { type = 3, _SeoUrl = seoUrl, _Ip = ip, _UserId = userId, ContentId = _res.Id, count = 10 }, commandType: CommandType.StoredProcedure).ToList();
+                res = await _db.QueryFirstAsync<ContentDetailForDetailPageDTO>("Content_ListBySeoUrl", new { type = 1, _SeoUrl = seoUrl, _Ip = ip, _UserId = (userId == null) ? 0 : userId, ContentId = 0, count = 10 }, commandType: CommandType.StoredProcedure);
+                res.MostPopularItems = _db.Query<ContentForHomePageDTO>("Content_ListBySeoUrl", new { type = 2, _SeoUrl = seoUrl, _Ip = ip, _UserId = userId, ContentId = res.Id, count = 10 }, commandType: CommandType.StoredProcedure).ToList();
+                res.CommentList = _db.Query<CommentForUIDto>("Content_ListBySeoUrl", new { type = 3, _SeoUrl = seoUrl, _Ip = ip, _UserId = userId, ContentId = res.Id, count = 10 }, commandType: CommandType.StoredProcedure).ToList();
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
+                await _errorManagement.SaveError(ex, userId, "GetContentUI", PlatformType.Mobil);
             }
-            return _res;
+            return res;
         }
 
         public async Task<long> GetContentId(string seoUrl)
@@ -224,19 +218,24 @@ namespace SCA.Services
         }
         public async Task<ServiceResult> GetContentForMobil(string seoUrl)
         {
-            ContentForUIDto result = new ContentForUIDto();
-            //var contentData = _mapper.Map<ContenUIDto>(_contentRepo.Get(x => x.SeoUrl == seoUrl && x.PlatformType == PlatformType.Mobil));
+            ServiceResult res = new ServiceResult();
+            await Task.Run(() =>
+            {
+                ContentForUIDto result = new ContentForUIDto();
+                //var contentData = _mapper.Map<ContenUIDto>(_contentRepo.Get(x => x.SeoUrl == seoUrl && x.PlatformType == PlatformType.Mobil));
 
-            //var userData = _userManager.GetUserInfo(contentData.CreatedUserId);
+                //var userData = _userManager.GetUserInfo(contentData.CreatedUserId);
 
-            //contentData.WriterName = userData.Name + " " + userData.Surname;
-            //contentData.WriterImagePath = userData.ImagePath;
+                //contentData.WriterName = userData.Name + " " + userData.Surname;
+                //contentData.WriterImagePath = userData.ImagePath;
 
-            return Result.ReturnAsSuccess(null, null, null);
+                res = Result.ReturnAsSuccess(data: null);
+            });
+            return res;
         }
         public async Task<ServiceResult> GetContent(long id)
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
             try
             {
                 string query = "Select *From Content where Id=@Id";
@@ -247,28 +246,33 @@ namespace SCA.Services
 
                 if (resultData != null)
                 {
-                    _res = Result.ReturnAsSuccess(data: resultData);
+                    res = Result.ReturnAsSuccess(data: resultData);
                 }
                 else
                 {
-                    _res = Result.ReturnAsFail(message: "Yüklenecek herhangi bir makale detayı bulunamadı");
+                    res = Result.ReturnAsFail(message: "Yüklenecek herhangi bir makale detayı bulunamadı");
                 }
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
-                _res = Result.ReturnAsFail(message: "Makale detay bilgisi yüklenirken hata meydana geldi");
+                await _errorManagement.SaveError(ex, null, "GetContent", PlatformType.Mobil);
+                res = Result.ReturnAsFail(message: "Makale detay bilgisi yüklenirken hata meydana geldi");
             }
-            return _res;
+            return res;
         }
         public async Task<ServiceResult> GetContent(string url)
         {
-            var listData = _mapper.Map<ContentDto>(_contentRepo.Get(x => x.SeoUrl == url));
-            return Result.ReturnAsSuccess(null, null, listData);
+            ServiceResult res = new ServiceResult();
+            await Task.Run(() =>
+            {
+                //var listData = _mapper.Map<ContentDto>(_contentRepo.Get(x => x.SeoUrl == url));
+                res = Result.ReturnAsSuccess(data: null);
+            });
+            return res;
         }
         public async Task<ServiceResult> UpdateContentPublish(publishStateDto dto, UserSession session)
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
             try
             {
                 string query = "Update Content set PublishStateType = @PublishStateType where Id=@Id";
@@ -277,14 +281,14 @@ namespace SCA.Services
                 filter.Add("PublishStateType", dto.publishState);
 
                 var resultData = _db.Execute(query, filter);
-                _res = Result.ReturnAsSuccess();
+                res = Result.ReturnAsSuccess();
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
-                _res = Result.ReturnAsFail();
+                await _errorManagement.SaveError(ex, null, "UpdateContentPublish", PlatformType.Mobil);
+                res = Result.ReturnAsFail();
             }
-            return _res;
+            return res;
         }
         /// <summary>
         /// Makaleleri içerikleri ile birlikte listeler
@@ -292,7 +296,12 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> ContentList()
         {
-            return Result.ReturnAsSuccess(null, null, _mapper.Map<List<ContentDto>>(_contentRepo.GetAll(x => x.IsDeleted.Equals(false)).ToList()));
+            ServiceResult res = new ServiceResult();
+            await Task.Run(() =>
+            {
+                res = Result.ReturnAsSuccess(data: null);
+            });
+            return res;
         }
         /// <summary>
         /// makale ekler
@@ -301,11 +310,11 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> ContentCreate(ContentDto dto, UserSession session)
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
             long _contentId = 0;
             if (dto == null)
             {
-                _res = Result.ReturnAsFail(AlertResource.NoChanges, null);
+                res = Result.ReturnAsFail(AlertResource.NoChanges, null);
             }
             string resultMessage = "";
             try
@@ -316,7 +325,6 @@ namespace SCA.Services
                     dto.PublishStateType = (dto.IsSendConfirm == true) ? PublishState.PublishProcess : PublishState.Taslak;
                 }
 
-                Content res = null;
                 if (dto.Id == 0)
                 {
                     dto.ReadCount = 0;
@@ -342,68 +350,78 @@ namespace SCA.Services
 
                 if (_contentId > 0)
                 {
-                    _res = Result.ReturnAsSuccess(message: resultMessage);
-                    ServiceResult _resTag = await _tagManager.CreateTag(dto.Tags, _contentId, ReadType.Content, session);
-                    if (_resTag.ResultCode != HttpStatusCode.OK)
+                    res = Result.ReturnAsSuccess(message: resultMessage);
+                    ServiceResult resTag = await _tagManager.CreateTag(dto.Tags, _contentId, ReadType.Content, session);
+                    if (resTag.ResultCode != HttpStatusCode.OK)
                     {
-                        _res = Result.ReturnAsFail("Makale kayıt edildi fakat etiket bilgileri kayıt edilirken hata meydana geldi, lütfen tekrar deneyiniz.");
+                        res = Result.ReturnAsFail("Makale kayıt edildi fakat etiket bilgileri kayıt edilirken hata meydana geldi, lütfen tekrar deneyiniz.");
                     }
-                    ServiceResult _resCategory = await _categoryManager.CreateCategoryRelation(dto.Category, _contentId, ReadType.Content, session);
-                    if (_resCategory.ResultCode != HttpStatusCode.OK)
+                    ServiceResult resCategory = await _categoryManager.CreateCategoryRelation(dto.Category, _contentId, ReadType.Content, session);
+                    if (resCategory.ResultCode != HttpStatusCode.OK)
                     {
-                        _res = Result.ReturnAsFail("Makale kayıt edildi fakat categori bilgileri kayıt edilirken hata meydana geldi, lütfen daha sonra tekrar deneyiniz.");
+                        res = Result.ReturnAsFail("Makale kayıt edildi fakat categori bilgileri kayıt edilirken hata meydana geldi, lütfen daha sonra tekrar deneyiniz.");
                     }
                 }
                 else
                 {
-                    _res = Result.ReturnAsFail(message: resultMessage);
+                    res = Result.ReturnAsFail(message: resultMessage);
                 }
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
-                _res = Result.ReturnAsFail(message: resultMessage);
+                await _errorManagement.SaveError(ex, null, "ContentCreate", PlatformType.Mobil);
+                res = Result.ReturnAsFail(message: resultMessage);
             }
-            return _res;
+            return res;
         }
 
         public async Task<List<CommentForUIDto>> GetCommentsByContentId(long contentId)
         {
-            string query = $"Select * Comments where ArticleId ={contentId}";
-            var listData = _db.Query<CommentForUIDto>(query) as List<CommentForUIDto>;
-            return listData;
+            List<CommentForUIDto> res = new List<CommentForUIDto>();
+            await Task.Run(() =>
+            {
+                string query = $"Select * Comments where ArticleId ={contentId}";
+                var listData = _db.Query<CommentForUIDto>(query) as List<CommentForUIDto>;
+                res = listData;
+            });
+            return res;
         }
 
         public async Task<ServiceResult> CreateContent(ContentDto dto, UserSession session)
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
+            await Task.Run(() =>
+            {
+                string query = "";
+                DynamicParameters filter = null;
+                GetContentQuery(CrudType.Insert, dto, session, ref query, ref filter);
 
-            string query = "";
-            DynamicParameters filter = null;
-            GetContentQuery(CrudType.Insert, dto, session, ref query, ref filter);
-
-            var res = _db.Execute(query, filter);
-
-            return Result.ReturnAsSuccess();
+                var result = _db.Execute(query, filter);
+                res = Result.ReturnAsSuccess(); 
+            });
+            return res;
 
         }
 
         public async Task<ServiceResult> CreateContentSyncData(ContentDto dto)
         {
-            ServiceResult _res = new ServiceResult();
-
-            UserSession session = new UserSession()
+            ServiceResult res = new ServiceResult();
+            await Task.Run(() =>
             {
-                Id = 1
-            };
+                UserSession session = new UserSession()
+                {
+                    Id = 1
+                };
 
-            string query = "";
-            DynamicParameters filter = null;
-            GetContentQuery(CrudType.Insert, dto, session, ref query, ref filter);
+                string query = "";
+                DynamicParameters filter = null;
+                GetContentQuery(CrudType.Insert, dto, session, ref query, ref filter);
 
-            var dataList = _db.Query<ContentShortListDto>(query, filter);
+                var dataList = _db.Query<ContentShortListDto>(query, filter);
 
-            return Result.ReturnAsSuccess();
+                res = Result.ReturnAsSuccess(); ;
+            });
+            return res;
 
         }
 
@@ -466,38 +484,6 @@ namespace SCA.Services
 
 
         /// <summary>
-        /// makale siler
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <returns></returns>
-        public async Task<ServiceResult> ContentDelete(long Id)
-        {
-            ServiceResult _res = new ServiceResult();
-
-            await Task.Run(() =>
-            {
-                if (Id == 0)
-                {
-                    Result.ReturnAsFail(AlertResource.NoChanges, null);
-                }
-                var deleteData = _contentRepo.Get(x => x.Id == Id);
-                var result = _unitOfWork.SaveChanges();
-
-                if (result.ResultCode == HttpStatusCode.OK)
-                {
-                    _res = Result.ReturnAsSuccess(message: "Silme işlemi başarılı");
-                }
-                else
-                {
-                    _res = Result.ReturnAsFail(message: "Silme işlemi sırasında hata meydana geldi.");
-                    _errorManagement.SaveError(result.Message);
-                }
-            });
-
-            return _unitOfWork.SaveChanges();
-        }
-
-        /// <summary>
         /// makalelerin yayınlanma durumunu günceller
         /// </summary>
         /// <param name="Id"></param>
@@ -505,7 +491,7 @@ namespace SCA.Services
         /// <returns></returns>
         public async Task<ServiceResult> UpdateAssayState(long Id, PublishState publishState)
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
 
             await Task.Run(() =>
             {
@@ -514,22 +500,21 @@ namespace SCA.Services
                 {
                     Result.ReturnAsFail(AlertResource.NoChanges, null);
                 }
-                var data = _contentRepo.Get(x => x.Id.Equals(Id) && x.IsDeleted.Equals(false));
-                data.PublishStateType = publishState;
-                _contentRepo.Update(_mapper.Map<Content>(data));
-                var result = _unitOfWork.SaveChanges();
-                if (result.ResultCode == HttpStatusCode.OK)
-                {
-                    _res = Result.ReturnAsSuccess(message: errorMessage);
-                }
-                else
-                {
-                    errorMessage = "Güncelleme işlemi yapılırken hata meydana geldi.";
-                    _res = Result.ReturnAsFail(message: errorMessage);
-                    _errorManagement.SaveError(_res.Message);
-                }
+                //var data = _contentRepo.Get(x => x.Id.Equals(Id) && x.IsDeleted.Equals(false));
+                //data.PublishStateType = publishState;
+                //_contentRepo.Update(_mapper.Map<Content>(data));
+                //var result = _unitOfWork.SaveChanges();
+                //if (result.ResultCode == HttpStatusCode.OK)
+                //{
+                //    res = Result.ReturnAsSuccess(message: errorMessage);
+                //}
+                //else
+                //{
+                //    errorMessage = "Güncelleme işlemi yapılırken hata meydana geldi.";
+                //    res = Result.ReturnAsFail(message: errorMessage);
+                //}
             });
-            return _res;
+            return res;
         }
 
         public async Task<List<ContentForHomePageDTO>> GetContentForHomePage(HitTypes hitTypes, int count)
@@ -541,7 +526,7 @@ namespace SCA.Services
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
+                await _errorManagement.SaveError(ex, null, "GetContentForHomePage", PlatformType.Mobil);
             }
             return listData;
         }
@@ -549,9 +534,14 @@ namespace SCA.Services
 
         public async Task<List<FavoriteDto>> GetFavoriteContents(int count)
         {
-            string query = $"select * from Favorite limit {count}";
-            var listData = _db.Query<FavoriteDto>(query).ToList();
-            return listData;
+            List<FavoriteDto> res = new List<FavoriteDto>();
+            await Task.Run(() =>
+            {
+                string query = $"select * from Favorite limit {count}";
+                var listData = _db.Query<FavoriteDto>(query).ToList();
+                res = listData;
+            });
+            return res;
         }
 
         public async Task<List<ContentForHomePageDTO>> GetUsersFavoriteContents(long userId, int count)
@@ -579,7 +569,7 @@ namespace SCA.Services
 
         public async Task<ServiceResult> GetFavoriteContents(int count, string token)
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
             long userId = JwtToken.GetUserId(token);
             try
             {
@@ -589,18 +579,18 @@ namespace SCA.Services
                 filter.Add("count", count);
                 filter.Add("UserId", userId);
                 var listData = await _db.QueryAsync<FavoriteDto>(query, filter) as List<FavoriteDto>;
-                _res = Result.ReturnAsSuccess(data: listData);
+                res = Result.ReturnAsSuccess(data: listData);
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString(), userId, "GetFavoriteContents", PlatformType.Mobil);
-                _res = Result.ReturnAsFail(message: "Favori listesi yüklenirken hata meydana geldi");
+                await _errorManagement.SaveError(ex, userId, "GetFavoriteContents", PlatformType.Mobil);
+                res = Result.ReturnAsFail(message: "Favori listesi yüklenirken hata meydana geldi");
             }
-            return _res;
+            return res;
         }
         public async Task<ServiceResult> CreateFavorite(FavoriteMobilDto dto, string token)
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
 
             if (dto.ContentId == 0)
             {
@@ -619,32 +609,32 @@ namespace SCA.Services
                     query = $"Update Favorite  set IsActive={dto.IsActive} where UserId={userId} and ContentId={dto.ContentId}";
                 }
 
-                var res = await _db.ExecuteAsync(query);
-                _res = Result.ReturnAsSuccess(message: "Favorilerinize eklendi");
+                var result = await _db.ExecuteAsync(query);
+                res = Result.ReturnAsSuccess(message: "Favorilerinize eklendi");
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString(), userId, "CreateFavorite", PlatformType.Mobil);
-                _res = Result.ReturnAsSuccess(message: "İçerik favoriye alınırken hata meydana geldi.");
+                await _errorManagement.SaveError(ex, userId, "CreateFavorite", PlatformType.Mobil);
+                res = Result.ReturnAsSuccess(message: "İçerik favoriye alınırken hata meydana geldi.");
             }
-            return _res;
+            return res;
         }
 
         public async Task<bool> FavoriteControl(long userId, long cotentId)
         {
-            bool _res = false;
+            bool res = false;
             string query = $"Select * from Favorite where UserId={userId} and ContentId ={cotentId}";
             var result = await _db.QueryAsync<FavoriteDto>(query) as List<FavoriteDto>;
 
             if (result.Count > 0)
             {
-                _res = true;
+                res = true;
             }
             else
             {
-                _res = false;
+                res = false;
             }
-            return _res;
+            return res;
         }
     }
 }

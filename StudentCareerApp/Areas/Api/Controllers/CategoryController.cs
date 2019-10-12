@@ -56,12 +56,6 @@ namespace StudentCareerApp.Areas.Api.Controller
             return await _categoryManager.MainCategoryUpdate(dto);
         }
 
-        [HttpDelete]
-        public async Task<ServiceResult> MainCategoryDelete(long id)
-        {
-            return await _categoryManager.MainCategoryDelete(id);
-        }
-
         [HttpPost("MainCategoryStatusUpdate")]
         public async Task<ServiceResult> MainCategoryStatusUpdate(int id, bool state)
         {

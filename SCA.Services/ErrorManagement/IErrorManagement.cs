@@ -8,7 +8,6 @@ namespace SCA.Services
 {
     public interface IErrorManagement
     {
-        Task<string> SaveError(string error);
-        Task<string> SaveError(string error, long userId, string process, PlatformType platformType);
+        Task<string> SaveError(Exception ex, long? userId, string process, PlatformType platformType);
     }
 }

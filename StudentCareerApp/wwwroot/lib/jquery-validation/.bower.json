@@ -29,7 +29,7 @@
   },
   "version": "1.14.0",
   "_release": "1.14.0",
-  "_resolution": {
+  "resolution": {
     "type": "version",
     "tag": "1.14.0",
     "commit": "c1343fb9823392aa9acbe1c3ffd337b8c92fed48"

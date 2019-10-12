@@ -4,6 +4,7 @@ using SCA.Common;
 using SCA.Common.Resource;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
+using SCA.Entity.Enums;
 using SCA.Services.Interface;
 using System;
 using System.Collections.Generic;
@@ -71,65 +72,65 @@ namespace SCA.Services
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
+                await _errorManagement.SaveError(ex, null, "SendEmail", PlatformType.Web);
             }
         }
 
         public async Task<List<EmailsDto>> GetEmails()
         {
-            List<EmailsDto> _res = new List<EmailsDto>();
+            List<EmailsDto> res = new List<EmailsDto>();
             try
             {
                 string query = "select * from Emails where IsSend = 0";
                 var resultData = await _db.QueryAsync<EmailsDto>(query) as List<EmailsDto>;
-                _res = resultData;
+                res = resultData;
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
+                await _errorManagement.SaveError(ex, null, "GetEmails", PlatformType.Web);
             }
-            return _res;
+            return res;
         }
 
         public async Task<string> GetEmailTemplate(string code)
         {
-            string _res = string.Empty;
+            string res = string.Empty;
             try
             {
                 string query = "select * from EmailTemplate where Code  = @code";
                 DynamicParameters filter = new DynamicParameters();
                 filter.Add("code", code);
                 var resultData = await _db.QueryFirstAsync<EmailTemplateDto>(query, filter);
-                _res = resultData.Description;
+                res = resultData.Description;
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
+                await _errorManagement.SaveError(ex, null, "GetEmailTemplate", PlatformType.Web);
             }
-            return _res;
+            return res;
         }
 
         public async Task<EmailSettings> GetEmailSetting(string code)
         {
-            EmailSettings _res = new EmailSettings();
+            EmailSettings res = new EmailSettings();
             try
             {
                 string query = "select * from EmailSettigns where Code=@Code";
                 DynamicParameters filter = new DynamicParameters();
                 filter.Add("Code", code);
                 var data = await _db.QueryFirstAsync<EmailSettings>(query, filter);
-                _res = data;
+                res = data;
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
+                await _errorManagement.SaveError(ex, null, "GetEmailSetting", PlatformType.Web);
             }
-            return _res;
+            return res;
         }
 
         public async Task<ServiceResult> SaveEmails(EmailsDto dto)
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
             try
             {
                // await SendEmail();
@@ -145,14 +146,14 @@ namespace SCA.Services
                 filter.Add("Process", dto.Process);
 
                 var result = await _db.ExecuteAsync(query,filter);
-                _res = Result.ReturnAsSuccess();
+                res = Result.ReturnAsSuccess();
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.InnerException.ToString());
-                _res = Result.ReturnAsFail(message: "Mail gönderilirken hata meydana geldi.");
+                await _errorManagement.SaveError(ex, null, "SaveEmails", PlatformType.Web);
+                res = Result.ReturnAsFail(message: "Mail gönderilirken hata meydana geldi.");
             }
-            return _res;
+            return res;
         }
     }
 }

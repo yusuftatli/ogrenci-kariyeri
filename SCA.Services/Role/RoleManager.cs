@@ -5,9 +5,8 @@ using Newtonsoft.Json;
 using SCA.Common.Resource;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
+using SCA.Entity.Enums;
 using SCA.Entity.Model;
-using SCA.Repository.Repo;
-using SCA.Repository.UoW;
 using SCA.Services.Interface;
 using System;
 using System.Collections.Generic;
@@ -20,38 +19,28 @@ namespace SCA.Services
 {
     public class RoleManager : IRoleManager
     {
-        private readonly IMapper _mapper;
-        private readonly IUnitofWork _unitOfWork;
-        private IGenericRepository<RoleType> _roleTypeRepo;
-        private IGenericRepository<RolePermission> _rolePermissionRepo;
         private readonly IErrorManagement _errorManagement;
         private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
 
-        public RoleManager(IUnitofWork unitOfWork, IMapper mapper, IErrorManagement errorManagement)
+        public RoleManager(IErrorManagement errorManagement)
         {
             _errorManagement = errorManagement;
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
-            _roleTypeRepo = unitOfWork.GetRepository<RoleType>();
-            _rolePermissionRepo = unitOfWork.GetRepository<RolePermission>();
         }
-
-
 
         #region RoleType
 
         public RoleTypeDto GetRoleTypeDataRow(long roleId)
         {
-            var data = _mapper.Map<RoleTypeDto>(_roleTypeRepo.Get(x => x.Id == roleId));
-            return data;
+            // var data = _mapper.Map<RoleTypeDto>(_roleTypeRepo.Get(x => x.Id == roleId));
+            return null;
         }
 
         public async Task<ServiceResult> GetRoleTypes()
         {
             try
             {
-                var dataList = _mapper.Map<List<RoleTypeDto>>(_roleTypeRepo.GetAll(x => x.IsDeleted.Equals(false)));
-                return Result.ReturnAsSuccess(null, null, dataList);
+                // var dataList = _mapper.Map<List<RoleTypeDto>>(_roleTypeRepo.GetAll(x => x.IsDeleted.Equals(false)));
+                return Result.ReturnAsSuccess(data: null);
 
             }
             catch (Exception ex)
@@ -63,8 +52,8 @@ namespace SCA.Services
         }
         public async Task<List<RoleTypeDto>> GetRoles()
         {
-            var res = _mapper.Map<List<RoleTypeDto>>(_roleTypeRepo.GetAll(x => x.Id != 1));//süper admin geitrme
-            return res;
+            //var res = _mapper.Map<List<RoleTypeDto>>(_roleTypeRepo.GetAll(x => x.Id != 1));//süper admin geitrme
+            return null;
         }
 
         public async Task<ServiceResult> CreateRoleType(RoleTypeDto dto)
@@ -76,20 +65,20 @@ namespace SCA.Services
                 Result.ReturnAsFail(AlertResource.NoChanges, null);
             }
 
-            if (dto.Id == 0)
-            {
-                _roleTypeRepo.Add(_mapper.Map<RoleType>(dto));
-                resultMessage = "Kayıt işlemi başarılı";
-            }
-            else
-            {
-                _roleTypeRepo.Update(_mapper.Map<RoleType>(dto));
-                resultMessage = "Güncelleme işlemi başarılı";
-            }
+            //if (dto.Id == 0)
+            //{
+            //    _roleTypeRepo.Add(_mapper.Map<RoleType>(dto));
+            //    resultMessage = "Kayıt işlemi başarılı";
+            //}
+            //else
+            //{
+            //    _roleTypeRepo.Update(_mapper.Map<RoleType>(dto));
+            //    resultMessage = "Güncelleme işlemi başarılı";
+            //}
 
-            _unitOfWork.SaveChanges();
-            var dataList = _roleTypeRepo.GetAll();
-            return Result.ReturnAsSuccess(null, resultMessage, dataList);
+            //_unitOfWork.SaveChanges();
+            //var dataList = _roleTypeRepo.GetAll();
+            return Result.ReturnAsSuccess(data: null);
         }
 
         #endregion
@@ -98,8 +87,8 @@ namespace SCA.Services
 
         public async Task<ServiceResult> GetRolePermission()
         {
-            var dataList = _rolePermissionRepo.GetAll();
-            return Result.ReturnAsSuccess(null, null, dataList);
+            //var dataList = _rolePermissionRepo.GetAll();
+            return Result.ReturnAsSuccess(data:null);
         }
 
         public async Task<ServiceResult> CreateRolePermission(RolePermissionDto dto)
@@ -110,25 +99,25 @@ namespace SCA.Services
                 Result.ReturnAsFail(AlertResource.NoChanges, null);
             }
 
-            if (dto.Id == 0)
-            {
-                _rolePermissionRepo.Add(_mapper.Map<RolePermission>(dto));
-                resultMessage = "Kayıt işlemi başarılı";
-            }
-            else
-            {
-                _rolePermissionRepo.Update(_mapper.Map<RolePermission>(dto));
-                resultMessage = "Güncelleme işlemi başarılı";
-            }
+            //if (dto.Id == 0)
+            //{
+            //    _rolePermissionRepo.Add(_mapper.Map<RolePermission>(dto));
+            //    resultMessage = "Kayıt işlemi başarılı";
+            //}
+            //else
+            //{
+            //    _rolePermissionRepo.Update(_mapper.Map<RolePermission>(dto));
+            //    resultMessage = "Güncelleme işlemi başarılı";
+            //}
 
-            _unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess(null, resultMessage, _rolePermissionRepo.GetAll());
+            //_unitOfWork.SaveChanges();
+            return Result.ReturnAsSuccess(data:null);
 
         }
 
         public async Task<ServiceResult> GetScreens()
         {
-            ServiceResult _res = new ServiceResult();
+            ServiceResult res = new ServiceResult();
             try
             {
                 string query = "select * from ScreenMaster";
@@ -150,14 +139,14 @@ namespace SCA.Services
                     ListData.Add(_l);
                 }
                 string value = JsonConvert.SerializeObject(ListData);
-                _res = Result.ReturnAsSuccess(data: value);
+                res = Result.ReturnAsSuccess(data: value);
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex.ToString());
-                _res = Result.ReturnAsFail(message: "Ekran bilgileri getirilirken hata meydana geldi");
+                await _errorManagement.SaveError(ex, null, "GetScreens", PlatformType.Web);
+                res = Result.ReturnAsFail(message: "Ekran bilgileri getirilirken hata meydana geldi");
             }
-            return _res;
+            return res;
         }
         #endregion
     }
