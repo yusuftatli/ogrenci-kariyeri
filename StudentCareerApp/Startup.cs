@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using SCA.BLLServices;
@@ -89,7 +90,7 @@ namespace StudentCareerApp
                 // Add XML Content Negotiation
                 config2.RespectBrowserAcceptHeader = true;
                 config2.ReturnHttpNotAcceptable = true;
-               // config2.InputFormatters.Add(new XmlSerializerInputFormatter());
+                // config2.InputFormatters.Add(new XmlSerializerInputFormatter());
                 config2.OutputFormatters.Add(new XmlSerializerOutputFormatter());
             });
 
@@ -141,6 +142,7 @@ namespace StudentCareerApp
             services.AddTransient<IErrorManagement, ErrorManagement>();
             services.AddTransient<INewsletterManager, NewsletterManager>();
             services.AddTransient<IPageManager, PageManager>();
+            services.AddTransient<IMenuManager, MenuManager>();
             services.AddTransient<ICommentManager, CommentManager>();
             //services which implements generic service and repository
             services.AddTransient<IAnnounsmentService<Announsment>, AnnounsmentService>();
@@ -151,159 +153,11 @@ namespace StudentCareerApp
             services.AddTransient<ICompanyClub<SCA.Entity.Entities.CompanyClubs>, CompanyClubRepository>();
             services.AddTransient<ISocialMedia<SCA.Entity.Entities.SocialMedia>, SocialMediaRepository>();
             services.AddTransient<ISocialMediaService<SCA.Entity.Entities.SocialMedia>, SocialMediaService>();
+
             //generic services
             services.AddSingleton(typeof(IGenericService<>), typeof(GenericService<>));
             services.AddSingleton(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-
-            #endregion
-
-            #region Auto Mapper
-            var config = new AutoMapper.MapperConfiguration(cfg =>
-            {
-                #region Address
-
-                cfg.CreateMap<Cities, CitiesDto>().ReverseMap();
-                cfg.CreateMap<District, DistrictDto>().ReverseMap();
-
-                #endregion
-
-                #region Education
-
-                cfg.CreateMap<Department, DepartmentDto>().ReverseMap();
-                cfg.CreateMap<EducationStatus, EducationStatusDto>().ReverseMap();
-                cfg.CreateMap<Faculty, FacultyDto>().ReverseMap();
-                cfg.CreateMap<HighSchool, HighSchoolDto>().ReverseMap();
-                cfg.CreateMap<StudentClass, StudentClassDto>().ReverseMap();
-                cfg.CreateMap<University, UniversityDto>().ReverseMap();
-
-                #endregion
-
-                #region Categories
-
-                cfg.CreateMap<Category, MainCategoryDto>().ReverseMap();
-                cfg.CreateMap<CategoryRelation, CategoryRelationDto>().ReverseMap();
-
-                #endregion
-
-                #region Users
-
-                cfg.CreateMap<Users, UsersDTO>().ReverseMap();
-                cfg.CreateMap<UserLog, UserLogDto>().ReverseMap();
-                cfg.CreateMap<Users, UserShortInforDto>().ReverseMap();
-                cfg.CreateMap<Users, UsersResultDTO>().ReverseMap();
-                cfg.CreateMap<UsersDTO, UsersResultDTO>().ReverseMap();
-                cfg.CreateMap<Users, UserMobilDto>().ReverseMap();
-                cfg.CreateMap<Users, UserRegisterDto>().ReverseMap();
-                cfg.CreateMap<UsersDTO, UserRegisterDto>().ReverseMap();
-                cfg.CreateMap<UserSession, Users>().ReverseMap();
-                cfg.CreateMap<Users, UserModelList>().ReverseMap();
-
-                #endregion
-
-                #region Question
-
-                cfg.CreateMap<Tests, TestsDto>().ReverseMap();
-                cfg.CreateMap<TestValue, TestValueDto>().ReverseMap();
-                cfg.CreateMap<Questions, QuestionsDto>().ReverseMap();
-                cfg.CreateMap<QuestionOptions, QuestionOptionsDto>().ReverseMap();
-                cfg.CreateMap<QuesitonAsnweByUsers, QuesitonAsnweByUsersDto>().ReverseMap();
-
-                #endregion
-
-                #region Read
-
-                cfg.CreateMap<ReadCountOfTestAndContent, ReadCountOfTestAndContentDto>().ReverseMap();
-
-                #endregion
-
-                #region Content
-
-                cfg.CreateMap<Content, ContentDto>().ReverseMap();
-                cfg.CreateMap<Content, ContentShortListDto>().ReverseMap();
-                cfg.CreateMap<Content, ContentShortListUIDto>().ReverseMap();
-                cfg.CreateMap<Content, ContenUIDto>().ReverseMap();
-                cfg.CreateMap<Content, ContentForHomePageDTO>().ReverseMap();
-                #endregion
-
-                #region Image
-
-                cfg.CreateMap<ImageModel, ReadCountOfTestAndContentDto>().ReverseMap();
-
-                #endregion
-
-                #region Tag
-
-                cfg.CreateMap<Tags, TagDto>().ReverseMap();
-                cfg.CreateMap<TagRelation, TagRelationDto>().ReverseMap();
-
-                #endregion
-
-                #region RoleType
-
-                cfg.CreateMap<RoleType, RoleTypeDto>().ReverseMap();
-
-                #endregion
-
-                #region comment
-                cfg.CreateMap<Comments, CommentsDto>().ReverseMap();
-                #endregion
-
-
-                #region SocialMedia
-
-                cfg.CreateMap<SCA.Entity.Model.SocialMedia, SocialMediaDto>().ReverseMap();
-
-                #endregion
-
-                #region Sector
-
-                cfg.CreateMap<Sector, SectorDto>().ReverseMap();
-
-                #endregion
-
-                #region ScreenAnouncement
-
-                cfg.CreateMap<Anouncement, AnouncementDto>().ReverseMap();
-
-                #endregion
-
-                #region ScreenAnouncement
-
-                cfg.CreateMap<ImageGalery, ImageGaleryDto>().ReverseMap();
-
-                #endregion
-
-                #region Errors
-
-                cfg.CreateMap<Errors, ErrorDto>().ReverseMap();
-
-                #endregion
-
-                #region CompanyClubs
-
-                cfg.CreateMap<CompanyClubInsertModel, CompanyClubsDto>().ReverseMap();
-                cfg.CreateMap<CompanyClubUpdateModel, CompanyClubsDto>().ReverseMap();
-                cfg.CreateMap<SCA.Entity.Model.CompanyClubs, CompanyClubsDto>().ReverseMap();
-
-                #endregion
-
-                #region pages
-
-                cfg.CreateMap<BasicPages, BasicPagesDto>().ReverseMap();
-
-                #endregion
-
-                services.AddMvc().AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-            });
-
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "/wwwroot";
-                configuration.RootPath = "/wwwroot/AdminFiles/Template/assets/node_modules";
-            });
-
-            var mapper = config.CreateMapper();
-            services.AddSingleton(mapper);
+            services.AddSingleton<IHostedService, MailService>();
             #endregion
 
             services.AddSession(options =>
@@ -315,7 +169,7 @@ namespace StudentCareerApp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
 
             if (env.IsDevelopment())

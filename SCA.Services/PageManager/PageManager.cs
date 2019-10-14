@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using SCA.Common.Result;
+﻿using SCA.Common.Result;
 using SCA.Entity.DTO;
 using SCA.Entity.Model;
 using System;
@@ -11,7 +10,6 @@ namespace SCA.Services
 {
     public class PageManager : IPageManager
     {
-        private readonly IMapper _mapper;
         public PageManager()
         {
         }

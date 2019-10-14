@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,12 +17,10 @@ namespace SCA.UI.Controllers
     {
 
         private readonly IUserManager _userManager;
-        private readonly IMapper _mapper;
 
-        public SharedController(IUserManager userManager, IMapper mapper)
+        public SharedController(IUserManager userManager)
         {
             _userManager = userManager;
-            _mapper = mapper;
         }
 
         public IActionResult Index()

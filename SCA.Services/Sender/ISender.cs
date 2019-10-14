@@ -14,5 +14,6 @@ namespace SCA.Services
         Task<ServiceResult> SaveEmails(EmailsDto dto);
         Task<string> GetEmailTemplate(string code);
         Task<EmailSettings> GetEmailSetting(string code);
+        Task SendEmail();
     }
 }

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using SCA.Common.Result;
+﻿using SCA.Common.Result;
 using SCA.Entity.DTO;
 using SCA.Entity.Model;
 using SCA.Services.Interface;
@@ -13,7 +12,6 @@ namespace SCA.Services
 {
     public class B2CManagerUI : IB2CManagerUI
     {
-        private readonly IMapper _mapper;
 
         public B2CManagerUI()
         {

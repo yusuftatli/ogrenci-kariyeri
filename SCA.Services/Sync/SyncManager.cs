@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Dapper;
+﻿using Dapper;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using SCA.Common;
@@ -23,7 +22,6 @@ namespace SCA.Services
 {
     public class SyncManager : ISyncManager
     {
-        private readonly IMapper _mapper;
         private readonly IApiManager _apiService;
         private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;Convert Zero Datetime=True");
 

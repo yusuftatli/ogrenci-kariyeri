@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using SCA.Common.Resource;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
@@ -20,17 +19,14 @@ namespace SCA.Services
 {
     public class AuthManager : IAuthManager
     {
-        private readonly IMapper _mapper;
         private readonly IUserValidation _userValidation;
         private ISender _sender;
        // IUserManager _userManager;
 
         public AuthManager(
-            IMapper mapper,
             ISender sender,
             IUserValidation userValidation)
         {
-            _mapper = mapper;
             _sender = sender;
             _userValidation = userValidation;
         }

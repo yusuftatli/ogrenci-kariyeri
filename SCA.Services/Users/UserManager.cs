@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Dapper;
+﻿using Dapper;
 using Grpc.Core;
 using Microsoft.AspNetCore.Hosting;
 using MySql.Data.MySqlClient;
@@ -33,7 +32,7 @@ namespace SCA.Services
         private readonly IRoleManager _roleManager;
         private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
 
-        public UserManager( IRoleManager roleManager, IHostingEnvironment env, IMapper mapper, ISender sender, IPictureManager pictureManager, IErrorManagement errorManagement, IUserValidation userValidation, IAuthManager authManager)
+        public UserManager( IRoleManager roleManager, IHostingEnvironment env,  ISender sender, IPictureManager pictureManager, IErrorManagement errorManagement, IUserValidation userValidation, IAuthManager authManager)
         {
             _sender = sender;
             _errorManagement = errorManagement;
@@ -69,7 +68,7 @@ namespace SCA.Services
                 filter.Add("Password", MD5Hash(_pas));
 
                 var data = _db.Execute(query, filter);
-                long userId = JwtToken.GetUserId(token);
+                long userId = 5677; //JwtToken.GetUserId(token);
 
                 EmailSettings emailSetting = await _sender.GetEmailSetting("PASSRENEW");
                 EmailsDto emailData = new EmailsDto

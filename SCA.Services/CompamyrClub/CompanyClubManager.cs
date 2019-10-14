@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Dapper;
+﻿using Dapper;
 using Microsoft.AspNetCore.Http;
 using MySql.Data.MySqlClient;
 using SCA.Common.Resource;

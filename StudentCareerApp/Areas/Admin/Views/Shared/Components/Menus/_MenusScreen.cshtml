@@ -1,0 +1,49 @@
+﻿@model List<SCA.Entity.DTO.AnouncementDto>
+
+@if (!Model.Equals(null) && Model.Count > 0)
+{
+    <section class="block-wrapper block-wrapper-1 p-50 mb-40 bg-white info-area">
+        <div class="container">
+            <div class="row post-overflow-style">
+                <div class="col-lg-12">
+                    <h2 class="ts-title full-size-ts">
+                        <span>Duyurular</span>
+                    </h2>
+                    <!-- ts title item end-->
+                    <div class="owl-carousel" id="post-slider1">
+                        @foreach (var x in Model)
+                        {
+                            <div class="row">
+                                <div class="col-lg-2">
+                                    <div class="ts-post-thumb">
+                                        <a href="@x.Url">
+                                            <img class="img-fluid" src="@x.ImagePath" alt="">
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- col end-->
+                                <div class="col-lg-10">
+                                    <div class="post-content post-content-item">
+                                        <h3 class="post-title large">@x.Title</h3>
+                                        <p>
+                                            @x.Description
+                                        </p>
+                                        <ul class="post-meta-info">
+                                            <li>
+                                                <i class="fa fa-clock-o"></i>
+                                                @x.CreatedDate.ToString("dd.MM.yyyy")
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <!-- col end-->
+            </div>
+            <!-- row end-->
+        </div>
+        <!-- container end-->
+    </section>
+}

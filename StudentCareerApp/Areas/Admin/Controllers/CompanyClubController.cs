@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SCA.BLLServices;
 using SCA.Common;
@@ -24,16 +23,14 @@ namespace StudentCareerApp.Areas.Admin.Controllers
         private readonly IYoutubePlaylistService<YoutubePlaylist> _youtubePlaylistService;
         private readonly ICompanyClubService<SCA.Entity.Entities.CompanyClubs> _companyClubService;
         private readonly ISocialMediaService<SCA.Entity.Entities.SocialMedia> _socialMediaService;
-        private readonly IMapper _mapper;
 
-        public CompanyClubController(   IMapper mapper,
+        public CompanyClubController(   
                                         ICompanyClubManager companyClubManager, 
                                         IAnnounsmentService<Announsment> announsmentService,
                                         IYoutubePlaylistService<YoutubePlaylist> youtubePlaylistService,
                                         ICompanyClubService<SCA.Entity.Entities.CompanyClubs> companyClubService,
                                         ISocialMediaService<SCA.Entity.Entities.SocialMedia> socialMediaService)
         {
-            _mapper = mapper;
             _announsmentService = announsmentService;
             _youtubePlaylistService = youtubePlaylistService;
             _companyClubService = companyClubService;
@@ -72,19 +69,19 @@ namespace StudentCareerApp.Areas.Admin.Controllers
             //for insert model
             if(model.Id.Equals(0))
             {
-                var requestModel = _mapper.Map<CompanyClubInsertModel>(model);
-                requestModel.CreatedUserId = user.Id;
-                requestModel.CreateUserName = user.Name;
-                requestModel.CompanyClupType = SCA.Entity.Enums.CompanyClupType.Company;
-                res = await _companyClubService.InsertAsync(requestModel);
+                //var requestModel = _mapper.Map<CompanyClubInsertModel>(model);
+                //requestModel.CreatedUserId = user.Id;
+                //requestModel.CreateUserName = user.Name;
+                //requestModel.CompanyClupType = SCA.Entity.Enums.CompanyClupType.Company;
+                //res = await _companyClubService.InsertAsync(requestModel);
             }
             //for 
             else
             {
-                var requestModel = _mapper.Map<CompanyClubUpdateModel>(model);
-                requestModel.UpdatedUserId = user.Id;
-                requestModel.CompanyClupType = SCA.Entity.Enums.CompanyClupType.Company;
-                res = await _companyClubService.UpdateAsync(requestModel);
+                //var requestModel = _mapper.Map<CompanyClubUpdateModel>(model);
+                //requestModel.UpdatedUserId = user.Id;
+                //requestModel.CompanyClupType = SCA.Entity.Enums.CompanyClupType.Company;
+                //res = await _companyClubService.UpdateAsync(requestModel);
             }
             //var res = await _companyClubManager.CreateCompanyClubs(model, HttpContext.GetSessionData<UserSession>("userInfo"));
             return Json(res);

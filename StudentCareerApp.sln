@@ -23,9 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCA.Services", "SCA.Service
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentCareerApp", "StudentCareerApp\StudentCareerApp.csproj", "{13FFA031-C70D-4D53-BBB4-FB2E7FB35CE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCA.DapperRepository", "SCA.DapperRepository\SCA.DapperRepository.csproj", "{0B564B13-307E-469B-8691-0ECE48007AAD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCA.DapperRepository", "SCA.DapperRepository\SCA.DapperRepository.csproj", "{0B564B13-307E-469B-8691-0ECE48007AAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCA.BLLServices", "SCA.BLLServices\SCA.BLLServices.csproj", "{3945A469-468E-4273-82A4-AC2BD80B23A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCA.BLLServices", "SCA.BLLServices\SCA.BLLServices.csproj", "{3945A469-468E-4273-82A4-AC2BD80B23A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

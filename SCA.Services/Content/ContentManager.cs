@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Dapper;
+﻿using Dapper;
 using MySql.Data.MySqlClient;
 using Npgsql;
 using SCA.Common;
@@ -27,7 +26,7 @@ namespace SCA.Services
         private readonly IUserManager _userManager;
         private readonly IErrorManagement _errorManagement;
         private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
-        public ContentManager( IMapper mapper, ITagManager tagManager, ICategoryManager categoryManager, IUserManager userManager, IErrorManagement errorManagement)
+        public ContentManager(  ITagManager tagManager, ICategoryManager categoryManager, IUserManager userManager, IErrorManagement errorManagement)
         {
             _tagManager = tagManager;
             _userManager = userManager;

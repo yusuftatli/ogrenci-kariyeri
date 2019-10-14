@@ -39,33 +39,33 @@ namespace SCA.Services
         {
             try
             {
-                EmailSettings _email = await GetEmailSetting("PSRNW");
+                EmailSettings _email = await GetEmailSetting("PASSRENEW");
                 List<EmailsDto> _emails = await GetEmails();
                 foreach (var _item in _emails)
                 {
-                    string toEmail = string.IsNullOrEmpty(_item.ToEmail) ? _email.ToEmail : _item.ToEmail;
 
                     MailMessage mail = new MailMessage()
                     {
-                        From = new MailAddress(_email.UsernameEmail, "Jose Carlos Macoratti")
+                        From = new MailAddress(_email.UsernameEmail, _item.Subject)
                     };
 
-                    mail.To.Add(new MailAddress(toEmail));
-                    mail.CC.Add(new MailAddress(_email.CcEmail));
+                    mail.To.Add(new MailAddress(_item.ToEmail));
+                    if (!string.IsNullOrEmpty(_item.CcEmail))
+                    {
+                        mail.CC.Add(new MailAddress(_email.CcEmail));
+                    }
 
-                    mail.Subject = "Macoratti .net - " + _item.Subject;
+                    mail.Subject =_item.Subject;
                     mail.Body = _item.Body;
                     mail.IsBodyHtml = true;
                     mail.Priority = MailPriority.High;
-
-                    //outras opções
-                    //mail.Attachments.Add(new Attachment(arquivo));
-                    //
 
                     using (SmtpClient smtp = new SmtpClient(_email.PrimaryDomain, _email.PrimaryPort))
                     {
                         smtp.Credentials = new NetworkCredential(_email.UsernameEmail, _email.UsernamePassword);
                         smtp.EnableSsl = true;
+                        smtp.UseDefaultCredentials = false;
+                        smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                         await smtp.SendMailAsync(mail);
                     }
                 }
@@ -133,19 +133,11 @@ namespace SCA.Services
             ServiceResult res = new ServiceResult();
             try
             {
-               // await SendEmail();
-                string query = "insert into Emails (UserId, Subject, Body, FromEmail, ToEmail, ToEmail, CcEmail, IsSend, SendDate,  Process) values (@UserId, @Subject, @Body, @FromEmail, @ToEmail, @CcEmail, 0, NOW(),  @Process);";
-                DynamicParameters filter = new DynamicParameters();
+                 await SendEmail();
+                string query = $"insert into Emails (UserId, Subject, Body, FromEmail, ToEmail, CcEmail, IsSend, SendDate,  Process) values " +
+                    $"('{dto.UserId}', '{dto.Subject}', '{dto.Body}', '{dto.FromEmail}', '{dto.ToEmail}', '{dto.CcEmail}', '0', CURDATE(), '{dto.Process}'); ";
 
-                filter.Add("UserId", dto.UserId);
-                filter.Add("Subject, ", dto.Subject);
-                filter.Add("Body, ", dto.Body);
-                filter.Add("FromEmail, ", dto.FromEmail);
-                filter.Add("ToEmail, ", dto.ToEmail);
-                filter.Add("CcEmail, ", dto.CcEmail);
-                filter.Add("Process", dto.Process);
-
-                var result = await _db.ExecuteAsync(query,filter);
+                var result = await _db.ExecuteAsync(query);
                 res = Result.ReturnAsSuccess();
             }
             catch (Exception ex)
