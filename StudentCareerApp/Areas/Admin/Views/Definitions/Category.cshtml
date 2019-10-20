@@ -2,14 +2,107 @@
     ViewBag.Title = "Kategori";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
-    <head>
-        <link href="~/AdminFiles/Template/assets/node_modules/switchery/dist/switchery.css" rel="stylesheet" />
-        <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
-    </head>
+
+
+<head>
+    <link href="~/AdminFiles/Template/assets/node_modules/switchery/dist/switchery.css" rel="stylesheet" />
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+
+</head>
 <body>
+
+    <aside class="left-sidebar">
+        <!-- Sidebar scroll-->
+        <div class="scroll-sidebar">
+            <!-- Sidebar navigation-->
+            <nav class="sidebar-nav">
+                <ul id="sidebarnav">
+                    <li class="user-pro">
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><img src="~/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"><span class="hide-menu"> @HttpContextAccessor.HttpContext.Session.GetString("NameSurname")</span></a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li><a href="javascript:void(0)"><i class="ti-user"></i> My Profile</a></li>
+                            <li><a href="javascript:void(0)"><i class="ti-wallet"></i> My Balance</a></li>
+                            <li><a href="javascript:void(0)"><i class="ti-email"></i> Inbox</a></li>
+                            <li><a href="javascript:void(0)"><i class="ti-settings"></i> Account Setting</a></li>
+                            <li><a href="javascript:void(0)"><i class="fa fa-power-off"></i> Logout</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="icon-speedometer"></i><span class="hide-menu">Dashboard </span></a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li><a href="index.html">Minimal </a></li>
+                            <li><a href="index2.html">Analytical</a></li>
+                            <li><a href="index3.html">Demographical</a></li>
+                            <li><a href="index4.html">Modern</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i><span>Kullanıcılar</span></a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li><a href="~/Admin/User/UserList">Liste</a></li>
+                            <li><a href="~/Admin/User/CreateUser">Ekle</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i><span>Sayfa Yönetimi</span></a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li><a href="~/Admin/Pages/Index">Basit Sayfalar</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i><span>İçerik</span></a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li><a href="~/Admin/Content/Question">Ekle</a></li>
+                            <li><a href="~/Admin/Content/Question">Liste</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i><span>Makale</span></a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li><a href="~/Admin/Content/Assay">Ekle</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i><span>Ayarlar</span></a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li><a href="~/Admin/Role/Index">Yetki</a></li>
+                            <li><a href="~/Admin/Definitions/Category">Kategori</a></li>
+                            <li><a href="~/Admin/Definitions/Index">Tanımlar</a></li>
+                            <li><a href="~/Admin/Sync/Index/">Senkronizasyon</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i><span>Şirket Kulüp</span></a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li><a href="~/Admin/CompanyClub/Company">Şirket</a></li>
+                            <li><a href="~/Admin/CompanyClub/Clubs">Kulüp</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-small-cap">--- Destek</li>
+                    <li> <a class="waves-effect waves-dark" href="../documentation/documentation.html" aria-expanded="false"><i class="far fa-circle text-danger"></i><span class="hide-menu">Documentation</span></a></li>
+                    <li> <a class="waves-effect waves-dark" href="pages-login.html" aria-expanded="false"><i class="far fa-circle text-success"></i><span class="hide-menu">Log Out</span></a></li>
+                    <li> <a class="waves-effect waves-dark" href="pages-faq.html" aria-expanded="false"><i class="far fa-circle text-info"></i><span class="hide-menu">FAQs</span></a></li>
+                </ul>
+            </nav>
+            <!-- End Sidebar navigation -->
+        </div>
+        <!-- End Sidebar scroll-->
+    </aside>
+
     <div class="page-wrapper" ng-app="MyApp" ng-controller="categoryController">
         <!-- ============================================================== -->
         <!-- Container fluid  -->

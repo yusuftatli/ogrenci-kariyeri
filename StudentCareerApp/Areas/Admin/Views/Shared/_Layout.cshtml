@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 @using Microsoft.AspNetCore.Http
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
@@ -16,6 +17,8 @@
     <script src="~/Scripts/jquery-3.0.0.min.js"></script>
     <script src="~/Scripts/angular.min.js"></script>
     <!-- page CSS -->
+   
+    <link href="~/Template/dist/css/style.min.css" rel="stylesheet">
     <link href="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.css" rel="stylesheet" />
     <script src="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.js"></script>
     <link href="~/Template/assets/node_modules/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
@@ -51,9 +54,10 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-
-
 <body class="skin-default fixed-layout">
+    <!-- ============================================================== -->
+    <!-- Preloader - style you can find in spinners.css -->
+    <!-- ============================================================== -->
     <div class="modalload" style="display: none">
         <div class="center">
             <img src="~/Template/assets/images/giphy.gif" />
@@ -68,7 +72,13 @@
             <p class="loader__label">Öğrenci Kariyeri</p>
         </div>
     </div>
+    <!-- ============================================================== -->
+    <!-- Main wrapper - style you can find in pages.scss -->
+    <!-- ============================================================== -->
     <div id="main-wrapper">
+        <!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
         <header class="topbar">
             <nav class="navbar top-navbar navbar-expand-md navbar-dark">
                 <!-- ============================================================== -->
@@ -81,14 +91,14 @@
                             <!-- Dark Logo icon -->
                             <img src="~/Template/assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
                             <!-- Light Logo icon -->
-                            <img width="200" height="40" src="~/Template/assets/images/ögrenci-kariyeri.png" alt="homepage" class="light-logo" />
+                           @* <img src="~/Template/assets/img/ogencikariyeri.jpg" width="40" height="50" alt="homepage" class="light-logo" />*@
                         </b>
                         <!--End Logo icon -->
                         <!-- Logo text --><span>
                             <!-- dark Logo text -->
                             <img src="~/Template/assets/images/logo-text.png" alt="homepage" class="dark-logo" />
                             <!-- Light Logo text -->
-                            @*<img src="~/Template/assets/images/logo-light-text.png" class="light-logo" alt="homepage" />*@
+                            <img src="~/Template/assets/images/ögrenci-kariyeri.png"width="210" height="50" class="light-logo" alt="homepage" />
                         </span>
                     </a>
                 </div>
@@ -108,7 +118,7 @@
                         <!-- ============================================================== -->
                         <li class="nav-item">
                             <form class="app-search d-none d-md-block d-lg-block">
-                                <input type="text" class="form-control" placeholder="Search & enter">
+                                <input type="text" class="form-control" placeholder="Ara & Enter Bas">
                             </form>
                         </li>
                     </ul>
@@ -254,50 +264,41 @@
                                     <li class="col-lg-3 m-b-30">
                                         <h4 class="m-b-20">ACCORDION</h4>
                                         <!-- Accordian -->
-                                        <div class="accordion" id="accordionExample">
-                                            <div class="card m-b-0">
-                                                <div class="card-header bg-white p-0" id="headingOne">
+                                        <div id="accordion" class="nav-accordion" role="tablist" aria-multiselectable="true">
+                                            <div class="card">
+                                                <div class="card-header" role="tab" id="headingOne">
                                                     <h5 class="mb-0">
-                                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                                             Collapsible Group Item #1
-                                                        </button>
+                                                        </a>
                                                     </h5>
                                                 </div>
-
-                                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-                                                    <div class="card-body">
-                                                        Anim pariatur cliche reprehenderit, enim eiusmod high.
-                                                    </div>
+                                                <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
+                                                    <div class="card-body"> Anim pariatur cliche reprehenderit, enim eiusmod high. </div>
                                                 </div>
                                             </div>
-                                            <div class="card m-b-0">
-                                                <div class="card-header bg-white p-0" id="headingTwo">
+                                            <div class="card">
+                                                <div class="card-header" role="tab" id="headingTwo">
                                                     <h5 class="mb-0">
-                                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
-                                                                aria-controls="collapseTwo">
+                                                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                                             Collapsible Group Item #2
-                                                        </button>
+                                                        </a>
                                                     </h5>
                                                 </div>
-                                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                                                    <div class="card-body">
-                                                        Anim pariatur cliche reprehenderit, enim eiusmod high.
-                                                    </div>
+                                                <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                                    <div class="card-body"> Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. </div>
                                                 </div>
                                             </div>
-                                            <div class="card m-b-0">
-                                                <div class="card-header bg-white p-0" id="headingThree">
+                                            <div class="card">
+                                                <div class="card-header" role="tab" id="headingThree">
                                                     <h5 class="mb-0">
-                                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
-                                                                aria-controls="collapseThree">
+                                                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                                                             Collapsible Group Item #3
-                                                        </button>
+                                                        </a>
                                                     </h5>
                                                 </div>
-                                                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-                                                    <div class="card-body">
-                                                        Anim pariatur cliche reprehenderit, enim eiusmod high.
-                                                    </div>
+                                                <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+                                                    <div class="card-body"> Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -339,22 +340,21 @@
                         <!-- User Profile -->
                         <!-- ============================================================== -->
                         <li class="nav-item dropdown u-pro">
-                            <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="~/Template/assets/images/users/1.jpg" alt="user" class=""> <span class="hidden-md-down">Mark &nbsp;<i class="fa fa-angle-down"></i></span> </a>
+                            <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="~/Template/assets/images/users/1.jpg" alt="user" class=""> <span class="hidden-md-down">@HttpContextAccessor.HttpContext.Session.GetString("NameSurname")<i class="fa fa-angle-down"></i></span> </a>
                             <div class="dropdown-menu dropdown-menu-right animated flipInY">
                                 <!-- text-->
-                                <a href="javascript:void(0)" class="dropdown-item"><i class="ti-user"></i> My Profile</a>
+                                <a href="javascript:void(0)" class="dropdown-item"><i class="ti-user"></i> Profile</a>
                                 <!-- text-->
-                                <a href="javascript:void(0)" class="dropdown-item"><i class="ti-wallet"></i> My Balance</a>
                                 <!-- text-->
-                                <a href="javascript:void(0)" class="dropdown-item"><i class="ti-email"></i> Inbox</a>
-                                <!-- text-->
-                                <div class="dropdown-divider"></div>
-                                <!-- text-->
-                                <a href="javascript:void(0)" class="dropdown-item"><i class="ti-settings"></i> Account Setting</a>
+                             @*   <a href="javascript:void(0)" class="dropdown-item"><i class="ti-email"></i> Inbox</a>*@
                                 <!-- text-->
                                 <div class="dropdown-divider"></div>
                                 <!-- text-->
-                                <a href="pages-login.html" class="dropdown-item"><i class="fa fa-power-off"></i> Logout</a>
+                                <a href="javascript:void(0)" class="dropdown-item"><i class="ti-settings"></i>Ayarlar</a>
+                                <!-- text-->
+                                <div class="dropdown-divider"></div>
+                                <!-- text-->
+                                <a href="login.html" class="dropdown-item"><i class="fa fa-power-off"></i> Çıkış</a>
                                 <!-- text-->
                             </div>
                         </li>
@@ -366,98 +366,35 @@
                 </div>
             </nav>
         </header>
-        <aside class="left-sidebar">
-            <!-- Sidebar scroll-->
-            <div class="scroll-sidebar">
-                <!-- Sidebar navigation-->
-                <nav class="sidebar-nav">
-                    <ul id="sidebarnav">
-                        <li class="user-pro">
-                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><img src="~/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"><span class="hide-menu"> @HttpContextAccessor.HttpContext.Session.GetString("NameSurname")</span></a>
-                            <ul aria-expanded="false" class="collapse">
-                                <li><a href="javascript:void(0)"><i class="ti-user"></i> My Profile</a></li>
-                                <li><a href="javascript:void(0)"><i class="ti-wallet"></i> My Balance</a></li>
-                                <li><a href="javascript:void(0)"><i class="ti-email"></i> Inbox</a></li>
-                                <li><a href="javascript:void(0)"><i class="ti-settings"></i> Account Setting</a></li>
-                                <li><a href="javascript:void(0)"><i class="fa fa-power-off"></i> Logout</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="icon-speedometer"></i><span class="hide-menu">Dashboard </span></a>
-                            <ul aria-expanded="false" class="collapse">
-                                <li><a href="index.html">Minimal </a></li>
-                                <li><a href="index2.html">Analytical</a></li>
-                                <li><a href="index3.html">Demographical</a></li>
-                                <li><a href="index4.html">Modern</a></li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i><span>Kullanıcılar</span></a>
-                            <ul aria-expanded="false" class="collapse">
-                                <li><a href="~/Admin/User/UserList">Liste</a></li>
-                                <li><a href="~/Admin/User/CreateUser">Ekle</a></li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i><span>Sayfa Yönetimi</span></a>
-                            <ul aria-expanded="false" class="collapse">
-                                <li><a href="~/Admin/Pages/Index">Basit Sayfalar</a></li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i><span>İçerik</span></a>
-                            <ul aria-expanded="false" class="collapse">
-                                <li><a href="~/Admin/Content/Question">Ekle</a></li>
-                                <li><a href="~/Admin/Content/Question">Liste</a></li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i><span>Makale</span></a>
-                            <ul aria-expanded="false" class="collapse">
-                                <li><a href="~/Admin/Content/Assay">Ekle</a></li>
-                                <li><a href="~/Admin/Content/AssayConfirm">Liste</a></li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i><span>Ayarlar</span></a>
-                            <ul aria-expanded="false" class="collapse">
-                                <li><a href="~/Admin/Role/Index">Yetki</a></li>
-                                <li><a href="~/Admin/Definitions/Category">Kategori</a></li>
-                                <li><a href="~/Admin/Definitions/Index">Tanımlar</a></li>
-                                <li><a href="~/Admin/Sync/Index/">Senkronizasyon</a></li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i><span>Şirket Kulüp</span></a>
-                            <ul aria-expanded="false" class="collapse">
-                                <li><a href="~/Admin/CompanyClub/Company">Şirket</a></li>
-                                <li><a href="~/Admin/CompanyClub/Clubs">Kulüp</a></li>
-                            </ul>
-                        </li>
-
-                        <li class="nav-small-cap">--- Destek</li>
-                        <li> <a class="waves-effect waves-dark" href="../documentation/documentation.html" aria-expanded="false"><i class="far fa-circle text-danger"></i><span class="hide-menu">Documentation</span></a></li>
-                        <li> <a class="waves-effect waves-dark" href="pages-login.html" aria-expanded="false"><i class="far fa-circle text-success"></i><span class="hide-menu">Log Out</span></a></li>
-                        <li> <a class="waves-effect waves-dark" href="pages-faq.html" aria-expanded="false"><i class="far fa-circle text-info"></i><span class="hide-menu">FAQs</span></a></li>
-                    </ul>
-                </nav>
-                <!-- End Sidebar navigation -->
-            </div>
-            <!-- End Sidebar scroll-->
-        </aside>
+        <!-- ============================================================== -->
+        <!-- End Topbar header -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Page wrapper  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- End Page wrapper  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- footer -->
+        <!-- ============================================================== -->
         @RenderBody()
+
         <div id="roxyCustomPanel2" style="display: none;">
             <iframe src="/lib/fileman/dev.html?integration=custom&txtFieldId=roxyField" style="width:100%;height:100%" frameborder="0"></iframe>
         </div>
         @*<footer class="footer">
-                @DateTime.Now Öğrenci Kariyeri
-            </footer>*@
+            @DateTime.Now Öğrenci Kariyeri
+        </footer>*@
+        <!-- ============================================================== -->
+        <!-- End footer -->
+        <!-- ============================================================== -->
     </div>
     <!-- ============================================================== -->
     <!-- End Wrapper -->
@@ -467,9 +404,9 @@
     <!-- ============================================================== -->
     <script src="~/Template/assets/node_modules/jquery/jquery-3.2.1.min.js"></script>
     <script src="~/Template/assets/node_modules/moment/moment.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
-            integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
-            crossorigin="anonymous"></script>
+    @*<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+        integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
+        crossorigin="anonymous"></script>*@
     <script src="~/Template/AngularComponents/treeselect/vue.js"></script>
     <!-- Bootstrap tether Core JavaScript -->
     <script src="~/Template/assets/node_modules/popper/popper.min.js"></script>
@@ -614,7 +551,7 @@
 
 </html>
 
-
+<script src="~/Template/assets/node_modules/toast-master/js/jquery.toast.js"></script>
 
 <script src="~/Template/assets/node_modules/dropify/dist/js/dropify.min.js"></script>
 @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">*@
@@ -720,4 +657,18 @@
             }
         }
     });
+
+    $.ajax({
+            url: _link + "/Roles/role-GetScreens",
+            type: "GET",
+            dataType: Json_,
+            contentType: ContentType_,
+            success: function (e) {
+                if (e.resultCode === 200) {
+                    localStorage.setItem("menus", e.data);
+                } else {
+                    shortMessage("Menu yüklenirken hata meydana geldi", "e");
+                }
+            }
+        });
 </script>

@@ -36,18 +36,22 @@ namespace SCA.Services
 
         public async Task<ServiceResult> GetRoleTypes()
         {
+            ServiceResult _res = new ServiceResult();
             try
             {
-                // var dataList = _mapper.Map<List<RoleTypeDto>>(_roleTypeRepo.GetAll(x => x.IsDeleted.Equals(false)));
-                return Result.ReturnAsSuccess(data: null);
+                string query = "select * from RoleType where  Id <> @Value";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("Value", 1);
 
+                var result = await _db.QueryAsync<RoleTypeDto>(query, filter) as List<RoleTypeDto>;
+                _res = Result.ReturnAsSuccess(data: result);
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                await _errorManagement.SaveError(ex, null, "GetRoleTypes", PlatformType.Web);
+                _res = Result.ReturnAsFail(message: "Rol Tipleri getirilirken hata meydana geldi");
             }
-
+            return _res;
         }
         public async Task<List<RoleTypeDto>> GetRoles()
         {
@@ -58,7 +62,7 @@ namespace SCA.Services
         public async Task<ServiceResult> CreateRoleType(RoleTypeDto dto)
         {
             string resultMessage = "";
-            dto.IsActive = dto.isActiveVal;
+            //  dto.IsActive = dto.isActiveVal;
             if (dto == null)
             {
                 Result.ReturnAsFail(AlertResource.NoChanges, null);
@@ -87,7 +91,7 @@ namespace SCA.Services
         public async Task<ServiceResult> GetRolePermission()
         {
             //var dataList = _rolePermissionRepo.GetAll();
-            return Result.ReturnAsSuccess(data:null);
+            return Result.ReturnAsSuccess(data: null);
         }
 
         public async Task<ServiceResult> CreateRolePermission(RolePermissionDto dto)
@@ -110,7 +114,7 @@ namespace SCA.Services
             //}
 
             //_unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess(data:null);
+            return Result.ReturnAsSuccess(data: null);
 
         }
 

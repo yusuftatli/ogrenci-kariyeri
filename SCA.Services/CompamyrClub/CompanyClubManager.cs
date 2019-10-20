@@ -147,10 +147,10 @@ namespace SCA.Services
                 socialData.Add(new SocialMediaDto { CompanyClupId = result, IsActive = true, SocialMediaType = SocialMediaType.Instagram, Url = dto.Instagram, UserId = null });
 
 
-                foreach (var item in socialData)
-                {
-                    await _socialmanager.CreateSocialMedia(item, session.Id);
-                }
+                //foreach (var item in socialData)
+                //{
+                //    await _socialmanager.CreateSocialMedia(item, session.Id);
+                //}
                 string flag = (dto.CompanyClupType == CompanyClupType.Club) ? "Şirket" : "Klüp";
                 res = Result.ReturnAsSuccess(message: flag + " Başarıyla kaydedildi");
             }

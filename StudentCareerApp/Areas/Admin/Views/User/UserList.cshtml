@@ -3,6 +3,12 @@
     ViewBag.Title = "Kullanıcı Liste";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
+
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+
+
     <head>
         <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -15,250 +21,289 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 
         <script src="~/ScriptController/userListController.js"></script>
+        <link href="~/Template/dist/css/style.min.css" rel="stylesheet">
+
     </head>
 
-<div class="page-wrapper" ng-app="MyApp" ng-controller="userListController">
-    <!-- ============================================================== -->
-    <!-- Container fluid  -->
-    <!-- ============================================================== -->
-    <div class="container-fluid">
-        <!-- ============================================================== -->
-        <!-- Bread crumb and right sidebar toggle -->
-        <!-- ============================================================== -->
-        <div class="row page-titles">
-            <div class="col-md-5 align-self-center">
-                <h4 class="text-themecolor">Kullanıcılar</h4>
+    <body ng-app="MyApp" ng-controller="userListController">
+        <aside class="left-sidebar">
+            <!-- Sidebar scroll-->
+            <div class="scroll-sidebar">
+                <!-- Sidebar navigation-->
+                <nav class="sidebar-nav">
+                    <ul id="sidebarnav">
+                        @*<li class="user-pro">
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><img src="~/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"><span class="hide-menu">@HttpContextAccessor.HttpContext.Session.GetString("NameSurname")</span></a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="javascript:void(0)"><i class="ti-user"></i> Profil</a></li>
+                                <li><a href="javascript:void(0)"><i class="ti-wallet"></i> My Balance</a></li>
+                                <li><a href="javascript:void(0)"><i class="ti-email"></i> Inbox</a></li>
+                                <li><a href="javascript:void(0)"><i class="ti-settings"></i> Ayarlar</a></li>
+                                <li><a href="javascript:void(0)"><i class="fa fa-power-off"></i> Çıkış</a></li>
+                            </ul>
+                        </li>*@
+                        <li ng-repeat="x in menuList">
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="{{x.Icon }}"></i><span class="hide-menu" ng-bind="x.Name"> </span></a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li ng-repeat="y in x.Details">
+                                    <a href="/{{y.Url}}"><span ng-bind="y.Name"></span> </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li> <a class="waves-effect waves-dark" href="../documentation/documentation.html" aria-expanded="false"><i class="far fa-circle text-danger"></i><span class="hide-menu">Documentation</span></a></li>
+                        <li> <a class="waves-effect waves-dark" href="pages-login.html" aria-expanded="false"><i class="far fa-circle text-success"></i><span class="hide-menu">Log Out</span></a></li>
+                        <li> <a class="waves-effect waves-dark" href="pages-faq.html" aria-expanded="false"><i class="far fa-circle text-info"></i><span class="hide-menu">FAQs</span></a></li>
+                    </ul>
+                </nav>
+                <!-- End Sidebar navigation -->
             </div>
-            <div class="col-md-7 align-self-center text-right">
-                <div class="d-flex justify-content-end align-items-center">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                        <li class="breadcrumb-item active">Kullanıcılar</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-        <!-- ============================================================== -->
-        <!-- End Bread crumb and right sidebar toggle -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Start Page Content -->
-        <!-- ============================================================== -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Kullanıcı Listesi</h4>
-                        <div class="row m-t-40">
-                            <!-- Column -->
-                            <div class="col-md-6 col-lg-3 col-xlg-3">
-                                <div class="card">
-                                    <div class="box bg-info text-center">
-                                        <h1 class="font-light text-white"> <span ng-hide="DashboardData.length>0"><i class="fa fa-spinner fa-spin fa-spin"></i></span><span ng-show="DashboardData.length>0" ng-bind="DashboardData[0].count+DashboardData[1].count+DashboardData[2].count+DashboardData[3].count"></span></h1>
-                                        <h6 class="text-white"><span ng-bind="DashboardData[0].description"></span></h6>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Column -->
-                            <div class="col-md-6 col-lg-3 col-xlg-3">
-                                <div class="card">
-                                    <div class="box bg-primary text-center">
-                                        <h1 class="font-light text-white"><span ng-hide="DashboardData.length>0"><i class="fa fa-spinner fa-spin"></i></span><span ng-show="DashboardData.length>0" ng-bind="DashboardData[1].count"></span></h1>
-                                        <h6 class="text-white"><span ng-bind="DashboardData[1].description"></span></h6>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Column -->
-                            <div class="col-md-6 col-lg-3 col-xlg-3">
-                                <div class="card">
-                                    <div class="box bg-success text-center">
-                                        <h1 class="font-light text-white"><span ng-hide="DashboardData.length>0"><i class="fa fa-spinner fa-spin"></i></span><span ng-show="DashboardData.length>0" ng-bind="DashboardData[2].count"></span></h1>
-                                        <h6 class="text-white"><span ng-bind="DashboardData[2].description"></span></h6>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Column -->
-                            <div class="col-md-6 col-lg-3 col-xlg-3">
-                                <div class="card">
-                                    <div class="box bg-dark text-center">
-                                        <h1 class="font-light text-white"><span ng-hide="DashboardData.length>0"><i class="fa fa-spinner fa-spin"></i></span><span ng-show="DashboardData.length>0" ng-bind="DashboardData[3].count"></span></h1>
-                                        <h6 class="text-white"><span ng-bind="DashboardData[3].description"></span></h6>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Column -->
-                        </div>
-                        <div class="center" ng-hide="assayList.length>0">
-                            <span><i class="fa fa-spinner fa-spin"></i></span>
-                        </div>
-                        <div class="table-responsive" ng-show="assayList.length>0">
-
-                            <h4 class="card-title">Makaleler Listesi</h4>
-                            <h6 class="card-subtitle">Makale Sayısı : <code><span ng-bind="assayList.length"></span></code></h6>
-                            <h4><input type="text" class="form-control" name="site-search" id="getData" ng-model="search" ng-keypress="getData($event)" placeholder="Ara..."></h4>
-                            <table>
-                                <tr>
-                                    <td>
-                                        <button class="btn btn-block btn-primary" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">Önceki </button>
-                                    </td>
-                                    <td>
-                                        &nbsp;{{currentPage+1}}/{{numberOfPages()}}&nbsp;
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-block btn-primary" ng-disabled="currentPage >= getData().length/pageSize - 1" ng-click="currentPage=currentPage+1"> Sonraki</button>
-                                    </td>
-                                </tr>
-                            </table>
-                            <table id="demo-foo-addrow" class="table m-t-30 table-hover no-wrap contact-list" data-paging="true" data-paging-size="7" ng-show="!showTable">
-                                <thead>
-                                    <tr>
-                                        <th>Adı</th>
-                                        <th>Soyadı</th>
-                                        <th>E-Posta</th>
-                                        <th>Rolü</th>
-                                        <th>Cinsiyet</th>
-                                        <th>Eğitim Durumu</th>
-                                        <th>Durum</th>
-                                        <th>Doğum Tarihi</th>
-                                        <th>Üyelik Tarihi</th>
-                                        <th>Detay</th>
-                                        @if (ViewBag.showColumn == 1 || ViewBag.showColumn == 2)
-                                        {
-                                            <th>İşlem</th>
-                                        }
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @*<tr>
-                                            <td>1011</td>
-                                            <td>
-                                                <a href="javascript:void(0)"><img width="100" height="100" src="~/Template/assets/images/users/1.jpg" alt="user" class="img-circle" /> Genelia Deshmukh</a>
-                                            </td>
-                                            <td>genelia@gmail.com</td>
-                                            <td>How to customize the template?</td>
-                                            <td><span class="label label-warning">New</span> </td>
-                                            <td>Johnathon</td>
-                                            <td>14-10-2017</td>
-                                        </tr>*@
-                                    <tr ng-repeat="x in userList| filter:search | startFrom:currentPage*pageSize | limitTo:pageSize" )">
-                                        <td ng-show="false" ng-bind="x.id"></td>
-                                        <td ng-show="false" ng-bind="x.imagePath"></td>
-                                        <td ng-bind="x.name"></td>
-                                        <td ng-bind="x.surname"></td>
-                                        <td ng-bind="x.emailAddress"></td>
-                                        <td ng-bind="x.roleDescription"></td>
-                                        <td ng-bind="x.genderDescription"></td>
-                                        <td ng-bind="x.educationDescription"></td>
-                                        <td ng-bind="x.durum"></td>
-                                        <td ng-bind="x.birthDate | date:'MM/dd/yyyy HH:mm:ss'"></td>
-                                        <td ng-bind="x.createdDate | date:'MM/dd/yyyy HH:mm:ss'"></td>
-                                        <td>
-                                            <button ng-click="showContentDetail(x.id)" type="button" class="btn btn-rounded btn-success">Aç</button>
-                                        </td>
-                                        @if (ViewBag.showColumn == 1 || ViewBag.showColumn == 2)
-                                        {
-                                            <td>
-                                                <button ng-click="onClikckProcess(x)" type="button" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#userProcessModal">İşlem</button>
-                                            </td>
-                                        }
-                                    </tr>
-                                </tbody>
-                            </table>
+            <!-- End Sidebar scroll-->
+        </aside>
 
 
-                            <div class="modal fade" id="userProcessModal" tabindex="-1" role="dialog" aria-labelledby="userProcessModal">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title" id="userProcessModal"> Rol Türü:{{userProcess.roleDescription}} - Ad Soyad{{userProcess.name}} {{userProcess.surname}} </h4>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form>
-                                                <div class="form-group">
-                                                    <label ng-show="false" class="control-label" ng-model="userProcess.id"></label>
-                                                    <label class="control-label">Role Durumu</label>
-                                                    <select id="roletypeid" class="form-control custom-select" name="roleType" ng-model="userProcess.roleType">
-                                                        <option ng-repeat="x in roleTypes" value="{{x.id}}">{{x.description}}</option>
-                                                    </select>
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
-                                            <button type="button" class="btn btn-primary" ng-click="postRoleTypeProcess()">İşlem Yap <span ng-show="showSaveLoading"><i class="fa fa-spinner fa-spin"></i></span></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
+        <div class="page-wrapper">
+            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <div class="row page-titles">
+                    <div class="col-md-5 align-self-center">
+                        <h4 class="text-themecolor">Kullanıcılar</h4>
+                    </div>
+                    <div class="col-md-7 align-self-center text-right">
+                        <div class="d-flex justify-content-end align-items-center">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                                <li class="breadcrumb-item active">Kullanıcılar</li>
+                            </ol>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <!-- ============================================================== -->
-        <!-- End PAge Content -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Right sidebar -->
-        <!-- ============================================================== -->
-        <!-- .right-sidebar -->
-        <div class="right-sidebar">
-            <div class="slimscrollright">
-                <div class="rpanel-title"> Service Panel <span><i class="ti-close right-side-toggle"></i></span> </div>
-                <div class="r-panel-body">
-                    <ul id="themecolors" class="m-t-20">
-                        <li><b>With Light sidebar</b></li>
-                        <li><a href="javascript:void(0)" data-skin="skin-default" class="default-theme working">1</a></li>
-                        <li><a href="javascript:void(0)" data-skin="skin-green" class="green-theme">2</a></li>
-                        <li><a href="javascript:void(0)" data-skin="skin-red" class="red-theme">3</a></li>
-                        <li><a href="javascript:void(0)" data-skin="skin-blue" class="blue-theme">4</a></li>
-                        <li><a href="javascript:void(0)" data-skin="skin-purple" class="purple-theme">5</a></li>
-                        <li><a href="javascript:void(0)" data-skin="skin-megna" class="megna-theme">6</a></li>
-                        <li class="d-block m-t-30"><b>With Dark sidebar</b></li>
-                        <li><a href="javascript:void(0)" data-skin="skin-default-dark" class="default-dark-theme ">7</a></li>
-                        <li><a href="javascript:void(0)" data-skin="skin-green-dark" class="green-dark-theme">8</a></li>
-                        <li><a href="javascript:void(0)" data-skin="skin-red-dark" class="red-dark-theme">9</a></li>
-                        <li><a href="javascript:void(0)" data-skin="skin-blue-dark" class="blue-dark-theme">10</a></li>
-                        <li><a href="javascript:void(0)" data-skin="skin-purple-dark" class="purple-dark-theme">11</a></li>
-                        <li><a href="javascript:void(0)" data-skin="skin-megna-dark" class="megna-dark-theme ">12</a></li>
-                    </ul>
-                    <ul class="m-t-20 chatonline">
-                        <li><b>Chat option</b></li>
-                        <li>
-                            <a href="javascript:void(0)"><img width="100" height="100" src="~/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"> <span>Varun Dhavan <small class="text-success">online</small></span></a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)"><img width="100" height="100" src="~/Template/assets/images/users/2.jpg" alt="user-img" class="img-circle"> <span>Genelia Deshmukh <small class="text-warning">Away</small></span></a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)"><img width="100" height="100" src="~/Template/assets/images/users/3.jpg" alt="user-img" class="img-circle"> <span>Ritesh Deshmukh <small class="text-danger">Busy</small></span></a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)"><img width="100" height="100" src="~/Template/assets/images/users/4.jpg" alt="user-img" class="img-circle"> <span>Arijit Sinh <small class="text-muted">Offline</small></span></a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)"><img width="100" height="100" src="~/Template/assets/images/users/5.jpg" alt="user-img" class="img-circle"> <span>Govinda Star <small class="text-success">online</small></span></a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)"><img width="100" height="100" src="~/Template/assets/images/users/6.jpg" alt="user-img" class="img-circle"> <span>John Abraham<small class="text-success">online</small></span></a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)"><img width="100" height="100" src="~/Template/assets/images/users/7.jpg" alt="user-img" class="img-circle"> <span>Hritik Roshan<small class="text-success">online</small></span></a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)"><img width="100" height="100" src="~/Template/assets/images/users/8.jpg" alt="user-img" class="img-circle"> <span>Pwandeep rajan <small class="text-success">online</small></span></a>
-                        </li>
-                    </ul>
+                <!-- ============================================================== -->
+                <!-- End Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Kullanıcı Dashboard</h4>
+                                <div class="row m-t-40">
+                                    <!-- Column -->
+                                    <div class="col-md-6 col-lg-3 col-xlg-3">
+                                        <div class="card">
+                                            <div class="box bg-info text-center">
+                                                <h1 class="font-light text-white"> <span ng-hide="DashboardData.length>0"><i class="fa fa-spinner fa-spin fa-spin"></i></span><span ng-show="DashboardData.length>0" ng-bind="DashboardData[0].count+DashboardData[1].count+DashboardData[2].count+DashboardData[3].count"></span></h1>
+                                                <h6 class="text-white"><span ng-bind="DashboardData[0].description"></span></h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Column -->
+                                    <div class="col-md-6 col-lg-3 col-xlg-3">
+                                        <div class="card">
+                                            <div class="box bg-primary text-center">
+                                                <h1 class="font-light text-white"><span ng-hide="DashboardData.length>0"><i class="fa fa-spinner fa-spin"></i></span><span ng-show="DashboardData.length>0" ng-bind="DashboardData[1].count"></span></h1>
+                                                <h6 class="text-white"><span ng-bind="DashboardData[1].description"></span></h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Column -->
+                                    <div class="col-md-6 col-lg-3 col-xlg-3">
+                                        <div class="card">
+                                            <div class="box bg-success text-center">
+                                                <h1 class="font-light text-white"><span ng-hide="DashboardData.length>0"><i class="fa fa-spinner fa-spin"></i></span><span ng-show="DashboardData.length>0" ng-bind="DashboardData[2].count"></span></h1>
+                                                <h6 class="text-white"><span ng-bind="DashboardData[2].description"></span></h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Column -->
+                                    <div class="col-md-6 col-lg-3 col-xlg-3">
+                                        <div class="card">
+                                            <div class="box bg-dark text-center">
+                                                <h1 class="font-light text-white"><span ng-hide="DashboardData.length>0"><i class="fa fa-spinner fa-spin"></i></span><span ng-show="DashboardData.length>0" ng-bind="DashboardData[3].count"></span></h1>
+                                                <h6 class="text-white"><span ng-bind="DashboardData[3].description"></span></h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Column -->
+                                </div>
+                                <div class="center" ng-hide="userList.length>0">
+                                    <span><i class="fa fa-spinner fa-spin"></i></span>
+                                </div>
+                                <div class="table-responsive" ng-show="userList.length>0">
+
+                                    <h4 class="card-title">Kullanıcı Listesi</h4>
+                                    <h6 class="card-subtitle">Kullanıcı Sayısı : <code><span ng-bind="userList.length"></span></code></h6>
+                                    <h4><input type="text" class="form-control" name="site-search" id="getData" ng-model="search" ng-keypress="getData($event)" placeholder="Ara..."></h4>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <button class="btn btn-block btn-primary" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">Önceki </button>
+                                            </td>
+                                            <td>
+                                                &nbsp;{{currentPage+1}}/{{numberOfPages()}}&nbsp;
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-block btn-primary" ng-disabled="currentPage >= getData().length/pageSize - 1" ng-click="currentPage=currentPage+1"> Sonraki</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table id="demo-foo-addrow" class="table m-t-30 table-hover no-wrap contact-list" data-paging="true" data-paging-size="7" ng-show="!showTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Adı</th>
+                                                <th>Soyadı</th>
+                                                <th>E-Posta</th>
+                                                <th>Rolü</th>
+                                                <th>Cinsiyet</th>
+                                                <th>Eğitim Durumu</th>
+                                                <th>Durum</th>
+                                                <th>Doğum Tarihi</th>
+                                                <th>Üyelik Tarihi</th>
+                                                <th>Detay</th>
+                                                @if (ViewBag.showColumn == 1 || ViewBag.showColumn == 2)
+                                                {
+                                                    <th>İşlem</th>
+                                                }
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @*<tr>
+                                                <td>1011</td>
+                                                <td>
+                                                    <a href="javascript:void(0)"><img width="100" height="100" src="~/Template/assets/images/users/1.jpg" alt="user" class="img-circle" /> Genelia Deshmukh</a>
+                                                </td>
+                                                <td>genelia@gmail.com</td>
+                                                <td>How to customize the template?</td>
+                                                <td><span class="label label-warning">New</span> </td>
+                                                <td>Johnathon</td>
+                                                <td>14-10-2017</td>
+                                            </tr>*@
+                                            <tr ng-repeat="x in userList| filter:search | startFrom:currentPage*pageSize | limitTo:pageSize" )">
+                                                <td ng-show="false" ng-bind="x.id"></td>
+                                                <td ng-show="false" ng-bind="x.imagePath"></td>
+                                                <td ng-bind="x.name"></td>
+                                                <td ng-bind="x.surname"></td>
+                                                <td ng-bind="x.emailAddress"></td>
+                                                <td ng-bind="x.roleDescription"></td>
+                                                <td ng-bind="x.genderDescription"></td>
+                                                <td ng-bind="x.educationDescription"></td>
+                                                <td ng-bind="x.durum"></td>
+                                                <td ng-bind="x.birthDate | date:'MM/dd/yyyy HH:mm:ss'"></td>
+                                                <td ng-bind="x.createdDate | date:'MM/dd/yyyy HH:mm:ss'"></td>
+                                                <td>
+                                                    <button ng-click="showContentDetail(x.id)" type="button" class="btn btn-rounded btn-success">Aç</button>
+                                                </td>
+                                                @if (ViewBag.showColumn == 1 || ViewBag.showColumn == 2)
+                                                {
+                                                    <td>
+                                                        <button ng-click="onClikckProcess(x)" type="button" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#userProcessModal">İşlem</button>
+                                                    </td>
+                                                }
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+
+                                    <div class="modal fade" id="userProcessModal" tabindex="-1" role="dialog" aria-labelledby="userProcessModal">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="userProcessModal"> Rol Türü:{{userProcess.roleDescription}} - Ad Soyad{{userProcess.name}} {{userProcess.surname}} </h4>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form>
+                                                        <div class="form-group">
+                                                            <label ng-show="false" class="control-label" ng-model="userProcess.id"></label>
+                                                            <label class="control-label">Role Durumu</label>
+                                                            <select id="roletypeid" class="form-control custom-select" name="roleType" ng-model="userProcess.roleType">
+                                                                <option ng-repeat="x in roleTypes" value="{{x.id}}">{{x.description}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                                                    <button type="button" class="btn btn-primary" ng-click="postRoleTypeProcess()">İşlem Yap <span ng-show="showSaveLoading"><i class="fa fa-spinner fa-spin"></i></span></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                <!-- ============================================================== -->
+                <!-- End PAge Content -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Right sidebar -->
+                <!-- ============================================================== -->
+                <!-- .right-sidebar -->
+                <div class="right-sidebar">
+                    <div class="slimscrollright">
+                        <div class="rpanel-title"> Service Panel <span><i class="ti-close right-side-toggle"></i></span> </div>
+                        <div class="r-panel-body">
+                            <ul id="themecolors" class="m-t-20">
+                                <li><b>With Light sidebar</b></li>
+                                <li><a href="javascript:void(0)" data-skin="skin-default" class="default-theme working">1</a></li>
+                                <li><a href="javascript:void(0)" data-skin="skin-green" class="green-theme">2</a></li>
+                                <li><a href="javascript:void(0)" data-skin="skin-red" class="red-theme">3</a></li>
+                                <li><a href="javascript:void(0)" data-skin="skin-blue" class="blue-theme">4</a></li>
+                                <li><a href="javascript:void(0)" data-skin="skin-purple" class="purple-theme">5</a></li>
+                                <li><a href="javascript:void(0)" data-skin="skin-megna" class="megna-theme">6</a></li>
+                                <li class="d-block m-t-30"><b>With Dark sidebar</b></li>
+                                <li><a href="javascript:void(0)" data-skin="skin-default-dark" class="default-dark-theme ">7</a></li>
+                                <li><a href="javascript:void(0)" data-skin="skin-green-dark" class="green-dark-theme">8</a></li>
+                                <li><a href="javascript:void(0)" data-skin="skin-red-dark" class="red-dark-theme">9</a></li>
+                                <li><a href="javascript:void(0)" data-skin="skin-blue-dark" class="blue-dark-theme">10</a></li>
+                                <li><a href="javascript:void(0)" data-skin="skin-purple-dark" class="purple-dark-theme">11</a></li>
+                                <li><a href="javascript:void(0)" data-skin="skin-megna-dark" class="megna-dark-theme ">12</a></li>
+                            </ul>
+                            <ul class="m-t-20 chatonline">
+                                <li><b>Chat option</b></li>
+                                <li>
+                                    <a href="javascript:void(0)"><img width="100" height="100" src="~/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"> <span>Varun Dhavan <small class="text-success">online</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img width="100" height="100" src="~/Template/assets/images/users/2.jpg" alt="user-img" class="img-circle"> <span>Genelia Deshmukh <small class="text-warning">Away</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img width="100" height="100" src="~/Template/assets/images/users/3.jpg" alt="user-img" class="img-circle"> <span>Ritesh Deshmukh <small class="text-danger">Busy</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img width="100" height="100" src="~/Template/assets/images/users/4.jpg" alt="user-img" class="img-circle"> <span>Arijit Sinh <small class="text-muted">Offline</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img width="100" height="100" src="~/Template/assets/images/users/5.jpg" alt="user-img" class="img-circle"> <span>Govinda Star <small class="text-success">online</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img width="100" height="100" src="~/Template/assets/images/users/6.jpg" alt="user-img" class="img-circle"> <span>John Abraham<small class="text-success">online</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img width="100" height="100" src="~/Template/assets/images/users/7.jpg" alt="user-img" class="img-circle"> <span>Hritik Roshan<small class="text-success">online</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img width="100" height="100" src="~/Template/assets/images/users/8.jpg" alt="user-img" class="img-circle"> <span>Pwandeep rajan <small class="text-success">online</small></span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Right sidebar -->
+                <!-- ============================================================== -->
             </div>
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
         </div>
-        <!-- ============================================================== -->
-        <!-- End Right sidebar -->
-        <!-- ============================================================== -->
-    </div>
-    <!-- ============================================================== -->
-    <!-- End Container fluid  -->
-    <!-- ============================================================== -->
-</div>
+    </body>

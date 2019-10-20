@@ -1,7 +1,7 @@
 ﻿var app = angular.module('MyApp', ['ui.bootstrap']);
 app.controller('userListController', function ($scope, $http, $filter) {
     "use strict";
-
+    $scope.menuList = JSON.parse(localStorage.getItem("menus"));
     $scope.userProcess = {};
     getUserList();
 
@@ -77,7 +77,7 @@ app.controller('userListController', function ($scope, $http, $filter) {
         $scope.data = [];
 
         $scope.getData = function () {
-            return $filter('filter')($scope.assayList, $scope.search);
+            return $filter('filter')($scope.userList, $scope.search);
         };
 
         $scope.numberOfPages = function () {

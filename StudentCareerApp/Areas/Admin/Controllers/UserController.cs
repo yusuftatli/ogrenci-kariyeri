@@ -17,19 +17,44 @@ namespace StudentCareerApp.Areas.Admin.Controllers
         [HttpGet("UserList")]
         public IActionResult UserList()
         {
-            ViewBag.showColumn = JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")).RoleTypeId;
-            return View();
+            var value = HttpContext.Session.GetString("userInfo");
+            if (value != null)
+            {
+                ViewBag.showColumn = JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")).RoleTypeId;
+
+                return View();
+            }
+            else
+            {
+                return Redirect("/Home/Index");
+            }
         }
 
         [HttpGet("CreateUser")]
         public IActionResult CreateUser()
         {
-            ViewBag.showColumn = JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")).RoleTypeId;
-            return View();
+            var value = HttpContext.Session.GetString("userInfo");
+            if (value != null)
+            {
+                ViewBag.showColumn = JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")).RoleTypeId;
+
+                return View();
+            }
+            else
+            {
+                return Redirect("/Home/Index");
+            }
         }
 
         [HttpGet("UserDetailList")]
         public IActionResult UserDetailList()
+        {
+            return View();
+        }
+
+
+        [HttpGet("Profile")]
+        public IActionResult Profile()
         {
             return View();
         }

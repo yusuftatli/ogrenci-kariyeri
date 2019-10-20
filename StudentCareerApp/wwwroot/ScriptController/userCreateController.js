@@ -1,6 +1,8 @@
 ﻿var app = angular.module('MyApp', ['ui.bootstrap']);
 app.controller('userCreateController', function ($scope, $http, $filter) {
     "use strict";
+    $scope.menuList = JSON.parse(localStorage.getItem("menus"));
+    
 
     $scope.userModel = {};
     $scope.showHigSchoolType = false;
@@ -41,6 +43,50 @@ app.controller('userCreateController', function ($scope, $http, $filter) {
 
     function saveUserData() {
         $scope.showSaveLoading = true;
+        if ($scope.userModel.name === undefined || $scope.userModel.name === "") {
+            $scope.showSaveLoading = false;
+            shortMessage("Ad Boş Geçilemez", "e");
+            return;
+        }
+        if ($scope.userModel.surname === undefined || $scope.userModel.surname === "") {
+            $scope.showSaveLoading = false;
+            shortMessage("Soyad Boş Geçilemez", "e");
+            return;
+        }
+        if ($scope.userModel.EmailAddress === undefined || $scope.userModel.EmailAddress === "") {
+            $scope.showSaveLoading = false;
+            shortMessage("Email Adresi Boş Geçilemez", "e");
+            return;
+        }
+        if ($scope.userModel.Password === undefined || $scope.userModel.Password === "") {
+            $scope.showSaveLoading = false;
+            shortMessage("Şifre Boş Geçilemez", "e");
+            return;
+        }
+        if ($scope.userModel.genderid === undefined || $scope.userModel.genderid === "") {
+
+            $scope.showSaveLoading = false;
+            shortMessage("Cinsiyet Boş Geçilemez", "e");
+            return;
+        }
+        if ($scope.userModel.birthdate === undefined || $scope.userModel.birthdate === "") {
+
+            $scope.showSaveLoading = false;
+            shortMessage("Doğum Tarihi Boş Geçilemez", "e");
+            return;
+        }
+        if ($scope.userModel.roletypeid === undefined || $scope.userModel.roletypeid === "") {
+
+            $scope.showSaveLoading = false;
+            shortMessage("Kullanıcı Rolü Boş Geçilemez", "e");
+            return;
+        }
+        if ($scope.userModel.roleexpiresdate === undefined || $scope.userModel.roleexpiresdate === "") {
+
+            $scope.showSaveLoading = false;
+            shortMessage("Role Geçerlilik Tarihi Boş Geçilemez", "e");
+            return;
+        }
         $http(postUserData()).then(function (res) {
             if (res.data.resultCode === 200) {
                 shortMessage(res.data.message, "s");
@@ -49,12 +95,10 @@ app.controller('userCreateController', function ($scope, $http, $filter) {
                 shortMessage(res.data.message, "e");
                 $scope.showSaveLoading = false;
             }
-
         });
     }
 
     function getRoleTypeList() {
-        Loading(true);
         $.ajax({
             url: _link + "/Roles/role-getroletypes",
             type: "GET",
@@ -70,7 +114,6 @@ app.controller('userCreateController', function ($scope, $http, $filter) {
                     console.log(e);
                 }
                 $scope.$apply();
-                Loading(false);
             }
         });
     }
@@ -205,11 +248,15 @@ app.controller('userCreateController', function ($scope, $http, $filter) {
         });
     }
 
+    let Header = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("token")
+    };
     var postUserData = function () {
         return {
             method: "post",
-            url: _link + "/User/CreateUser",
-            headers: Headers,
+            url: _link + "/User/user-create-web",
+            headers: Header,
             data: $scope.userModel
         };
     };
