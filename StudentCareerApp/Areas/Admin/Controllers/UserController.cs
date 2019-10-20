@@ -5,6 +5,7 @@ using SCA.Entity.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace StudentCareerApp.Areas.Admin.Controllers
@@ -57,6 +58,13 @@ namespace StudentCareerApp.Areas.Admin.Controllers
         public IActionResult Profile()
         {
             return View();
+        }
+
+        [HttpGet("Exit")]
+        public IActionResult Exit()
+        {
+            HttpContext.Session.Remove("userInfo");
+            return Redirect("/Home/Index");
         }
     }
 }
