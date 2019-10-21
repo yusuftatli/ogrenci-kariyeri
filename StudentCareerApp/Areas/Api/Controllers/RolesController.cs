@@ -19,12 +19,28 @@ namespace StudentCareerApp.Areas.Api.Controller
     public class RolesController : ControllerBase
     {
         IRoleManager _roleManager;
-        public RolesController(IRoleManager roleManager)
+        IMenuManager _menuManager;
+
+        public RolesController(IRoleManager roleManager,
+            IMenuManager menuManager)
         {
             _roleManager = roleManager;
+            _menuManager = menuManager;
         }
 
         #region Role Types
+
+        [HttpGet, Route("menu-GetMenuWitRoles")]
+        public async Task<ServiceResult> GetRolePermission(long roleTypeId)
+        {
+            return await _menuManager.GetRolePermission(roleTypeId);
+        }
+
+        [HttpGet, Route("menu-sync-withRoleTypeId")]
+        public async Task<ServiceResult> GetRoleTypes(long roleTypeId)
+        {
+            return await _menuManager.SyncAllMenu(roleTypeId);
+        }
 
         [HttpGet, Route("role-getroletypes")]
         public async Task<ServiceResult> GetRoleTypes()
