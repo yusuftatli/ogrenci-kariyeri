@@ -105,7 +105,7 @@
                                                         <td ng-bind="x.createdDate| date:'dd.MM.yyyy (HH:mm)'"></td>
                                                         <td>
                                                             <div class="btn-group">
-                                                                <button ng-click="showContentDetail(x.id)" type="button" class="btn btn-default"><i class="fa fa-edit"></i></button>
+                                                                <button id="popupModal" type="button" class="btn btn-default lazyload showModal" data-header="<i class='fa fa-edit'></i> Şirket Düzenle" data-size="modal-xl" data-url="/Admin/CompanyClub/CompanyPage?id={{x.id}}"><i class="fa fa-edit"></i></button>
                                                                 <button type="button" class="btn btn-default"><i class="fa fa-trash"></i></button>
                                                                 <div class="dropdown">
                                                                     <button class="btn btn-default dropdown-toggle" id="dropdownOthers" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>

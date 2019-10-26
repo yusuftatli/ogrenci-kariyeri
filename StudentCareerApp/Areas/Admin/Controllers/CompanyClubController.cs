@@ -10,6 +10,7 @@ using SCA.Common.Result;
 using SCA.Entity.DTO;
 using SCA.Entity.Entities;
 using SCA.Entity.Model;
+using SCA.Entity.Model.CompanyClub;
 using SCA.Entity.Model.SocialMedias;
 using SCA.Services;
 
@@ -53,8 +54,8 @@ namespace StudentCareerApp.Areas.Admin.Controllers
         }
 
         public async Task<JsonResult> GetCompanyDetails(long id)
-        {
-            var res = await _companyClubService.GetByIdAsync<SocialMediaVM>(id);
+        {   
+            var res = await _companyClubService.GetByIdAsync<CompanyVM>(id);
             return Json(res);
         }
 

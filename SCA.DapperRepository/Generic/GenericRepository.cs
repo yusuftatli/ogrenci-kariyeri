@@ -99,6 +99,7 @@ namespace SCA.DapperRepository.Generic
             using (IDbConnection conn = new MySqlConnection(_connString))
             {
                 var query = ((T)Activator.CreateInstance(typeof(T), null)).GenerateSelectQuery<T,U>(_tableName);
+                query += " WHERE Id=@Id";
                 var res = await conn.QueryFirstOrDefaultAsync<T>(query, new { Id = id });
                 return res;
             }
