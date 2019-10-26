@@ -16,12 +16,13 @@ namespace SCA.Entity.DTO
         public string Biography { get; set; }
         public string Category { get; set; }
         public long RoleTypeId { get; set; }
+        public string RoleType { get; set; }
         public int BanCount { get; set; }
         public bool IsActive { get; set; }
         public string ImagePath { get; set; }
         public string ImageData { get; set; }
         public DateTime RoleExpiresDate { get; set; }
-        public GenderType GenderId { get; set; }
+        public string Gender { get; set; }
         public EducationType? EducationStatusId { get; set; }
         public DateTime BirthDate { get; set; }
         public long? HighSchoolTypeId { get; set; }

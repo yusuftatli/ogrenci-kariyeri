@@ -10,6 +10,7 @@ namespace SCA.Services
     public interface IUserManager
     {
         Task<ServiceResult> PasswordRenew(string emailAddress,string token);
+        Task<ServiceResult> CreateUserByWeb(UserWeblDto dto, string token);
         Task CreateUserLog(UserLogDto dto);
         Task<ServiceResult> CheckUserForLogin(string email, string password);
         Task<ServiceResult> RegisterUser(UserRegisterDto dto);
@@ -20,7 +21,7 @@ namespace SCA.Services
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        Task<UsersDTO> GetUserInfo(long Id);
+        Task<ServiceResult> GetUserInfo(string token);
 
         /// <summary>
         /// verilen idlere göre kullanıcıları listeler

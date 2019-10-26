@@ -7,7 +7,7 @@ app.controller('clubController', function ($scope, $http, $filter) {
     $scope.clubsModel = {};
     $scope.showSaveLoading = false;
     $scope.showTable = true;
-
+    $scope.menuList = JSON.parse(localStorage.getItem("menus"));
     function pagin() {
         $scope.currentPage = 0;
         $scope.pageSize = 20;

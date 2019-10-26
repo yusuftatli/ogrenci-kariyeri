@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,12 +17,10 @@ namespace SCA.UI.Controllers
     {
 
         private readonly IUserManager _userManager;
-        private readonly IMapper _mapper;
 
-        public SharedController(IUserManager userManager, IMapper mapper)
+        public SharedController(IUserManager userManager)
         {
             _userManager = userManager;
-            _mapper = mapper;
         }
 
         public IActionResult Index()
@@ -59,6 +56,7 @@ namespace SCA.UI.Controllers
                 JsonSerializer serializer = new JsonSerializer();
                 var result = JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo"));
                 HttpContext.Session.SetString("NameSurname", result.Name + " " + result.Surname);
+                HttpContext.Session.SetString("RoleTypeId", result.RoleTypeId.ToString());
                 return Json(res);
             }
             else

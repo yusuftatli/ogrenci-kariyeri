@@ -3,683 +3,722 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+
 
 <head>
+    <link href="~/Template/dist/css/style.min.css" rel="stylesheet">
     <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <script src="~/ScriptController/definitionController.js"></script>
 </head>
 
-
-<div class="page-wrapper" ng-app="MyApp" ng-controller="DefinitonManagerController">
-    <!-- ============================================================== -->
-    <!-- Container fluid  -->
-    <!-- ============================================================== -->
-    <div class="container-fluid">
-        <!-- ============================================================== -->
-        <!-- Bread crumb and right sidebar toggle -->
-        <!-- ============================================================== -->
-        <div class="row page-titles">
-            <div class="col-md-5 align-self-center">
-                <h4 class="text-themecolor">Eğitim Bilgi Sistemi Yönetimi</h4>
-            </div>
-            <div class="col-md-7 align-self-center text-right">
-                <div class="d-flex justify-content-end align-items-center">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Eğitim Bilgi Sistemi Yönetimi</a></li>
-                        <li class="breadcrumb-item active">Eğitim Bilgi Sistemi Yönetimi</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-        <!-- ============================================================== -->
-        <!-- End Bread crumb and right sidebar toggle -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Start Page Content -->
-        <!-- ============================================================== -->
-        <!-- Row -->
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li ng-click="onClickDashboardTab()" class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">DashBoard</span></a> </li>
-                            <li ng-click="onClickClassTab()" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#ClassType" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Sınıflar</span></a> </li>
-                            @*<li ng-click="onClickEducationTypeTab()" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#EducationType" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Eğitim Durumu</span></a> </li>*@
-                            <li ng-click="onClickhighSchollTab()" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#highSchool" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Okullar</span></a> </li>
-                            <li ng-click="onClickuniversityTab()" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#university" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Üniversiteler</span></a> </li>
-                            <li ng-click="onClickFacultyTab()" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#faculty" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Fakülteler</span></a> </li>
-                            <li ng-click="onClickDepartmentTab()" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#department" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Bölümler</span></a> </li>
-                            <li ng-click="onClicksectorTab()" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#sector" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Sektör</span></a> </li>
-
+<body ng-app="MyApp" ng-controller="DefinitonManagerController">
+    <aside class="left-sidebar">
+        <!-- Sidebar scroll-->
+        <div class="scroll-sidebar">
+            <!-- Sidebar navigation-->
+            <nav class="sidebar-nav">
+                <ul id="sidebarnav">
+                    @*<li class="user-pro">
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><img src="~/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"><span class="hide-menu">@HttpContextAccessor.HttpContext.Session.GetString("NameSurname")</span></a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="/Admin/User/Profile"><i class="ti-user"></i> Profil</a></li>
+                                <li><a href="javascript:void(0)"><i class="ti-wallet"></i> My Balance</a></li>
+                                <li><a href="javascript:void(0)"><i class="ti-email"></i> Inbox</a></li>
+                                <li><a href="javascript:void(0)"><i class="ti-settings"></i> Ayarlar</a></li>
+                                <li><a href="javascript:void(0)"><i class="fa fa-power-off"></i> Çıkış</a></li>
+                            </ul>
+                        </li>*@
+                    <li ng-repeat="x in menuList">
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="{{x.Icon }}"></i><span class="hide-menu" ng-bind="x.Name"> </span></a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li ng-repeat="y in x.Details">
+                                <a href="/{{y.Url}}"><span ng-bind="y.Name"></span> </a>
+                            </li>
                         </ul>
-                        <div class="tab-content tabcontent-border">
+                    </li>
+                    <li> <a class="waves-effect waves-dark" href="../documentation/documentation.html" aria-expanded="false"><i class="far fa-circle text-danger"></i><span class="hide-menu">Documentation</span></a></li>
+                    <li> <a class="waves-effect waves-dark" href="pages-login.html" aria-expanded="false"><i class="far fa-circle text-success"></i><span class="hide-menu">Log Out</span></a></li>
+                    <li> <a class="waves-effect waves-dark" href="pages-faq.html" aria-expanded="false"><i class="far fa-circle text-info"></i><span class="hide-menu">FAQs</span></a></li>
+                </ul>
+            </nav>
+            <!-- End Sidebar navigation -->
+        </div>
+        <!-- End Sidebar scroll-->
+    </aside>
 
-                            <div class="tab-pane active" id="home" role="tabpanel">
-                                <br />
-                                <div class="row">
-                                    <!-- Column -->
-                                    <div class="col-lg-3 col-md-6">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="d-flex flex-row">
-                                                    <div class="round align-self-center round-success"><i class="ti-wallet"></i></div>
-                                                    <div class="m-l-10 align-self-center">
-                                                        <h3 class="m-b-0"><span ng-bind="contentDashboard[0].quantity"></span></h3>
-                                                        <h5 class="text-muted m-b-0">Sınıf</h5>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Column -->
-                                    <!-- Column -->
-                                    <div class="col-lg-3 col-md-6">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="d-flex flex-row">
-                                                    <div class="round align-self-center round-info"><i class="ti-user"></i></div>
-                                                    <div class="m-l-10 align-self-center">
-                                                        <h3 class="m-b-0"><span ng-bind="contentDashboard[1].quantity"></span></h3>
-                                                        <h5 class="text-muted m-b-0">Üniversite</h5>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Column -->
-                                    <!-- Column -->
-                                    <div class="col-lg-3 col-md-6">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="d-flex flex-row">
-                                                    <div class="round align-self-center round-danger"><i class="ti-calendar"></i></div>
-                                                    <div class="m-l-10 align-self-center">
-                                                        <h3 class="m-b-0"><span ng-bind="contentDashboard[2].quantity"></span></h3>
-                                                        <h5 class="text-muted m-b-0">Bölüm</h5>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Column -->
-                                    <!-- Column -->
-                                    <div class="col-lg-3 col-md-6">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="d-flex flex-row">
-                                                    <div class="round align-self-center round-success"><i class="ti-settings"></i></div>
-                                                    <div class="m-l-10 align-self-center">
-                                                        <h3 class="m-b-0"><span ng-bind="contentDashboard[3].quantity"></span></h3>
-                                                        <h5 class="text-muted m-b-0">Fakülte</h5>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Column -->
-                                </div>
-
-                            </div>
-
-                            <div class="tab-pane  p-20" id="ClassType" role="tabpanel">
-                                <div class="col-lg-6">
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        <h4 class="card-title"><button ng-click="openClassTypeModal()" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#classTypeModal">Sınıf Ekle</button></h4>
-                                                    </div>
-                                                    <div class="row">
-                                                        <h4 class="card-title"><input type="text" ng-model="classTypefilter" class="form-control" placeholder="Ara" id="highSchoolfilter"></h4>
-                                                    </div>
-                                                    <div class="table-responsive">
-                                                        <table class="table color-table primary-table">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Sınıf No</th>
-                                                                    <th>Seç</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr ng-repeat="x in classTypeModel.classTypeList|filter:classTypefilter">
-                                                                    <td ng-show="false" ng-bind="x.id"></td>
-                                                                    <td ng-bind="x.description"></td>
-                                                                    <td>
-                                                                        <span ng-click="showClassType(x)" data-toggle="modal" data-target="#classTypeModal">
-                                                                            <img height="20" width="20" src="~/Template/assets/images/chose.png" />
-                                                                        </span>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal fade" id="classTypeModal" tabindex="-1" role="dialog" aria-labelledby="classTypeModal">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title" id="exampleModalLabel1">Sınıf - {{classTypeModel.description}}</h4>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form>
-                                                <div class="form-group">
-                                                    <label id="ClassNo" class="control-label">Sınıf No </label>
-                                                    <input type="text" ng-model="classTypeModel.description" class="form-control" id="ClassNo">
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
-                                            <button type="button" class="btn btn-primary" ng-click="postClassType()">{{classTypeModel.classTypeCreateButtonName}}</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="tab-pane  p-20" id="EducationType" role="tabpanel">
-                                <div class="col-lg-6">
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        <h4 class="card-title"><button ng-click="openEducationTypeModal()" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#EducationTypeModal">Eğitim Durumu Ekle</button></h4>
-                                                    </div>
-                                                    <div class="row">
-                                                        <h4 class="card-title"><input type="text" ng-model="educationStatusfilter" class="form-control" placeholder="Ara" id="highSchoolfilter"></h4>
-                                                    </div>
-                                                    <div class="table-responsive">
-                                                        <table class="table color-table primary-table">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Eğitim Durumu</th>
-                                                                    <th>Seç</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr ng-repeat="x in educationTypeModel.educationTypeList |filter:educationStatusfilter ">
-                                                                    <td ng-show="false" ng-bind="x.id"></td>
-                                                                    <td ng-bind="x.description"></td>
-                                                                    <td>
-                                                                        <span ng-click="showEducationType(x)" data-toggle="modal" data-target="#EducationTypeModal">
-                                                                            <img height="20" width="20" src="~/Template/assets/images/chose.png" />
-                                                                        </span>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal fade" id="EducationTypeModal" tabindex="-1" role="dialog" aria-labelledby="EducationTypeModal">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title" id="exampleModalLabel1">Eğitim Durumu - {{educationTypeModel.description}}</h4>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form>
-                                                <div class="form-group">
-                                                    <label id="EducationStatus" class="control-label">Eğitim Durumu </label>
-                                                    <input type="text" ng-model="educationTypeModel.description" class="form-control" id="EducationStatus">
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
-                                            <button type="button" class="btn btn-primary" ng-click="postEducationType()">{{educationTypeModel.EducationTypeCreateButtonName}}</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="tab-pane  p-20" id="highSchool" role="tabpanel">
-                                <div class="col-lg-6">
-                                    <div class="row">
-                                        <div class="col-lg-8">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        <h4 class="card-title"><button ng-click="openhighSchoolModal()" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#highSchoolModal">Okul Ekle</button></h4>
-                                                    </div>
-                                                    <div class="row">
-                                                        <h4 class="card-title"><input type="text" ng-model="highSchoolfilter" class="form-control" placeholder="Ara" id="highSchoolfilter"></h4>
-                                                    </div>
-                                                    <div class="table-responsive">
-                                                        <table class="table color-table primary-table">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Okul Kodu</th>
-                                                                    <th>İl</th>
-                                                                    <th>Okul Adı</th>
-                                                                    <th>Seç</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr ng-repeat="x in highSchoolModel.highSchoolList |filter:highSchoolfilter">
-                                                                    <td ng-show="false" ng-bind="x.id"></td>
-                                                                    <td ng-bind="x.highSchoolCode"></td>
-                                                                    <td ng-show="false" ng-bind="x.cityId"></td>
-                                                                    <td ng-bind="x.cityName"></td>
-                                                                    <td ng-bind="x.schoolName"></td>
-                                                                    <td>
-                                                                        <span ng-click="showHighSchool(x)" data-toggle="modal" data-target="#highSchoolModal">
-                                                                            <img height="20" width="20" src="~/Template/assets/images/chose.png" />
-                                                                        </span>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal fade" id="highSchoolModal" tabindex="-1" role="dialog" aria-labelledby="highSchoolModal">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title" id="exampleModalLabel1">Okul kod : {{highSchoolModel.highschoolcode}} - Adı: {{highSchoolModel.schoolname}}</h4>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form>
-                                                <div class="form-group">
-                                                    <label id="lblhighSchoolCityId" class="control-label">İl </label>
-
-                                                    <select id="product" class="form-control" name="product" required
-                                                            ng-model="highSchoolModel.cityId"
-                                                            ng-options="x.cityId as x.cityName for x in cityList| filter:x.cityName"></select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label id="schoolCode" class="control-label">Okul Kodu </label>
-                                                    <input type="text" ng-model="highSchoolModel.highSchoolCode" class="form-control" id="schoolCode">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label id="schoolDescription" class="control-label">Okul Adı </label>
-                                                    <input type="text" ng-model="highSchoolModel.schoolName" class="form-control" id="schoolDescription">
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
-                                            <button type="button" class="btn btn-primary" ng-click="postHighSchool()">{{highSchoolModel.highSchoolCreateButtonName}}</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="tab-pane  p-20" id="university" role="tabpanel">
-                                <div class="col-lg-12">
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        <h4 class="card-title"><button ng-click="openuniversityModal()" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#universityModal">Üniversite Ekle</button></h4>
-                                                    </div>
-                                                    <div class="row">
-                                                        <h4 class="card-title"><input type="text" ng-model="universityfilter" class="form-control" placeholder="Ara" id="highSchoolfilter"></h4>
-                                                    </div>
-                                                    <div class="table-responsive">
-                                                        <table class="table color-table primary-table">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>İl</th>
-                                                                    <th>Üniversite Kodu</th>
-                                                                    <th>Üniversite Adı</th>
-                                                                    <th>Seç</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr ng-repeat="x in universityModel.universityList|filter:universityfilter">
-                                                                    <td ng-show="false" ng-bind="x.id"></td>
-                                                                    <td ng-bind="x.cityName"></td>
-                                                                    <td ng-bind="x.universityCode"></td>
-                                                                    <td ng-bind="x.universityName"></td>
-                                                                    <td ng-show="false" ng-bind="x.cityId"></td>
-                                                                    <td>
-                                                                        <span ng-click="showuniversity(x)" data-toggle="modal" data-target="#universityModal">
-                                                                            <img height="20" width="20" src="~/Template/assets/images/chose.png" />
-                                                                        </span>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal fade" id="universityModal" tabindex="-1" role="dialog" aria-labelledby="universityModal">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title" id="exampleModalLabel1">Üniversite kod : {{universityModel.universitycode}} - Adı: {{universityModel.universityname}}</h4>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form>
-                                                <div class="form-group">
-                                                    <label id="lbluniversityCityId" class="control-label">İl </label>
-
-                                                    <select id="universityCityId" class="form-control" name="universityCityId" required
-                                                            ng-model="universityModel.cityId"
-                                                            ng-options="x.cityId as x.cityName for x in cityList| filter:x.cityName"></select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label id="universityCode" class="control-label">Üniversite Kodu </label>
-                                                    <input type="text" ng-model="universityModel.universitycode" class="form-control" id="universityCode">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label id="universityname" class="control-label">Üniversite Adı </label>
-                                                    <input type="text" ng-model="universityModel.universityname" class="form-control" id="universityname">
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
-                                            <button type="button" class="btn btn-primary" ng-click="postuniversity()">{{universityModel.universityCreateButtonName}}</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="tab-pane  p-20" id="faculty" role="tabpanel">
-                                <div class="col-lg-12">
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        <h4 class="card-title"><button ng-click="openfacultyModal()" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#facultyModal">Fakülte Ekle</button></h4>
-                                                    </div>
-                                                    <div class="row">
-                                                        <h4 class="card-title"><input type="text" ng-model="facultyfilter" class="form-control" placeholder="Ara" id="facultyfilter"></h4>
-                                                    </div>
-                                                    <div class="table-responsive">
-                                                        <table class="table color-table primary-table">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Fakülte Kodu</th>
-                                                                    <th>Fakülte Adı</th>
-                                                                    <th>Seç</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr ng-repeat="x in facultyModel.facultyList|filter:facultyfilter">
-                                                                    <td ng-show="false" ng-bind="x.id"></td>
-                                                                    <td ng-bind="x.facultyCode"></td>
-                                                                    <td ng-bind="x.facultyName"></td>
-                                                                    <td>
-                                                                        <span ng-click="showFaculty(x) " data-toggle="modal" data-target="#facultyModal">
-                                                                            <img height="20" width="20" src="~/Template/assets/images/chose.png" />
-                                                                        </span>
-                                                                    </td>
-                                                                    @*<td>
-                                                                            <span ng-click="showuniversity(x)" data-toggle="modal" data-target="#universityModal">
-                                                                                <img height="20" width="20" src="~/Template/assets/images/Plus-512.png" />
-                                                                            </span>
-                                                                        </td>*@
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal fade" id="facultyModal" tabindex="-1" role="dialog" aria-labelledby="facultyModal">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form>
-                                                <div class="form-group">
-                                                    <label id="universityCode" class="control-label">Fakülte Kodu </label>
-                                                    <input type="text" ng-model="facultyModel.facultyCode" class="form-control" id="universityCode">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label id="universityname" class="control-label">Fakülte Adı </label>
-                                                    <input type="text" ng-model="facultyModel.facultyName" class="form-control" id="universityname">
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
-                                            <button type="button" class="btn btn-primary" ng-click="postfaculty()">{{facultyModel.facultyCreateButtonName}}</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="tab-pane  p-20" id="department" role="tabpanel">
-                                <div class="col-lg-12">
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        <h4 class="card-title"><button ng-click="departmentModal()" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#departmentModal">Bölüm Ekle</button></h4>
-                                                    </div>
-                                                    <div class="row">
-                                                        <h4 class="card-title"><input type="text" ng-model="departmentfilter" class="form-control" placeholder="Ara" id="departmentfilter"></h4>
-                                                    </div>
-                                                    <div class="table-responsive">
-                                                        <table class="table color-table primary-table">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Bölüm Kodu</th>
-                                                                    <th>Bölüm Adı</th>
-                                                                    <th>Seç</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr ng-repeat="x in departmentModel.departmentList|filter:departmentfilter">
-                                                                    <td ng-show="false" ng-bind="x.id"></td>
-                                                                    <td ng-bind="x.departmentCode"></td>
-                                                                    <td ng-bind="x.departmentName"></td>
-                                                                    <td>
-                                                                        <span ng-click="showdepartment(x) " data-toggle="modal" data-target="#departmentModal">
-                                                                            <img height="20" width="20" src="~/Template/assets/images/chose.png" />
-                                                                        </span>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal fade" id="departmentModal" tabindex="-1" role="dialog" aria-labelledby="departmentModal">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form>
-                                                <div class="form-group">
-                                                    <label id="universityCode" class="control-label">Bölüm Kodu </label>
-                                                    <input type="text" ng-model="departmentModel.departmentCode" class="form-control" id="universityCode">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label id="universityname" class="control-label">Bölüm Adı </label>
-                                                    <input type="text" ng-model="departmentModel.departmentName" class="form-control" id="universityname">
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
-                                            <button type="button" class="btn btn-primary" ng-click="postdepartment()">{{departmentModel.departmentCreateButtonName}}</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="tab-pane  p-20" id="sector" role="tabpanel">
-                                <div class="col-lg-12">
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        <h4 class="card-title"><button ng-click="sectorModal()" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#sectorModal">Sektör Ekle</button></h4>
-                                                    </div>
-                                                    <div class="row">
-                                                        <h4 class="card-title"><input type="text" ng-model="sectorfilter" class="form-control" placeholder="Ara" id="sectorfilter"></h4>
-                                                    </div>
-                                                    <div class="table-responsive">
-                                                        <table class="table color-table primary-table">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Sektör Adı</th>
-                                                                    <th>Seç</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr ng-repeat="x in sectorModel.sectorList|filter:sectorfilter">
-                                                                    <td ng-show="false" ng-bind="x.id"></td>
-                                                                    <td ng-bind="x.description"></td>
-                                                                    <td>
-                                                                        <span ng-click="showSector(x) " data-toggle="modal" data-target="#sectorModal">
-                                                                            <img height="20" width="20" src="~/Template/assets/images/chose.png" />
-                                                                        </span>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal fade" id="sectorModal" tabindex="-1" role="dialog" aria-labelledby="sectorModal">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form>
-                                                <div class="form-group">
-                                                    <label id="universityname" class="control-label">Sektör Adı </label>
-                                                    <input type="text" ng-model="sectorModel.description" class="form-control" id="description">
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
-                                            <button type="button" class="btn btn-primary" ng-click="postsector()">{{sectorModel.sectorCreateButtonName}}</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-
-
-
-
+    <div class="page-wrapper">
+        <!-- ============================================================== -->
+        <!-- Container fluid  -->
+        <!-- ============================================================== -->
+        <div class="container-fluid">
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <div class="row page-titles">
+                <div class="col-md-5 align-self-center">
+                    <h4 class="text-themecolor">Eğitim Bilgi Sistemi Yönetimi</h4>
                 </div>
-                <div class="right-sidebar">
-                    <div class="slimscrollright">
-                        <div class="rpanel-title"> Service Panel <span><i class="ti-close right-side-toggle"></i></span> </div>
-                        <div class="r-panel-body">
-                            <ul id="themecolors" class="m-t-20">
-                                <li><b>With Light sidebar</b></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-default" class="default-theme working">1</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-green" class="green-theme">2</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-red" class="red-theme">3</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-blue" class="blue-theme">4</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-purple" class="purple-theme">5</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-megna" class="megna-theme">6</a></li>
-                                <li class="d-block m-t-30"><b>With Dark sidebar</b></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-default-dark" class="default-dark-theme ">7</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-green-dark" class="green-dark-theme">8</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-red-dark" class="red-dark-theme">9</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-blue-dark" class="blue-dark-theme">10</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-purple-dark" class="purple-dark-theme">11</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-megna-dark" class="megna-dark-theme ">12</a></li>
-                            </ul>
-                            <ul class="m-t-20 chatonline">
-                                <li><b>Chat option</b></li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"> <span>Varun Dhavan <small class="text-success">online</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/2.jpg" alt="user-img" class="img-circle"> <span>Genelia Deshmukh <small class="text-warning">Away</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/3.jpg" alt="user-img" class="img-circle"> <span>Ritesh Deshmukh <small class="text-danger">Busy</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/4.jpg" alt="user-img" class="img-circle"> <span>Arijit Sinh <small class="text-muted">Offline</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/5.jpg" alt="user-img" class="img-circle"> <span>Govinda Star <small class="text-success">online</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/6.jpg" alt="user-img" class="img-circle"> <span>John Abraham<small class="text-success">online</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/7.jpg" alt="user-img" class="img-circle"> <span>Hritik Roshan<small class="text-success">online</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/8.jpg" alt="user-img" class="img-circle"> <span>Pwandeep rajan <small class="text-success">online</small></span></a>
-                                </li>
-                            </ul>
-                        </div>
+                <div class="col-md-7 align-self-center text-right">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="javascript:void(0)">Eğitim Bilgi Sistemi Yönetimi</a></li>
+                            <li class="breadcrumb-item active">Eğitim Bilgi Sistemi Yönetimi</li>
+                        </ol>
                     </div>
                 </div>
-                <!-- ============================================================== -->
-                <!-- End Right sidebar -->
-                <!-- ============================================================== -->
             </div>
             <!-- ============================================================== -->
-            <!-- End Container fluid  -->
+            <!-- End Bread crumb and right sidebar toggle -->
             <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Start Page Content -->
+            <!-- ============================================================== -->
+            <!-- Row -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li ng-click="onClickDashboardTab()" class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">DashBoard</span></a> </li>
+                                <li ng-click="onClickClassTab()" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#ClassType" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Sınıflar</span></a> </li>
+                                @*<li ng-click="onClickEducationTypeTab()" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#EducationType" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Eğitim Durumu</span></a> </li>*@
+                                <li ng-click="onClickhighSchollTab()" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#highSchool" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Okullar</span></a> </li>
+                                <li ng-click="onClickuniversityTab()" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#university" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Üniversiteler</span></a> </li>
+                                <li ng-click="onClickFacultyTab()" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#faculty" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Fakülteler</span></a> </li>
+                                <li ng-click="onClickDepartmentTab()" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#department" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Bölümler</span></a> </li>
+                                <li ng-click="onClicksectorTab()" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#sector" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Sektör</span></a> </li>
+
+                            </ul>
+                            <div class="tab-content tabcontent-border">
+
+                                <div class="tab-pane active" id="home" role="tabpanel">
+                                    <br />
+                                    <div class="row">
+                                        <!-- Column -->
+                                        <div class="col-lg-3 col-md-6">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="d-flex flex-row">
+                                                        <div class="round align-self-center round-success"><i class="ti-wallet"></i></div>
+                                                        <div class="m-l-10 align-self-center">
+                                                            <h3 class="m-b-0"><span ng-bind="contentDashboard[0].quantity"></span></h3>
+                                                            <h5 class="text-muted m-b-0">Sınıf</h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Column -->
+                                        <!-- Column -->
+                                        <div class="col-lg-3 col-md-6">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="d-flex flex-row">
+                                                        <div class="round align-self-center round-info"><i class="ti-user"></i></div>
+                                                        <div class="m-l-10 align-self-center">
+                                                            <h3 class="m-b-0"><span ng-bind="contentDashboard[1].quantity"></span></h3>
+                                                            <h5 class="text-muted m-b-0">Üniversite</h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Column -->
+                                        <!-- Column -->
+                                        <div class="col-lg-3 col-md-6">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="d-flex flex-row">
+                                                        <div class="round align-self-center round-danger"><i class="ti-calendar"></i></div>
+                                                        <div class="m-l-10 align-self-center">
+                                                            <h3 class="m-b-0"><span ng-bind="contentDashboard[2].quantity"></span></h3>
+                                                            <h5 class="text-muted m-b-0">Bölüm</h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Column -->
+                                        <!-- Column -->
+                                        <div class="col-lg-3 col-md-6">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="d-flex flex-row">
+                                                        <div class="round align-self-center round-success"><i class="ti-settings"></i></div>
+                                                        <div class="m-l-10 align-self-center">
+                                                            <h3 class="m-b-0"><span ng-bind="contentDashboard[3].quantity"></span></h3>
+                                                            <h5 class="text-muted m-b-0">Fakülte</h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Column -->
+                                    </div>
+
+                                </div>
+
+                                <div class="tab-pane  p-20" id="ClassType" role="tabpanel">
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <h4 class="card-title"><button ng-click="openClassTypeModal()" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#classTypeModal">Sınıf Ekle</button></h4>
+                                                        </div>
+                                                        <div class="row">
+                                                            <h4 class="card-title"><input type="text" ng-model="classTypefilter" class="form-control" placeholder="Ara" id="highSchoolfilter"></h4>
+                                                        </div>
+                                                        <div class="table-responsive">
+                                                            <table class="table color-table primary-table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Sınıf No</th>
+                                                                        <th>Seç</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr ng-repeat="x in classTypeModel.classTypeList|filter:classTypefilter">
+                                                                        <td ng-show="false" ng-bind="x.id"></td>
+                                                                        <td ng-bind="x.description"></td>
+                                                                        <td>
+                                                                            <span ng-click="showClassType(x)" data-toggle="modal" data-target="#classTypeModal">
+                                                                                <img height="20" width="20" src="~/Template/assets/images/chose.png" />
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="classTypeModal" tabindex="-1" role="dialog" aria-labelledby="classTypeModal">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" id="exampleModalLabel1">Sınıf - {{classTypeModel.description}}</h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form>
+                                                    <div class="form-group">
+                                                        <label id="ClassNo" class="control-label">Sınıf No </label>
+                                                        <input type="text" ng-model="classTypeModel.description" class="form-control" id="ClassNo">
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                                                <button type="button" class="btn btn-primary" ng-click="postClassType()">{{classTypeModel.classTypeCreateButtonName}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane  p-20" id="EducationType" role="tabpanel">
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <h4 class="card-title"><button ng-click="openEducationTypeModal()" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#EducationTypeModal">Eğitim Durumu Ekle</button></h4>
+                                                        </div>
+                                                        <div class="row">
+                                                            <h4 class="card-title"><input type="text" ng-model="educationStatusfilter" class="form-control" placeholder="Ara" id="highSchoolfilter"></h4>
+                                                        </div>
+                                                        <div class="table-responsive">
+                                                            <table class="table color-table primary-table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Eğitim Durumu</th>
+                                                                        <th>Seç</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr ng-repeat="x in educationTypeModel.educationTypeList |filter:educationStatusfilter ">
+                                                                        <td ng-show="false" ng-bind="x.id"></td>
+                                                                        <td ng-bind="x.description"></td>
+                                                                        <td>
+                                                                            <span ng-click="showEducationType(x)" data-toggle="modal" data-target="#EducationTypeModal">
+                                                                                <img height="20" width="20" src="~/Template/assets/images/chose.png" />
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="EducationTypeModal" tabindex="-1" role="dialog" aria-labelledby="EducationTypeModal">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" id="exampleModalLabel1">Eğitim Durumu - {{educationTypeModel.description}}</h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form>
+                                                    <div class="form-group">
+                                                        <label id="EducationStatus" class="control-label">Eğitim Durumu </label>
+                                                        <input type="text" ng-model="educationTypeModel.description" class="form-control" id="EducationStatus">
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                                                <button type="button" class="btn btn-primary" ng-click="postEducationType()">{{educationTypeModel.EducationTypeCreateButtonName}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane  p-20" id="highSchool" role="tabpanel">
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <div class="col-lg-8">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <h4 class="card-title"><button ng-click="openhighSchoolModal()" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#highSchoolModal">Okul Ekle</button></h4>
+                                                        </div>
+                                                        <div class="row">
+                                                            <h4 class="card-title"><input type="text" ng-model="highSchoolfilter" class="form-control" placeholder="Ara" id="highSchoolfilter"></h4>
+                                                        </div>
+                                                        <div class="table-responsive">
+                                                            <table class="table color-table primary-table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Okul Kodu</th>
+                                                                        <th>İl</th>
+                                                                        <th>Okul Adı</th>
+                                                                        <th>Seç</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr ng-repeat="x in highSchoolModel.highSchoolList |filter:highSchoolfilter">
+                                                                        <td ng-show="false" ng-bind="x.id"></td>
+                                                                        <td ng-bind="x.highSchoolCode"></td>
+                                                                        <td ng-show="false" ng-bind="x.cityId"></td>
+                                                                        <td ng-bind="x.cityName"></td>
+                                                                        <td ng-bind="x.schoolName"></td>
+                                                                        <td>
+                                                                            <span ng-click="showHighSchool(x)" data-toggle="modal" data-target="#highSchoolModal">
+                                                                                <img height="20" width="20" src="~/Template/assets/images/chose.png" />
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="highSchoolModal" tabindex="-1" role="dialog" aria-labelledby="highSchoolModal">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" id="exampleModalLabel1">Okul kod : {{highSchoolModel.highschoolcode}} - Adı: {{highSchoolModel.schoolname}}</h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form>
+                                                    <div class="form-group">
+                                                        <label id="lblhighSchoolCityId" class="control-label">İl </label>
+
+                                                        <select id="product" class="form-control" name="product" required
+                                                                ng-model="highSchoolModel.cityId"
+                                                                ng-options="x.cityId as x.cityName for x in cityList| filter:x.cityName"></select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label id="schoolCode" class="control-label">Okul Kodu </label>
+                                                        <input type="text" ng-model="highSchoolModel.highSchoolCode" class="form-control" id="schoolCode">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label id="schoolDescription" class="control-label">Okul Adı </label>
+                                                        <input type="text" ng-model="highSchoolModel.schoolName" class="form-control" id="schoolDescription">
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                                                <button type="button" class="btn btn-primary" ng-click="postHighSchool()">{{highSchoolModel.highSchoolCreateButtonName}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane  p-20" id="university" role="tabpanel">
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <h4 class="card-title"><button ng-click="openuniversityModal()" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#universityModal">Üniversite Ekle</button></h4>
+                                                        </div>
+                                                        <div class="row">
+                                                            <h4 class="card-title"><input type="text" ng-model="universityfilter" class="form-control" placeholder="Ara" id="highSchoolfilter"></h4>
+                                                        </div>
+                                                        <div class="table-responsive">
+                                                            <table class="table color-table primary-table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>İl</th>
+                                                                        <th>Üniversite Kodu</th>
+                                                                        <th>Üniversite Adı</th>
+                                                                        <th>Seç</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr ng-repeat="x in universityModel.universityList|filter:universityfilter">
+                                                                        <td ng-show="false" ng-bind="x.id"></td>
+                                                                        <td ng-bind="x.cityName"></td>
+                                                                        <td ng-bind="x.universityCode"></td>
+                                                                        <td ng-bind="x.universityName"></td>
+                                                                        <td ng-show="false" ng-bind="x.cityId"></td>
+                                                                        <td>
+                                                                            <span ng-click="showuniversity(x)" data-toggle="modal" data-target="#universityModal">
+                                                                                <img height="20" width="20" src="~/Template/assets/images/chose.png" />
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="universityModal" tabindex="-1" role="dialog" aria-labelledby="universityModal">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" id="exampleModalLabel1">Üniversite kod : {{universityModel.universitycode}} - Adı: {{universityModel.universityname}}</h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form>
+                                                    <div class="form-group">
+                                                        <label id="lbluniversityCityId" class="control-label">İl </label>
+
+                                                        <select id="universityCityId" class="form-control" name="universityCityId" required
+                                                                ng-model="universityModel.cityId"
+                                                                ng-options="x.cityId as x.cityName for x in cityList| filter:x.cityName"></select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label id="universityCode" class="control-label">Üniversite Kodu </label>
+                                                        <input type="text" ng-model="universityModel.universitycode" class="form-control" id="universityCode">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label id="universityname" class="control-label">Üniversite Adı </label>
+                                                        <input type="text" ng-model="universityModel.universityname" class="form-control" id="universityname">
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                                                <button type="button" class="btn btn-primary" ng-click="postuniversity()">{{universityModel.universityCreateButtonName}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="tab-pane  p-20" id="faculty" role="tabpanel">
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <h4 class="card-title"><button ng-click="openfacultyModal()" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#facultyModal">Fakülte Ekle</button></h4>
+                                                        </div>
+                                                        <div class="row">
+                                                            <h4 class="card-title"><input type="text" ng-model="facultyfilter" class="form-control" placeholder="Ara" id="facultyfilter"></h4>
+                                                        </div>
+                                                        <div class="table-responsive">
+                                                            <table class="table color-table primary-table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Fakülte Kodu</th>
+                                                                        <th>Fakülte Adı</th>
+                                                                        <th>Seç</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr ng-repeat="x in facultyModel.facultyList|filter:facultyfilter">
+                                                                        <td ng-show="false" ng-bind="x.id"></td>
+                                                                        <td ng-bind="x.facultyCode"></td>
+                                                                        <td ng-bind="x.facultyName"></td>
+                                                                        <td>
+                                                                            <span ng-click="showFaculty(x) " data-toggle="modal" data-target="#facultyModal">
+                                                                                <img height="20" width="20" src="~/Template/assets/images/chose.png" />
+                                                                            </span>
+                                                                        </td>
+                                                                        @*<td>
+                                                                                <span ng-click="showuniversity(x)" data-toggle="modal" data-target="#universityModal">
+                                                                                    <img height="20" width="20" src="~/Template/assets/images/Plus-512.png" />
+                                                                                </span>
+                                                                            </td>*@
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="facultyModal" tabindex="-1" role="dialog" aria-labelledby="facultyModal">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form>
+                                                    <div class="form-group">
+                                                        <label id="universityCode" class="control-label">Fakülte Kodu </label>
+                                                        <input type="text" ng-model="facultyModel.facultyCode" class="form-control" id="universityCode">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label id="universityname" class="control-label">Fakülte Adı </label>
+                                                        <input type="text" ng-model="facultyModel.facultyName" class="form-control" id="universityname">
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                                                <button type="button" class="btn btn-primary" ng-click="postfaculty()">{{facultyModel.facultyCreateButtonName}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="tab-pane  p-20" id="department" role="tabpanel">
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <h4 class="card-title"><button ng-click="departmentModal()" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#departmentModal">Bölüm Ekle</button></h4>
+                                                        </div>
+                                                        <div class="row">
+                                                            <h4 class="card-title"><input type="text" ng-model="departmentfilter" class="form-control" placeholder="Ara" id="departmentfilter"></h4>
+                                                        </div>
+                                                        <div class="table-responsive">
+                                                            <table class="table color-table primary-table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Bölüm Kodu</th>
+                                                                        <th>Bölüm Adı</th>
+                                                                        <th>Seç</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr ng-repeat="x in departmentModel.departmentList|filter:departmentfilter">
+                                                                        <td ng-show="false" ng-bind="x.id"></td>
+                                                                        <td ng-bind="x.departmentCode"></td>
+                                                                        <td ng-bind="x.departmentName"></td>
+                                                                        <td>
+                                                                            <span ng-click="showdepartment(x) " data-toggle="modal" data-target="#departmentModal">
+                                                                                <img height="20" width="20" src="~/Template/assets/images/chose.png" />
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="departmentModal" tabindex="-1" role="dialog" aria-labelledby="departmentModal">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form>
+                                                    <div class="form-group">
+                                                        <label id="universityCode" class="control-label">Bölüm Kodu </label>
+                                                        <input type="text" ng-model="departmentModel.departmentCode" class="form-control" id="universityCode">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label id="universityname" class="control-label">Bölüm Adı </label>
+                                                        <input type="text" ng-model="departmentModel.departmentName" class="form-control" id="universityname">
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                                                <button type="button" class="btn btn-primary" ng-click="postdepartment()">{{departmentModel.departmentCreateButtonName}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane  p-20" id="sector" role="tabpanel">
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <h4 class="card-title"><button ng-click="sectorModal()" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#sectorModal">Sektör Ekle</button></h4>
+                                                        </div>
+                                                        <div class="row">
+                                                            <h4 class="card-title"><input type="text" ng-model="sectorfilter" class="form-control" placeholder="Ara" id="sectorfilter"></h4>
+                                                        </div>
+                                                        <div class="table-responsive">
+                                                            <table class="table color-table primary-table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Sektör Adı</th>
+                                                                        <th>Seç</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr ng-repeat="x in sectorModel.sectorList|filter:sectorfilter">
+                                                                        <td ng-show="false" ng-bind="x.id"></td>
+                                                                        <td ng-bind="x.description"></td>
+                                                                        <td>
+                                                                            <span ng-click="showSector(x) " data-toggle="modal" data-target="#sectorModal">
+                                                                                <img height="20" width="20" src="~/Template/assets/images/chose.png" />
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="sectorModal" tabindex="-1" role="dialog" aria-labelledby="sectorModal">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form>
+                                                    <div class="form-group">
+                                                        <label id="universityname" class="control-label">Sektör Adı </label>
+                                                        <input type="text" ng-model="sectorModel.description" class="form-control" id="description">
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                                                <button type="button" class="btn btn-primary" ng-click="postsector()">{{sectorModel.sectorCreateButtonName}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div>
+                    <div class="right-sidebar">
+                        <div class="slimscrollright">
+                            <div class="rpanel-title"> Service Panel <span><i class="ti-close right-side-toggle"></i></span> </div>
+                            <div class="r-panel-body">
+                                <ul id="themecolors" class="m-t-20">
+                                    <li><b>With Light sidebar</b></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-default" class="default-theme working">1</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-green" class="green-theme">2</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-red" class="red-theme">3</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-blue" class="blue-theme">4</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-purple" class="purple-theme">5</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-megna" class="megna-theme">6</a></li>
+                                    <li class="d-block m-t-30"><b>With Dark sidebar</b></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-default-dark" class="default-dark-theme ">7</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-green-dark" class="green-dark-theme">8</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-red-dark" class="red-dark-theme">9</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-blue-dark" class="blue-dark-theme">10</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-purple-dark" class="purple-dark-theme">11</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-megna-dark" class="megna-dark-theme ">12</a></li>
+                                </ul>
+                                <ul class="m-t-20 chatonline">
+                                    <li><b>Chat option</b></li>
+                                    <li>
+                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"> <span>Varun Dhavan <small class="text-success">online</small></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/2.jpg" alt="user-img" class="img-circle"> <span>Genelia Deshmukh <small class="text-warning">Away</small></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/3.jpg" alt="user-img" class="img-circle"> <span>Ritesh Deshmukh <small class="text-danger">Busy</small></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/4.jpg" alt="user-img" class="img-circle"> <span>Arijit Sinh <small class="text-muted">Offline</small></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/5.jpg" alt="user-img" class="img-circle"> <span>Govinda Star <small class="text-success">online</small></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/6.jpg" alt="user-img" class="img-circle"> <span>John Abraham<small class="text-success">online</small></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/7.jpg" alt="user-img" class="img-circle"> <span>Hritik Roshan<small class="text-success">online</small></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/8.jpg" alt="user-img" class="img-circle"> <span>Pwandeep rajan <small class="text-success">online</small></span></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ============================================================== -->
+                    <!-- End Right sidebar -->
+                    <!-- ============================================================== -->
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Container fluid  -->
+                <!-- ============================================================== -->
+            </div>
         </div>
     </div>
-</div>
 
-
+</body>
 
 <style>
     .ulrow {
@@ -700,5 +739,3 @@
         border: 1px solid rgba(86,61,124,.2);
     }
 </style>
-
-

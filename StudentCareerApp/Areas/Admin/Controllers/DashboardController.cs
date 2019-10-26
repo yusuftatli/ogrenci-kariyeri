@@ -7,22 +7,21 @@ using System.Web;
 namespace StudentCareerApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Route("[area]/[controller]")]
     public class DashboardController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Minimal()
         {
             return View();
         }
-        public IActionResult Index1()
+        public IActionResult Analytical()
         {
             return View();
         }
-        public IActionResult Index2()
+        public IActionResult Demographical()
         {
             return View();
         }
-        public IActionResult Index3()
+        public IActionResult Modern()
         {
             return View();
         }

@@ -76,7 +76,7 @@ namespace SCA.Services
         Task<ServiceResult> GetFavoriteContents(int count, string token);
         Task<ServiceResult> CreateFavorite(FavoriteMobilDto dto, string token);
         Task<ServiceResult> ContentShortListFavoriByMobil(int count, string token);
-
+        Task<ServiceResult> GetSearch(string value);
 
     }
 }

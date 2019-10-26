@@ -9,6 +9,7 @@ namespace SCA.Services
 {
     public interface ISocialMediaManager
     {
-        Task<ServiceResult> CreateSocialMedia(SocialMediaDto dto, long userId);
+        Task<ServiceResult> CreateSocialMedia(List<SocialMediaDto> dto, long userId);
+        Task<List<SocialMediaDto>> GetSocialMedia(long id);
     }
 }

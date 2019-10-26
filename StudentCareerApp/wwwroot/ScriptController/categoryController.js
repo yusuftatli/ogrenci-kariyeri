@@ -20,7 +20,7 @@ app.controller('categoryController', function ($scope, $http, $filter) {
     $scope.mainCategoryDescription = "";
     $scope.subCategoryDescription = "";
 
-
+    $scope.menuList = JSON.parse(localStorage.getItem("menus"));
     MainCategoryList();
     // mainCategoryCreate();
 

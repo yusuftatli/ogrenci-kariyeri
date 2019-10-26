@@ -33,6 +33,20 @@ namespace StudentCareerApp.Areas.Api.Controller
             return await _userManager.PasswordRenew(emailAddress, await HttpContext.GetTokenAsync("access_token"));
         }
 
+        //[Authorize()]
+        [HttpPost("user-create-web")]
+        public async Task<ServiceResult> CreateUserByWeb(UserWeblDto dto)
+        {
+            var token = await HttpContext.GetTokenAsync("access_token");
+            return await _userManager.CreateUserByWeb(dto, await HttpContext.GetTokenAsync("access_token"));
+        }
+
+        [HttpGet("web-getinfo")]
+        public async Task<ServiceResult> GetUserInfo()
+        {
+            return await _userManager.GetUserInfo(await HttpContext.GetTokenAsync("access_token"));
+        }
+
         [HttpGet("web-getallusers")]
         public async Task<List<UserModelList>> GetUserList()
         {
@@ -76,6 +90,7 @@ namespace StudentCareerApp.Areas.Api.Controller
                 JsonSerializer serializer = new JsonSerializer();
                 var result = JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo"));
                 HttpContext.Session.SetString("NameSurname", result.Name + " " + result.Surname);
+                HttpContext.Session.SetString("RoleTypeId", result.RoleTypeId.ToString());
                 return res;
             }
             return res;

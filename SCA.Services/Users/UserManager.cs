@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Dapper;
+﻿using Dapper;
 using Grpc.Core;
 using Microsoft.AspNetCore.Hosting;
 using MySql.Data.MySqlClient;
@@ -30,10 +29,18 @@ namespace SCA.Services
         private IHostingEnvironment _env;
         private IAuthManager _authManager;
         private readonly IErrorManagement _errorManagement;
+        private readonly ISocialMediaManager _socialMedia;
         private readonly IRoleManager _roleManager;
         private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
 
-        public UserManager( IRoleManager roleManager, IHostingEnvironment env, IMapper mapper, ISender sender, IPictureManager pictureManager, IErrorManagement errorManagement, IUserValidation userValidation, IAuthManager authManager)
+        public UserManager(IRoleManager roleManager,
+            IHostingEnvironment env,
+            ISender sender,
+            IPictureManager pictureManager,
+            IErrorManagement errorManagement,
+            IUserValidation userValidation,
+            IAuthManager authManager,
+            ISocialMediaManager socialManager)
         {
             _sender = sender;
             _errorManagement = errorManagement;
@@ -42,6 +49,7 @@ namespace SCA.Services
             _userValidation = userValidation;
             _authManager = authManager;
             _roleManager = roleManager;
+            _socialMedia = socialManager;
         }
 
         public async Task<ServiceResult> PasswordRenew(string emailAddress, string token)
@@ -55,7 +63,7 @@ namespace SCA.Services
                     return res;
                 }
 
-                if (await UserDataControl(emailAddress) == false)
+                if (await _userValidation.UserDataControl(emailAddress) == false)
                 {
                     res = Result.ReturnAsFail(message: "Email Kayıtlı değil");
                     return res;
@@ -69,7 +77,7 @@ namespace SCA.Services
                 filter.Add("Password", MD5Hash(_pas));
 
                 var data = _db.Execute(query, filter);
-                long userId = JwtToken.GetUserId(token);
+                long userId = 5677; //JwtToken.GetUserId(token);
 
                 EmailSettings emailSetting = await _sender.GetEmailSetting("PASSRENEW");
                 EmailsDto emailData = new EmailsDto
@@ -182,6 +190,107 @@ namespace SCA.Services
             }
             return res;
         }
+
+        public async Task<ServiceResult> CreateUserByWeb(UserWeblDto dto, string token)
+        {
+            ServiceResult res = new ServiceResult();
+            res = Result.ReturnAsSuccess();
+
+            var errror = await _userValidation.ValidateCreateUserByWeb(dto);
+            if (errror.ResultCode != HttpStatusCode.OK)
+            {
+                return errror;
+            }
+
+            try
+            {
+                string query = string.Empty;
+                long _userId = JwtToken.GetUserId(token);
+                long saveUserId = 0;
+                DynamicParameters filter = new DynamicParameters();
+                if (dto.Id == 0)
+                {
+                    query = "Insert Into Users (Id, Name, Surname, EmailAddress, PhoneNumber, Password, ImagePath, GenderId, RoleTypeId, " +
+                   "BirthDate, RoleExpiresDate, Biography, EnrollPlatformTypeId, IsStudent, ReferanceCode, CreatedUserId, CreatedDate) " +
+                   "values (@Id, @Name, @Surname, @EmailAddress, @PhoneNumber, @Password, @ImagePath, @GenderId, @RoleTypeId,BirthDate, " +
+                   "@RoleExpiresDate, @Biography, @EnrollPlatformTypeId, @IsStudent, @ReferanceCode, @CreatedUserId, @CreatedDate); SELECT LAST_INSERT_ID();";
+                    saveUserId = GetUserId();
+                    filter.Add("Id", saveUserId);
+                    filter.Add("CreatedUserId", _userId);
+                    filter.Add("CreatedDate", DateTime.Now);
+                }
+                else
+                {
+                    query = "Update Users set  Name = @Name, Surname = @Surname, EmailAddress = @EmailAddress, PhoneNumber = @PhoneNumber, " +
+                        "Password = @Password, ImagePath = @ImagePath, GenderId = @GenderId, RoleTypeId = @RoleTypeId, BirthDate = @BirthDate, " +
+                        "RoleExpiresDate = @RoleExpiresDate, Biography = @Biography, EnrollPlatformTypeId = @EnrollPlatformTypeId, IsStudent = @IsStudent," +
+                        " ReferanceCode = @ReferanceCode, UpdatedUserId = @UpdatedUserId, UpdatedDate = @UpdatedDate" +
+                        "where Id = @Id";
+                    filter.Add("Id", "Id");
+                    filter.Add("UpdatedUserId", _userId);
+                    filter.Add("UpdatedDate", DateTime.Now);
+                }
+
+                filter.Add("Name", dto.Name);
+                filter.Add("Surname", dto.Surname);
+                filter.Add("EmailAddress", dto.EmailAddress);
+                filter.Add("PhoneNumber", dto.PhoneNumber);
+                filter.Add("Password", dto.Password);
+                filter.Add("ImagePath", "");//SaveImage(dto.ImaageData));
+                filter.Add("RoleTypeId", dto.RoleTypeId);
+                filter.Add("RoleExpiresDate", dto.RoleExpiresDate);
+                filter.Add("GenderId", dto.GenderId);
+                filter.Add("IsStudent", 0);
+                filter.Add("Biography", dto.Biography);
+                filter.Add("IsActive", true);
+                filter.Add("ReferanceCode", dto.ReferanceCode);
+                filter.Add("EnrollPlatformTypeId", 2);
+                filter.Add("BirthDate", dto.BirthDate);
+
+                var Id = _db.Execute(query, filter);
+
+                List<SocialMediaDto> listSocial = new List<SocialMediaDto>();
+
+                listSocial.Add(new SocialMediaDto()
+                {
+                    SocialMediaType = SocialMediaType.Facebook,
+                    UserId = saveUserId,
+                    IsActive = true,
+                    Url = dto.Facebook
+                });
+                listSocial.Add(new SocialMediaDto()
+                {
+                    SocialMediaType = SocialMediaType.Instagram,
+                    UserId = saveUserId,
+                    IsActive = true,
+                    Url = dto.Instagram
+                });
+                listSocial.Add(new SocialMediaDto()
+                {
+                    SocialMediaType = SocialMediaType.Linkedin,
+                    UserId = saveUserId,
+                    IsActive = true,
+                    Url = dto.Linkedin
+                });
+
+                await _socialMedia.CreateSocialMedia(listSocial, _userId);
+                res = Result.ReturnAsSuccess(message: "Kullancı kayıt işlemi başarılı");
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, 0, "CreateUserByMobil", PlatformType.Mobil);
+                res = Result.ReturnAsFail(message: "Üye kaydı yapılırken hata meydana geldi.+ " + ex.Message);
+            }
+            return res;
+        }
+
+
+        public async Task<string> SaveImage(string base64Value)
+        {
+            string path = string.Empty;
+            return path;
+        }
+
         public async Task<ServiceResult> CreateUserByMobil(UserMobilDto dto)
         {
             ServiceResult res = new ServiceResult();
@@ -190,7 +299,7 @@ namespace SCA.Services
             {
                 res = Result.ReturnAsFail(message: AlertResource.NoChanges);
             }
-            if (await UserDataControl(dto.EmailAddress) == true)
+            if (await _userValidation.UserDataControl(dto.EmailAddress) == true)
             {
                 res = Result.ReturnAsFail(message: "Email adresi zaten kayıtlı");
             }
@@ -206,10 +315,10 @@ namespace SCA.Services
 
                 string query = "Insert Into Users (Id,Name,Surname,EmailAddress,PhoneNumber,Password,ImagePath,Category,RoleTypeId,RoleExpiresDate,GenderId," +
                     "EducationStatusId,HighSchoolTypeId,UniversityId,FacultyId,DepartmentId,ClassId,IsStudent,Biography,CityId,IsActive," +
-                    "ReferanceCode,EnrollPlatformTypeId,BirthDate) values (" +
+                    "ReferanceCode,EnrollPlatformTypeId,BirthDate, CreatedDate) values (" +
                     "@Id,@Name,@Surname,@EmailAddress,@PhoneNumber,@Password,@ImagePath,@RoleTypeId,@Category,@RoleExpiresDate,@GenderId,@EducationStatusId," +
                     "@HighSchoolTypeId,@UniversityId,@FacultyId,@DepartmentId,@ClassId,@IsStudent,@Biography,@CityId,@IsActive,@ReferanceCode," +
-                    "@EnrollPlatformTypeId,@BirthDate); SELECT LAST_INSERT_ID();";
+                    "@EnrollPlatformTypeId,@BirthDate, @CreatedDate); SELECT LAST_INSERT_ID();";
 
                 DynamicParameters filter = new DynamicParameters();
                 filter.Add("Id", GetUserId());
@@ -236,13 +345,14 @@ namespace SCA.Services
                 filter.Add("ReferanceCode", dto.ReferanceCode);
                 filter.Add("EnrollPlatformTypeId", 1);
                 filter.Add("BirthDate", dto.BirthDate);
+                filter.Add("CreatedDate", DateTime.Now);
 
                 var userId = _db.Execute(query, filter);
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex, 0, "UserKayıt", PlatformType.Mobil);
-                res = Result.ReturnAsFail(message: "Kulanıcı kaydı yapılırken hata meydana geldi.");
+                await _errorManagement.SaveError(ex, 0, "CreateUserByMobil", PlatformType.Mobil);
+                res = Result.ReturnAsFail(message: "Üye kaydı yapılırken hata meydana geldi.");
             }
             return res;
         }
@@ -254,25 +364,7 @@ namespace SCA.Services
             return res.Id + 1;
         }
 
-        public async Task<bool> UserDataControl(string emailAddress)
-        {
-            bool res = false; ;
-            string query = "select * from Users where Emailaddress=@Emailaddress";
-            DynamicParameters filter = new DynamicParameters();
-            filter.Add("Emailaddress", emailAddress);
 
-            var result = await _db.QueryAsync<UsersDTO>(query, filter);
-
-            if (result.Count() > 0)
-            {
-                res = true;
-            }
-            else
-            {
-                res = false;
-            }
-            return res;
-        }
 
         public async Task<List<UserModelList>> GetUserList()
         {
@@ -294,22 +386,61 @@ namespace SCA.Services
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        public async Task<UsersDTO> GetUserInfo(long Id)
+        public async Task<ServiceResult> GetUserInfo(string token)
         {
-            UsersDTO res = new UsersDTO();
+            ServiceResult _res = new ServiceResult();
+            long _userId = JwtToken.GetUserId(token);
             try
             {
-                string query = "select * from User where Id=@Id";
+                string query = @"select 
+                                u.Id,
+                                u.Name, 
+                                u.Surname, 
+                                u.EmailAddress, 
+                                u.PhoneNumber, 
+                                u.Password, 
+                                u.Category, 
+                                u.ImagePath, 
+                                u.RoleTypeId, 
+                                r.Description as RoleType,
+                                u.RoleExpiresDate, 
+                                case when u.GenderId = '1' then 'Bay' else 'Bayan' end as Gender, 
+                                u.Biography, 
+                                u.BirthDate
+                                  from Users u
+                                left join RoleType r on u.RoleTypeId = r.Id
+                                where u.Id = @Id
+                                order by Id desc limit 1 ";
                 DynamicParameters filter = new DynamicParameters();
-                filter.Add("Id", Id);
+                filter.Add("Id", _userId);
                 var data = await _db.QueryFirstAsync<UsersDTO>(query, filter);
-                res = data;
+
+                List<SocialMediaDto> socialListData = await _socialMedia.GetSocialMedia(_userId);
+                if (socialListData.Count > 0)
+                {
+                    foreach (SocialMediaDto item in socialListData)
+                    {
+                        if (item.SocialMediaType == SocialMediaType.Facebook)
+                        {
+                            data.Facebook = item.Url;
+                        }
+                        if (item.SocialMediaType == SocialMediaType.Linkedin)
+                        {
+                            data.Linkedin = item.Url;
+                        }
+                        if (item.SocialMediaType == SocialMediaType.Instagram)
+                        {
+                            data.Instagram = item.Url;
+                        }
+                    }
+                }
+                _res = Result.ReturnAsSuccess(data: data);
             }
             catch (Exception ex)
             {
                 await _errorManagement.SaveError(ex, null, "GetUserInfo", PlatformType.Mobil);
             }
-            return res;
+            return _res;
         }
 
         public async Task<ServiceResult> UserLoginByMobil(MobilUserLoginDto dto)

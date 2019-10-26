@@ -15,6 +15,7 @@ namespace SCA.Services
         Task<ServiceResult> CreateRoleType(RoleTypeDto dto);
         Task<List<RoleTypeDto>> GetRoles();
         Task<ServiceResult> GetScreens();
+        Task<ServiceResult> UpdateRolePermission(long roleTypeId, string menu, long userId);
 
         #endregion
 

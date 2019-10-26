@@ -1,7 +1,14 @@
-﻿    @{
-    ViewBag.Title = "Kullanıcı Kayıt";
+﻿@{
+    ViewBag.Title = "Kullanıcı Ekleme";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+
+
+<html lang="en">
+
 
 
 <head>
@@ -14,346 +21,381 @@
 
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <link href="~/Template/dist/css/style.min.css" rel="stylesheet">
 
     <script src="~/ScriptController/userCreateController.js"></script>
 </head>
 
+<body ng-app="MyApp" ng-controller="userCreateController">
+    <aside class="left-sidebar">
+        <!-- Sidebar scroll-->
+        <div class="scroll-sidebar">
+            <!-- Sidebar navigation-->
+            <nav class="sidebar-nav">
+                <ul id="sidebarnav">
+                    @*<li class="user-pro">
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><img src="~/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"><span class="hide-menu">@HttpContextAccessor.HttpContext.Session.GetString("NameSurname")</span></a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="javascript:void(0)"><i class="ti-user"></i> Profil</a></li>
 
-<div class="page-wrapper" ng-app="MyApp" ng-controller="userCreateController">
-    <!-- ============================================================== -->
-    <!-- Container fluid  -->
-    <!-- ============================================================== -->
-    <div class="container-fluid">
+                                    <li><a href="javascript:void(0)"><i class="ti-wallet"></i> My Balance</a></li>
+
+                                    <li><a href="javascript:void(0)"><i class="ti-email"></i> Inbox</a></li>
+                                <li><a href="javascript:void(0)"><i class="ti-settings"></i> Ayarlar</a></li>
+                                <li><a href="javascript:void(0)"><i class="fa fa-power-off"></i> Çıkış</a></li>
+                            </ul>
+                        </li>*@
+                    <li ng-repeat="x in menuList">
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="{{x.Icon }}"></i><span class="hide-menu" ng-bind="x.Name"> </span></a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li ng-repeat="y in x.Details">
+                                <a href="/{{y.Url}}"><span ng-bind="y.Name"></span> </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li> <a class="waves-effect waves-dark" href="../documentation/documentation.html" aria-expanded="false"><i class="far fa-circle text-danger"></i><span class="hide-menu">Documentation</span></a></li>
+                    <li> <a class="waves-effect waves-dark" href="pages-login.html" aria-expanded="false"><i class="far fa-circle text-success"></i><span class="hide-menu">Log Out</span></a></li>
+                    <li> <a class="waves-effect waves-dark" href="pages-faq.html" aria-expanded="false"><i class="far fa-circle text-info"></i><span class="hide-menu">FAQs</span></a></li>
+                </ul>
+            </nav>
+            <!-- End Sidebar navigation -->
+        </div>
+        <!-- End Sidebar scroll-->
+    </aside>
+
+
+    <div class="page-wrapper">
         <!-- ============================================================== -->
-        <!-- Bread crumb and right sidebar toggle -->
+        <!-- Container fluid  -->
         <!-- ============================================================== -->
-        <div class="row page-titles">
-            <div class="col-md-5 align-self-center">
-                <h4 class="text-themecolor">Kullanıcı Kayıt</h4>
-            </div>
-            <div class="col-md-7 align-self-center text-right">
-                <div class="d-flex justify-content-end align-items-center">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Kullanıcı Kayıt</a></li>
-                        <li class="breadcrumb-item active">Kullanıcı Kayıt</li>
-                    </ol>
+        <div class="container-fluid">
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <div class="row page-titles">
+                <div class="col-md-5 align-self-center">
+                    <h4 class="text-themecolor">Kullanıcı Kayıt</h4>
+                </div>
+                <div class="col-md-7 align-self-center text-right">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="javascript:void(0)">Kullanıcı Kayıt</a></li>
+                            <li class="breadcrumb-item active">Kullanıcı Kayıt</li>
+                        </ol>
+                    </div>
                 </div>
             </div>
-        </div>
-        <!-- ============================================================== -->
-        <!-- End Bread crumb and right sidebar toggle -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Start Page Content -->
-        <!-- ============================================================== -->
-        <!-- Row -->
-        <div class="row">
-            <div class="col-md-12">
+            <!-- ============================================================== -->
+            <!-- End Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Start Page Content -->
+            <!-- ============================================================== -->
+            <!-- Row -->
+            <div class="row">
+                <div class="col-md-12">
 
 
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-header bg-info">
-                                <h4 class="mb-0 text-white">Kullanıcı Kayıt</h4>
-                            </div>
-                            <div class="card-body">
-                                <h4 class="card-title">Kişisel Bilgiler</h4>
-                            </div>
-                            <div class="form-body">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label class="control-label">Adı</label>
-                                                <input type="text" id="name" ng-model="userModel.name" class="form-control" placeholder="Adı">
-                                                @*<small class="form-control-feedback"> This is inline help </small>*@
-                                            </div>
-                                        </div>
-                                        <!--/span-->
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label class="control-label">Soyad</label>
-                                                <input type="text" id="surname" ng-model="userModel.surname" class="form-control form-control-danger" placeholder="Soyad">
-                                                @*<small class="form-control-feedback"> This field has error. </small>*@
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label class="control-label">Kullanıcı Adı</label>
-                                                <input type="text" id="userName" ng-model="userModel.userName" class="form-control form-control-danger" placeholder="Kullanıcı Adı">
-                                                @*<small class="form-control-feedback"> This field has error. </small>*@
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3 p-l-0 p-t-20">
-                                            <input type="file" id="input-file-now-custom-3" ng-file-select="onFileSelect($files)" ng-model="userModel.imageData" class="dropify" data-height="150" />
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">Email</label>
-                                                <input type="text" id="EmailAddress" ng-model="userModel.EmailAddress" class="form-control" placeholder="Email">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">Şifre</label>
-                                                <input type="text" id="Password" ng-model="userModel.Password" class="form-control" placeholder="Password">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">Cinsiyet</label>
-                                                <select id="roletypeid" class="form-control custom-select" ng-model="userModel.genderid" name="roletypeid">
-                                                    <option ng-repeat="x in genderList" value="{{x.id}}">{{x.description}}</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">Doğum Tarihi</label>
-                                                <input type="date" ng-model="userModel.birthdate" class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">Kullanıcı Rolü</label>
-                                                <select id="roletypeid" class="form-control custom-select" ng-model="userModel.roletypeid" name="roletypeid">
-                                                    <option ng-repeat="x in roleTypeList" value="{{x.id}}">{{x.description}}</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">Role Geçerlilik Tarihi</label>
-                                                <input type="date" ng-model="userModel.roleexpiresdate" class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <hr>
-                                <div class="card-body">
-                                    <h4 class="card-title">Biografi</h4>
-                                    <div class="row">
-                                        <div class="col-md-9">
-                                            <div class="form-group">
-                                                <label class="control-label">Biografi</label>
-                                                <textarea rows="3" ng-model="userModel.biography" class="form-control"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="card-body">
-                                    <h4 class="card-title">Sosyal Medya</h4>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">Facebook</label>
-                                                <input type="text" class="form-control" ng-model="userModel.facebook" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">Linkedin</label>
-                                                <input type="text" class="form-control" ng-model="userModel.linkedin" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">Instagram</label>
-                                                <input type="text" class="form-control" ng-model="userModel.instagram" />
-                                            </div>
-                                        </div>
-                                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header bg-info">
+                                    <h4 class="mb-0 text-white">Kullanıcı Kayıt</h4>
                                 </div>
                                 <div class="card-body">
-                                    @*<div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label">İl</label>
-                                                    <select id="cityId" class="form-control custom-select" ng-model="userModel.CityId" name="cityId">
-                                                        <option ng-repeat="x in cityList" value="{{x.cityId}}">{{x.cityName}}</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <div class="custom-control custom-switch">
-                                                        <input ng-model="userModel.isemailsend" type="checkbox" class="custom-control-input" id="customSwitch1">
-                                                        <label class="custom-control-label" for="customSwitch1">E mail gönderilsin?</label>
-                                                    </div>
-                                                    <div class="custom-control custom-switch">
-                                                        <input ng-model="userModel.isphonesend" type="checkbox" class="custom-control-input" id="customSwitch2">
-                                                        <label class="custom-control-label" for="customSwitch2">Telefona mesaj gönderilsin?</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-                                            <!--/span-->
-                                            <!--/span-->
-                                        </div>*@
-                                    @*<div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label">Eğitim Durumu</label>
-                                                    <select id="roletypeid" class="form-control custom-select" ng-change="onChanageEdcationStatus()" ng-model="userModel.educationstatusid" name="educationstatusid">
-                                                        <option ng-repeat="x in educationTypeList" value="{{x.id}}">{{x.description}}</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <!--/span-->
-                                            <div class="col-md-6">
-                                                <div ng-show="showHigSchoolType" class="form-group">
-                                                    <label class="control-label">Okul Adı</label>
-                                                    <select id="highschooltypeid" class="form-control custom-select" ng-model="userModel.HighSchoolTypeId" name="highschooltypeid">
-                                                        <option ng-repeat="x in highSchollList" value="{{x.id}}">{{x.schoolName}}</option>
-                                                    </select>
-                                                </div>
-                                                <div ng-show="!showHigSchoolType" class="form-group">
-                                                    <label class="control-label">Üniversite</label>
-                                                    <select id="universityid" class="form-control custom-select" ng-model="userModel.UniversityId" name="universityid">
-                                                        <option ng-repeat="x in universityList" value="{{x.id}}">{{x.universityName}}</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <!--/span-->
-                                        </div>*@
-                                    @*<div ng-show="!showHigSchoolType" class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label">Fakülte</label>
-                                                    <select id="facultyid" class="form-control custom-select" ng-model="userModel.FacultyId" name="facultyid">
-                                                        <option ng-repeat="x in facultyList" value="{{x.id}}">{{x.facultyName}}</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <!--/span-->
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label">Bölüm</label>
-                                                    <select id="departmentid" class="form-control custom-select" ng-model="userModel.DepartmentId" name="departmentid">
-                                                        <option ng-repeat="x in departmentList" value="{{x.id}}">{{x.departmentName}}</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <!--/span-->
-                                        </div>*@
-                                    @*<div class="row">
-                                            <div ng-show="showHigSchoolType" class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label">Sınıf</label>
-                                                    <select id="roletypeid" class="form-control custom-select" ng-model="userModel.roletypeid" name="roletypeid">
-                                                        <option ng-repeat="x in classTypeList" value="{{x.id}}">{{x.description}}</option>
-                                                    </select>
-
-                                                </div>
-                                            </div>
-                                            <!--/span-->
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label">Referans kodu</label>
-                                                    <input ng-model="userModel.referancecode" type="text" class="form-control">
-                                                </div>
-                                            </div>
-                                            <!--/span-->
-                                        </div>*@
-
-                                    <!--/row-->
-
+                                    <h4 class="card-title">Kişisel Bilgiler</h4>
                                 </div>
-                                <div class="form-actions">
+                                <div class="form-body">
                                     <div class="card-body">
-                                        <button ng-disabled="showSaveLoading" ng-click="onClikSave()" class="btn btn-success">
-                                            <span ng-show="showSaveLoading"><i class="fa fa-spinner fa-spin"></i></span>
-                                            Kaydet
-                                        </button>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="control-label">Adı</label>
+                                                    <input type="text" id="name" ng-model="userModel.name" class="form-control" placeholder="Adı">
+                                                    @*<small class="form-control-feedback"> This is inline help </small>*@
+                                                </div>
+                                            </div>
+                                            <!--/span-->
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="control-label">Soyad</label>
+                                                    <input type="text" id="surname" ng-model="userModel.surname" class="form-control form-control-danger" placeholder="Soyad">
+                                                    @*<small class="form-control-feedback"> This field has error. </small>*@
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="control-label">Telefon Numarası</label>
+                                                    <input type="text" id="userName" ng-model="userModel.PhoneNumber" class="form-control form-control-danger" placeholder="Telefon Numarası">
+                                                    @*<small class="form-control-feedback"> This field has error. </small>*@
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 p-l-0 p-t-20">
+                                                <input type="file" id="input-file-now-custom-3" ng-file-select="onFileSelect($files)" ng-model="userModel.imageData" class="dropify" data-height="150" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Email</label>
+                                                    <input type="text" id="EmailAddress" ng-model="userModel.EmailAddress" class="form-control" placeholder="Email">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Şifre</label>
+                                                    <input type="text" id="Password" ng-model="userModel.Password" class="form-control" placeholder="Password">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Cinsiyet </label>
+                                                    <select id="roletypeid" class="form-control custom-select" ng-model="userModel.genderid" name="roletypeid">
+                                                        <option ng-repeat="x in genderList" value="{{x.id}}">
+                                                            {{x.description}}
+                                                        </option>
 
+                                                    </select>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Doğum Tarihi</label>
+                                                    <input type="date" ng-model="userModel.birthdate" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Kullanıcı Rolü <span ng-hide="roleTypeList.length>0"><i class="fa fa-spinner fa-spin"></i></span></label>
+                                                    <select id="roletypeid" class="form-control custom-select" ng-model="userModel.roletypeid" name="roletypeid">
+                                                        <option ng-repeat="x in roleTypeList" value="{{x.id}}">{{x.description}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Role Geçerlilik Tarihi</label>
+                                                    <input type="date" ng-model="userModel.roleexpiresdate" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <hr>
+                                    <div class="card-body">
+                                        <h4 class="card-title">Biografi</h4>
+                                        <div class="row">
+                                            <div class="col-md-9">
+                                                <div class="form-group">
+                                                    <label class="control-label">Biografi</label>
+                                                    <textarea rows="3" ng-model="userModel.biography" class="form-control"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="card-body">
+                                        <h4 class="card-title">Sosyal Medya</h4>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Facebook</label>
+                                                    <input type="text" class="form-control" ng-model="userModel.facebook" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Linkedin</label>
+                                                    <input type="text" class="form-control" ng-model="userModel.linkedin" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Instagram</label>
+                                                    <input type="text" class="form-control" ng-model="userModel.instagram" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        @*<div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label">İl</label>
+                                                        <select id="cityId" class="form-control custom-select" ng-model="userModel.CityId" name="cityId">
+                                                            <option ng-repeat="x in cityList" value="{{x.cityId}}">{{x.cityName}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="custom-control custom-switch">
+                                                            <input ng-model="userModel.isemailsend" type="checkbox" class="custom-control-input" id="customSwitch1">
+                                                            <label class="custom-control-label" for="customSwitch1">E mail gönderilsin?</label>
+                                                        </div>
+                                                        <div class="custom-control custom-switch">
+                                                            <input ng-model="userModel.isphonesend" type="checkbox" class="custom-control-input" id="customSwitch2">
+                                                            <label class="custom-control-label" for="customSwitch2">Telefona mesaj gönderilsin?</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <!--/span-->
+                                                <!--/span-->
+                                            </div>*@
+                                        @*<div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Eğitim Durumu</label>
+                                                        <select id="roletypeid" class="form-control custom-select" ng-change="onChanageEdcationStatus()" ng-model="userModel.educationstatusid" name="educationstatusid">
+                                                            <option ng-repeat="x in educationTypeList" value="{{x.id}}">{{x.description}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <!--/span-->
+                                                <div class="col-md-6">
+                                                    <div ng-show="showHigSchoolType" class="form-group">
+                                                        <label class="control-label">Okul Adı</label>
+                                                        <select id="highschooltypeid" class="form-control custom-select" ng-model="userModel.HighSchoolTypeId" name="highschooltypeid">
+                                                            <option ng-repeat="x in highSchollList" value="{{x.id}}">{{x.schoolName}}</option>
+                                                        </select>
+                                                    </div>
+                                                    <div ng-show="!showHigSchoolType" class="form-group">
+                                                        <label class="control-label">Üniversite</label>
+                                                        <select id="universityid" class="form-control custom-select" ng-model="userModel.UniversityId" name="universityid">
+                                                            <option ng-repeat="x in universityList" value="{{x.id}}">{{x.universityName}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <!--/span-->
+                                            </div>*@
+                                        @*<div ng-show="!showHigSchoolType" class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Fakülte</label>
+                                                        <select id="facultyid" class="form-control custom-select" ng-model="userModel.FacultyId" name="facultyid">
+                                                            <option ng-repeat="x in facultyList" value="{{x.id}}">{{x.facultyName}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <!--/span-->
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Bölüm</label>
+                                                        <select id="departmentid" class="form-control custom-select" ng-model="userModel.DepartmentId" name="departmentid">
+                                                            <option ng-repeat="x in departmentList" value="{{x.id}}">{{x.departmentName}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <!--/span-->
+                                            </div>*@
+                                        @*<div class="row">
+                                                <div ng-show="showHigSchoolType" class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Sınıf</label>
+                                                        <select id="roletypeid" class="form-control custom-select" ng-model="userModel.roletypeid" name="roletypeid">
+                                                            <option ng-repeat="x in classTypeList" value="{{x.id}}">{{x.description}}</option>
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+                                                <!--/span-->
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Referans kodu</label>
+                                                        <input ng-model="userModel.referancecode" type="text" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <!--/span-->
+                                            </div>*@
+
+                                        <!--/row-->
+
+                                    </div>
+                                    <div class="form-actions">
+                                        <div class="card-body">
+                                            <button ng-disabled="showSaveLoading" ng-click="onClikSave()" class="btn btn-success">
+                                                <span ng-show="showSaveLoading"><i class="fa fa-spinner fa-spin"></i></span>
+                                                Role Tipi Menu Sync
+                                            </button>
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="right-sidebar">
-                    <div class="slimscrollright">
-                        <div class="rpanel-title"> Service Panel <span><i class="ti-close right-side-toggle"></i></span> </div>
-                        <div class="r-panel-body">
-                            <ul id="themecolors" class="m-t-20">
-                                <li><b>With Light sidebar</b></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-default" class="default-theme working">1</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-green" class="green-theme">2</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-red" class="red-theme">3</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-blue" class="blue-theme">4</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-purple" class="purple-theme">5</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-megna" class="megna-theme">6</a></li>
-                                <li class="d-block m-t-30"><b>With Dark sidebar</b></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-default-dark" class="default-dark-theme ">7</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-green-dark" class="green-dark-theme">8</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-red-dark" class="red-dark-theme">9</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-blue-dark" class="blue-dark-theme">10</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-purple-dark" class="purple-dark-theme">11</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-megna-dark" class="megna-dark-theme ">12</a></li>
-                            </ul>
-                            <ul class="m-t-20 chatonline">
-                                <li><b>Chat option</b></li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"> <span>Varun Dhavan <small class="text-success">online</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/2.jpg" alt="user-img" class="img-circle"> <span>Genelia Deshmukh <small class="text-warning">Away</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/3.jpg" alt="user-img" class="img-circle"> <span>Ritesh Deshmukh <small class="text-danger">Busy</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/4.jpg" alt="user-img" class="img-circle"> <span>Arijit Sinh <small class="text-muted">Offline</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/5.jpg" alt="user-img" class="img-circle"> <span>Govinda Star <small class="text-success">online</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/6.jpg" alt="user-img" class="img-circle"> <span>John Abraham<small class="text-success">online</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/7.jpg" alt="user-img" class="img-circle"> <span>Hritik Roshan<small class="text-success">online</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/8.jpg" alt="user-img" class="img-circle"> <span>Pwandeep rajan <small class="text-success">online</small></span></a>
-                                </li>
-                            </ul>
+                    <div class="right-sidebar">
+                        <div class="slimscrollright">
+                            <div class="rpanel-title"> Service Panel <span><i class="ti-close right-side-toggle"></i></span> </div>
+                            <div class="r-panel-body">
+                                <ul id="themecolors" class="m-t-20">
+                                    <li><b>With Light sidebar</b></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-default" class="default-theme working">1</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-green" class="green-theme">2</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-red" class="red-theme">3</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-blue" class="blue-theme">4</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-purple" class="purple-theme">5</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-megna" class="megna-theme">6</a></li>
+                                    <li class="d-block m-t-30"><b>With Dark sidebar</b></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-default-dark" class="default-dark-theme ">7</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-green-dark" class="green-dark-theme">8</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-red-dark" class="red-dark-theme">9</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-blue-dark" class="blue-dark-theme">10</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-purple-dark" class="purple-dark-theme">11</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-megna-dark" class="megna-dark-theme ">12</a></li>
+                                </ul>
+                                <ul class="m-t-20 chatonline">
+                                    <li><b>Chat option</b></li>
+                                    <li>
+                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"> <span>Varun Dhavan <small class="text-success">online</small></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/2.jpg" alt="user-img" class="img-circle"> <span>Genelia Deshmukh <small class="text-warning">Away</small></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/3.jpg" alt="user-img" class="img-circle"> <span>Ritesh Deshmukh <small class="text-danger">Busy</small></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/4.jpg" alt="user-img" class="img-circle"> <span>Arijit Sinh <small class="text-muted">Offline</small></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/5.jpg" alt="user-img" class="img-circle"> <span>Govinda Star <small class="text-success">online</small></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/6.jpg" alt="user-img" class="img-circle"> <span>John Abraham<small class="text-success">online</small></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/7.jpg" alt="user-img" class="img-circle"> <span>Hritik Roshan<small class="text-success">online</small></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/8.jpg" alt="user-img" class="img-circle"> <span>Pwandeep rajan <small class="text-success">online</small></span></a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
+                    <!-- ============================================================== -->
+                    <!-- End Right sidebar -->
+                    <!-- ============================================================== -->
                 </div>
                 <!-- ============================================================== -->
-                <!-- End Right sidebar -->
+                <!-- End Container fluid  -->
                 <!-- ============================================================== -->
             </div>
-            <!-- ============================================================== -->
-            <!-- End Container fluid  -->
-            <!-- ============================================================== -->
         </div>
     </div>
-</div>
-
-
-            </div>
-<!-- ============================================================== -->
-<!-- End Container fluid  -->
-<!-- ============================================================== -->
-        </div>
-    </div>
-</div>
+</body>
 

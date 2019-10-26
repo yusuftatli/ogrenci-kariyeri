@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Dapper;
+﻿using Dapper;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using SCA.Common;

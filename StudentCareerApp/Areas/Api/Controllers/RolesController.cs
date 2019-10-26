@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
 using SCA.Services;
@@ -19,12 +20,28 @@ namespace StudentCareerApp.Areas.Api.Controller
     public class RolesController : ControllerBase
     {
         IRoleManager _roleManager;
-        public RolesController(IRoleManager roleManager)
+        IMenuManager _menuManager;
+
+        public RolesController(IRoleManager roleManager,
+            IMenuManager menuManager)
         {
             _roleManager = roleManager;
+            _menuManager = menuManager;
         }
 
         #region Role Types
+
+        [HttpGet, Route("menu-GetMenuWitRoles")]
+        public async Task<ServiceResult> GetRolePermission(long roleTypeId)
+        {
+            return await _menuManager.GetRolePermission(roleTypeId, JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")).Id);
+        }
+
+        [HttpPost, Route("menu-syncMenu")]
+        public async Task<ServiceResult> GetRoleTypes(long id)
+        {
+            return await _menuManager.SyncAllMenu(id, JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")).RoleTypeId);
+        }
 
         [HttpGet, Route("role-getroletypes")]
         public async Task<ServiceResult> GetRoleTypes()

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Dapper;
+﻿using Dapper;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using SCA.Common.Resource;
@@ -20,7 +19,7 @@ namespace SCA.Services
     public class RoleManager : IRoleManager
     {
         private readonly IErrorManagement _errorManagement;
-        private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
+        private readonly IDbConnection _db = new MySqlConnection("Server = 167.71.46.71; Database = StudentDbTest; Uid = ogrencikariyeri; Pwd = dXog323!s.?;");
 
         public RoleManager(IErrorManagement errorManagement)
         {
@@ -37,18 +36,22 @@ namespace SCA.Services
 
         public async Task<ServiceResult> GetRoleTypes()
         {
+            ServiceResult _res = new ServiceResult();
             try
             {
-                // var dataList = _mapper.Map<List<RoleTypeDto>>(_roleTypeRepo.GetAll(x => x.IsDeleted.Equals(false)));
-                return Result.ReturnAsSuccess(data: null);
+                string query = "select * from RoleType where  Id <> @Value";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("Value", 1);
 
+                var result = await _db.QueryAsync<RoleTypeDto>(query, filter) as List<RoleTypeDto>;
+                _res = Result.ReturnAsSuccess(data: result);
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                await _errorManagement.SaveError(ex, null, "GetRoleTypes", PlatformType.Web);
+                _res = Result.ReturnAsFail(message: "Rol Tipleri getirilirken hata meydana geldi");
             }
-
+            return _res;
         }
         public async Task<List<RoleTypeDto>> GetRoles()
         {
@@ -59,7 +62,7 @@ namespace SCA.Services
         public async Task<ServiceResult> CreateRoleType(RoleTypeDto dto)
         {
             string resultMessage = "";
-            dto.IsActive = dto.isActiveVal;
+            //  dto.IsActive = dto.isActiveVal;
             if (dto == null)
             {
                 Result.ReturnAsFail(AlertResource.NoChanges, null);
@@ -88,7 +91,7 @@ namespace SCA.Services
         public async Task<ServiceResult> GetRolePermission()
         {
             //var dataList = _rolePermissionRepo.GetAll();
-            return Result.ReturnAsSuccess(data:null);
+            return Result.ReturnAsSuccess(data: null);
         }
 
         public async Task<ServiceResult> CreateRolePermission(RolePermissionDto dto)
@@ -111,7 +114,7 @@ namespace SCA.Services
             //}
 
             //_unitOfWork.SaveChanges();
-            return Result.ReturnAsSuccess(data:null);
+            return Result.ReturnAsSuccess(data: null);
 
         }
 
@@ -149,5 +152,28 @@ namespace SCA.Services
             return res;
         }
         #endregion
+
+        public async Task<ServiceResult> UpdateRolePermission(long roleTypeId, string menu,long userId)
+        {
+            ServiceResult _res = new ServiceResult();
+            try
+            {
+                string query = string.Empty;
+                query = @"update RoleType set Menus = @Menus where Id = @Id";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("Menus", menu);
+                filter.Add("Id",roleTypeId);
+
+                var result = await _db.QueryAsync(query,filter);
+                _res = Result.ReturnAsSuccess(message:"İşlem başarılı");
+
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, userId, "UpdateRolePermission", PlatformType.Web);
+                _res = Result.ReturnAsFail(message: "Role yetkileri ayarlanırken bir hata meydana geldi.");
+            }
+            return _res;
+        } 
     }
 }

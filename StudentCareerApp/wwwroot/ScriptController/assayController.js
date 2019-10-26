@@ -19,6 +19,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
     $scope.confirmType = [{ id: 0, description: '-----' }, { id: 1, description: 'Taslak' }, { id: 2, description: 'Yayın Aşamasında' }, { id: 3, description: 'Yayında Değil' }, { id: 4, description: 'Yayında' }];
     $scope.events = [{ id: 0, description: '-----' }, { id: 1, description: 'Mentor' }, { id: 2, description: 'Kariyer Sohbetleri' }];
     $scope.platformType = [{ id: 0, description: '-----' }, { id: 1, description: 'Mobil' }, { id: 2, description: 'Web' }, { id: 3, description: 'Web/Mobil' }];
+    $scope.menuList = JSON.parse(localStorage.getItem("menus"));
 
 
     var trMap = {
@@ -29,6 +30,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
         ıİ: "i",
         öÖ: "o"
     };
+    $scope.menuList = JSON.parse(localStorage.getItem("menus"));
 
     function pagin() {
         $scope.currentPage = 0;
@@ -360,7 +362,6 @@ app.controller("assayController", function ($scope, $http, $filter) {
     //#endregion
     getContentShortList();
     getMainCategories();
-
 });
 
 app.directive("treeselect", createVueComponent =>

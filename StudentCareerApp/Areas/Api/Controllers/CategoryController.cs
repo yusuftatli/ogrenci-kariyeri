@@ -29,7 +29,7 @@ namespace StudentCareerApp.Areas.Api.Controller
 
         #region Category
 
-        [Authorize()]
+       // [Authorize()]
         [HttpGet("MainCategoryListWithParents")]
         public async Task<ServiceResult> MainCategoryListWithParents()
         {

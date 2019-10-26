@@ -35,11 +35,12 @@ app.controller('comapanyController', function ($scope, $http, $filter) {
     $scope.onClickcompanyList = function () {
         getAllCompany();
     };
-
+    $scope.menuList = JSON.parse(localStorage.getItem("menus"));
     getSectorType();
     getAllCompany();
 
-    
+
+
     var trMap = {
         çÇ: "c",
         ğĞ: "g",

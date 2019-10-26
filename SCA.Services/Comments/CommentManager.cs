@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Dapper;
+﻿using Dapper;
 using MySql.Data.MySqlClient;
 using SCA.Common;
 using SCA.Common.Result;

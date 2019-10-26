@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using SCA.Common.Resource;
+﻿using SCA.Common.Resource;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
 using SCA.Entity.Enums;
@@ -15,7 +14,6 @@ namespace SCA.Services
 {
     public class QuestionManager : IQuestionManager
     {
-        private readonly IMapper _mapper;
 
         public QuestionManager()
         {

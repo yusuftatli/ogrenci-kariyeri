@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Dapper;
+﻿using Dapper;
 using Microsoft.AspNetCore.Http;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
@@ -26,24 +25,22 @@ namespace SCA.Services
         public async Task<string> SaveError(Exception ex, long? userId, string process, PlatformType platformType)
         {
             string res = string.Empty;
+            string query = string.Empty;
+            long? _userId = userId == null ? 0 : userId;
             try
             {
-                string query = @"insert into Errors (UserId, Process, StackTrace, Source, Message, InnerException, HResult, Data, TargetSite, HelpLink, PlatformType, ErrorDate) values 
-                              (@UserId, @Process, @StackTrace, @Source, @Message, @InnerException, @HResult, @Data, @TargetSite, @HelpLink, @PlatformType, CURDATE());";
-                DynamicParameters filter = new DynamicParameters();
-                filter.Add("UserId", userId);
-                filter.Add("Process", process);
-                filter.Add("StackTrace", ex.StackTrace);
-                filter.Add("Source", ex.Source);
-                filter.Add("Message", ex.Message);
-                filter.Add("InnerException", ex.InnerException);
-                filter.Add("HResult", ex.HResult);
-                filter.Add("Data", ex.Data);
-                filter.Add("TargetSite", ex.TargetSite);
-                filter.Add("HelpLink", ex.HelpLink);
-                filter.Add("PlatformType", platformType);
+                if (ex.InnerException != null)
+                {
+                    query = $"insert into Errors (UserId, Process, StackTrace, PlatformType, ErrorDate) values " +
+                                       $"({_userId}, '{process}', '{ex.InnerException.StackTrace.ToString()}', '{platformType}', CURDATE());";
+                }
+                else
+                {
+                    query = $"insert into Errors (UserId, Process, StackTrace, PlatformType, ErrorDate) values " +
+                   $"({_userId}, '{process}', '{ex.Message}', '{platformType}', CURDATE());";
+                }
 
-                var result = await _db.ExecuteAsync(query, filter);
+                var data = _db.Execute(query);
             }
             catch (Exception ex1)
             {
