@@ -129,46 +129,46 @@
                                             </table>
                                             <div class="table-responsive" ng-show="!showTable">
 
-                                                <table class="table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Şirket Kısa Adı</th>
-                                                            <th>Sktör</th>
-                                                            <th>Telefon Numarası</th>
-                                                            <th>Oluşturan Kişi</th>
-                                                            <th>Oluşturulma Tarihi</th>
-                                                            <th>İşlemler</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr ng-repeat="x in companyList| filter:search | limitTo:pageSize" )">
-                                                            <td ng-show="false" ng-bind="x.id"></td>
-                                                            <td ng-bind="x.shortName"></td>
-                                                            <td ng-bind="x.sectorDescription"></td>
-                                                            <td ng-bind="x.phoneNumber"></td>
-                                                            <td ng-bind="x.createUserName"></td>
-                                                            <td ng-bind="x.createdDate| date:'dd.MM.yyyy (HH:mm)'"></td>
-                                                            <td>
-                                                                <div class="btn-group">
-                                                                    <button ng-click="showContentDetail(x.id)" type="button" class="btn btn-default"><i class="fa fa-edit"></i></button>
-                                                                    <button type="button" class="btn btn-default"><i class="fa fa-trash"></i></button>
-                                                                    <div class="dropdown">
-                                                                        <button class="btn btn-default dropdown-toggle" id="dropdownOthers" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                                                                        <div class="dropdown-menu" aria-labelledby="dropdownOthers">
-                                                                            <a id="popupModal" class="dropdown-item lazyload showModal" data-size="modal-lg" data-url="/Admin/CompanyClub/CompanyAnnouncements?companyId={{x.id}}&seoUrl={{x.seoUrl}}"><i class="fa fa-info"></i> Duyurular</a>
-                                                                            <a id="popupModal" class="dropdown-item lazyload showModal" data-size="modal-lg" data-url="/Admin/CompanyClub/CompanySocialMedias?companyId={{x.id}}"><i class="fa fa-info"></i> Sosyal Medya</a>
-                                                                            <a id="popupModal" class="dropdown-item lazyload showModal" data-size="modal-lg" data-url="/Admin/CompanyClub/CompanyYoutubePlaylist?companyId={{x.id}}&seoUrl={{x.seoUrl}}"><i class="fa fa-youtube"></i> Youtube Playlist</a>
-                                                                        </div>
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Şirket Kısa Adı</th>
+                                                        <th>Sktör</th>
+                                                        <th>Telefon Numarası</th>
+                                                        <th>Oluşturan Kişi</th>
+                                                        <th>Oluşturulma Tarihi</th>
+                                                        <th>İşlemler</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="x in companyList| filter:search | limitTo:pageSize" )">
+                                                        <td ng-show="false" ng-bind="x.id"></td>
+                                                        <td ng-bind="x.shortName"></td>
+                                                        <td ng-bind="x.sectorDescription"></td>
+                                                        <td ng-bind="x.phoneNumber"></td>
+                                                        <td ng-bind="x.createUserName"></td>
+                                                        <td ng-bind="x.createdDate| date:'dd.MM.yyyy (HH:mm)'"></td>
+                                                        <td>
+                                                            <div class="btn-group">
+                                                                <button id="popupModal" type="button" class="btn btn-default lazyload showModal" data-header="<i class='fa fa-edit'></i> Şirket Düzenle" data-size="modal-xl" data-url="/Admin/CompanyClub/CompanyPage?id={{x.id}}"><i class="fa fa-edit"></i></button>
+                                                                <button type="button" class="btn btn-default"><i class="fa fa-trash"></i></button>
+                                                                <div class="dropdown">
+                                                                    <button class="btn btn-default dropdown-toggle" id="dropdownOthers" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                                                                    <div class="dropdown-menu" aria-labelledby="dropdownOthers">
+                                                                        <a id="popupModal" class="dropdown-item lazyload showModal" data-size="modal-lg" data-url="/Admin/CompanyClub/CompanyAnnouncements?companyId={{x.id}}&seoUrl={{x.seoUrl}}"><i class="fa fa-info"></i> Duyurular</a>
+                                                                        <a id="popupModal" class="dropdown-item lazyload showModal" data-size="modal-lg" data-url="/Admin/CompanyClub/CompanySocialMedias?companyId={{x.id}}"><i class="fa fa-info"></i> Sosyal Medya</a>
+                                                                        <a id="popupModal" class="dropdown-item lazyload showModal" data-size="modal-lg" data-url="/Admin/CompanyClub/CompanyYoutubePlaylist?companyId={{x.id}}&seoUrl={{x.seoUrl}}"><i class="fa fa-youtube"></i> Youtube Playlist</a>
                                                                     </div>
                                                                 </div>
-
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                                            </div>
+                                                          
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
+                                </div>
 
 
                                 </div>

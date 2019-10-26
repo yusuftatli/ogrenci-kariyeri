@@ -18,7 +18,7 @@ namespace SCA.DapperRepository.Generic
         public static string GenerateInsertQuery<T>(this T model, string tableName) where T : class
         {
             var propsArray = model.GetPropertiesOfModelAsString<T>().Split(',');
-            var props = string.Join(',', propsArray.Where(x=>x != "@Id"));
+            var props = string.Join(',', propsArray.Where(x => x != "@Id"));
             var insertQuery = new StringBuilder($"INSERT INTO {tableName} ({props.Replace('@', ' ')}) VALUES ({props}); " +
                 $"SELECT LAST_INSERT_ID();");
             return insertQuery.ToString();
@@ -55,10 +55,13 @@ namespace SCA.DapperRepository.Generic
         public static string GenerateSelectQuery<T, U>(this T model, string tableName, Expression<Func<U, bool>> predicate = null) where T : class where U : class
         {
             var props = model.GetPropertiesOfModelAsString<T>();
-            var expBody = new CustomVisitor().Visit(predicate.Body).ToString().Replace("AndAlso", "AND").Replace("OrElse", "OR").Replace("==", "=").Replace("Convert(", "").Replace(", Int32)", "");
-            if (expBody != null)
-                expBody = "WHERE " + expBody.Replace(predicate.Parameters[0].Name + ".", "");
-
+            var expBody = "";
+            if (predicate != null)
+            {
+                expBody = new CustomVisitor().Visit(predicate.Body).ToString().Replace("AndAlso", "AND").Replace("OrElse", "OR").Replace("==", "=").Replace("Convert(", "").Replace(", Int32)", "");
+                if (!string.IsNullOrEmpty(expBody))
+                    expBody = "WHERE " + expBody.Replace(predicate.Parameters[0].Name + ".", "");
+            }
             var selectQuery = new StringBuilder($"SELECT {props.Replace('@', ' ')} FROM {tableName} {expBody}");
             return selectQuery.ToString();
         }
