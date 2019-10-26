@@ -61,6 +61,12 @@ namespace StudentCareerApp.Areas.Api.Controller
             return await _contentManager.CreateFavorite(dto, await HttpContext.GetTokenAsync("access_token"));
         }
 
+        [HttpGet("GetSearch")]
+        public async Task<ServiceResult> GetSearch(string value)
+        {
+            return await _contentManager.GetSearch(value);
+        }
+
         [HttpGet("GetTags")]
         public async Task<ServiceResult> GetTags()
         {

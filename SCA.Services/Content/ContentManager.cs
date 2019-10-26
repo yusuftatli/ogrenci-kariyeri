@@ -26,7 +26,7 @@ namespace SCA.Services
         private readonly IUserManager _userManager;
         private readonly IErrorManagement _errorManagement;
         private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
-        public ContentManager(  ITagManager tagManager, ICategoryManager categoryManager, IUserManager userManager, IErrorManagement errorManagement)
+        public ContentManager(ITagManager tagManager, ICategoryManager categoryManager, IUserManager userManager, IErrorManagement errorManagement)
         {
             _tagManager = tagManager;
             _userManager = userManager;
@@ -396,7 +396,7 @@ namespace SCA.Services
                 GetContentQuery(CrudType.Insert, dto, session, ref query, ref filter);
 
                 var result = _db.Execute(query, filter);
-                res = Result.ReturnAsSuccess(); 
+                res = Result.ReturnAsSuccess();
             });
             return res;
 
@@ -632,6 +632,35 @@ namespace SCA.Services
             else
             {
                 res = false;
+            }
+            return res;
+        }
+
+        public async Task<ServiceResult> GetSearch(string value)
+        {
+            ServiceResult res = new ServiceResult();
+            try
+            {
+                string query = string.Empty;
+                query = $"select SeoUrl from Content where SeoUrl like '%{value}%' union ALL " +
+                    $"select SeoUrl from Content where Writer like '%{value}%' " +
+                    $"UNION ALL " +
+                    $"select SeoUrl from Content where ContentDescription like '%{value}'";
+
+                var result = await _db.QueryAsync<SearchDto>(query) as List<SearchDto>;
+                if (result.Count > 0)
+                {
+                    res = Result.ReturnAsSuccess(data: result);
+                }
+                else
+                {
+                    res = Result.ReturnAsSuccess(message: "Herhangi bir sonuç bulunamadı...");
+                }
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, null, "GetSearch", PlatformType.Mobil);
+                res = Result.ReturnAsSuccess(message: "Herhangi bir sonuç bulunamadı...");
             }
             return res;
         }
