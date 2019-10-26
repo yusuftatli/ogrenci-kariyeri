@@ -10,7 +10,7 @@ app.controller("pageController", function ($scope, $http, $filter) {
 
     $scope.pageCreate = {};
     $scope.contentProcess = {};
-
+    $scope.menuList = JSON.parse(localStorage.getItem("menus"));
 
     $scope.pageList = [];
     var trMap = {

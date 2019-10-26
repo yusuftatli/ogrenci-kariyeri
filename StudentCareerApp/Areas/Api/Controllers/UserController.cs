@@ -90,6 +90,7 @@ namespace StudentCareerApp.Areas.Api.Controller
                 JsonSerializer serializer = new JsonSerializer();
                 var result = JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo"));
                 HttpContext.Session.SetString("NameSurname", result.Name + " " + result.Surname);
+                HttpContext.Session.SetString("RoleTypeId", result.RoleTypeId.ToString());
                 return res;
             }
             return res;

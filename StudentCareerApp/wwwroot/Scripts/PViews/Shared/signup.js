@@ -3,7 +3,7 @@
 document.cookie
   .split(";")
   .map(x => x.trim())
-  .find(x => x == "acceptCookie=1") == undefined
+  .find(x => x === "acceptCookie=1") === undefined
   ? $(".cookieEnable").removeClass("hidden")
   : $(".cookieEnable").addClass("hidden");
 
@@ -65,10 +65,10 @@ $(document).on("click", "#acceptCookie", function() {
 });
 
 $(document).on("change", "#educationType", function(e) {
-  e.target.value == 2 || e.target.value == 3
+  e.target.value === 2 || e.target.value === 3
     ? $(".template-selected-university").removeClass("hidden")
     : $(".template-selected-university").addClass("hidden");
-  e.target.value == 1
+  e.target.value === 1
     ? $(".template-selected-highschool").removeClass("hidden")
     : $(".template-selected-highschool").addClass("hidden");
   e.target.value > 0
@@ -83,7 +83,7 @@ $(document).on("submit", ".loginForm", function(e) {
     type: "post",
     data: form,
     success: function(res) {
-      if (res.resultCode == 200) {
+      if (res.resultCode === 200) {
         toastr["success"]("Seni aramızda görmekten çok mutlu olduk :)" ,res.message);
         setTimeout(() => {
           document.location.reload();

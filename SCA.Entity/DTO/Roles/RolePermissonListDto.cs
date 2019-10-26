@@ -6,7 +6,7 @@ namespace SCA.Entity.DTO
 {
     public class RolePermissonListDto
     {
-        public long RoleId { get; set; }
+        public long RolePermissonId { get; set; }
         public long MasterId { get; set; }
         public string MasterName { get; set; }
         public string MasterIcon { get; set; }

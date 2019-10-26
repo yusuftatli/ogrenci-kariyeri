@@ -362,7 +362,6 @@ app.controller("assayController", function ($scope, $http, $filter) {
     //#endregion
     getContentShortList();
     getMainCategories();
-
 });
 
 app.directive("treeselect", createVueComponent =>

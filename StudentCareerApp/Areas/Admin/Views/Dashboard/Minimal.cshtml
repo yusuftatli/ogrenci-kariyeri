@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Dashboard";
+    ViewBag.Title = "Minimal";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
@@ -8,21 +8,17 @@
 
 
 
-    <head>
-        <link href="~/Template/assets/node_modules/morrisjs/morris.css" rel="stylesheet">
-        <!--Toaster Popup message CSS -->
-        <link href="~/Template/assets/node_modules/toast-master/css/jquery.toast.css" rel="stylesheet">
-        <!-- Custom CSS -->
-        <link href="~/Template/css/style.min.css" rel="stylesheet">
-        <!-- Dashboard 1 Page CSS -->
-        <link href="~/Template/css/pages/dashboard1.css" rel="stylesheet">
-        <link href="~/Template/dist/css/style.min.css" rel="stylesheet">
-        <!-- Dashboard 1 Page CSS -->
-        <link href="~/Template/dist/css/pages/dashboard1.css" rel="stylesheet">
-        <script src="~/ScriptController/Dashboard1Controller.js"></script>
-    </head>
+<head>
+    <link href="~/Template/dist/css/style.min.css" rel="stylesheet">
+    <link href="~/Template/assets/node_modules/morrisjs/morris.css" rel="stylesheet">
+    <link href="~/Template/dist/css/pages/dashboard1.css" rel="stylesheet">
+    <script src="~/Template/assets/node_modules/raphael/raphael-min.js"></script>
+    <script src="~/Template/assets/node_modules/morrisjs/morris.min.js"></script>
+    <script src="~/Template/assets/node_modules/jquery-sparkline/jquery.sparkline.min.js"></script>
+    <script src="~/ScriptController/Dashboard/MinimalController.js"></script>
+</head>
 
-<body ng-app="MyApp" ng-controller="Dashboard1Controller">
+<body ng-app="MyApp" ng-controller="MinimalController">
     <aside class="left-sidebar">
         <!-- Sidebar scroll-->
         <div class="scroll-sidebar">
@@ -238,7 +234,7 @@
                                             <div class="carousel-item active">
                                                 <h4 class="cmin-height">My Acting blown <span class="font-medium">Your Mind</span> and you also <br />laugh at the moment</h4>
                                                 <div class="d-flex no-block">
-                                                    <span><img src="../assets/images/users/1.jpg" alt="user" width="50" class="img-circle"></span>
+                                                    <span><img src="~/Template/assets/images/users/1.jpg" alt="user" width="50" class="img-circle"></span>
                                                     <span class="m-l-10">
                                                         <h4 class="text-white m-b-0">Govinda</h4>
                                                         <p class="text-white">Actor</p>
@@ -248,7 +244,7 @@
                                             <div class="carousel-item">
                                                 <h4 class="cmin-height">My Acting blown <span class="font-medium">Your Mind</span> and you also <br />laugh at the moment</h4>
                                                 <div class="d-flex no-block">
-                                                    <span><img src="../assets/images/users/2.jpg" alt="user" width="50" class="img-circle"></span>
+                                                    <span><img src="~/Template/assets/images/users/2.jpg" alt="user" width="50" class="img-circle"></span>
                                                     <span class="m-l-10">
                                                         <h4 class="text-white m-b-0">Govinda</h4>
                                                         <p class="text-white">Actor</p>
@@ -258,7 +254,7 @@
                                             <div class="carousel-item">
                                                 <h4 class="cmin-height">My Acting blown <span class="font-medium">Your Mind</span> and you also <br />laugh at the moment</h4>
                                                 <div class="d-flex no-block">
-                                                    <span><img src="../assets/images/users/3.jpg" alt="user" width="50" class="img-circle"></span>
+                                                    <span><img src="~/Template/assets/images/users/3.jpg" alt="user" width="50" class="img-circle"></span>
                                                     <span class="m-l-10">
                                                         <h4 class="text-white m-b-0">Govinda</h4>
                                                         <p class="text-white">Actor</p>
@@ -292,7 +288,7 @@
                         <div class="comment-widgets">
                             <!-- Comment Row -->
                             <div class="d-flex no-block comment-row">
-                                <div class="p-2"><span class="round"><img src="../assets/images/users/1.jpg" alt="user" width="50"></span></div>
+                                <div class="p-2"><span class="round"><img src="~/Template/assets/images/users/1.jpg" alt="user" width="50"></span></div>
                                 <div class="comment-text w-100">
                                     <h5 class="font-medium">James Anderson</h5>
                                     <p class="m-b-10 text-muted">Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has beenorem Ipsum is simply dummy text of the printing and type setting industry.</p>
@@ -307,7 +303,7 @@
                             </div>
                             <!-- Comment Row -->
                             <div class="d-flex no-block comment-row border-top">
-                                <div class="p-2"><span class="round"><img src="../assets/images/users/2.jpg" alt="user" width="50"></span></div>
+                                <div class="p-2"><span class="round"><img src="~/Template/assets/images/users/2.jpg" alt="user" width="50"></span></div>
                                 <div class="comment-text active w-100">
                                     <h5 class="font-medium">Michael Jorden</h5>
                                     <p class="m-b-10 text-muted">Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has beenorem Ipsum is simply dummy text of the printing and type setting industry..</p>
@@ -324,7 +320,7 @@
                             </div>
                             <!-- Comment Row -->
                             <div class="d-flex no-block comment-row border-top">
-                                <div class="p-2"><span class="round"><img src="../assets/images/users/3.jpg" alt="user" width="50"></span></div>
+                                <div class="p-2"><span class="round"><img src="~/Template/assets/images/users/3.jpg" alt="user" width="50"></span></div>
                                 <div class="comment-text w-100">
                                     <h5 class="font-medium">Johnathan Doeting</h5>
                                     <p class="m-b-10 text-muted">Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has beenorem Ipsum is simply dummy text of the printing and type setting industry.</p>
@@ -341,7 +337,7 @@
                             </div>
                             <!-- Comment Row -->
                             <div class="d-flex no-block comment-row border-top">
-                                <div class="p-2"><span class="round"><img src="../assets/images/users/4.jpg" alt="user" width="50"></span></div>
+                                <div class="p-2"><span class="round"><img src="~/Template/assets/images/users/4.jpg" alt="user" width="50"></span></div>
                                 <div class="comment-text active w-100">
                                     <h5 class="font-medium">Genelia doe</h5>
                                     <p class="m-b-10 text-muted">Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has beenorem Ipsum is simply dummy text of the printing and type setting industry..</p>
@@ -599,10 +595,10 @@
                                             </label>
                                         </div>
                                         <ul class="assignedto">
-                                            <li><img src="../assets/images/users/1.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Steave"></li>
-                                            <li><img src="../assets/images/users/2.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Jessica"></li>
-                                            <li><img src="../assets/images/users/3.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Priyanka"></li>
-                                            <li><img src="../assets/images/users/4.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Selina"></li>
+                                            <li><img src="~/Template/assets/images/users/1.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Steave"></li>
+                                            <li><img src="~/Template/assets/images/users/2.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Jessica"></li>
+                                            <li><img src="~/Template/assets/images/users/3.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Priyanka"></li>
+                                            <li><img src="~/Template/assets/images/users/4.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Selina"></li>
                                         </ul>
                                     </li>
                                     <li class="list-group-item" data-role="task">
@@ -622,8 +618,8 @@
                                             </label>
                                         </div>
                                         <ul class="assignedto">
-                                            <li><img src="../assets/images/users/3.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Priyanka"></li>
-                                            <li><img src="../assets/images/users/4.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Selina"></li>
+                                            <li><img src="~/Template/assets/images/users/3.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Priyanka"></li>
+                                            <li><img src="~/Template/assets/images/users/4.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Selina"></li>
                                         </ul>
                                     </li>
                                     <li class="list-group-item" data-role="task">
@@ -643,8 +639,10 @@
                                             </label>
                                         </div>
                                         <ul class="assignedto">
-                                            <li><img src="../assets/images/users/3.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Priyanka"></li>
-                                            <li><img src="../assets/images/users/4.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Selina"></li>
+                                            <li><img src="~/Template/assets/images/users/3.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Priyanka"></li>
+                                            <li><img src="~/Template/assets/images/users/3.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Priyanka"></li>
+                                            <li><img src="~/Template/assets/images/users/4.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Selina"></li>
+                                            <li><img src="~/Template/assets/images/users/4.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Selina"></li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -660,14 +658,14 @@
                                 <div class="message-widget message-scroll">
                                     <!-- Message -->
                                     <a href="javascript:void(0)">
-                                        <div class="user-img"> <img src="../assets/images/users/1.jpg" alt="user" class="img-circle"> <span class="profile-status online pull-right"></span> </div>
+                                        <div class="user-img"> <img src="~/Template/assets/images/users/1.jpg" alt="user" class="img-circle"> <span class="profile-status online pull-right"></span> </div>
                                         <div class="mail-contnet">
                                             <h5>Pavan kumar</h5> <span class="mail-desc">Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been.</span> <span class="time">9:30 AM</span>
                                         </div>
                                     </a>
                                     <!-- Message -->
                                     <a href="javascript:void(0)">
-                                        <div class="user-img"> <img src="../assets/images/users/2.jpg" alt="user" class="img-circle"> <span class="profile-status busy pull-right"></span> </div>
+                                        <div class="user-img"> <img src="~/Template/assets/images/users/2.jpg" alt="user" class="img-circle"> <span class="profile-status busy pull-right"></span> </div>
                                         <div class="mail-contnet">
                                             <h5>Sonu Nigam</h5> <span class="mail-desc">I've sung a song! See you at</span> <span class="time">9:10 AM</span>
                                         </div>
@@ -681,21 +679,21 @@
                                     </a>
                                     <!-- Message -->
                                     <a href="javascript:void(0)">
-                                        <div class="user-img"> <img src="../assets/images/users/4.jpg" alt="user" class="img-circle"> <span class="profile-status offline pull-right"></span> </div>
+                                        <div class="user-img"> <img src="~/Template/assets/images/users/4.jpg" alt="user" class="img-circle"> <span class="profile-status offline pull-right"></span> </div>
                                         <div class="mail-contnet">
                                             <h5>Pavan kumar</h5> <span class="mail-desc">Just see the my admin!</span> <span class="time">9:02 AM</span>
                                         </div>
                                     </a>
                                     <!-- Message -->
                                     <a href="javascript:void(0)">
-                                        <div class="user-img"> <img src="../assets/images/users/1.jpg" alt="user" class="img-circle"> <span class="profile-status online pull-right"></span> </div>
+                                        <div class="user-img"> <img ="~/Template/assets/images/users/1.jpg" alt="user" class="img-circle"> <span class="profile-status online pull-right"></span> </div>
                                         <div class="mail-contnet">
                                             <h5>Pavan kumar</h5> <span class="mail-desc">Welcome to the Elite Admin</span> <span class="time">9:30 AM</span>
                                         </div>
                                     </a>
                                     <!-- Message -->
                                     <a href="javascript:void(0)">
-                                        <div class="user-img"> <img src="../assets/images/users/2.jpg" alt="user" class="img-circle"> <span class="profile-status busy pull-right"></span> </div>
+                                        <div class="user-img"> <img src="~/Template/assets/images/users/2.jpg" alt="user" class="img-circle"> <span class="profile-status busy pull-right"></span> </div>
                                         <div class="mail-contnet">
                                             <h5>Sonu Nigam</h5> <span class="mail-desc">I've sung a song! See you at</span> <span class="time">9:10 AM</span>
                                         </div>
@@ -714,7 +712,7 @@
                                 <ul class="chat-list">
                                     <!--chat Row -->
                                     <li>
-                                        <div class="chat-img"><img src="../assets/images/users/1.jpg" alt="user"></div>
+                                        <div class="chat-img"><img src="~/Template/assets/images/users/1.jpg" alt="user"></div>
                                         <div class="chat-content">
                                             <h5>James Anderson</h5>
                                             <div class="box bg-light-info">Lorem Ipsum is simply dummy text of the printing &amp; type setting industry.</div>
@@ -723,7 +721,7 @@
                                     </li>
                                     <!--chat Row -->
                                     <li>
-                                        <div class="chat-img"><img src="../assets/images/users/2.jpg" alt="user"></div>
+                                        <div class="chat-img"><img src="~/Template/assets/images/users/2.jpg" alt="user"></div>
                                         <div class="chat-content">
                                             <h5>Bianca Doe</h5>
                                             <div class="box bg-light-info">It’s Great opportunity to work.</div>
@@ -748,7 +746,7 @@
                                     </li>
                                     <!--chat Row -->
                                     <li>
-                                        <div class="chat-img"><img src="../assets/images/users/3.jpg" alt="user"></div>
+                                        <div class="chat-img"><img src="~/Template/assets/images/users/3.jpg" alt="user"></div>
                                         <div class="chat-content">
                                             <h5>Angelina Rhodes</h5>
                                             <div class="box bg-light-info">Well we have good budget for the project</div>
@@ -802,28 +800,28 @@
                         <ul class="m-t-20 chatonline">
                             <li><b>Chat option</b></li>
                             <li>
-                                <a href="javascript:void(0)"><img src="../assets/images/users/1.jpg" alt="user-img" class="img-circle"> <span>Varun Dhavan <small class="text-success">online</small></span></a>
+                                <a href="javascript:void(0)"><img src="~/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"> <span>Varun Dhavan <small class="text-success">online</small></span></a>
                             </li>
                             <li>
-                                <a href="javascript:void(0)"><img src="../assets/images/users/2.jpg" alt="user-img" class="img-circle"> <span>Genelia Deshmukh <small class="text-warning">Away</small></span></a>
+                                <a href="javascript:void(0)"><img src="~/Template/assets/images/users/2.jpg" alt="user-img" class="img-circle"> <span>Genelia Deshmukh <small class="text-warning">Away</small></span></a>
                             </li>
                             <li>
-                                <a href="javascript:void(0)"><img src="../assets/images/users/3.jpg" alt="user-img" class="img-circle"> <span>Ritesh Deshmukh <small class="text-danger">Busy</small></span></a>
+                                <a href="javascript:void(0)"><img src="~/Template/assets/images/users/3.jpg" alt="user-img" class="img-circle"> <span>Ritesh Deshmukh <small class="text-danger">Busy</small></span></a>
                             </li>
                             <li>
-                                <a href="javascript:void(0)"><img src="../assets/images/users/4.jpg" alt="user-img" class="img-circle"> <span>Arijit Sinh <small class="text-muted">Offline</small></span></a>
+                                <a href="javascript:void(0)"><img src="~/Template/assets/images/users/4.jpg" alt="user-img" class="img-circle"> <span>Arijit Sinh <small class="text-muted">Offline</small></span></a>
                             </li>
                             <li>
-                                <a href="javascript:void(0)"><img src="../assets/images/users/5.jpg" alt="user-img" class="img-circle"> <span>Govinda Star <small class="text-success">online</small></span></a>
+                                <a href="javascript:void(0)"><img src="~/Template/assets/images/users/5.jpg" alt="user-img" class="img-circle"> <span>Govinda Star <small class="text-success">online</small></span></a>
                             </li>
                             <li>
-                                <a href="javascript:void(0)"><img src="../assets/images/users/6.jpg" alt="user-img" class="img-circle"> <span>John Abraham<small class="text-success">online</small></span></a>
+                                <a href="javascript:void(0)"><img src="~/Template/assets/images/users/6.jpg" alt="user-img" class="img-circle"> <span>John Abraham<small class="text-success">online</small></span></a>
                             </li>
                             <li>
-                                <a href="javascript:void(0)"><img src="../assets/images/users/7.jpg" alt="user-img" class="img-circle"> <span>Hritik Roshan<small class="text-success">online</small></span></a>
+                                <a href="javascript:void(0)"><img src="~/Template/assets/images/users/7.jpg" alt="user-img" class="img-circle"> <span>Hritik Roshan<small class="text-success">online</small></span></a>
                             </li>
                             <li>
-                                <a href="javascript:void(0)"><img src="../assets/images/users/8.jpg" alt="user-img" class="img-circle"> <span>Pwandeep rajan <small class="text-success">online</small></span></a>
+                                <a href="javascript:void(0)"><img src="~/Template/assets/images/users/8.jpg" alt="user-img" class="img-circle"> <span>Pwandeep rajan <small class="text-success">online</small></span></a>
                             </li>
                         </ul>
                     </div>
@@ -837,13 +835,5 @@
         <!-- End Container fluid  -->
         <!-- ============================================================== -->
     </div>
+
 </body>
-
-
-<script src="~/Template/assets/node_modules/raphael/raphael-min.js"></script>
-<script src="~/Template/assets/node_modules/morrisjs/morris.min.js"></script>
-<script src="~/Template/assets/node_modules/jquery-sparkline/jquery.sparkline.min.js"></script>
-<!-- Popup message jquery -->
-<script src="~/Template/assets/node_modules/toast-master/js/jquery.toast.js"></script>
-<!-- Chart JS -->
-<script src="dist/js/dashboard1.js"></script>

@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
 using SCA.Entity.Enums;
@@ -15,11 +16,13 @@ namespace SCA.Services
     public class MenuManager : IMenuManager
     {
         private readonly IErrorManagement _errorManagement;
+        private readonly IRoleManager _roleManager;
         private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
 
-        public MenuManager(IErrorManagement errorManagement)
+        public MenuManager(IErrorManagement errorManagement, IRoleManager roleManager)
         {
             _errorManagement = errorManagement;
+            _roleManager = roleManager;
         }
 
 
@@ -87,12 +90,17 @@ namespace SCA.Services
             return listData;
         }
 
-        public async Task<ServiceResult> SyncAllMenu(long roleTypeId)
+        public async Task<ServiceResult> SyncAllMenu(long roleTypeId, long userId)
         {
             ServiceResult _res = new ServiceResult();
+            if (roleTypeId == 0)
+            {
+                _res = Result.ReturnAsFail(message: "Role boş geçilemez");
+                return _res;
+            }
             try
             {
-                ServiceResult service = await GetRolePermission(roleTypeId);
+                ServiceResult service = await GetRolePermission(roleTypeId, userId);
                 List<RolePermissonListDto> rolePermissionDataList = service.Data as List<RolePermissonListDto>;
 
                 List<ScreenMasterDto> master = await GetMenuMaster(0);
@@ -127,34 +135,80 @@ namespace SCA.Services
                             }
                         }
                     }
-                    await CreateRolePermission(ListData);
-                    _res = Result.ReturnAsSuccess(message: "Menu senkronizasyon işlemi başarıyla tamamlandı.");
                 }
+                await CreateRolePermission(ListData);
+                var listData = GetMenus(roleTypeId, userId);
+                //string jsonData = JsonConvert.SerializeObject(listData);
+                //await _roleManager.UpdateRolePermission(roleTypeId, jsonData, userId);
+                _res = Result.ReturnAsSuccess(message: "Menu senkronizasyon işlemi başarıyla tamamlandı.", data: listData);
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex, null, "SyncAllMenu", PlatformType.Web);
+                await _errorManagement.SaveError(ex, userId, "SyncAllMenu", PlatformType.Web);
+                _res = Result.ReturnAsFail(message: "Role yetkileri seknronizasyon sırasında hata meydana geldi.");
             }
             return _res;
         }
 
 
-        public async Task<ServiceResult> GetRolePermission(long roleTypeId)
+        public async Task<ServiceResult> GetRolePermission(long roleTypeId, long userId)
         {
             ServiceResult _res = new ServiceResult();
             try
             {
                 string query = string.Empty;
-                query = @"select * from List_RolePermission where RoleTypeId = @RoleTypeId order by DetailId asc";
+                query = @"select * from List_RolePermission where RoleTypeId = @RoleTypeId  order by DetailId asc";
                 DynamicParameters filter = new DynamicParameters();
                 filter.Add("RoleTypeId", roleTypeId);
 
                 var listData = await _db.QueryAsync<RolePermissonListDto>(query, filter) as List<RolePermissonListDto>;
                 _res = Result.ReturnAsSuccess(data: listData);
+
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex, null, "SyncAllMenu", PlatformType.Web);
+                await _errorManagement.SaveError(ex, userId, "SyncAllMenu", PlatformType.Web);
+                _res = Result.ReturnAsFail(message: "Menü yüklenirken hata meydana geldi");
+            }
+            return _res;
+        }
+
+        public async Task<ServiceResult> GetMenus(long roleTypeId, long userId)
+        {
+            ServiceResult _res = new ServiceResult();
+            try
+            {
+                string query = $"select DISTINCT MasterId as Id, MasterName as Name, MasterIcon as Icon from List_RolePermission where RoleTypeId = {roleTypeId};";
+                var screenMaster = await _db.QueryAsync<ScreenMasterDto>(query) as List<ScreenMasterDto>;
+
+                ServiceResult service = await GetRolePermission(roleTypeId, userId);
+                List<RolePermissonListDto> rolePermissionDataList = service.Data as List<RolePermissonListDto>;
+
+                List<ScreenDoUI> ListData = new List<ScreenDoUI>();
+                foreach (ScreenMasterDto master in screenMaster)
+                {
+                    ScreenDoUI _l = new ScreenDoUI();
+                    _l.Id = master.Id;
+                    _l.Name = master.Name;
+                    _l.IsActive = master.IsActive;
+                    _l.Icon = master.Icon;
+                    foreach (RolePermissonListDto item in rolePermissionDataList.Where(x => x.MasterId == master.Id).ToList())
+                    {
+                        ScreenDetailDto _de = new ScreenDetailDto();
+                        _de.Id = item.DetailId;
+                        _de.Icon = item.DetailIcon;
+                        _de.IsActive = item.IsActive;
+                        _l.Details.Add(_de);
+                    }
+                    ListData.Add(_l);
+                }
+                _res = Result.ReturnAsSuccess(data: ListData);
+            }
+            catch (Exception ex)
+            {
+
+                await _errorManagement.SaveError(ex, userId, "GetMenus", PlatformType.Web);
+                _res = Result.ReturnAsFail(message: "Menü yüklenirken hata meydana geldi");
             }
             return _res;
         }
@@ -165,32 +219,34 @@ namespace SCA.Services
             try
             {
                 string query = string.Empty;
-
-                foreach (RolePermissionDto item in dto)
+                if (dto.Count > 0)
                 {
-                    DynamicParameters filter = new DynamicParameters();
-                    if (item.Id == 0)
+                    foreach (RolePermissionDto item in dto)
                     {
-                        query = @"insert RolePermission (SreenMasterId, ScreenDetailId, IsActive, RoleTypeId, CreatedUserId, CreatedDate) values
+                        DynamicParameters filter = new DynamicParameters();
+                        if (item.Id == 0)
+                        {
+                            query = @"insert RolePermission (SreenMasterId, ScreenDetailId, IsActive, RoleTypeId, CreatedUserId, CreatedDate) values
                              (@SreenMasterId, @ScreenDetailId, @IsActive, @RoleTypeId, @CreatedUserId, @CreatedDate);";
-                        filter.Add("CreatedUserId", 0);
-                        filter.Add("CreatedDate", DateTime.Now);
-                    }
-                    else
-                    {
-                        query = @"Update RolePermission set SreenMasterId = @SreenMasterId, ScreenDetailId = @ScreenDetailId, IsActive = @IsActive, 
+                            filter.Add("CreatedUserId", 0);
+                            filter.Add("CreatedDate", DateTime.Now);
+                        }
+                        else
+                        {
+                            query = @"Update RolePermission set SreenMasterId = @SreenMasterId, ScreenDetailId = @ScreenDetailId, IsActive = @IsActive, 
                             RoleTypeId = @RoleTypeId, UpdatedUserId = @UpdatedUserId, UpdatedDate = @UpdatedDate where Id = @Id";
-                        filter.Add("Id", item.Id);
-                        filter.Add("UpdatedUserId", 0);
-                        filter.Add("UpdatedDate", DateTime.Now);
+                            filter.Add("Id", item.Id);
+                            filter.Add("UpdatedUserId", 0);
+                            filter.Add("UpdatedDate", DateTime.Now);
+                        }
+
+                        filter.Add("SreenMasterId", item.SreenMasterId);
+                        filter.Add("ScreenDetailId", item.ScreenDetailId);
+                        filter.Add("IsActive", item.IsActive);
+                        filter.Add("RoleTypeId", item.RoleTypeId);
+
+                        var result = await _db.ExecuteAsync(query, filter);
                     }
-
-                    filter.Add("SreenMasterId", item.SreenMasterId);
-                    filter.Add("ScreenDetailId", item.ScreenDetailId);
-                    filter.Add("IsActive", item.IsActive);
-                    filter.Add("RoleTypeId", item.RoleTypeId);
-
-                    var result = await _db.ExecuteAsync(query, filter);
                 }
                 _res = Result.ReturnAsSuccess(message: "Kayıt İşlemi Başarılı.");
             }

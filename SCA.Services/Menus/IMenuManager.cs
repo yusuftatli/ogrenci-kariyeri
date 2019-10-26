@@ -10,7 +10,7 @@ namespace SCA.Services
     public interface IMenuManager
     {
         Task<List<MenuDto>> GetMenus(long? userId);
-        Task<ServiceResult> SyncAllMenu(long roleTypeId);
-        Task<ServiceResult> GetRolePermission(long roleTypeId);
+        Task<ServiceResult> SyncAllMenu(long roleTypeId, long userId);
+        Task<ServiceResult> GetRolePermission(long roleTypeId, long userId);
     }
 }

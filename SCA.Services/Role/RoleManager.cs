@@ -19,7 +19,7 @@ namespace SCA.Services
     public class RoleManager : IRoleManager
     {
         private readonly IErrorManagement _errorManagement;
-        private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
+        private readonly IDbConnection _db = new MySqlConnection("Server = 167.71.46.71; Database = StudentDbTest; Uid = ogrencikariyeri; Pwd = dXog323!s.?;");
 
         public RoleManager(IErrorManagement errorManagement)
         {
@@ -152,5 +152,28 @@ namespace SCA.Services
             return res;
         }
         #endregion
+
+        public async Task<ServiceResult> UpdateRolePermission(long roleTypeId, string menu,long userId)
+        {
+            ServiceResult _res = new ServiceResult();
+            try
+            {
+                string query = string.Empty;
+                query = @"update RoleType set Menus = @Menus where Id = @Id";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("Menus", menu);
+                filter.Add("Id",roleTypeId);
+
+                var result = await _db.QueryAsync(query,filter);
+                _res = Result.ReturnAsSuccess(message:"İşlem başarılı");
+
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, userId, "UpdateRolePermission", PlatformType.Web);
+                _res = Result.ReturnAsFail(message: "Role yetkileri ayarlanırken bir hata meydana geldi.");
+            }
+            return _res;
+        } 
     }
 }

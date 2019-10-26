@@ -13,7 +13,7 @@ app.controller('DefinitonManagerController', function ($scope, $http, $filter) {
     $scope.onClickDashboardTab = function () {
 
     };
-
+    $scope.menuList = JSON.parse(localStorage.getItem("menus"));
 
     //ClassType
     $scope.classTypeModel = {};
