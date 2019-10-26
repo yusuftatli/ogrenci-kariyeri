@@ -664,5 +664,38 @@ namespace SCA.Services
             }
             return res;
         }
+
+        public async Task<List<TagDto>> GetAllTagsUI()
+        {
+            List<TagDto> res = new List<TagDto>();
+            try
+            {
+                string query = "select Id, Description from Tags";
+                var listData = await _db.QueryAsync<TagDto>(query) as List<TagDto>;
+                res = listData;
+
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, null, "GetAllTagsUI", PlatformType.Mobil);
+            }
+            return res;
+        }
+
+        public async Task<ServiceResult> GetAllTags()
+        {
+            ServiceResult res = new ServiceResult();
+            try
+            {
+                string query = "select Id, Description from Tags";
+                var listData = await _db.QueryAsync<TagDto>(query) as List<TagDto>;
+                res = Result.ReturnAsSuccess(data: listData);
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, null, "GetAllTags", PlatformType.Mobil);
+            }
+            return res;
+        }
     }
 }

@@ -124,6 +124,11 @@ namespace StudentCareerApp.Areas.Api.Controller
             return await _contentManager.GetContent(id);
         }
 
+        [HttpGet("GetAllTags")]
+        public async Task<ServiceResult> GetAllTags()
+        {
+            return await _contentManager.GetAllTags();
+        }
 
     }
 }

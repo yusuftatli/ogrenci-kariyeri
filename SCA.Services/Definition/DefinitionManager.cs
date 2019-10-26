@@ -120,7 +120,7 @@ namespace SCA.Services
             ServiceResult res = new ServiceResult();
             try
             {
-                string query = "select * from Faculty";
+                string query = "select Id, Description as FacultyName from Faculty";
                 var reullt = await _db.QueryAsync<FacultyDto>(query) as List<FacultyDto>;
                 res = Result.ReturnAsSuccess(data: reullt);
             }
@@ -157,8 +157,8 @@ namespace SCA.Services
             {
                 if (dto.Id == 0)
                 {
-                    query = @"Insert Into Faculty (Description) values
-                        (Description=@Description)";
+                    query = $"Insert Into Faculty (Id,Description) values" +
+                        $"({await GetFacultId()}, Description=@Description)";
                     filter.Add("Description", dto.FacultyName);
                     resultMessage = "Kayıt işlemi başarılı";
                 }
@@ -179,6 +179,22 @@ namespace SCA.Services
             }
             return res;
         }
+
+        public async Task<long> GetFacultId()
+        {
+            long res = 0;
+            try
+            {
+                var id = await _db.QueryAsync<long>("select Id+1 as Id from Faculty order by Id desc limit 1");
+                res = Convert.ToInt64(id);
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, null, "CreateFaculty", PlatformType.Web);
+            }
+            return res;
+        }
+
 
         public async Task<ServiceResult> UpdateFacultIsActive(long Id, bool IsActive)
         {
