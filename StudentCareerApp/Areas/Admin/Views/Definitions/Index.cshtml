@@ -469,7 +469,7 @@
                                                                 <tbody>
                                                                     <tr ng-repeat="x in facultyModel.facultyList|filter:facultyfilter">
                                                                         <td ng-show="false" ng-bind="x.id"></td>
-                                                                        <td ng-bind="x.facultyCode"></td>
+                                                                        @*<td ng-bind="x.facultyCode"></td>*@
                                                                         <td ng-bind="x.facultyName"></td>
                                                                         <td>
                                                                             <span ng-click="showFaculty(x) " data-toggle="modal" data-target="#facultyModal">

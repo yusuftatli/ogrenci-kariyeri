@@ -1,382 +1,423 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Question";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<head>
-    <script src="~/AdminFiles/ScriptController/questionController.js"></script>
-    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js"></script>
-
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-</head>
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 
-<div class="page-wrapper" ng-app="MyApp" ng-controller="questionController">
-    <!-- ============================================================== -->
-    <!-- Container fluid  -->
-    <!-- ============================================================== -->
-    <div class="container-fluid">
+
+    <head>
+        <script src="~/AdminFiles/ScriptController/questionController.js"></script>
+        <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js"></script>
+
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <script src="~/ScriptController/questionController.js"></script>
+    </head>
+
+
+<body ng-app="MyApp" ng-controller="questionController">
+    <aside class="left-sidebar">
+        <!-- Sidebar scroll-->
+        <div class="scroll-sidebar">
+            <!-- Sidebar navigation-->
+            <nav class="sidebar-nav">
+                <ul id="sidebarnav">
+                    @*<li class="user-pro">
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><img src="~/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"><span class="hide-menu">@HttpContextAccessor.HttpContext.Session.GetString("NameSurname")</span></a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="/Admin/User/Profile"><i class="ti-user"></i> Profil</a></li>
+                                <li><a href="javascript:void(0)"><i class="ti-wallet"></i> My Balance</a></li>
+                                <li><a href="javascript:void(0)"><i class="ti-email"></i> Inbox</a></li>
+                                <li><a href="javascript:void(0)"><i class="ti-settings"></i> Ayarlar</a></li>
+                                <li><a href="javascript:void(0)"><i class="fa fa-power-off"></i> Çıkış</a></li>
+                            </ul>
+                        </li>*@
+                    <li ng-repeat="x in menuList">
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="{{x.Icon }}"></i><span class="hide-menu" ng-bind="x.Name"> </span></a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li ng-repeat="y in x.Details">
+                                <a href="/{{y.Url}}"><span ng-bind="y.Name"></span> </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li> <a class="waves-effect waves-dark" href="../documentation/documentation.html" aria-expanded="false"><i class="far fa-circle text-danger"></i><span class="hide-menu">Documentation</span></a></li>
+                    <li> <a class="waves-effect waves-dark" href="pages-login.html" aria-expanded="false"><i class="far fa-circle text-success"></i><span class="hide-menu">Log Out</span></a></li>
+                    <li> <a class="waves-effect waves-dark" href="pages-faq.html" aria-expanded="false"><i class="far fa-circle text-info"></i><span class="hide-menu">FAQs</span></a></li>
+                </ul>
+            </nav>
+            <!-- End Sidebar navigation -->
+        </div>
+        <!-- End Sidebar scroll-->
+    </aside>
+
+
+    <div class="page-wrapper">
         <!-- ============================================================== -->
-        <!-- Bread crumb and right sidebar toggle -->
+        <!-- Container fluid  -->
         <!-- ============================================================== -->
-        <div class="row page-titles">
-            <div class="col-md-5 align-self-center">
-                <h4 class="text-themecolor">Soru Yönetimi</h4>
-            </div>
-            <div class="col-md-7 align-self-center text-right">
-                <div class="d-flex justify-content-end align-items-center">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Soru Makale Yönetimi</a></li>
-                        <li class="breadcrumb-item active">Soru Yönetimi</li>
-                    </ol>
+        <div class="container-fluid">
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <div class="row page-titles">
+                <div class="col-md-5 align-self-center">
+                    <h4 class="text-themecolor">Soru Yönetimi</h4>
+                </div>
+                <div class="col-md-7 align-self-center text-right">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="javascript:void(0)">Soru Makale Yönetimi</a></li>
+                            <li class="breadcrumb-item active">Soru Yönetimi</li>
+                        </ol>
+                    </div>
                 </div>
             </div>
-        </div>
-        <!-- ============================================================== -->
-        <!-- End Bread crumb and right sidebar toggle -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Start Page Content -->
-        <!-- ============================================================== -->
-        <!-- Row -->
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Test DashBoard</span></a> </li>
-                            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Test Ekle</span></a> </li>
-                            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#testAnswer" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Test Cevap</span></a> </li>
-                        </ul>
-                        <div class="tab-content tabcontent-border">
-                            <div class="tab-pane active" id="home" role="tabpanel">
-                                <br />
-                                <div class="row" ng-model="rowdata">
-                                    <!-- Column -->
-                                    <div class="col-lg-3 col-md-6">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row p-t-10 p-b-10">
-                                                    <!-- Column -->
-                                                    <div class="col p-r-0">
-                                                        <h1 class="font-light" ng-bind="contentDashboard[0].quantity"></h1>
-                                                        <h6 class="text-muted">Tolam Test</h6>
-                                                    </div>
-                                                    <!-- Column -->
-                                                    <div class="col text-right align-self-center">
-                                                        <div data-label="{{contentDashboard[0].percent}}%" class="css-bar m-b-0 css-bar-primary css-bar-20"><i class="mdi mdi-account-circle"></i></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Column -->
-                                    <!-- Column -->
-                                    <div class="col-lg-3 col-md-6">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row p-t-10 p-b-10">
-                                                    <!-- Column -->
-                                                    <div class="col p-r-0">
-                                                        <h1 class="font-light" ng-bind="contentDashboard[1].quantity"></h1>
-                                                        <h6 class="text-muted">Yayınlanmış</h6>
-                                                    </div>
-                                                    <!-- Column -->
-                                                    <div class="col text-right align-self-center">
-                                                        <div data-label="{{contentDashboard[1].percent}}%" class="css-bar m-b-0 css-bar-danger css-bar-20"><i class="mdi mdi-briefcase-check"></i></div>
+            <!-- ============================================================== -->
+            <!-- End Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Start Page Content -->
+            <!-- ============================================================== -->
+            <!-- Row -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Test DashBoard</span></a> </li>
+                                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Test Ekle</span></a> </li>
+                                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#testAnswer" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Test Cevap</span></a> </li>
+                            </ul>
+                            <div class="tab-content tabcontent-border">
+                                <div class="tab-pane active" id="home" role="tabpanel">
+                                    <br />
+                                    <div class="row" ng-model="rowdata">
+                                        <!-- Column -->
+                                        <div class="col-lg-3 col-md-6">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="row p-t-10 p-b-10">
+                                                        <!-- Column -->
+                                                        <div class="col p-r-0">
+                                                            <h1 class="font-light" ng-bind="contentDashboard[0].quantity"></h1>
+                                                            <h6 class="text-muted">Tolam Test</h6>
+                                                        </div>
+                                                        <!-- Column -->
+                                                        <div class="col text-right align-self-center">
+                                                            <div data-label="{{contentDashboard[0].percent}}%" class="css-bar m-b-0 css-bar-primary css-bar-20"><i class="mdi mdi-account-circle"></i></div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <!-- Column -->
-                                    <!-- Column -->
-                                    <div class="col-lg-3 col-md-6">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row p-t-10 p-b-10">
-                                                    <!-- Column -->
-                                                    <div class="col p-r-0">
-                                                        <h1 class="font-light" ng-bind="contentDashboard[2].quantity"></h1>
-                                                        <h6 class="text-muted">Taslak</h6>
-                                                    </div>
-                                                    <!-- Column -->
-                                                    <div class="col text-right align-self-center">
-                                                        <div data-label="{{contentDashboard[2].percent}}%" class="css-bar m-b-0 css-bar-warning css-bar-40"><i class="mdi mdi-star-circle"></i></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Column -->
-                                    <!-- Column -->
-                                    <div class="col-lg-3 col-md-6">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row p-t-10 p-b-10">
-                                                    <!-- Column -->
-                                                    <div class="col p-r-0">
-                                                        <h1 class="font-light" ng-bind="contentDashboard[3].quantity"></h1>
-                                                        <h6 class="text-muted">Yayınlanmamış</h6>
-                                                    </div>
-                                                    <!-- Column -->
-                                                    <div class="col text-right align-self-center">
-                                                        <div data-label="{{contentDashboard[3].percent}}%" class="css-bar m-b-0 css-bar-info css-bar-60"><i class="mdi mdi-receipt"></i></div>
+                                        <!-- Column -->
+                                        <!-- Column -->
+                                        <div class="col-lg-3 col-md-6">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="row p-t-10 p-b-10">
+                                                        <!-- Column -->
+                                                        <div class="col p-r-0">
+                                                            <h1 class="font-light" ng-bind="contentDashboard[1].quantity"></h1>
+                                                            <h6 class="text-muted">Yayınlanmış</h6>
+                                                        </div>
+                                                        <!-- Column -->
+                                                        <div class="col text-right align-self-center">
+                                                            <div data-label="{{contentDashboard[1].percent}}%" class="css-bar m-b-0 css-bar-danger css-bar-20"><i class="mdi mdi-briefcase-check"></i></div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <!-- Column -->
-                                </div>
-                            </div>
-
-
-
-                            <div class="tab-pane  p-20" id="profile" role="tabpanel">
-                                <div class="col-lg-12 col-md-12">
-                                    <div class="ribbon-wrapper p-t-40">
-                                        <div class="ribbon ribbon-bookmark ribbon-default">Genel Test Bilgileri</div>
-                                        <div class="ribbon-button">
-                                            <button ng-click="clicktest()" class="btn btn-danger" data-toggle="modal" data-target=".bs-example-modal-lg">Önizleme</button>
-                                            <button class="btn btn-success" ng-click="postTest()">Testi Tamamla</button>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 p-l-0 p-t-20">
-                                        <input type="file" id="input-file-now-custom-3" ng-file-select="onFileSelect($files)" ng-model="testData.imagePath" class="dropify" data-height="150" />
-                                    </div>
-
-                                    <div class="col-md-9 p-t-20">
-                                        <div class="media-body">
-                                            <div class="col-md-6 p-l-0">
-                                                <div class="form-group">
-                                                    <input type="text" ng-model="testData.header" class="form-control" placeholder="Test Başlığı">
+                                        <!-- Column -->
+                                        <!-- Column -->
+                                        <div class="col-lg-3 col-md-6">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="row p-t-10 p-b-10">
+                                                        <!-- Column -->
+                                                        <div class="col p-r-0">
+                                                            <h1 class="font-light" ng-bind="contentDashboard[2].quantity"></h1>
+                                                            <h6 class="text-muted">Taslak</h6>
+                                                        </div>
+                                                        <!-- Column -->
+                                                        <div class="col text-right align-self-center">
+                                                            <div data-label="{{contentDashboard[2].percent}}%" class="css-bar m-b-0 css-bar-warning css-bar-40"><i class="mdi mdi-star-circle"></i></div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6 p-r-0">
-                                                <div class="form-group">
-                                                    <input type="text" id="testDataUrl" ng-disabled="true" value="{{RegexSeo(testData.header)}}" class="form-control">
+                                        </div>
+                                        <!-- Column -->
+                                        <!-- Column -->
+                                        <div class="col-lg-3 col-md-6">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="row p-t-10 p-b-10">
+                                                        <!-- Column -->
+                                                        <div class="col p-r-0">
+                                                            <h1 class="font-light" ng-bind="contentDashboard[3].quantity"></h1>
+                                                            <h6 class="text-muted">Yayınlanmamış</h6>
+                                                        </div>
+                                                        <!-- Column -->
+                                                        <div class="col text-right align-self-center">
+                                                            <div data-label="{{contentDashboard[3].percent}}%" class="css-bar m-b-0 css-bar-info css-bar-60"><i class="mdi mdi-receipt"></i></div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <textarea ng-model="testData.label" class="form-control" placeholder="Test Açıklama" rows="4"></textarea>&nbsp;
                                         </div>
+                                        <!-- Column -->
                                     </div>
                                 </div>
 
-                                <div class="col-md-12 p-t-40">
-                                    <div class="ribbon-wrapper p-t-40">
-                                        <div class="ribbon ribbon-bookmark ribbon-default">Test Soruları ({{questionList.length}})</div>
-                                        <div class="ribbon-button">
-                                            <button ng-click="addQuestion()" class="btn btn-success">Soru Ekle</button>
-                                        </div>
-                                    </div>
 
-                                    <div ng-repeat="x in questionList">
+
+                                <div class="tab-pane  p-20" id="profile" role="tabpanel">
+                                    <div class="col-lg-12 col-md-12">
+                                        <div class="ribbon-wrapper p-t-40">
+                                            <div class="ribbon ribbon-bookmark ribbon-default">Genel Test Bilgileri</div>
+                                            <div class="ribbon-button">
+                                                <button ng-click="clicktest()" class="btn btn-danger" data-toggle="modal" data-target=".bs-example-modal-lg">Önizleme</button>
+                                                <button class="btn btn-success" ng-click="postTest()">Testi Tamamla</button>
+                                            </div>
+                                        </div>
                                         <div class="col-md-3 p-l-0 p-t-20">
-                                            <input type="file" id="dropify_{{$index}}" ng-init="initDropify('#dropify_'+$index)" ng-file-select="onFileSelect($files)" ng-model="x.imagePath" class="dropify" data-height="150" />
+                                            <input type="file" id="input-file-now-custom-3" ng-file-select="onFileSelect($files)" ng-model="testData.imagePath" class="dropify" data-height="150" />
                                         </div>
+
                                         <div class="col-md-9 p-t-20">
                                             <div class="media-body">
-                                                <div class="form-group">
-                                                    <input class="form-control" ng-model="x.question" placeholder="ex: Soru - {{$index + 1}}" ng-click="onChangeQuestionName(x)" ng-keydown="$event.keyCode === 13 && onChangeQuestionName(x)" />
+                                                <div class="col-md-6 p-l-0">
+                                                    <div class="form-group">
+                                                        <input type="text" ng-model="testData.header" class="form-control" placeholder="Test Başlığı">
+                                                    </div>
                                                 </div>
-                                                <textarea ng-model="x.description" class="form-control" placeholder="Soru Açıklama" rows="2"></textarea>
-                                                <div class="text-right">
-                                                    <button class="btn btn-danger" ng-click="deleteQuestion(x.guidId)">Sil</button>
-                                                    <button class="btn btn-warning" id="option-panel_{{x.guidId}}_hider" data-count="{{x.questionOptionList.length}}" ng-click="hideOptions('#option-panel_'+x.guidId)">Seçenekleri Gizle ({{x.questionOptionList.length}})</button>
-                                                    <button ng-click="addOptions(x)" class="btn btn-success">Seçenek Ekle</button>
+                                                <div class="col-md-6 p-r-0">
+                                                    <div class="form-group">
+                                                        <input type="text" id="testDataUrl" ng-disabled="true" value="{{RegexSeo(testData.header)}}" class="form-control">
+                                                    </div>
                                                 </div>
-
-
+                                                <textarea ng-model="testData.label" class="form-control" placeholder="Test Açıklama" rows="4"></textarea>&nbsp;
                                             </div>
                                         </div>
-                                        <div class="col-md-12 pl-0 p-t-20 pr-0" id="option-panel_{{x.guidId}}">
-                                            <div class="col-md-12 p-t-40 pr-0" ng-repeat=" y in x.questionOptionList">
-                                                <div class="col-md-1">
-                                                    <div class="ribbon-wrapper" style="background-color:white;">
-                                                        <div class="ribbon ribbon-bookmark ribbon-vertical-l ribbon-default" style="box-shadow:8px 16px 20px 0px black;height:max-content;"><h5 style="writing-mode:vertical-lr;text-orientation:upright;color:white;">Seçenek {{$index+1}}</h5></div>
+                                    </div>
+
+                                    <div class="col-md-12 p-t-40">
+                                        <div class="ribbon-wrapper p-t-40">
+                                            <div class="ribbon ribbon-bookmark ribbon-default">Test Soruları ({{questionList.length}})</div>
+                                            <div class="ribbon-button">
+                                                <button ng-click="addQuestion()" class="btn btn-success">Soru Ekle</button>
+                                            </div>
+                                        </div>
+
+                                        <div ng-repeat="x in questionList">
+                                            <div class="col-md-3 p-l-0 p-t-20">
+                                                <input type="file" id="dropify_{{$index}}" ng-init="initDropify('#dropify_'+$index)" ng-file-select="onFileSelect($files)" ng-model="x.imagePath" class="dropify" data-height="150" />
+                                            </div>
+                                            <div class="col-md-9 p-t-20">
+                                                <div class="media-body">
+                                                    <div class="form-group">
+                                                        <input class="form-control" ng-model="x.question" placeholder="ex: Soru - {{$index + 1}}" ng-click="onChangeQuestionName(x)" ng-keydown="$event.keyCode === 13 && onChangeQuestionName(x)" />
                                                     </div>
+                                                    <textarea ng-model="x.description" class="form-control" placeholder="Soru Açıklama" rows="2"></textarea>
+                                                    <div class="text-right">
+                                                        <button class="btn btn-danger" ng-click="deleteQuestion(x.guidId)">Sil</button>
+                                                        <button class="btn btn-warning" id="option-panel_{{x.guidId}}_hider" data-count="{{x.questionOptionList.length}}" ng-click="hideOptions('#option-panel_'+x.guidId)">Seçenekleri Gizle ({{x.questionOptionList.length}})</button>
+                                                        <button ng-click="addOptions(x)" class="btn btn-success">Seçenek Ekle</button>
+                                                    </div>
+
+
                                                 </div>
-                                                <div class="col-md-11 pr-0">
-                                                    <div class="col-md-3 p-l-0 p-t-20">
-                                                        <input type="file" id="dropify_y_{{$index}}_{{x.guidId}}" ng-init="initDropify('#dropify_y_'+$index+'_'+x.guidId)" ng-file-select="onFileSelect($files)" ng-model="y.imagePath" class="dropify" data-height="150" />
+                                            </div>
+                                            <div class="col-md-12 pl-0 p-t-20 pr-0" id="option-panel_{{x.guidId}}">
+                                                <div class="col-md-12 p-t-40 pr-0" ng-repeat=" y in x.questionOptionList">
+                                                    <div class="col-md-1">
+                                                        <div class="ribbon-wrapper" style="background-color:white;">
+                                                            <div class="ribbon ribbon-bookmark ribbon-vertical-l ribbon-default" style="box-shadow:8px 16px 20px 0px black;height:max-content;"><h5 style="writing-mode:vertical-lr;text-orientation:upright;color:white;">Seçenek {{$index+1}}</h5></div>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-md-9 p-t-20">
-                                                        <div class="media-body">
-                                                            <div class="form-group">
-                                                                <input class="form-control" placeholder="ex: Seçenek - {{$index+1}}" ng-model="y.option" ng-click="onChangeQuestionOption(y)" ng-keydown="$event.keyCode === 13 && onChangeQuestionOption(y)" />
-                                                            </div>
-                                                            <textarea placeholder="Seçenek açıklama" ng-model="y.description" class="form-control" rows="2"></textarea>
-                                                            <div class="input-group col-md-6 p-l-0">
-                                                                <div class="input-group-prepend">
-                                                                    <span class="input-group-text">Puan</span>
+                                                    <div class="col-md-11 pr-0">
+                                                        <div class="col-md-3 p-l-0 p-t-20">
+                                                            <input type="file" id="dropify_y_{{$index}}_{{x.guidId}}" ng-init="initDropify('#dropify_y_'+$index+'_'+x.guidId)" ng-file-select="onFileSelect($files)" ng-model="y.imagePath" class="dropify" data-height="150" />
+                                                        </div>
+                                                        <div class="col-md-9 p-t-20">
+                                                            <div class="media-body">
+                                                                <div class="form-group">
+                                                                    <input class="form-control" placeholder="ex: Seçenek - {{$index+1}}" ng-model="y.option" ng-click="onChangeQuestionOption(y)" ng-keydown="$event.keyCode === 13 && onChangeQuestionOption(y)" />
                                                                 </div>
-                                                                <input class="form-control" type="text" ng-model="y.totalMarks">
-                                                            </div>
-                                                            <div class="text-right">
-                                                                <button class="btn btn-danger" ng-click="deleteOption(x.guidId,y.guidId)">Sil</button>
-                                                            </div>
+                                                                <textarea placeholder="Seçenek açıklama" ng-model="y.description" class="form-control" rows="2"></textarea>
+                                                                <div class="input-group col-md-6 p-l-0">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text">Puan</span>
+                                                                    </div>
+                                                                    <input class="form-control" type="text" ng-model="y.totalMarks">
+                                                                </div>
+                                                                <div class="text-right">
+                                                                    <button class="btn btn-danger" ng-click="deleteOption(x.guidId,y.guidId)">Sil</button>
+                                                                </div>
 
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div class="col-md-12">
-                                            <hr />
-                                        </div>
-                                    </div>
-
-
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
-                                            <div class="modal-dialog modal-xl">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title" id="myLargeModalLabel">{{testData.header}} Önizleme</h4>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                    </div>
-                                                    <div class="modal-body">
-
-                                                        <div class="col-md-12">
-                                                            <img src="{{testData.imagePath}}" class="img-responsive" />
-                                                            <h3>{{testData.header}}</h3>
-                                                            <h4>{{testData.label}}</h4>
-                                                        </div>
-                                                        <div class="col-md-12" ng-repeat="question in testData.questionList">
-                                                            <div class="text-center">
-                                                                <img src="{{question.imagePath}}" class="img-responsive" style="width:50%;" />
-                                                            </div>
-                                                            <div class="col-md-12">
-                                                                <h4><strong>Soru 1:</strong> {{question.question}}</h4>
-                                                                <p>{{question.description}}</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal">Kapat</button>
-                                                    </div>
-                                                </div>
-                                                <!-- /.modal-content -->
+                                            <div class="col-md-12">
+                                                <hr />
                                             </div>
-                                            <!-- /.modal-dialog -->
                                         </div>
-                                        <!-- /.modal -->
-                                    </div>
-                                </div>
 
-                            </div>
 
-                            <div class="tab-pane  p-20" id="testAnswer" role="tabpanel">
-                                <div class="col-md-12 pl-0 pr-0">
-                                    <div class="ribbon-wrapper p-t-40">
-                                        <div class="ribbon ribbon-bookmark ribbon-default">Test Sonuçları ({{questionAnswer.length}})</div>
-                                        <div class="ribbon-button">
-                                            <button ng-click="onAddQuestionAnswer()" class="btn btn-success">Sonuç Ekle</button>
-                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-12 m-t-20">
-                                    <p ng-show="questionAnswer.length == 0">Henüz sonuç girmediniz...</p>
-                                    <div class="col-md-12 white-box" ng-repeat="x in questionAnswer">
+
+                                    <div class="row">
                                         <div class="col-md-4">
-                                            <div class="input-group p-l-0">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text">Başlangıç Puanı</span>
-                                                </div>
-                                                <input class="form-control" type="number" ng-model="x.firstValue">
-                                            </div>
-                                            <div class="input-group p-l-0 p-t-10">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text">Bitiş Puanı</span>
-                                                </div>
-                                                <input class="form-control" type="number" ng-model="x.secondValue">
-                                            </div>
-                                            <button class="btn btn-danger pull-right m-t-10" ng-click="onDeleteQuestionAnswer(x.guidId)">Sil</button>
+                                            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+                                                <div class="modal-dialog modal-xl">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" id="myLargeModalLabel">{{testData.header}} Önizleme</h4>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                        </div>
+                                                        <div class="modal-body">
 
+                                                            <div class="col-md-12">
+                                                                <img src="{{testData.imagePath}}" class="img-responsive" />
+                                                                <h3>{{testData.header}}</h3>
+                                                                <h4>{{testData.label}}</h4>
+                                                            </div>
+                                                            <div class="col-md-12" ng-repeat="question in testData.questionList">
+                                                                <div class="text-center">
+                                                                    <img src="{{question.imagePath}}" class="img-responsive" style="width:50%;" />
+                                                                </div>
+                                                                <div class="col-md-12">
+                                                                    <h4><strong>Soru 1:</strong> {{question.question}}</h4>
+                                                                    <p>{{question.description}}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal">Kapat</button>
+                                                        </div>
+                                                    </div>
+                                                    <!-- /.modal-content -->
+                                                </div>
+                                                <!-- /.modal-dialog -->
+                                            </div>
+                                            <!-- /.modal -->
                                         </div>
-                                        <div class="col-md-8">
-                                            <textarea id="ckeditorForAnswer_{{x.guidId}}" ng-init="initCK('ckeditorForAnswer_'+x.guidId)"></textarea>
+                                    </div>
+
+                                </div>
+
+                                <div class="tab-pane  p-20" id="testAnswer" role="tabpanel">
+                                    <div class="col-md-12 pl-0 pr-0">
+                                        <div class="ribbon-wrapper p-t-40">
+                                            <div class="ribbon ribbon-bookmark ribbon-default">Test Sonuçları ({{questionAnswer.length}})</div>
+                                            <div class="ribbon-button">
+                                                <button ng-click="onAddQuestionAnswer()" class="btn btn-success">Sonuç Ekle</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 m-t-20">
+                                        <p ng-show="questionAnswer.length == 0">Henüz sonuç girmediniz...</p>
+                                        <div class="col-md-12 white-box" ng-repeat="x in questionAnswer">
+                                            <div class="col-md-4">
+                                                <div class="input-group p-l-0">
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">Başlangıç Puanı</span>
+                                                    </div>
+                                                    <input class="form-control" type="number" ng-model="x.firstValue">
+                                                </div>
+                                                <div class="input-group p-l-0 p-t-10">
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">Bitiş Puanı</span>
+                                                    </div>
+                                                    <input class="form-control" type="number" ng-model="x.secondValue">
+                                                </div>
+                                                <button class="btn btn-danger pull-right m-t-10" ng-click="onDeleteQuestionAnswer(x.guidId)">Sil</button>
+
+                                            </div>
+                                            <div class="col-md-8">
+                                                <textarea id="ckeditorForAnswer_{{x.guidId}}" ng-init="initCK('ckeditorForAnswer_'+x.guidId)"></textarea>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="right-sidebar">
-                    <div class="slimscrollright">
-                        <div class="rpanel-title"> Service Panel <span><i class="ti-close right-side-toggle"></i></span> </div>
-                        <div class="r-panel-body">
-                            <ul id="themecolors" class="m-t-20">
-                                <li><b>With Light sidebar</b></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-default" class="default-theme working">1</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-green" class="green-theme">2</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-red" class="red-theme">3</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-blue" class="blue-theme">4</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-purple" class="purple-theme">5</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-megna" class="megna-theme">6</a></li>
-                                <li class="d-block m-t-30"><b>With Dark sidebar</b></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-default-dark" class="default-dark-theme ">7</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-green-dark" class="green-dark-theme">8</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-red-dark" class="red-dark-theme">9</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-blue-dark" class="blue-dark-theme">10</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-purple-dark" class="purple-dark-theme">11</a></li>
-                                <li><a href="javascript:void(0)" data-skin="skin-megna-dark" class="megna-dark-theme ">12</a></li>
-                            </ul>
-                            <ul class="m-t-20 chatonline">
-                                <li><b>Chat option</b></li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"> <span>Varun Dhavan <small class="text-success">online</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/2.jpg" alt="user-img" class="img-circle"> <span>Genelia Deshmukh <small class="text-warning">Away</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/3.jpg" alt="user-img" class="img-circle"> <span>Ritesh Deshmukh <small class="text-danger">Busy</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/4.jpg" alt="user-img" class="img-circle"> <span>Arijit Sinh <small class="text-muted">Offline</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/5.jpg" alt="user-img" class="img-circle"> <span>Govinda Star <small class="text-success">online</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/6.jpg" alt="user-img" class="img-circle"> <span>John Abraham<small class="text-success">online</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/7.jpg" alt="user-img" class="img-circle"> <span>Hritik Roshan<small class="text-success">online</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="~/Template/assets/images/users/8.jpg" alt="user-img" class="img-circle"> <span>Pwandeep rajan <small class="text-success">online</small></span></a>
-                                </li>
-                            </ul>
+                    <div class="right-sidebar">
+                        <div class="slimscrollright">
+                            <div class="rpanel-title"> Service Panel <span><i class="ti-close right-side-toggle"></i></span> </div>
+                            <div class="r-panel-body">
+                                <ul id="themecolors" class="m-t-20">
+                                    <li><b>With Light sidebar</b></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-default" class="default-theme working">1</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-green" class="green-theme">2</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-red" class="red-theme">3</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-blue" class="blue-theme">4</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-purple" class="purple-theme">5</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-megna" class="megna-theme">6</a></li>
+                                    <li class="d-block m-t-30"><b>With Dark sidebar</b></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-default-dark" class="default-dark-theme ">7</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-green-dark" class="green-dark-theme">8</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-red-dark" class="red-dark-theme">9</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-blue-dark" class="blue-dark-theme">10</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-purple-dark" class="purple-dark-theme">11</a></li>
+                                    <li><a href="javascript:void(0)" data-skin="skin-megna-dark" class="megna-dark-theme ">12</a></li>
+                                </ul>
+                                <ul class="m-t-20 chatonline">
+                                    <li><b>Chat option</b></li>
+                                    <li>
+                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"> <span>Varun Dhavan <small class="text-success">online</small></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/2.jpg" alt="user-img" class="img-circle"> <span>Genelia Deshmukh <small class="text-warning">Away</small></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/3.jpg" alt="user-img" class="img-circle"> <span>Ritesh Deshmukh <small class="text-danger">Busy</small></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/4.jpg" alt="user-img" class="img-circle"> <span>Arijit Sinh <small class="text-muted">Offline</small></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/5.jpg" alt="user-img" class="img-circle"> <span>Govinda Star <small class="text-success">online</small></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/6.jpg" alt="user-img" class="img-circle"> <span>John Abraham<small class="text-success">online</small></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/7.jpg" alt="user-img" class="img-circle"> <span>Hritik Roshan<small class="text-success">online</small></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/8.jpg" alt="user-img" class="img-circle"> <span>Pwandeep rajan <small class="text-success">online</small></span></a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
+                    <!-- ============================================================== -->
+                    <!-- End Right sidebar -->
+                    <!-- ============================================================== -->
                 </div>
                 <!-- ============================================================== -->
-                <!-- End Right sidebar -->
+                <!-- End Container fluid  -->
                 <!-- ============================================================== -->
             </div>
-            <!-- ============================================================== -->
-            <!-- End Container fluid  -->
-            <!-- ============================================================== -->
         </div>
     </div>
-</div>
-
+</body>
 
 
 <style>
