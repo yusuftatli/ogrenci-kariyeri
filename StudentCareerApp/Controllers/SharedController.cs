@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SCA.BLLServices;
+using SCA.Entity.Dto;
 using SCA.Entity.DTO;
 using SCA.Entity.Model;
 using SCA.Services;
@@ -43,6 +45,7 @@ namespace SCA.UI.Controllers
         {
             return PartialView();
         }
+
 
         [AllowAnonymous]
         [HttpPost]

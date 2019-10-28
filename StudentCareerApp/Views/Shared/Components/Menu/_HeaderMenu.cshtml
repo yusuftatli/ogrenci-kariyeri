@@ -1,0 +1,36 @@
+﻿@model List<SCA.Entity.Dto.MainCategoryDto>
+
+<ul class="nav-menu">
+    <li class="active">
+        <a href="@Url.Action("Index", "Home")">ANASAYFA</a>
+    </li>
+    @foreach (var x in Model.Where(y => y.ParentId == null))
+    {
+        <li>
+            <a href="#">@x.Description</a>
+            <div class="megamenu-panel ts-mega-menu">
+                <div class="megamenu-lists">
+                    <ul class="megamenu-list list-col-2">
+                        @foreach (var y in Model.Where(y=>y.ParentId == x.Id).Take(Model.Where(y=>y.ParentId == x.Id).Count() / 2))
+                        {
+                            <li>
+                                <a href="index.html">@y.Description</a>
+                            </li>
+                        }
+                    </ul>
+                    <ul class="megamenu-list list-col-2" data-count="">
+                        @foreach (var y in Model.Where(y=>y.ParentId == x.Id).Skip(Model.Where(y=>y.ParentId == x.Id).Count() / 2))
+                        {
+                            <li>
+                                <a href="business.html">@y.Description</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </li>
+    }
+    <li>
+        <a href="#">İLETİŞİM</a>
+    </li>
+</ul>

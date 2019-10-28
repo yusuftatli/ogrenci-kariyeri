@@ -36,7 +36,7 @@ namespace SCA.Services
             ServiceResult res = new ServiceResult();
             try
             {
-                string query = "select * from Category where Id=@_Id";
+                string query = "select * from Category where ParentId=@_Id";
                 DynamicParameters filter = new DynamicParameters();
                 filter.Add("_Id", id);
                 var lisData = await _db.QueryAsync<MainCategoryDto>(query, filter) as List<MainCategoryDto>;
@@ -154,7 +154,7 @@ namespace SCA.Services
 
             if (crudType == CrudType.Insert)
             {
-                query = $"Insert Into Category (Description,IsActive,CreatedUserId,CreatedDate) VALUES({dto.Description},{true},{session.Id},{DateTime.Now})";
+                query = $"Insert Into Category (Description,IsActive,CreatedUserId,CreatedDate) VALUES({dto.Description},{true},{session.Id},{DateTime.Now.ToString()})";
             }
 
             if (crudType == CrudType.Update)

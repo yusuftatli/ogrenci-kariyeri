@@ -58,7 +58,19 @@ namespace SCA.DapperRepository.Generic
             var expBody = "";
             if (predicate != null)
             {
-                expBody = new CustomVisitor().Visit(predicate.Body).ToString().Replace("AndAlso", "AND").Replace("OrElse", "OR").Replace("==", "=").Replace("Convert(", "").Replace(", Int32)", "");
+                try
+                {
+
+                expBody = new CustomVisitor().Visit(predicate.Body).ToString()
+                    .Replace("AndAlso", "AND")
+                    .Replace("OrElse", "OR")
+                    .Replace("==", "=")
+                    .Replace("Convert(", "")
+                    .Replace(", Int32)", "")
+                    .Replace("= null", "is null")
+                    .Replace(", Nullable`1)", "");
+                }
+                catch(Exception ex) { }
                 if (!string.IsNullOrEmpty(expBody))
                     expBody = "WHERE " + expBody.Replace(predicate.Parameters[0].Name + ".", "");
             }
