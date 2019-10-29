@@ -8,16 +8,18 @@
 
 
 
-<head>
-    <link href="~/Template/dist/css/style.min.css" rel="stylesheet">
-    <link href="~/Template/assets/node_modules/morrisjs/morris.css" rel="stylesheet">
-    <link href="~/Template/dist/css/pages/dashboard1.css" rel="stylesheet">
-    <script src="~/Template/assets/node_modules/raphael/raphael-min.js"></script>
-    <script src="~/Template/assets/node_modules/morrisjs/morris.min.js"></script>
-    <script src="~/Template/assets/node_modules/jquery-sparkline/jquery.sparkline.min.js"></script>
-</head>
+    <head>
+        <link href="~/Template/dist/css/style.min.css" rel="stylesheet">
+        <script src="~/ScriptController/Dashboard/MinimalController.js"></script>
 
-<body ng-app="MyApp" ng-controller="MinimalController">
+        <link href="~/Template/assets/node_modules/morrisjs/morris.css" rel="stylesheet">
+        <link href="~/Template/dist/css/pages/dashboard1.css" rel="stylesheet">
+        <script src="~/Template/assets/node_modules/raphael/raphael-min.js"></script>
+        <script src="~/Template/assets/node_modules/morrisjs/morris.min.js"></script>
+        <script src="~/Template/assets/node_modules/jquery-sparkline/jquery.sparkline.min.js"></script>
+    </head>
+
+<div ng-app="MyApp" ng-controller="MinimalController">
     <aside class="left-sidebar">
         <!-- Sidebar scroll-->
         <div class="scroll-sidebar">
@@ -835,5 +837,4 @@
         <!-- ============================================================== -->
     </div>
 
-</body>
-<script src="~/ScriptController/Dashboard/MinimalController.js"></script>
+</div>
