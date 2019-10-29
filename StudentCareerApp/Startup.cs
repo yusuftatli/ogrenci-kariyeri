@@ -153,6 +153,8 @@ namespace StudentCareerApp
             services.AddTransient<ICompanyClub<SCA.Entity.Entities.CompanyClubs>, CompanyClubRepository>();
             services.AddTransient<ISocialMedia<SCA.Entity.Entities.SocialMedia>, SocialMediaRepository>();
             services.AddTransient<ISocialMediaService<SCA.Entity.Entities.SocialMedia>, SocialMediaService>();
+            services.AddTransient<ICategory<SCA.Entity.Entities.Category>, CategoryRepository>();
+            services.AddTransient<ICategoryService<SCA.Entity.Entities.Category>, CategoryService>();
 
             //generic services
             services.AddSingleton(typeof(IGenericService<>), typeof(GenericService<>));
