@@ -1,4 +1,5 @@
-﻿@model List<SCA.Entity.DTO.ContentForHomePageDTO>
+﻿@using SCA.Common;
+@model List<SCA.Entity.DTO.ContentForHomePageDTO>
 
 @if (!Model.Equals(null) && Model.Count > 0)
 {
@@ -13,7 +14,7 @@
                 <div class="ts-grid-box ts-grid-content">
                     @if (!string.IsNullOrEmpty(x.Category))
                     {
-                        <a class="post-cat ts-green-bg" href="@Url.Action("Index", "Category")">@x.Category</a>
+                        <a class="post-cat ts-green-bg" href="@Url.Action("Index", "Category", new { id = x.Category.Split(',')[0].ToString(), seoUrl = x.CategoryName.FriendlyUrl()})">@x.CategoryName</a>
                     }
                     <div class="ts-post-thumb">
                         <a href="@Url.Action("Index", "Blog", new { x.SeoUrl })">

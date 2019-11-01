@@ -11,6 +11,7 @@ namespace SCA.Entity.DTO
         public string Header { get; set; }
         public DateTime PublishDate { get; set; }
         public string Category { get; set; }
+        public string CategoryName { get; set; }
         public bool IsHeadLine { get; set; }
         public bool IsManset { get; set; }
         public string Writer { get; set; }

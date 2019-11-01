@@ -1,4 +1,5 @@
 ﻿@model List<SCA.Entity.DTO.ContentForHomePageDTO>
+@using SCA.Common;
 
 @if (!Model.Equals(null) && Model.Count > 0)
 {
@@ -14,7 +15,7 @@
                             <div class="item" style="background-image: url(@x.ImagePath)">
                                 @if (!string.IsNullOrEmpty(x.Category))
                                 {
-                                    <a class="post-cat ts-orange-bg" href="@Url.Action("Index", "Category", new { x.SeoUrl })">@x.Category</a>
+                                    <a class="post-cat ts-orange-bg" href="@Url.Action("Index", "Category", new { id = x.Category.Split(',')[0].ToString(), seoUrl = x.CategoryName.FriendlyUrl()})">@x.CategoryName</a>
                                 }
                                 <div class="overlay-post-content">
                                     <div class="post-content">

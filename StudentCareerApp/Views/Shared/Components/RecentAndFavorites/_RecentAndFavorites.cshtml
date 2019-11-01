@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Http;
+@using SCA.Common;
 
 @model SCA.Entity.DTO.RecentAndFavoritesContentForUIDto
 
@@ -37,9 +38,12 @@
                     <div class="post-content media">
                         <img class="d-flex sidebar-img" src="@x.ImagePath" alt="Öğrenci Kariyeri - @x.Header">
                         <div class="media-body">
-                            <span class="post-tag">
-                                <a href="#" class="green-color">@x.Category</a>
-                            </span>
+                            @if (!string.IsNullOrEmpty(x.Category))
+                            {
+                                <span class="post-tag">
+                                    <a href="@Url.Action("Index", "Category", new { id = x.Category.Split(',')[0].ToString(), seoUrl = x.CategoryName.FriendlyUrl()})" class="green-color">@x.CategoryName</a>
+                                </span>
+                            }
                             <h4 class="post-title">
                                 <a href="@Url.Action("Index", "Blog", new { SeoUrl = x.SeoUrl })">@x.Header</a>
                             </h4>
@@ -54,9 +58,12 @@
                     <div class="post-content media">
                         <img class="d-flex sidebar-img" src="@x.ImagePath" alt="Öğrenci Kariyeri - @x.Header">
                         <div class="media-body">
-                            <span class="post-tag">
-                                <a href="#" class="green-color">@x.Category</a>
-                            </span>
+                            @if (!string.IsNullOrEmpty(x.Category))
+                            {
+                                <span class="post-tag">
+                                    <a href="@Url.Action("Index", "Category", new { id = x.Category.Split(',')[0].ToString(), seoUrl = x.CategoryName.FriendlyUrl()})" class="green-color">@x.CategoryName</a>
+                                </span>
+                            }
                             <h4 class="post-title">
                                 <a href="@Url.Action("Index", "Blog", new { SeoUrl = x.SeoUrl })">@x.Header</a>
                             </h4>
