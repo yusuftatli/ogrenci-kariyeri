@@ -10,15 +10,12 @@
                 <div class="tab-content featured-post" id="nav-tabContent">
                     @foreach (var x in Model)
                     {
-                        <div class="tab-pane ts-overlay-style fade @(Model.First().SeoUrl == x.SeoUrl ? "show active" : "") " id="nav-@x.SeoUrl" role="tabpanel" aria-labelledby="nav-@x.SeoUrl-tab">
+                        <div class="tab-pane ts-overlay-style fade @(Model.First().SeoUrl == x.SeoUrl ? "show active" : "") " id="nav-@x.SeoUrl" role="tabpanel" aria-labelledby="nav-@x.SeoUrl-tab" onclick="window.location.href='@Url.Action("Index", "Blog", new { x.SeoUrl})'" style="cursor:pointer;">
                             <div class="item" style="background-image: url(@x.ImagePath)">
                                 @if (!string.IsNullOrEmpty(x.Category))
                                 {
                                     <a class="post-cat ts-orange-bg" href="@Url.Action("Index", "Category", new { x.SeoUrl })">@x.Category</a>
                                 }
-                                <a href="https://www.youtube.com/watch?v=_0UO1NcheAE" class="ts-video-btn">
-                                    <i class="fa fa-play-circle-o"></i>
-                                </a>
                                 <div class="overlay-post-content">
                                     <div class="post-content">
                                         <h3 class="post-title md">
