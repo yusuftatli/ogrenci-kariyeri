@@ -29,7 +29,7 @@ namespace StudentCareerApp.Areas.Api.Controller
         [HttpGet("MainCategoryListWithParents")]
         public async Task<ServiceResult> MainCategoryListWithParents()
         {
-            var res = await _categoryService.GetByWhereParams<MainCategoryDto>(x => x.IsActive == true && x.ParentId == null);
+            var res = await _categoryService.GetByWhereParams<MainCategoryDto>(x => x.IsActive == true);
             return res;
         }
 
