@@ -1,35 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Cors.Infrastructure;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using SCA.BLLServices;
 using SCA.BLLServices.Generic;
 using SCA.DapperRepository;
 using SCA.DapperRepository.Generic;
 using SCA.DataAccess.Context;
-using SCA.Entity.Dto;
-using SCA.Entity.DTO;
-using SCA.Entity.DTO.ErrorDb;
 using SCA.Entity.Entities;
 using SCA.Entity.Model;
 using SCA.Services;
@@ -157,6 +144,8 @@ namespace StudentCareerApp
             services.AddTransient<ICategoryService<SCA.Entity.Entities.Category>, CategoryService>();
             services.AddTransient<IContent<SCA.Entity.Entities.Content>, ContentRepository>();
             services.AddTransient<IContentService<SCA.Entity.Entities.Content>, ContentService>();
+            services.AddTransient<IImageGalery<SCA.Entity.Entities.ImageGalery>, ImageGaleryRepository>();
+            services.AddTransient<IImageGaleryService<SCA.Entity.Entities.ImageGalery>, ImageGaleryService>();
 
             //generic services
             services.AddSingleton(typeof(IGenericService<>), typeof(GenericService<>));

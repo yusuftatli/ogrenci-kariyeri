@@ -1,0 +1,43 @@
+﻿<style>
+    body > div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.ui-draggable.ui-resizable {
+        z-index: 9999 !important;
+    }
+
+    #toast-container > .toast-info {
+        background-image: unset !important;
+    }
+</style>
+
+<div id="vue-company-images">
+    <div class="modal-body">
+        <div class="form-group col-md-12">
+            <div id="company-dropzone" class="dropzone" />
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Başlık</th>
+                        <th class="text-right">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="x in images">
+                        <td><img :src="x.imagePath" style="width: 100px" class="img-responsive" /></td>
+                        <td class="text-right">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary" v-on:click="deleteImage(x.imagePath, x.id)"><i class="fa fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" v-on:click="addImage()">Kaydet</button>
+    </div>
+    <span class="hidden" id="image-info-area" data-company="@ViewBag.CompanyId" data-company-name="@ViewBag.CompanyName"></span>
+</div>
+
+<script src="~/Template/PViews/Company/companyImage.js"></script>
