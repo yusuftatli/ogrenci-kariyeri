@@ -9,14 +9,29 @@
 
 
     <head>
-        <!--c3 CSS -->
-        <link href="~/Template/assets/node_modules/morrisjs/morris.css" rel="stylesheet">
-
-        <link href="~/Template/dist/css/pages/easy-pie-chart.css" rel="stylesheet">
-        <!-- Custom CSS -->
-        <!-- Dashboard 1 Page CSS -->
-        <link href="~/Template/dist/css/pages/dashboard2.css" rel="stylesheet">
         <link href="~/Template/dist/css/style.min.css" rel="stylesheet">
+
+        <link href="~/Template/assets/node_modules/morrisjs/morris.css" rel="stylesheet">
+        <link href="~/Template/assets/node_modules/vectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
+        <link href="~/Template/dist/css/pages/easy-pie-chart.css" rel="stylesheet">
+        <link href="~/Template/dist/css/pages/dashboard2.css" rel="stylesheet">
+        <script src="~/Template/assets/node_modules/jquery/jquery-3.2.1.min.js"></script>
+        <script src="~/Template/assets/node_modules/popper/popper.min.js"></script>
+        <script src="~/Template/assets/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="~/Template/dist/js/perfect-scrollbar.jquery.min.js"></script>
+        <script src="~/Template/dist/js/waves.js"></script>
+        <script src="~/Template/dist/js/sidebarmenu.js"></script>
+        <script src="~/Template/dist/js/custom.min.js"></script>
+        <script src="~/Template/assets/node_modules/flot/jquery.flot.js"></script>
+        <script src="~/Template/assets/node_modules/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
+        <script src="~/Template/assets/node_modules/sparkline/jquery.sparkline.min.js"></script>
+        <script src="~/Template/dist/js/dashboard2.js"></script>
+        <script src="~/AdminFiles/Template/assets/node_modules/jquery.easy-pie-chart/dist/jquery.easypiechart.min.js"></script>
+        <script src="~/AdminFiles/Template/assets/node_modules/vectormap/jquery-jvectormap-2.0.2.min.js"></script>
+        <script src="~/AdminFiles/Template/assets/node_modules/vectormap/jquery-jvectormap-world-mill-en.js"></script>
+        <script src="~/AdminFiles/Template/assets/node_modules/jquery.easy-pie-chart/easy-pie-chart.init.js"></script>
+
+        <script src="~/ScriptController/Dashboard/AnalyticalController.js"></script>
 
     </head>
 
@@ -66,13 +81,13 @@
             <!-- ============================================================== -->
             <div class="row page-titles">
                 <div class="col-md-5 align-self-center">
-                    <h4 class="text-themecolor">Dashboard 2</h4>
+                    <h4 class="text-themecolor">Analytical</h4>
                 </div>
                 <div class="col-md-7 align-self-center text-right">
                     <div class="d-flex justify-content-end align-items-center">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                            <li class="breadcrumb-item active">Dashboard 2</li>
+                            <li class="breadcrumb-item active">Analytical</li>
                         </ol>
                         <button type="button" class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i> Create New</button>
                     </div>
@@ -399,15 +414,4 @@
         <!-- ============================================================== -->
     </div>
 </body>
-<script src="~/ScriptController/Dashboard/AnalyticalController.js"></script>
 
-<script src="~/Template/assets/node_modules/flot/jquery.flot.js"></script>
-<script src="~/Template/assets/node_modules/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
-<!--sparkline JavaScript -->
-<script src="~/Template/assets/node_modules/sparkline/jquery.sparkline.min.js"></script>
-<!-- EASY PIE CHART JS -->
-<script src="~/Template/assets/node_modules/jquery.easy-pie-chart/dist/jquery.easypiechart.min.js"></script>
-<script src="~/Template/assets/node_modules/jquery.easy-pie-chart/easy-pie-chart.init.js"></script>
-<!-- Vector map JavaScript -->
-<script src="~/Template/assets/node_modules/vectormap/jquery-jvectormap-2.0.2.min.js"></script>
-<script src="~/Template/assets/node_modules/vectormap/jquery-jvectormap-world-mill-en.js"></script>

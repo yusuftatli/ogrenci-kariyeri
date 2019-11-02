@@ -1,4 +1,4 @@
-﻿var prodType = "d";//d,p
+﻿var prodType = "p";//d,p
 var _link = '';
 var _domain = "";
 
@@ -9,7 +9,7 @@ if (prodType === "d") {
     _domain = "https://localhost:44308";
 } else {
     _link = _domain + "/api";
-    _domain = "https://localhost:44308";
+    _domain = "http://167.71.46.71";
 }
 
 var ContentType_ = "application/x-www-form-urlencoded; charset=utf-8;application/json";
