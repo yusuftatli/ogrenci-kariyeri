@@ -1,4 +1,27 @@
-﻿
+﻿$(document).ready(function(){
+    CKEDITOR.replace('ckeditorForAssayContent');
+
+    $("#publishHour").clockpicker({
+        placement: 'top',
+        align: 'left',
+        autoclose: true,
+        'default': 'now'
+    });
+
+    $("#searchStartDate").datepicker({
+        format: 'dd.mm.yyyy'
+    });
+    $("#searchEndDate").datepicker({
+        format: 'dd.mm.yyyy'
+    })
+
+    $("#publishDate").datepicker({
+        format: 'dd.mm.yyyy'
+    });
+})
+
+
+
 var app = angular.module("MyApp", ["ui.bootstrap", "ngVue"]);
 
 app.controller("assayController", function ($scope, $http, $filter) {
