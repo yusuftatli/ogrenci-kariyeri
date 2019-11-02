@@ -3,13 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using SCA.BLLServices;
 using SCA.Entity.DTO;
+using SCA.Entity.Entities;
+using SCA.Entity.SPModels.SPResult;
 
 namespace SCA.UI.Controllers
 {
     public class AuthorController : Controller
     {
-        [Route("editor")]
+        private readonly ICompanyClubService<CompanyClubs> _companyClubService;
+        private readonly IContentService<Content> _contentService;
+
+        public AuthorController(ICompanyClubService<CompanyClubs> companyClubService, IContentService<Content> contentService)
+        {
+            _companyClubService = companyClubService;
+            _contentService = contentService;
+        }
+
         public IActionResult Editor()
         {
             var model = FakeContentList();
@@ -120,15 +131,22 @@ namespace SCA.UI.Controllers
         }
 
         [Route("{seoUrl}")]
-        public IActionResult Company(string seoUrl)
+        public async Task<IActionResult> Company(string seoUrl)
         {
             ViewBag.SeoUrl = seoUrl;
-            var model = FakeContentList();
-            return View(model);
+            var res = await _companyClubService.GetByWhereParams<CompanyClubs>(x => x.SeoUrl == seoUrl);
+            var company = ((List<CompanyClubs>)res.Data).FirstOrDefault();
+            ViewBag.CompanyId = company.Id;
+            var @params = new
+            {
+                userId = company.UserId,
+                count = 20
+            };
+            var model = await _contentService.SPQueryAsync<object, ContentForHomePageDTO>(@params, "GetUserContents");
+            return View(model.Data as List<ContentForHomePageDTO>);
         }
 
 
-        [Route("firma")]
         public IActionResult Agent()
         {
             return View();

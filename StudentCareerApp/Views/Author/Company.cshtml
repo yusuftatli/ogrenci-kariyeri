@@ -31,7 +31,7 @@
 
 @await  Component.InvokeAsync("CompanyClubHeader", new { seoUrl = ViewBag.SeoUrl})
 
-@await  Component.InvokeAsync("ImageGalery")
+@await  Component.InvokeAsync("ImageGalery", new { companyClubId = ViewBag.CompanyId})
 
 @await  Component.InvokeAsync("Anouncement", new { seoUrl = ViewBag.SeoUrl})
 

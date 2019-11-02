@@ -53,6 +53,7 @@
         addOrUpdateCompany: function(){
             this.company.headerImage = $("#roxyFieldAnnouncement")[0].value;
             this.company.id = this.companyId;
+            this.company.seoUrl = this.regexSeo(this.company.shortName);
             $.ajax({
                 url: this.urls.addOrUpdateCompany,
                 type: 'post',

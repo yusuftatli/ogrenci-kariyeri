@@ -25,15 +25,32 @@
             })
         },
         deleteImage: function(path, id){
-            $.ajax({
-                url: this.urls.deleteCompanyImage,
-                data: {path: path, id: id},
-                type: 'post',
-                success: function(){
-                    if (res.resultCode == 200)
-                        toastr["success"]("Silme işlemi başarılı!");
+            self = this;
+            swal.fire({
+                title: 'Şirket fotoğrafını silmek üzeresiniz!',
+                text: 'Bu fotoğrafı sildiğiniz taktirde şirketin sayfasına giriş yapan kullanıcılar ilgili fotoğrafı göremeyecektir. Yine de silmek istiyor musunuz?',
+                imageUrl: path,
+                showCancelButton: true,
+                confirmButtonCoolor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sil!',
+                calcelButtonText: 'İptal'
+            }).then((result) => {
+                if(result.value){
+                    $.ajax({
+                        url: this.urls.deleteCompanyImage,
+                        data: {path: path, id: id},
+                        type: 'post',
+                        success: function(res){
+                            if (res.resultCode == 200){
+                                toastr["success"]("Silme işlemi başarılı!");
+                                self.getCompanyImages();
+                            }
+                        }
+                    })
                 }
             })
+           
         }
     }
 })

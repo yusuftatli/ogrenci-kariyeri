@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SCA.BLLServices;
 using SCA.Entity.DTO;
 using System;
 using System.Collections.Generic;
@@ -9,43 +10,17 @@ namespace StudentCareerApp.Components.ImageGalery
 {
     public class ImageGaleryViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke(List<ImageGaleryDto> model = null)
+        private readonly IImageGaleryService<SCA.Entity.Entities.ImageGalery> _imageGaleryService;
+
+        public ImageGaleryViewComponent(IImageGaleryService<SCA.Entity.Entities.ImageGalery> imageGaleryService)
         {
-            var returnModel = model ?? FakeData();
-            return View("_ImageGalery", returnModel);
+            _imageGaleryService = imageGaleryService;
         }
 
-        private List<ImageGaleryDto> FakeData()
+        public async Task<IViewComponentResult> InvokeAsync(long companyClubId)
         {
-            return new List<ImageGaleryDto>
-            {
-                new ImageGaleryDto
-                {
-                    ImagePath = "/images/kampanya-1.jpg"
-                },
-                new ImageGaleryDto
-                {
-                    ImagePath = "/images/kampanya-2.jpg"
-                },
-                new ImageGaleryDto
-                {
-                    ImagePath = "/images/kampanya-3.jpg"
-                },
-                new ImageGaleryDto
-                {
-                    ImagePath = "/images/kampanya-4.png"
-                },
-                new ImageGaleryDto
-                {
-                    ImagePath = "/images/kampanya-5.png"
-                },
-                new ImageGaleryDto
-                {
-                    ImagePath = "/images/kampanya-6.jpg"
-                }
-            };
+            var returnModel = await _imageGaleryService.GetByWhereParams<ImageGaleryDto>(x => x.CompanyClubId == companyClubId && x.IsActive == true);
+            return View("_ImageGalery", returnModel.Data as List<ImageGaleryDto>);
         }
-
-
     }
 }

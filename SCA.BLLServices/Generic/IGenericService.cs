@@ -27,7 +27,7 @@ namespace SCA.BLLServices.Generic
 
         Task<ServiceResult> SPExecuteScalarAsync<T>(T model) where T : class;
 
-        Task<ServiceResult> SPQueryAsync<TRequest, TResult>(TRequest model) where TRequest : class where TResult : class;
+        Task<ServiceResult> SPQueryAsync<TRequest, TResult>(TRequest model, string procedureName = null) where TRequest : class where TResult : class;
 
         Task<ServiceResult> SPQueryFirstOrDefaultAsync<TRequest, TResult>(TRequest model) where TRequest : class where TResult : class;
     }
