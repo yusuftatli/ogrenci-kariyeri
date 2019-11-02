@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SCA.BLLServices;
 using SCA.Entity.DTO;
+using SCA.Entity.Entities;
+using SCA.Entity.SPModels.SPResult;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,65 +12,18 @@ namespace StudentCareerApp.Components.SidebarComponents.PopularCategories
 {
     public class PopularCategoriesViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke()
+
+        private readonly ICategoryService<Category> _categoryService;
+
+        public PopularCategoriesViewComponent(ICategoryService<Category> categoryService)
         {
-            var fakeData = FakeData();
-            return View("_PopularCategories", fakeData);
+            _categoryService = categoryService;
         }
 
-        private List<PopularCategoriesDto> FakeData()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
-            return new List<PopularCategoriesDto>
-            {
-                new PopularCategoriesDto
-                {
-                    Description = "Teknoloji",
-                    SeoUrl = "teknoloji",
-                    UsingCount = 26
-                },
-                new PopularCategoriesDto
-                {
-                    Description = "Sağlık",
-                    SeoUrl = "saglik",
-                    UsingCount = 7
-                },
-                new PopularCategoriesDto
-                {
-                    Description = "Spor",
-                    SeoUrl = "spor",
-                    UsingCount = 21
-                },
-                new PopularCategoriesDto
-                {
-                    Description = "Tarih",
-                    SeoUrl = "tarih",
-                    UsingCount = 20
-                },
-                new PopularCategoriesDto
-                {
-                    Description = "Bilim",
-                    SeoUrl = "bilim",
-                    UsingCount = 34
-                },
-                new PopularCategoriesDto
-                {
-                    Description = "Eğitim",
-                    SeoUrl = "egitim",
-                    UsingCount = 43
-                },
-                new PopularCategoriesDto
-                {
-                    Description = "İş",
-                    SeoUrl = "is",
-                    UsingCount = 10
-                },
-                new PopularCategoriesDto
-                {
-                    Description = "Seyahat",
-                    SeoUrl = "seyahat",
-                    UsingCount = 6
-                }
-            };
+            var res = await _categoryService.SPQueryAsync<object, GetCategoryUsings>(null);
+            return View("_PopularCategories", res.Data as List<GetCategoryUsings>);
         }
     }
 }

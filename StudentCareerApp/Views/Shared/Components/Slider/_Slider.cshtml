@@ -1,5 +1,6 @@
-﻿@model SCA.Entity.DTO.SliderContentDto
+﻿@using SCA.Common;
 
+@model SCA.Entity.DTO.SliderContentDto
 
 <style>
     .slider-dot-item {
@@ -67,7 +68,7 @@
                                     <div class="hero-content">
                                         @if (!string.IsNullOrEmpty(x.Category))
                                         {
-                                            <a href="#" class="post-cat">@x.Category</a>
+                                            <a href="@Url.Action("Index", "Category", new { id = x.Category.Split(',')[0].ToString(), seoUrl = x.CategoryName.FriendlyUrl()})" class="post-cat">@x.CategoryName</a>
                                         }
                                         <h2>
                                             @x.Header
@@ -94,7 +95,7 @@
             <div class="item" style="background-image: url(@Model.TopContent.ImagePath); cursor: pointer;" id="hrefContent" onclick="window.location.href = '@Url.Action("Index", "Blog", new { seoUrl = Model.TopContent.SeoUrl})'">
                 @if (!string.IsNullOrEmpty(Model.TopContent.Category))
                 {
-                    <a class="post-cat ts-pink-bg" href="#">@Model.TopContent.Category</a>
+                    <a class="post-cat ts-pink-bg" href="@Url.Action("Index", "Category", new { id = Model.TopContent.Category.Split(',')[0].ToString(), seoUrl = Model.TopContent.CategoryName.FriendlyUrl()})">@Model.TopContent.CategoryName</a>
                 }
                 <div class="overlay-post-content">
                     <div class="post-content">
@@ -122,7 +123,7 @@
             <div class="item" style="background-image: url(@Model.BottomContent.ImagePath); cursor: pointer;" onclick="window.location.href = '@Url.Action("Index", "Blog", new { seoUrl = Model.BottomContent.SeoUrl})'">
                 @if (!string.IsNullOrEmpty(Model.BottomContent.Category))
                 {
-                    <a class="post-cat ts-green-bg" href="#">@Model.BottomContent.Category</a>
+                    <a class="post-cat ts-green-bg" href="@Url.Action("Index", "Category", new { id = Model.BottomContent.Category.Split(',')[0].ToString(), seoUrl = Model.BottomContent.CategoryName.FriendlyUrl()})">@Model.BottomContent.CategoryName</a>
                 }
                 <div class="overlay-post-content">
                     <div class="post-content">
