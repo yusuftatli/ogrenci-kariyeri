@@ -25,7 +25,7 @@ namespace SCA.Services
         private readonly IApiManager _apiService;
         private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;Convert Zero Datetime=True");
 
-        public SyncManager( IApiManager apiService)
+        public SyncManager(IApiManager apiService)
         {
             _apiService = apiService;
         }
@@ -49,7 +49,7 @@ namespace SCA.Services
 
         public async Task<ServiceResult> SyncAssay()
         {
-            SyncDetail assayDetail = null;
+            ServiceResult _res = new ServiceResult();
             string resMessage = "";
             try
             {
@@ -61,93 +61,97 @@ namespace SCA.Services
                 List<SyncHeader> ids = Newtonsoft.Json.JsonConvert.DeserializeObject<List<SyncHeader>>(idcon);
 
                 List<ContentDto> listContent = new List<ContentDto>();
-
+                string query = @"select SycnId as Id from Content;";
+                List<ContentDto> idList = await _db.QueryAsync<ContentDto>(query) as List<ContentDto>;
 
                 foreach (var item in ids)
                 {
-                    bool isData = ContentControl(Convert.ToInt64(item.ID));
-                    if (isData == false)
+                    try
                     {
-                        ContentDto dto = new ContentDto();
-
-                        HttpClient http = new HttpClient();
-                        string url = @"https://ogrencikariyeri.com/panel/yusuf.php?act=haber&id=" + item.ID;
-
-                        HttpClient client = new HttpClient();
-                        var response = await client.GetAsync(url);
-                        var pageContents = await response.Content.ReadAsStringAsync();
-
-                        assayDetail = Newtonsoft.Json.JsonConvert.DeserializeObject<SyncDetail>(pageContents);
-
-                        dto.Header = assayDetail.post_title;
-                        dto.ContentDescription = assayDetail.post_content;
-                        dto.UserId = Convert.ToInt64(assayDetail.post_author);
-                        dto.Category = assayDetail.kategori;
-                        dto.SeoUrl = assayDetail.post_title.FriendlyUrl();
-
-                        if (!string.IsNullOrEmpty(assayDetail.appStaj))
+                        List<ContentDto> isData = idList.Where(x => x.Id == Convert.ToInt64(item.ID)).ToList();//ContentControl(Convert.ToInt64(item.ID));
+                        if (isData.Count() == 0)
                         {
-                            dto.InternId = Convert.ToInt32(assayDetail.appStaj);
-                        }
+                            ContentDto dto = new ContentDto();
 
+                            HttpClient http = new HttpClient();
+                            string url = @"https://ogrencikariyeri.com/panel/yusuf.php?act=haber&id=" + item.ID;
 
-                        if (!string.IsNullOrEmpty(assayDetail.appEtkinlik))
-                        {
-                            dto.EventId = Convert.ToInt32(assayDetail.appEtkinlik);
-                        }
+                            HttpClient client = new HttpClient();
+                            var response = await client.GetAsync(url);
+                            var pageContents = await response.Content.ReadAsStringAsync();
+                            SyncDetail assayDetail = new SyncDetail();
+                            assayDetail = Newtonsoft.Json.JsonConvert.DeserializeObject<SyncDetail>(pageContents);
 
-                        if (assayDetail.appKat != null)
-                        {
-                            if (!string.IsNullOrEmpty(assayDetail.appKat.Replace(",", "").Replace("null", "")))
+                            dto.Header = assayDetail.post_title;
+                            dto.ContentDescription = assayDetail.post_content;
+                            dto.UserId = Convert.ToInt64(assayDetail.post_author);
+                            dto.Category = assayDetail.kategori;
+                            dto.SeoUrl = assayDetail.post_title.FriendlyUrl();
+
+                            if (!string.IsNullOrEmpty(assayDetail.appStaj))
                             {
-                                dto.EventId = Convert.ToInt32(assayDetail.appKat.Replace(",", "").Replace("null", ""));
+                                dto.InternId = Convert.ToInt32(assayDetail.appStaj);
                             }
-                        }
 
-                        if (assayDetail.appStaj != null)
-                        {
-                            if (!string.IsNullOrEmpty(assayDetail.appStaj.Replace(",", "").Replace("null", "")))
+
+                            if (!string.IsNullOrEmpty(assayDetail.appEtkinlik))
                             {
-                                dto.InternId = Convert.ToInt32(assayDetail.appStaj.Replace(",", "").Replace("null", ""));
-
+                                dto.EventId = Convert.ToInt32(assayDetail.appEtkinlik);
                             }
-                        }
 
-                        dto.ImagePath = assayDetail.foto;
-                        dto.PublishDate = Convert.ToDateTime(assayDetail.post_date);
-                        dto.Writer = assayDetail.yazar;
-                        dto.ReadCount = 0;
-                        dto.PublishStateType = PublishState.Publish;
-                        dto.SycnId = Convert.ToInt64(item.ID);
+                            //if (assayDetail.appKat != null)
+                            //{
+                            //    dto.EventId = assayDetail.appKat;
+                            //    //if (!string.IsNullOrEmpty(assayDetail.appKat.Replace(",", "").Replace("null", "")))
+                            //    //{
+                            //    //    dto.EventId = Convert.ToInt32(assayDetail.appKat.Replace(",", "").Replace("null", ""));
+                            //    //}
+                            //}
 
-                        if (assayDetail.app == "1")
-                        {
-                            dto.PlatformType = PlatformType.Mobil;
+                            if (assayDetail.appStaj != null)
+                            {
+                                if (!string.IsNullOrEmpty(assayDetail.appStaj.Replace(",", "").Replace("null", "")))
+                                {
+                                    dto.InternId = Convert.ToInt32(assayDetail.appStaj.Replace(",", "").Replace("null", ""));
+
+                                }
+                            }
+
+                            dto.ImagePath = assayDetail.foto;
+                            dto.PublishDate = Convert.ToDateTime(assayDetail.post_date);
+                            dto.Writer = assayDetail.yazar;
+                            dto.ReadCount = 0;
+                            dto.PublishStateType = PublishState.Publish;
+                            dto.SycnId = Convert.ToInt64(item.ID);
+
+                            if (assayDetail.app == "1")
+                            {
+                                dto.PlatformType = PlatformType.Mobil;
+                            }
+                            else if (assayDetail.app == "0")
+                            {
+                                dto.PlatformType = PlatformType.Web;
+                            }
+                            else
+                            {
+                                dto.PlatformType = PlatformType.WebMobil;
+                            }
+                            await CreateContentSyncData(dto);
                         }
-                        else if (assayDetail.app == "0")
-                        {
-                            dto.PlatformType = PlatformType.Web;
-                        }
-                        else
-                        {
-                            dto.PlatformType = PlatformType.WebMobil;
-                        }
-                      await  CreateContentSyncData(dto);
+                        _res = Result.ReturnAsSuccess();
                     }
+                    catch (Exception ex1)
+                    {
+                        _res = Result.ReturnAsFail(message: ex1.Message);
+                    }
+                    _res = Result.ReturnAsSuccess();
                 }
             }
             catch (Exception ex)
             {
-                resMessage = ex.ToString();
-
-
+                _res = Result.ReturnAsFail(message: ex.Message);
             }
-
-
-
-
-
-            return Result.ReturnAsSuccess(null, message: resMessage, assayDetail);
+            return _res;
         }
 
         public async Task<ServiceResult> SyncDiger()
