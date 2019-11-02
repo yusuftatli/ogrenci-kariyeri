@@ -56,35 +56,67 @@ namespace StudentCareerApp.Areas.Admin.Controllers
             return Json(res);
         }
 
+        [HttpPost]
         public async Task<JsonResult> DeleteCompany(long id)
         {
-            var res = await _companyClubService.DeleteAsync(id);
+            var user = HttpContext.GetSessionData<UserSession>("userInfo");
+            var @params = new
+            {
+                Id = id,
+                DeletedUserId = user.Id,
+                DeletedDate = DateTime.Now
+            };
+            var res = await _companyClubService.UpdateAsync(@params);
             return Json(res);
         }
        
         [HttpPost]
-        public async Task<JsonResult> AddOrUpdateCompany([FromBody]CompanyClubsDto model)
+        public async Task<JsonResult> AddOrUpdateCompany(CompanyClubsDto model)
         {
             var user = HttpContext.GetSessionData<UserSession>("userInfo");
             var res = new ServiceResult();
             //for insert model
             if(model.Id.Equals(0))
             {
-                //var requestModel = _mapper.Map<CompanyClubInsertModel>(model);
-                //requestModel.CreatedUserId = user.Id;
-                //requestModel.CreateUserName = user.Name;
-                //requestModel.CompanyClupType = SCA.Entity.Enums.CompanyClupType.Company;
-                //res = await _companyClubService.InsertAsync(requestModel);
+                var requestModel = new CompanyClubInsertModel
+                {
+                    CompanyClupType = SCA.Entity.Enums.CompanyClupType.Company,
+                    CreatedUserId = user.Id,
+                    CreateUserName = user.Name,
+                    Description = model.Description,
+                    EmailAddress = model.EmailAddress,
+                    HeaderImage = model.HeaderImage,
+                    ImageDirectory = model.ImageDirectory,
+                    PhoneNumber = model.PhoneNumber,
+                    SectorId = model.SectorId,
+                    SectorType = model.SectorType,
+                    SeoUrl = model.SeoUrl,
+                    ShortName = model.ShortName,
+                    WebSite = model.WebSite
+                };
+                res = await _companyClubService.InsertAsync(requestModel);
             }
-            //for 
+            //for update model
             else
             {
-                //var requestModel = _mapper.Map<CompanyClubUpdateModel>(model);
-                //requestModel.UpdatedUserId = user.Id;
-                //requestModel.CompanyClupType = SCA.Entity.Enums.CompanyClupType.Company;
-                //res = await _companyClubService.UpdateAsync(requestModel);
+                var requestModel = new CompanyClubUpdateModel
+                {
+                    UpdatedUserId = user.Id,
+                    CompanyClupType = SCA.Entity.Enums.CompanyClupType.Company,
+                    Description = model.Description,
+                    EmailAddress = model.EmailAddress,
+                    Id = model.Id,
+                    ImageDirectory = model.ImageDirectory,
+                    PhoneNumber = model.PhoneNumber,
+                    SectorId = model.SectorId,
+                    SectorType = model.SectorType,
+                    SeoUrl = model.SeoUrl,
+                    ShortName = model.ShortName,
+                    WebSite = model.WebSite,
+                    HeaderImage = model.HeaderImage
+                };
+                res = await _companyClubService.UpdateAsync(requestModel);
             }
-            //var res = await _companyClubManager.CreateCompanyClubs(model, HttpContext.GetSessionData<UserSession>("userInfo"));
             return Json(res);
         }
 
