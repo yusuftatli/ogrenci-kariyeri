@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using SCA.Entity.DTO;
 using SCA.Services;
-using SCA.Services.Interface;
 using SCA.Common;
 using SCA.BLLServices;
 using SCA.Entity.Entities;
