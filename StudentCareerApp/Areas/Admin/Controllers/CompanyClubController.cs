@@ -85,7 +85,6 @@ namespace StudentCareerApp.Areas.Admin.Controllers
         public async Task<JsonResult> AddOrUpdateCompany(CompanyClubsDto model)
         {
             var user = HttpContext.GetSessionData<UserSession>("userInfo");
-            var res = new ServiceResult();
             //for insert model
             if (model.Id.Equals(0))
             {
@@ -105,7 +104,8 @@ namespace StudentCareerApp.Areas.Admin.Controllers
                     ShortName = model.ShortName,
                     WebSite = model.WebSite
                 };
-                res = await _companyClubService.InsertAsync(requestModel);
+                var res = await _companyClubService.InsertAsync(requestModel);
+                return Json(res);
             }
             //for update model
             else
@@ -126,9 +126,9 @@ namespace StudentCareerApp.Areas.Admin.Controllers
                     WebSite = model.WebSite,
                     HeaderImage = model.HeaderImage
                 };
-                res = await _companyClubService.UpdateAsync(requestModel);
+                var res = await _companyClubService.UpdateAsync(requestModel);
+                return Json(res);
             }
-            return Json(res);
         }
         #endregion
 
@@ -160,7 +160,7 @@ namespace StudentCareerApp.Areas.Admin.Controllers
             var model = new ImageGaleryInsertModel
             {
                 CompanyClubId = companyId,
-                ImagePath = "/"+serverPath.Replace("\\", "/") + "/" + file.FileName,
+                ImagePath = "/" + serverPath.Replace("\\", "/") + "/" + file.FileName,
                 IsActive = true
             };
             var res = await _imageGaleryService.InsertAsync(model);

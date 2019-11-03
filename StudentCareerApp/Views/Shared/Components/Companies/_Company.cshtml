@@ -1,0 +1,28 @@
+﻿@model List<SCA.Entity.Model.CompanyComponent>
+
+<style>
+    .company-list-item{
+        overflow-y: auto;
+        max-height:400px;
+    }
+</style>
+
+@if (Model != null && Model.Count > 0)
+{
+    @* COMPANIES START *@
+    <div class="ts-grid-box widgets company-list-item">
+        <h2 class="widget-title">Şirketler</h2>
+        <ul class="category-list">
+            @foreach (var x in Model)
+            {
+                <li>
+                    <a href="@Url.Action("Company", "Author", new { seoUrl = x.SeoUrl})">
+                        @x.ShortName
+                    </a>
+                </li>
+            }
+
+        </ul>
+    </div>
+    @* COMPANIES END *@
+}
