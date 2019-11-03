@@ -33,7 +33,8 @@ namespace SCA.UI.Controllers
         public async Task<IActionResult> Index(string seoUrl)
         {
             var ip = HttpContext.Connection.RemoteIpAddress.ToString();
-            var res = await _contentManager.GetContentUI(seoUrl, HttpContext.GetSessionData<UserSession>("userInfo")?.Id, ip: ip);
+            var guidBrowserId = HttpContext.Request.Cookies["okgdy"].ToString();
+            var res = await _contentManager.GetContentUI(seoUrl, HttpContext.GetSessionData<UserSession>("userInfo")?.Id, ip: guidBrowserId);
             return View(res);
         }
 

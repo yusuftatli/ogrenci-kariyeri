@@ -1,5 +1,9 @@
 ﻿var isDetailsLoaded = false;
 
+function set4guid() {
+  return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+}
+
 document.cookie
   .split(";")
   .map(x => x.trim())
@@ -7,12 +11,21 @@ document.cookie
   ? $(".cookieEnable").removeClass("hidden")
   : $(".cookieEnable").addClass("hidden");
 
+!document.cookie
+  .split(';')
+  .find(x => x.indexOf('okgdy') > -1)
+  ? document.cookie = "okgdy=" + 
+                      set4guid() + "-" + 
+                      set4guid() + "-" + 
+                      set4guid() + "-" + 
+                      set4guid() + "; path=/; Expires=" + moment().add('Y', 1).toDate() : "";
+
 function openLoginMagnific() {
   $.ajax({
     url: "/Shared/_LoginPage",
     type: "get",
     dataType: "html",
-    success: function(res) {
+    success: function (res) {
       $.magnificPopup.open({
         items: {
           src: res,
@@ -34,7 +47,7 @@ function openRegisterMagnific() {
     url: "/Shared/_RegisterPage",
     type: "get",
     dataType: "html",
-    success: function(res) {
+    success: function (res) {
       $.magnificPopup.open({
         items: {
           src: res,
@@ -46,25 +59,25 @@ function openRegisterMagnific() {
   });
 }
 
-$(document).on("click", "white-popup", function() {
+$(document).on("click", "white-popup", function () {
   $.magnificPopup.close();
 });
 
-$(document).on("click", ".openLoginMagnific", function() {
+$(document).on("click", ".openLoginMagnific", function () {
   openLoginMagnific();
 });
 
-$(document).on("click", ".openRegisterMagnific", function() {
+$(document).on("click", ".openRegisterMagnific", function () {
   openRegisterMagnific();
 });
 
-$(document).on("click", "#acceptCookie", function() {
+$(document).on("click", "#acceptCookie", function () {
   document.cookie =
-    "acceptCookie=1; path=/; Expires=@DateTime.Now.AddYears(1);";
+    "acceptCookie=1; path=/; Expires="+moment().add('Y', 1).toDate()+";";
   $(".cookieEnable").addClass("hidden");
 });
 
-$(document).on("change", "#educationType", function(e) {
+$(document).on("change", "#educationType", function (e) {
   e.target.value === 2 || e.target.value === 3
     ? $(".template-selected-university").removeClass("hidden")
     : $(".template-selected-university").addClass("hidden");
@@ -76,32 +89,32 @@ $(document).on("change", "#educationType", function(e) {
     : $(".template-still-student").addClass("hidden");
 });
 
-$(document).on("submit", ".loginForm", function(e) {
+$(document).on("submit", ".loginForm", function (e) {
   var form = $(this).serialize();
   $.ajax({
     url: "/Shared/Login",
     type: "post",
     data: form,
-    success: function(res) {
+    success: function (res) {
       if (res.resultCode === 200) {
-        toastr["success"]("Seni aramızda görmekten çok mutlu olduk :)" ,res.message);
+        toastr["success"]("Seni aramızda görmekten çok mutlu olduk :)", res.message);
         setTimeout(() => {
           document.location.reload();
         }, 2000);
       } else toastr["error"](res.message, "Birşeyler hatalı!");
     },
-    error: function(res) {
+    error: function (res) {
       console.log(res);
     }
   });
   e.preventDefault();
 });
 
-$(document).on("click", "#logoutButton", function(e) {
+$(document).on("click", "#logoutButton", function (e) {
   $.ajax({
     url: "/Shared/Logout",
     type: "get",
-    success: function(res) {
+    success: function (res) {
       toastr["success"](res.message, "Çıkış yaptınız.");
       setTimeout(() => {
         document.location.reload();
@@ -113,7 +126,7 @@ $(document).on("click", "#logoutButton", function(e) {
 function initRegisterPanel() {
   new Switchery($("#stillStudent")[0], $("#stillStudent").data());
 
-  document.querySelector(".stillStudent").onchange = function(e) {
+  document.querySelector(".stillStudent").onchange = function (e) {
     var stillStudent = $("#stillStudent")[0].checked;
     stillStudent
       ? $(".showClasses").removeClass("hidden")

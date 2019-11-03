@@ -6,6 +6,7 @@
     {
         user = Newtonsoft.Json.JsonConvert.DeserializeObject<SCA.Entity.DTO.UserSession>(Context.Session.GetString("userInfo"));
     }
+
 }
 
 <!doctype html>
@@ -111,7 +112,7 @@
                 <div class="col-md-8 align-self-center">
                     <div class="banner-img">
                         <a href="index.html">
-                            <img class="img-fluid" src=""~/images/banner/banner4.jpg" alt="">
+                            <img class="img-fluid" src="" ~/images/banner/banner4.jpg" alt="">
                         </a>
                     </div>
                 </div>
@@ -211,7 +212,7 @@
 
                             <!--nav right menu end-->
                             <!-- nav menu start-->
-                            @await  Component.InvokeAsync("Menu")
+                            @await Component.InvokeAsync("Menu")
                             <!--nav menu end-->
                         </div>
                     </nav>
@@ -379,6 +380,7 @@
     =============================================================================-->
     <!-- initialize jQuery Library -->
     <script src="/js/jquery.min.js"></script>
+    <script src="~/AdminFiles/Template/assets/node_modules/moment/moment.js"></script>
     <script src="~/Template/AngularComponents/treeselect/vue.js"></script>
     <!-- navigation JS -->
     <script src="/js/navigation.js"></script>
