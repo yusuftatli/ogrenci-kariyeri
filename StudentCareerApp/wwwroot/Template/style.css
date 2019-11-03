@@ -55,6 +55,15 @@ body {
     font-weight: 300
 }
 
+.modal-title{
+    position:absolute !important;
+}
+
+.img-shadow{
+    border-radius: 10px;
+    box-shadow: 6px 6px 10px 0px;
+}
+
 html {
     position: relative;
     min-height: 100%;

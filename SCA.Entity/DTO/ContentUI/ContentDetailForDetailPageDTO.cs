@@ -8,6 +8,7 @@ namespace SCA.Entity.DTO
     public class ContentDetailForDetailPageDTO
     {
         public long Id { get; set; }
+        public long UserId { get; set; }
         public string ImagePath { get; set; }
         public string Category { get; set; }
         public string Header { get; set; }

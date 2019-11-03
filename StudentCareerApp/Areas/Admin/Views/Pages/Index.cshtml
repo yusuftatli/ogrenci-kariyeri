@@ -6,8 +6,6 @@
 @using Microsoft.AspNetCore.Http
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
-
-
 <head>
     <link href="~/Template/dist/css/style.min.css" rel="stylesheet">
     <link href="~/Template/AngularComponents/treeselect/vue-treeselect.css" rel="stylesheet" />
@@ -23,41 +21,7 @@
     <link href="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.css" rel="stylesheet" />
 </head>
 
-<body ng-app="MyApp" ng-controller="pageController">
-    <aside class="left-sidebar">
-        <!-- Sidebar scroll-->
-        <div class="scroll-sidebar">
-            <!-- Sidebar navigation-->
-            <nav class="sidebar-nav">
-                <ul id="sidebarnav">
-                    @*<li class="user-pro">
-                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><img src="~/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"><span class="hide-menu">@HttpContextAccessor.HttpContext.Session.GetString("NameSurname")</span></a>
-                            <ul aria-expanded="false" class="collapse">
-                                <li><a href="/Admin/User/Profile"><i class="ti-user"></i> Profil</a></li>
-                                <li><a href="javascript:void(0)"><i class="ti-wallet"></i> My Balance</a></li>
-                                <li><a href="javascript:void(0)"><i class="ti-email"></i> Inbox</a></li>
-                                <li><a href="javascript:void(0)"><i class="ti-settings"></i> Ayarlar</a></li>
-                                <li><a href="javascript:void(0)"><i class="fa fa-power-off"></i> Çıkış</a></li>
-                            </ul>
-                        </li>*@
-                    <li ng-repeat="x in menuList">
-                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="{{x.Icon }}"></i><span class="hide-menu" ng-bind="x.Name"> </span></a>
-                        <ul aria-expanded="false" class="collapse">
-                            <li ng-repeat="y in x.Details">
-                                <a href="/{{y.Url}}"><span ng-bind="y.Name"></span> </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li> <a class="waves-effect waves-dark" href="../documentation/documentation.html" aria-expanded="false"><i class="far fa-circle text-danger"></i><span class="hide-menu">Documentation</span></a></li>
-                    <li> <a class="waves-effect waves-dark" href="pages-login.html" aria-expanded="false"><i class="far fa-circle text-success"></i><span class="hide-menu">Log Out</span></a></li>
-                    <li> <a class="waves-effect waves-dark" href="pages-faq.html" aria-expanded="false"><i class="far fa-circle text-info"></i><span class="hide-menu">FAQs</span></a></li>
-                </ul>
-            </nav>
-            <!-- End Sidebar navigation -->
-        </div>
-        <!-- End Sidebar scroll-->
-    </aside>
-
+<body>
 
     <div class="page-wrapper">
         <!-- ============================================================== -->
@@ -91,274 +55,49 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <ul class="nav nav-tabs" role="tablist">
-                                <li class="nav-item" ng-click="onClickPageList()"> <a id="pageListTap" class="nav-link active" data-toggle="tab" href="#PageList" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Sayfalar</span></a> </li>
-                                <li class="nav-item" ng-click="onClickPage" ()> <a id="pageTab" class="nav-link" data-toggle="tab" href="#PageCreate" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Sayfa Ekle</span></a> </li>
-                            </ul>
-                            <div class="tab-content tabcontent-border">
-
-                                <div class="tab-pane active" id="home" role="tabpanel">
-                                    <div class="card">
-
-                                        <div class="card-body">
-                                            <h4 class="card-title">Sayfa Listesi</h4>
-                                            <h6 class="card-subtitle">Sayfa Sayısı : <code><span ng-bind="assayList.length"></span></code></h6>
-                                            <h4><input type="text" class="form-control" name="site-search" id="getData" ng-model="search" ng-keypress="getData($event)" placeholder="Ara..."></h4>
-                                            <table>
-                                                <tr>
-                                                    <td>
-                                                        <button class="btn btn-block btn-primary" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">Önceki </button>
-                                                    </td>
-                                                    <td>
-                                                        &nbsp;{{currentPage+1}}/{{numberOfPages()}}&nbsp;
-                                                    </td>
-                                                    <td>
-                                                        <button class="btn btn-block btn-primary" ng-disabled="currentPage >= getData().length/pageSize - 1" ng-click="currentPage=currentPage+1"> Sonraki</button>
-                                                    </td>
-                                                </tr>
+                            <div class="tab-pane active" id="home" role="tabpanel">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title">Sayfa Listesi</h4>
+                                        <h6 class="card-subtitle">Sayfa Sayısı : <code><span ng-bind="assayList.length"></span></code></h6>
+                                        <h4><input type="text" class="form-control" name="site-search" id="getData" ng-model="search" ng-keypress="getData($event)" placeholder="Ara..."></h4>
+                                        
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>SeoUrl</th>
+                                                        <th>Başlık</th>
+                                                        <th>Aktif/Pasif</th>
+                                                        <th>Detay</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="x in pageList">
+                                                        <td>{{x.seoUrl}}</td>
+                                                        <td>{{x.title}}</td>
+                                                        <td></td>
+                                                        <td>
+                                                            <button ng-click="showDetailPages(x.id)" type="button" class="btn btn-rounded btn-success">Aç</button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
                                             </table>
-                                            <div class="table-responsive">
-
-                                                <table class="table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Açıklama</th>
-                                                            <th>Seo-Url</th>
-                                                            <th>Başlık</th>
-                                                            <th>Aktif/Pasif</th>
-                                                            <th>Detay</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr ng-repeat="x in assayList| filter:search | startFrom:currentPage*pageSize | limitTo:pageSize" )">
-                                                            <td ng-show="false" ng-bind="x.id"></td>
-                                                            <td ng-bind="x.description"></td>
-                                                            <td ng-bind="x.seoUrl"></td>
-                                                            <td ng-bind="x.title"></td>
-                                                            <td ng-bind="x.ActiveDescription"></td>
-                                                            <td>
-                                                                <button ng-click="showDetailPages(x.id)" type="button" class="btn btn-rounded btn-success">Aç</button>
-                                                            </td>
-
-
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
                                         </div>
                                     </div>
-
                                 </div>
 
-
-                                <div ng-disabled="showSaveLoading" class="tab-pane  p-20" id="AssayCreate" role="tabpanel">
-                                    <div class="row">
-                                        <div class="col-md-12">
-
-                                            <div class="col-md-10 p-0">
-
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>Makale Başlığı</label>
-                                                            <input type="text" class="form-control" ng-model="pageCreate.header">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>Seo Link</label>
-                                                            <input type="text" id="seoUrl" ng-disabled="true" class="form-control" placeholder="Seo Link" value="{{RegexSeo(assayCreate.header)}}" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label>Makale Başlık Resim</label>
-                                                            <input type="text" class="form-control" id="roxyField" onclick="openCustomRoxy2('#roxyCustomPanel2')" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        <div class="form-group">
-                                                            <label>Yayınlanma Tarihi</label>
-                                                            <input id="publishDate" type="text" class="form-control" placeholder="dd.mm.yyyy" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <div class="form-group">
-                                                            <label>Yayınlanma Saati</label>
-                                                            <input id="publishHour" type="text" class="form-control" placeholder="HH:mm" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <div class="form-group">
-                                                            <label>Yayınlansın mı?</label>
-                                                            <br />
-                                                            <input id="togglwPublish" type="checkbox" ng-checked="{{assayCreate.isHeadLine}}" class="js-switch" data-color="#00c292" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <div class="form-group">
-                                                            <label>Manşet mi?</label>
-                                                            <br />
-                                                            <input id="toggleManset" type="checkbox" ng-checked="{{assayCreate.isManset}}" class="js-switch" data-color="#00c292" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <div class="form-group">
-                                                            <label>Ana Menü?</label>
-                                                            <br />
-                                                            <input id="toggleMainMenu" type="checkbox" ng-checked="{{assayCreate.isMainMenu}}" class="js-switch" data-color="#00c292" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <div class="form-group">
-                                                            <label>Ana Menüde Sabitlensin mi?</label>
-                                                            <br />
-                                                            <input id="toggleisConstantMainMenu" type="checkbox" ng-checked="{{assayCreate.isConstantMainMenu}}" class="js-switch" data-color="#00c292" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <div class="form-group">
-                                                            <label>Onaya Gönderilsin mi?</label>
-                                                            <br />
-                                                            <input id="toggleisSendConfirm" type="checkbox" ng-checked="{{assayCreate.isSendConfirm}}" class="js-switch" data-color="#00c292" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        <div class="form-group">
-                                                            <label class="control-label">Etkinlikler</label>
-                                                            <select id="roletypeid" class="form-control custom-select" ng-model="assayCreate.eventId" name="eventId">
-                                                                <option ng-repeat="x in events" value="{{x.id}}">{{x.description}}</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <div class="form-group">
-                                                            <label class="control-label">Stajlar</label>
-                                                            <select id="roletypeid" class="form-control custom-select" ng-model="assayCreate.internId" name="internId">
-                                                                <option ng-repeat="x in internList" value="{{x.id}}">{{x.description}}</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <div class="form-group">
-                                                            <label class="control-label">Görünürlük</label>
-                                                            <select id="roletypeid" class="form-control custom-select" ng-model="assayCreate.visibleId" name="visibleId">
-                                                                <option ng-repeat="x in visibleList" value="{{x.id}}">{{x.description}}</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2 text-right">
-                                                <img class="img-responsive newsImage" id="img_roxyField" />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label>Makale Kategori</label>
-                                                <input type="hidden" id="categoryIds" />
-                                                <treeselect v-props-options="options" v-props-field="'categoryIds'" v-props-multiple="true" v-props-value="categoryValue" watch-depth="value"></treeselect>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label>Makale Etiket</label>
-                                                <input type="hidden" value="" id="multipleTags" />
-                                                <treeselect v-props-options="tagOptions" v-props-field="'multipleTags'" v-props-is-insertable="true" v-props-multiple="true" v-props-value="tagsValue" watch-depth="value"></treeselect>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <textarea id="ckeditorForAssayContent"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <button ng-disabled="showSaveLoading" ng-click="postAssay()" class="btn btn-success">
-                                                <span ng-show="showSaveLoading"><i class="fa fa-spinner fa-spin"></i></span>
-                                                Kaydet
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <br />
-                                </div>
                             </div>
+
                         </div>
                     </div>
-                    <div class="right-sidebar">
-                        <div class="slimscrollright">
-                            <div class="rpanel-title"> Service Panel <span><i class="ti-close right-side-toggle"></i></span> </div>
-                            <div class="r-panel-body">
-                                <ul id="themecolors" class="m-t-20">
-                                    <li><b>With Light sidebar</b></li>
-                                    <li><a href="javascript:void(0)" data-skin="skin-default" class="default-theme working">1</a></li>
-                                    <li><a href="javascript:void(0)" data-skin="skin-green" class="green-theme">2</a></li>
-                                    <li><a href="javascript:void(0)" data-skin="skin-red" class="red-theme">3</a></li>
-                                    <li><a href="javascript:void(0)" data-skin="skin-blue" class="blue-theme">4</a></li>
-                                    <li><a href="javascript:void(0)" data-skin="skin-purple" class="purple-theme">5</a></li>
-                                    <li><a href="javascript:void(0)" data-skin="skin-megna" class="megna-theme">6</a></li>
-                                    <li class="d-block m-t-30"><b>With Dark sidebar</b></li>
-                                    <li><a href="javascript:void(0)" data-skin="skin-default-dark" class="default-dark-theme ">7</a></li>
-                                    <li><a href="javascript:void(0)" data-skin="skin-green-dark" class="green-dark-theme">8</a></li>
-                                    <li><a href="javascript:void(0)" data-skin="skin-red-dark" class="red-dark-theme">9</a></li>
-                                    <li><a href="javascript:void(0)" data-skin="skin-blue-dark" class="blue-dark-theme">10</a></li>
-                                    <li><a href="javascript:void(0)" data-skin="skin-purple-dark" class="purple-dark-theme">11</a></li>
-                                    <li><a href="javascript:void(0)" data-skin="skin-megna-dark" class="megna-dark-theme ">12</a></li>
-                                </ul>
-                                <ul class="m-t-20 chatonline">
-                                    <li><b>Chat option</b></li>
-                                    <li>
-                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"> <span>Varun Dhavan <small class="text-success">online</small></span></a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/2.jpg" alt="user-img" class="img-circle"> <span>Genelia Deshmukh <small class="text-warning">Away</small></span></a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/3.jpg" alt="user-img" class="img-circle"> <span>Ritesh Deshmukh <small class="text-danger">Busy</small></span></a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/4.jpg" alt="user-img" class="img-circle"> <span>Arijit Sinh <small class="text-muted">Offline</small></span></a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/5.jpg" alt="user-img" class="img-circle"> <span>Govinda Star <small class="text-success">online</small></span></a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/6.jpg" alt="user-img" class="img-circle"> <span>John Abraham<small class="text-success">online</small></span></a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/7.jpg" alt="user-img" class="img-circle"> <span>Hritik Roshan<small class="text-success">online</small></span></a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)"><img src="~/Template/assets/images/users/8.jpg" alt="user-img" class="img-circle"> <span>Pwandeep rajan <small class="text-success">online</small></span></a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- ============================================================== -->
-                    <!-- End Right sidebar -->
-                    <!-- ============================================================== -->
                 </div>
-                <!-- ============================================================== -->
-                <!-- End Container fluid  -->
-                <!-- ============================================================== -->
             </div>
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
         </div>
+    </div>
 
     </div>
 </body>

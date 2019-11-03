@@ -77,7 +77,7 @@ namespace SCA.DapperRepository.Generic
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        Task<List<TResult>> SPQueryAsync<TRequest, TResult>(TRequest model) where TRequest : class where TResult : class;
+        Task<List<TResult>> SPQueryAsync<TRequest, TResult>(TRequest model, string procedureName = null) where TRequest : class where TResult : class;
 
         /// <summary>
         /// Execute query first or default async for stored procedure.

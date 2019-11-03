@@ -33,11 +33,11 @@ namespace SCA.DapperRepository.Generic
         }
 
         /// <inheritdoc cref="IGenericRepository{T}.SPQueryAsync(T)"/>
-        public async Task<List<TResult>> SPQueryAsync<TRequest, TResult>(TRequest model) where TRequest : class where TResult : class
+        public async Task<List<TResult>> SPQueryAsync<TRequest, TResult>(TRequest model, string procedureName = null) where TRequest : class where TResult : class
         {
             using (IDbConnection conn = new MySqlConnection(_connString))
             {
-                var res = await conn.QueryAsync<TResult>(typeof(TResult).Name, model, commandType: CommandType.StoredProcedure);
+                var res = await conn.QueryAsync<TResult>(!string.IsNullOrEmpty(procedureName) ? procedureName : typeof(TResult).Name, model, commandType: CommandType.StoredProcedure);
                 return res as List<TResult>;
             }
         }

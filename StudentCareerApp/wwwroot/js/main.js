@@ -115,6 +115,18 @@ $(function ($) {
         })
     }
 
+    if ($("#comp-image-galery").length > 0){
+        $("#comp-image-galery").owlCarousel({
+            items: 5,
+            loop: false,
+            dots: false,
+            nav: false,
+            responsiveClass: true,
+            autoplayTimeout: 5000,
+            autoplay:true,
+            autoplayHoverPause: true
+        })
+    }
     /*======================== 
         featured post  
    ==========================*/
@@ -421,7 +433,6 @@ $(function ($) {
             zoom: {
                 enabled: true, // By default it's false, so don't forget to enable it
 
-                duration: 300, // duration of the effect, in milliseconds
                 easing: 'ease-in-out', // CSS transition easing function
 
                 opener: function (openerElement) {

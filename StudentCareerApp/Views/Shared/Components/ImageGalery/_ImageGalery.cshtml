@@ -3,20 +3,19 @@
 <section class="instagramPhoto">
     <div class="container-fluid">
         <div class="row">
-            @foreach (var x in Model)
-            {
-                <div class="col-md p-0">
-                    <div class="ts-single-inst">
-                        <a href="#" class="">
-                            <img src="@x.ImagePath" alt="">
-                        </a>
-                    </div>
-                    <!-- ts single inst-->
+            <div class="gallery-img">
+                <div class="owl-carousel" id="comp-image-galery" style="height:200px !important;">
+                    @foreach (var x in Model)
+                    {
+                        <div class="col-md p-0">
+                            <a href="@x.ImagePath" class="gallery-popup">
+                                <img src="@x.ImagePath" class="img-responsive" style="height:200px;" alt="">
+                            </a>
+                            <!-- ts single inst-->
+                        </div>
+                    }
                 </div>
-            }
-            <!-- col end-->
+            </div>
         </div>
-        <!-- row end-->
     </div>
-    <!-- container end-->
 </section>

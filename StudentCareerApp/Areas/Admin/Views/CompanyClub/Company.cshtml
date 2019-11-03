@@ -7,12 +7,8 @@
 
 
 
-<html lang="en">
-
-
 
 <head>
-    <link href="~/Template/dist/css/style.min.css" rel="stylesheet">
 
     <link href="~/Template/AngularComponents/treeselect/vue-treeselect.css" rel="stylesheet" />
     <link href="~/Template/assets/node_modules/switchery/dist/switchery.css" rel="stylesheet" />
@@ -99,19 +95,11 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <ul class="nav nav-tabs" role="tablist">
-                                <li class="nav-item" ng-click="onClickcompanyList()"> <a class="nav-link active" data-toggle="tab" href="#companyList" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Şirket Liste</span></a> </li>
-                                <li class="nav-item" ng-click="onClickcompanyCreate()"> <a class="nav-link" data-toggle="tab" href="#createCompany" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Şirket Ekle</span></a> </li>
-                                <li class="nav-item" ng-click="onClickphotoGallery" ()> <a class="nav-link" data-toggle="tab" href="#photoGallery" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Resim Galeri</span></a> </li>
-                            </ul>
-                            <div class="tab-content tabcontent-border">
-
-
                                 <div class="tab-pane active" id="companyList" role="tabpanel">
                                     <div class="card">
 
                                         <div class="card-body">
-                                            <h4 class="card-title">Şirket Listesi</h4>
+                                            <h4 class="card-title">Şirket Listesi <button id="popupModal" class="btn btn-default pull-right lazyload showModal" data-size="modal-xl" data-url="/Admin/CompanyClub/CompanyPage" data-header="<i class='fa fa-plus'></i> Yeni Şirket"><i class="fa fa-plus"></i> Yeni</button></h4>
                                             <h6 class="card-subtitle">Şirket Sayısı : <code><span ng-bind="companyList.length"></span></code></h6>
                                             <h4><input type="text" class="form-control" name="site-search" id="getData" ng-model="search" ng-keypress="getData($event)" placeholder="Ara..."></h4>
                                             <table>
@@ -132,6 +120,7 @@
                                             <table class="table">
                                                 <thead>
                                                     <tr>
+                                                        <th></th>
                                                         <th>Şirket Kısa Adı</th>
                                                         <th>Sktör</th>
                                                         <th>Telefon Numarası</th>
@@ -142,6 +131,7 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr ng-repeat="x in companyList| filter:search | limitTo:pageSize" )">
+                                                        <td><img src="{{x.headerImage}}" class="img-responsive img-shadow" style="width: 150px;" /></td>
                                                         <td ng-show="false" ng-bind="x.id"></td>
                                                         <td ng-bind="x.shortName"></td>
                                                         <td ng-bind="x.sectorDescription"></td>
@@ -151,13 +141,14 @@
                                                         <td>
                                                             <div class="btn-group">
                                                                 <button id="popupModal" type="button" class="btn btn-default lazyload showModal" data-header="<i class='fa fa-edit'></i> Şirket Düzenle" data-size="modal-xl" data-url="/Admin/CompanyClub/CompanyPage?id={{x.id}}"><i class="fa fa-edit"></i></button>
-                                                                <button type="button" class="btn btn-default"><i class="fa fa-trash"></i></button>
+                                                                <button type="button" class="btn btn-default" ng-click="deleteCompany(x.id)"><i class="fa fa-trash"></i></button>
                                                                 <div class="dropdown">
                                                                     <button class="btn btn-default dropdown-toggle" id="dropdownOthers" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                                                                     <div class="dropdown-menu" aria-labelledby="dropdownOthers">
                                                                         <a id="popupModal" class="dropdown-item lazyload showModal" data-size="modal-lg" data-url="/Admin/CompanyClub/CompanyAnnouncements?companyId={{x.id}}&seoUrl={{x.seoUrl}}"><i class="fa fa-info"></i> Duyurular</a>
                                                                         <a id="popupModal" class="dropdown-item lazyload showModal" data-size="modal-lg" data-url="/Admin/CompanyClub/CompanySocialMedias?companyId={{x.id}}"><i class="fa fa-info"></i> Sosyal Medya</a>
                                                                         <a id="popupModal" class="dropdown-item lazyload showModal" data-size="modal-lg" data-url="/Admin/CompanyClub/CompanyYoutubePlaylist?companyId={{x.id}}&seoUrl={{x.seoUrl}}"><i class="fa fa-youtube"></i> Youtube Playlist</a>
+                                                                        <a id="popupModal" class="dropdown-item lazyload showModal" data-size="modal-lg" data-url="/Admin/CompanyClub/CompanyImages?companyId={{x.id}}&companyName={{x.shortName}}"><i class="fa fa-image"></i> Galeri</a>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -172,141 +163,6 @@
 
 
                                 </div>
-                                <div class="tab-pane" id="createCompany" role="tabpanel">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="card">
-                                                <div class="card-header bg-info">
-                                                    <h4 class="mb-0 text-white">Şirket Kayıt</h4>
-                                                </div>
-                                                <div class="form-body">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="control-label">Şirket Kısa Adı</label>
-                                                                    <input type="text" id="companyShortName" ng-model="companyModel.ShortName" class="form-control" placeholder="Şirket Kısa Adı">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <label class="control-label">Seo Url</label>
-                                                                <input type="text" id="companySeoUrl" class="form-control" ng-disabled="true" value="{{RegexSeo(companyModel.ShortName)}}" />
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="control-label">Sektör Tipi</label>
-                                                                    <select id="sectorTypeId" class="form-control" ng-model="companyModel.SectorType">
-                                                                        <option value="1">Kamu</option>
-                                                                        <option value="2">Özel</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="control-label">Sektör</label>
-                                                                    <select id="sectorId" class="form-control" ng-model="companyModel.SectorId" name="eventId">
-                                                                        <option ng-repeat="x in sectorTypes" value="{{x.id}}">{{x.description}}</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-12">
-                                                                <div class="form-group">
-                                                                    <label class="control-label">Açıklama</label>
-                                                                    <textarea rows="3" ng-model="companyModel.Description" class="form-control"></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-12 p-l-0 p-t-20">
-                                                                <div class="form-group">
-                                                                    <label>Şirket Header Resmi</label>
-                                                                    <input type="text" class="form-control" id="roxyField" onclick="openCustomRoxy2('#roxyCustomPanel2')" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <hr>
-
-                                                </div>
-                                            </div>
-                                            <div class="card">
-                                                <div class="card-header bg-info">
-                                                    <h4 class="mb-0 text-white">Şirket Bilgileri</h4>
-                                                </div>
-                                                <div class="form-body">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-md-4">
-                                                                <div class="form-group">
-                                                                    <label class="control-label">Web Sitesi</label>
-                                                                    <input ng-model="companyModel.WebSite" class="form-control" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <div class="form-group">
-                                                                    <label class="control-label">Telefon Numarası</label>
-                                                                    <input rows="3" ng-model="companyModel.PhoneNumber" class="form-control" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <div class="form-group">
-                                                                    <label class="control-label">E-Posta</label>
-                                                                    <input ng-model="companyModel.EmailAddress" class="form-control" />
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                            <div class="card">
-                                                <div class="card-header bg-info">
-                                                    <h4 class="mb-0 text-white">Sosyal Medya Hesapları</h4>
-                                                </div>
-                                                <div class="form-body">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-md-4">
-                                                                <div class="form-group">
-                                                                    <label class="control-label">Facebook</label>
-                                                                    <input type="text" class="form-control" ng-model="companyModel.Facebook" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <div class="form-group">
-                                                                    <label class="control-label">Linkedin</label>
-                                                                    <input type="text" class="form-control" ng-model="companyModel.Linkedin" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <div class="form-group">
-                                                                    <label class="control-label">Instagram</label>
-                                                                    <input type="text" class="form-control" ng-model="companyModel.Instagram" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-actions text-right">
-                                                        <div class="card-body">
-                                                            <button ng-disabled="showSaveLoading" ng-click="onClikSave()" class="btn btn-success">
-                                                                <span ng-show="showSaveLoading"><i class="fa fa-spinner fa-spin"></i></span>
-                                                                Kaydet
-                                                            </button>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <br />
-                                </div>
-
-                                <div class="tab-pane" id="photoGallery" role="tabpanel">
-
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="right-sidebar">

@@ -118,6 +118,38 @@ app.controller('comapanyController', function ($scope, $http, $filter) {
         };
     };
 
+    $scope.deleteCompany = function(id) {
+        var company = $scope.companyList.find(x=>x.id == id);
+        
+        swal.fire({
+            title: company.shortName + ' şirketi deaktif edilecek!',
+            text: 'Bu şirket deaktif duruma getirilecek ve aramalarda gözükmeyecektir. İşlemi yapmak istediğinizden emin misiniz?',
+            imageUrl: company.headerImage,
+            footer: '<a href="#">Deaktif Şirketleri görüntüle.</a>',
+            showCancelButton: true,
+            confirmButtonCoolor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Deaktif et!',
+            calcelButtonText: 'İptal'
+        }).then((result) => {
+            if(result.value){
+                $.ajax({
+                    url: '/admin/companyclub/deletecompany',
+                    type: 'post',
+                    data: {id: id},
+                    success: function(res){
+                        if(res.resultCode == 200){
+                            toastr["success"]("Şirket deaktif konuma getirildi.");
+                            getAllCompany();
+                        }
+                        else
+                            toastr["error"]("İşlem sırasında hata oluştu!");
+                    }
+                })
+            }
+        })
+    }
+
     function getAllCompany() {
         $scope.showTable = true;
         $.ajax({

@@ -6,8 +6,8 @@
         sectorTypes: [],
         urls:{
             getCompany: "/admin/companyclub/GetCompanyDetails",
-            getSectorTypes: "/admin/definition/getallsector",
-            addOrUpdateCompany: "/admin/companyclub/"
+            getSectorTypes: "/api/definition/getallsector",
+            addOrUpdateCompany: "/admin/companyclub/AddOrUpdateCompany"
         },
         trMap: {
             çÇ: "c",
@@ -20,6 +20,7 @@
     },
     mounted: function(){
         this.getCompany();
+        this.getSectorTypes();
     },
     methods: {
         getCompany: function(){
@@ -28,8 +29,10 @@
                 type: 'get',
                 data: {id: this.companyId },
                 success: (res) => {
-                    if(res.resultCode == 200)
+                    if(res.resultCode == 200){
                         this.company = res.data;
+                        $("#roxyFieldAnnouncement").val(res.data.headerImage);
+                    }
                     else
                         toastr["error"]("Şirket bilgileri yüklenemedi.");
                 }
@@ -48,11 +51,13 @@
             })
         },
         addOrUpdateCompany: function(){
-            this.company.headerImage = $(".roxyFieldAnnouncement")[0].value();
+            this.company.headerImage = $("#roxyFieldAnnouncement")[0].value;
+            this.company.id = this.companyId;
+            this.company.seoUrl = this.regexSeo(this.company.shortName);
             $.ajax({
                 url: this.urls.addOrUpdateCompany,
                 type: 'post',
-                data: {'model': this.company},
+                data: {model: this.company},
                 success: (res) => {
                     if (res.resultCode == 200){
                         toastr["success"]("Şirket kayıt işlemi başarılı!");

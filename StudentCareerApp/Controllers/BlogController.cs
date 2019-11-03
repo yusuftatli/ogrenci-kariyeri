@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using SCA.Entity.DTO;
 using SCA.Services;
-using SCA.Services.Interface;
 using SCA.Common;
+using SCA.BLLServices;
+using SCA.Entity.Entities;
 
 namespace SCA.UI.Controllers
 {
@@ -17,10 +14,12 @@ namespace SCA.UI.Controllers
         #region INTERFACES & CONSTRUCTOR
         private readonly IContentManager _contentManager;
         private readonly ICommentManager _commentManager;
-        public BlogController(IContentManager contentManager, ICommentManager commentManager)
+        private readonly ICommentService<Comments> _commentService;
+        public BlogController(IContentManager contentManager, ICommentManager commentManager, ICommentService<Comments> commentService)
         {
             _contentManager = contentManager;
             _commentManager = commentManager;
+            _commentService = commentService;
         }
         #endregion
 
@@ -29,7 +28,8 @@ namespace SCA.UI.Controllers
         public async Task<IActionResult> Index(string seoUrl)
         {
             var ip = HttpContext.Connection.RemoteIpAddress.ToString();
-            var res = await _contentManager.GetContentUI(seoUrl, HttpContext.GetSessionData<UserSession>("userInfo")?.Id, ip: ip);
+            var guidBrowserId = HttpContext.Request.Cookies["okgdy"].ToString();
+            var res = await _contentManager.GetContentUI(seoUrl, HttpContext.GetSessionData<UserSession>("userInfo")?.Id, ip: guidBrowserId);
             return View(res);
         }
 

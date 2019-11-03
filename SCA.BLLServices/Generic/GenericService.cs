@@ -65,9 +65,9 @@ namespace SCA.BLLServices.Generic
             return Result.ReturnAsSuccess(data: res);
         }
 
-        public async Task<ServiceResult> SPQueryAsync<TRequest, TResult>(TRequest model) where TRequest : class where TResult : class
+        public async Task<ServiceResult> SPQueryAsync<TRequest, TResult>(TRequest model, string procedureName = null) where TRequest : class where TResult : class
         {
-            var res = await _repository.SPQueryAsync<TRequest, TResult>(model);
+            var res = await _repository.SPQueryAsync<TRequest, TResult>(model, procedureName);
             return Result.ReturnAsSuccess(data: res);
         }
 

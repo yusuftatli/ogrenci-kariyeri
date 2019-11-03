@@ -34,7 +34,7 @@ function FileSelected(file) {
    * 
    */
   var fieldId = RoxyUtils.GetUrlParam('txtFieldId');
-  $(window.parent.document).find('#' + fieldId).attr('value', file.fullPath);
+  $(window.parent.document).find('#' + fieldId).val(file.fullPath);
   $(window.parent.document).find('#img_' + fieldId).attr('src', file.fullPath);
   fieldId == 'roxyFieldAnnouncement'
     ? window.parent.closeCustomRoxy2('.'+fieldId)

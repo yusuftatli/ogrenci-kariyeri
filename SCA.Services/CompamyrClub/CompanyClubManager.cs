@@ -34,7 +34,7 @@ namespace SCA.Services
             string flag = (companyClupType == CompanyClupType.Club) ? "Şirket" : "Klüp";
             try
             {
-                string query = "select * from CompanyClubs where CompanyClupType=@CompanyClupType";
+                string query = "select * from CompanyClubs where CompanyClupType=@CompanyClupType AND DeletedDate is null";
                 DynamicParameters filter = new DynamicParameters();
                 filter.Add("CompanyClupType", companyClupType);
                 var resultData = _db.Query<CompanyClubsDto>(query, filter).ToList();

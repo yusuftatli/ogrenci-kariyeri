@@ -23,6 +23,8 @@ namespace SCA.Entity.Model
 
         public long UserId { get; set; }
 
+        public string HeaderImage { get; set; }
+
         public string Description { get; set; }
 
         public string WebSite { get; set; }
