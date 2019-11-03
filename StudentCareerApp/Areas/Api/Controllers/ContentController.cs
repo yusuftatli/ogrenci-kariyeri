@@ -130,5 +130,25 @@ namespace StudentCareerApp.Areas.Api.Controller
             return await _contentManager.GetAllTags();
         }
 
+        [HttpGet("comment-GetAllCommentsPendingApproval")]
+        public async Task<ServiceResult> GetAllCommentsPendingApproval(int readType)
+        {
+            return await _commentManager.GetAllCommentsPendingApproval(readType);
+        }
+
+
+        [HttpGet("comment-approve")]
+        public async Task<ServiceResult> ApproveComment(long id)
+        {
+            return await _commentManager.ApproveComment(id);
+        }
+
+        [HttpGet("comment-Dashboard")]
+        public async Task<ServiceResult> Dashboard()
+        {
+            return await _commentManager.Dashboard();
+        }
+
+
     }
 }

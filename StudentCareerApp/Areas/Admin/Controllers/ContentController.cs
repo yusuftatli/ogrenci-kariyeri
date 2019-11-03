@@ -36,5 +36,6 @@ namespace StudentCareerApp.Areas.Admin.Controllers
         {
             return View();
         }
+        
     }
 }

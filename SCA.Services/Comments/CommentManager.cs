@@ -3,6 +3,7 @@ using MySql.Data.MySqlClient;
 using SCA.Common;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
+using SCA.Entity.Enums;
 using SCA.Entity.Model;
 using System;
 using System.Collections.Generic;
@@ -71,35 +72,62 @@ namespace SCA.Services
         /// onayda beykeleyn bütün yorumları çeker
         /// </summary>
         /// <returns></returns>
-        public async Task<ServiceResult> GetAllCommentsPendingApproval()
+        public async Task<ServiceResult> GetAllCommentsPendingApproval(int readType)
         {
             ServiceResult res = new ServiceResult();
-            await Task.Run(() =>
+            try
             {
-                //var result = _mapper.Map<List<CommentsDto>>((_commentRepo.GetAll(x => x.Approved.Equals(false))));
-                res = Result.ReturnAsSuccess();
-            });
+                int _readTypeId = readType == 0 ? 2 : readType;
+                string query = $"select c.Id, c.Description as comment, u.Id as UserID,u.Name  as userName," +
+                    $" c.PostDate, 'Onayla' buttonName, 'success' as ButtonClass  from Comments c inner join Users u on c.UserID = u.Id " +
+                    $"where Approved = 0 and ReadType ={_readTypeId}";
+
+                var resultData = await _db.QueryAsync<CommentsDto>(query) as List<CommentsDto>;
+                res = Result.ReturnAsSuccess(data: resultData);
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, 0, "CreateComments ", Entity.Enums.PlatformType.Web);
+                res = Result.ReturnAsFail();
+            }
+            return res;
+        }
+        public async Task<ServiceResult> Dashboard()
+        {
+            ServiceResult res = new ServiceResult();
+            try
+            {
+                string query = "select count(Id) as  Count from Comments  GROUP BY Approved";
+
+                var result = await _db.QueryAsync<ContentDashboardDto>(query);
+                res = Result.ReturnAsSuccess(data: result);
+            }
+            catch (Exception ex)
+            {
+                res = res = Result.ReturnAsFail(message: "Kullanıcı dashboard bilgisi yüklenemedi");
+                await _errorManagement.SaveError(ex, null, "User/Dashboard", PlatformType.Web);
+            }
             return res;
         }
 
-        /// <summary>
-        /// makaleye yazılmış olan yorumu admin tarafından onaylar
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <returns></returns>
-        public async Task<ServiceResult> ApproveComment(long Id)
+        public async Task<ServiceResult> ApproveComment(long id)
         {
             ServiceResult res = new ServiceResult();
-            await Task.Run(() =>
+            try
             {
-                //var data = _commentRepo.Get(x => x.Id == Id);
-                //data.Approved = true;
-                //_commentRepo.Update(data);
-                //_unitOfWork.SaveChanges();
-                res = Result.ReturnAsSuccess();
-            });
+                string query = $"update Comments set Approved =1 where Id={id}";
+                await _db.ExecuteAsync(query);
+                return Result.ReturnAsSuccess();
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, 0, "ApproveComment ", Entity.Enums.PlatformType.Web);
+                res = Result.ReturnAsFail();
+            }
             return res;
         }
+
+
 
         /// <summary>
         /// Makale ye ait tüm yorumları getitir

@@ -1,0 +1,206 @@
+﻿@{
+    ViewBag.Title = "Yorum Yönetimi";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+
+
+<head>
+    <link href="~/Template/dist/css/style.min.css" rel="stylesheet">
+
+    <link href="~/Template/AngularComponents/treeselect/vue-treeselect.css" rel="stylesheet" />
+    <link href="~/Template/assets/node_modules/switchery/dist/switchery.css" rel="stylesheet" />
+    <script src="~/Template/AngularComponents/treeselect/vue.js"></script>
+    <script src="~/Template/AngularComponents/treeselect/vue-treeselect.js"></script>
+    <script src="~/Template/AngularComponents/treeselect/index.js"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
+    <script src="~/ScriptController/commnetsController.js"></script>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <script src="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.js"></script>
+    <link href="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.css" rel="stylesheet" />
+</head>
+
+<body ng-app="MyApp" ng-controller="commnetsController">
+    <aside class="left-sidebar">
+        <!-- Sidebar scroll-->
+        <div class="scroll-sidebar">
+            <!-- Sidebar navigation-->
+            <nav class="sidebar-nav">
+                <ul id="sidebarnav">
+                    @*<li class="user-pro">
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><img src="~/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"><span class="hide-menu">@HttpContextAccessor.HttpContext.Session.GetString("NameSurname")</span></a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="/Admin/User/Profile"><i class="ti-user"></i> Profil</a></li>
+                                <li><a href="javascript:void(0)"><i class="ti-wallet"></i> My Balance</a></li>
+                                <li><a href="javascript:void(0)"><i class="ti-email"></i> Inbox</a></li>
+                                <li><a href="javascript:void(0)"><i class="ti-settings"></i> Ayarlar</a></li>
+                                <li><a href="javascript:void(0)"><i class="fa fa-power-off"></i> Çıkış</a></li>
+                            </ul>
+                        </li>*@
+                    <li ng-repeat="x in menuList">
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="{{x.Icon }}"></i><span class="hide-menu" ng-bind="x.Name"> </span></a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li ng-repeat="y in x.Details">
+                                <a href="/{{y.Url}}"><span ng-bind="y.Name"></span> </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li> <a class="waves-effect waves-dark" href="../documentation/documentation.html" aria-expanded="false"><i class="far fa-circle text-danger"></i><span class="hide-menu">Documentation</span></a></li>
+                    <li> <a class="waves-effect waves-dark" href="pages-login.html" aria-expanded="false"><i class="far fa-circle text-success"></i><span class="hide-menu">Log Out</span></a></li>
+                    <li> <a class="waves-effect waves-dark" href="pages-faq.html" aria-expanded="false"><i class="far fa-circle text-info"></i><span class="hide-menu">FAQs</span></a></li>
+                </ul>
+            </nav>
+            <!-- End Sidebar navigation -->
+        </div>
+        <!-- End Sidebar scroll-->
+    </aside>
+
+
+    <div class="page-wrapper">
+        <!-- ============================================================== -->
+        <!-- Container fluid  -->
+        <!-- ============================================================== -->
+        <div class="container-fluid">
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <div class="row page-titles">
+                <div class="col-md-5 align-self-center">
+                    <h4 class="text-themecolor">Yorumlar Yönetimi</h4>
+                </div>
+                <div class="col-md-7 align-self-center text-right">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="javascript:void(0)">Yorumlar Yönetimi</a></li>
+                            <li class="breadcrumb-item active">Makale  Yönetimi</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Start Page Content -->
+            <!-- ============================================================== -->
+            <!-- Row -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Kullanıcı Dashboard</h4>
+                            <div class="row m-t-40">
+                                <!-- Column -->
+                                <div class="col-md-6 col-lg-3 col-xlg-3">
+                                    <div class="card">
+                                        <div class="box bg-info text-center">
+                                            <h1 class="font-light text-white"> <span ng-hide="DashboardData.length>0"><i class="fa fa-spinner fa-spin fa-spin"></i></span><span ng-show="DashboardData.length>0" ng-bind="DashboardData[0].count+DashboardData[1].count"></span></h1>
+                                            <h6 class="text-white"><span>Toplam Yorum</span></h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Column -->
+                                <div class="col-md-6 col-lg-3 col-xlg-3">
+                                    <div class="card">
+                                        <div class="box bg-primary text-center">
+                                            <h1 class="font-light text-white"><span ng-hide="DashboardData.length>0"><i class="fa fa-spinner fa-spin"></i></span><span ng-show="DashboardData.length>0" ng-bind="DashboardData[0].count"></span></h1>
+                                            <h6 class="text-white"><span>Onaylanan</span></h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Column -->
+                                <div class="col-md-6 col-lg-3 col-xlg-3">
+                                    <div class="card">
+                                        <div class="box bg-success text-center">
+                                            <h1 class="font-light text-white"><span ng-hide="DashboardData.length>0"><i class="fa fa-spinner fa-spin"></i></span><span ng-show="DashboardData.length>0" ng-bind="DashboardData[1].count"></span></h1>
+                                            <h6 class="text-white"><span>Onay Bekleyen</span></h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Column -->
+                                @*<div class="col-md-6 col-lg-3 col-xlg-3">
+                                        <div class="card">
+                                            <div class="box bg-dark text-center">
+                                                <h1 class="font-light text-white"><span ng-hide="DashboardData.length>0"><i class="fa fa-spinner fa-spin"></i></span><span ng-show="DashboardData.length>0" ng-bind="DashboardData[3].count"></span></h1>
+                                                <h6 class="text-white"><span ng-bind="DashboardData[3].description"></span></h6>
+                                            </div>
+                                        </div>
+                                    </div>*@
+                                <!-- Column -->
+                            </div>
+                            <div class="center" ng-show="showTable">
+                                <span><i class="fa fa-spinner fa-spin"></i></span>
+                            </div>
+                            <div class="row" ng-show="!showTable">
+                                <div class="col-lg-12">
+
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">Kategori</label>
+                                                <select id="roletypeid" ng-change="onChangeReadType()" class="form-control custom-select" ng-model="readTypeId" name="readTypeId">
+                                                    <option ng-repeat="x in roleTypeList" value="{{x.id}}">{{x.description}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="card">
+
+                                        <div class="card-body">
+                                            <h4 class="card-title">Yorumlar Listesi</h4>
+                                            <h6 class="card-subtitle">Yorum Sayısı : <code><span ng-bind="commentList.length"></span></code></h6>
+                                            <h4><input type="text" class="form-control" name="site-search" id="getData" ng-model="search" ng-keypress="getData($event)" placeholder="Ara..."></h4>
+                                            <span class="center" ng-hide="commentList.length>0"><i class="fa fa-spinner fa-spin"></i></span>
+                                            <table ng-show="commentList.length>0">
+                                                <tr>
+                                                    <td>
+                                                        <button class="btn btn-block btn-primary" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">Önceki </button>
+                                                    </td>
+                                                    <td>
+                                                        &nbsp;{{currentPage+1}}/{{numberOfPages()}}&nbsp;
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-block btn-primary" ng-disabled="currentPage >= getData().length/pageSize - 1" ng-click="currentPage=currentPage+1"> Sonraki</button>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <div class="table-responsive">
+
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Kullanıcı Adı</th>
+                                                            <th>Yorum</th>
+                                                            <th>Tarih</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="x in commentList| filter:search | startFrom:currentPage*pageSize | limitTo:pageSize" )">
+                                                            <td ng-show="false" ng-bind="x.id"></td>
+                                                            <td ng-bind="x.comment"></td>
+                                                            <td ng-bind="x.userName"></td>
+                                                            <td ng-bind="x.postDate | date:'MM/dd/yyyy HH:mm:ss'"></td>
+                                                            <td>
+                                                                <button ng-click="ApproveComment(x.id)" type="button" class="btn btn-rounded btn-{{x.buttonClass}}">{{x.buttonName}}&nbsp;<span ng-hide="aprrpveComment"><i class="fa fa-spinner fa-spin"></i></span></button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+</body>

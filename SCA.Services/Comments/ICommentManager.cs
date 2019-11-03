@@ -17,19 +17,13 @@ namespace SCA.Services
         /// <returns></returns>
         Task<ServiceResult> CreateComments(CommentForUIDto dto);
         Task<ServiceResult> CreateCommentsByMobil(CommentMobilDto dto, string token);
-
+        Task<ServiceResult> Dashboard();
         /// <summary>
         /// onayda beykeleyn bütün yorumları çeker
         /// </summary>
         /// <returns></returns>
-        Task<ServiceResult> GetAllCommentsPendingApproval();
+        Task<ServiceResult> GetAllCommentsPendingApproval(int readType);
 
-        /// <summary>
-        /// makaleye yazılmış olan yorumu admin tarafından onaylar
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <returns></returns>
-        Task<ServiceResult> ApproveComment(long Id);
 
         /// <summary>
         /// Makale ye ait tüm yorumları getitir
@@ -44,5 +38,7 @@ namespace SCA.Services
         /// <param name="Id"></param>
         /// <returns></returns>
         Task<ServiceResult> PassiveApproveComment(long Id);
+
+        Task<ServiceResult> ApproveComment(long id);
     }
 }

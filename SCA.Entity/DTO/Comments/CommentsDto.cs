@@ -16,5 +16,7 @@ namespace SCA.Entity.DTO
         public long UserID { get; set; }
         public string userName { get; set; }
         public DateTime PostDate { get; set; }
+        public string ButtonName { get; set; }
+        public string ButtonClass{ get; set; }
     }
 }
