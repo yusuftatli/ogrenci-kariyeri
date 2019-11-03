@@ -1,0 +1,24 @@
+﻿@model List<SCA.Entity.DTO.CommentForUIDto>
+<h3 class="comments-counter">@Model.Count Yorum</h3>
+@if (Model != null)
+{
+
+    <ul class="comments-list">
+        @foreach (var x in Model)
+        {
+            <li>
+                <div class="comment">
+                    <img class="comment-avatar float-left" alt="" src="@(!string.IsNullOrEmpty(x.ImagePath) ? x.ImagePath : ((x.GenderId == SCA.Entity.Enums.GenderType.Man) ? "/images/avatar/man.png" : "/images/avatar/woman.png"))">
+                    <div class="comment-body">
+                        <div class="meta-data">
+                            <span class="comment-author">@x.UserName</span><span class="comment-date">@x.PostDate.ToShortDateString()</span>
+                        </div>
+                        <div class="comment-content">
+                            <p>@x.Description</p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        }
+    </ul>
+}

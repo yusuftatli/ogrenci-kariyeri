@@ -9,6 +9,8 @@ using SCA.Entity.DTO;
 using SCA.Services;
 using SCA.Services.Interface;
 using SCA.Common;
+using SCA.BLLServices;
+using SCA.Entity.Entities;
 
 namespace SCA.UI.Controllers
 {
@@ -17,10 +19,12 @@ namespace SCA.UI.Controllers
         #region INTERFACES & CONSTRUCTOR
         private readonly IContentManager _contentManager;
         private readonly ICommentManager _commentManager;
-        public BlogController(IContentManager contentManager, ICommentManager commentManager)
+        private readonly ICommentService<Comments> _commentService;
+        public BlogController(IContentManager contentManager, ICommentManager commentManager, ICommentService<Comments> commentService)
         {
             _contentManager = contentManager;
             _commentManager = commentManager;
+            _commentService = commentService;
         }
         #endregion
 

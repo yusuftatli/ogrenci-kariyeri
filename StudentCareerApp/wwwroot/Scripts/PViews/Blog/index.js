@@ -6,7 +6,8 @@
         type: 'post',
         data: $("#commentForm").serialize(),
         success: function(res){
-            console.log(res);
+            if(res.resultCode == 200)
+                toastr["success"]("Yorumunuz başarıyla kaydedildi. Onay sürecinden sonra yorumunuz gözükecektir.");
         }
     })
 })

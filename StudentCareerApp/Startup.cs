@@ -146,6 +146,8 @@ namespace StudentCareerApp
             services.AddTransient<IContentService<SCA.Entity.Entities.Content>, ContentService>();
             services.AddTransient<IImageGalery<SCA.Entity.Entities.ImageGalery>, ImageGaleryRepository>();
             services.AddTransient<IImageGaleryService<SCA.Entity.Entities.ImageGalery>, ImageGaleryService>();
+            services.AddTransient<ICommentService<SCA.Entity.Entities.Comments>, CommentService>();
+            services.AddTransient<IComment<SCA.Entity.Entities.Comments>, CommentRepository>();
 
             //generic services
             services.AddSingleton(typeof(IGenericService<>), typeof(GenericService<>));

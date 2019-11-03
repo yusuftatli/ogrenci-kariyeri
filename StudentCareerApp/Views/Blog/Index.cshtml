@@ -7,18 +7,19 @@
 }
 
 <style>
-    .entry-content{
-        font-size:16px;
-        padding-top:20px;
+    .entry-content {
+        font-size: 16px;
+        padding-top: 20px;
     }
-    .entry-content img {
-        width: 100% !important;
-        height: 100% !important;
-        margin-top: 10px !important;
-        margin-bottom: 10px !important;
-        border-radius: 5px;
-        box-shadow: 0px 0px 5px 0px;
-    }
+
+        .entry-content img {
+            width: 100% !important;
+            height: 100% !important;
+            margin-top: 10px !important;
+            margin-bottom: 10px !important;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px 0px;
+        }
 
     .heart-box i {
         width: 35px;
@@ -31,11 +32,11 @@
         cursor: pointer;
     }
 
-    .author-box{
-        margin-bottom:0 !important;
-        border-bottom:unset !important;
-        border-top:unset !important;
-        padding:50px 0 20px 100px !important;
+    .author-box {
+        margin-bottom: 0 !important;
+        border-bottom: unset !important;
+        border-top: unset !important;
+        padding: 50px 0 20px 100px !important;
     }
 
     .heart-box {
@@ -51,10 +52,10 @@
 <section class="single-post-wrapper post-layout-1">
     <div class="container">
         @*<div class="row">
-            <div class="col-lg-12">
-                <div class="single-big-img mb-30" style="background-image: url(@Model.ImagePath)"></div>
-            </div>
-        </div>*@
+                <div class="col-lg-12">
+                    <div class="single-big-img mb-30" style="background-image: url(@Model.ImagePath)"></div>
+                </div>
+            </div>*@
         <div class="row">
             <div class="col-lg-9">
                 @*<div class="single-big-img mb-30" style="background-image: url(@Model.ImagePath)"></div>*@
@@ -95,14 +96,14 @@
                                 @Model.ReadCount
                             </li>
                             @*<li class="share-post">
-                    <a href="#">
-                        <i class="fa fa-share"></i>
-                    </a>
-                </li>*@
+                                    <a href="#">
+                                        <i class="fa fa-share"></i>
+                                    </a>
+                                </li>*@
 
                             <li class="heart-box">
                                 @if (Context.GetSessionData<SCA.Entity.DTO.UserSession>
-                                   ("userInfo")?.Id > 0)
+                                ("userInfo")?.Id > 0)
                                 {
                                     <a id="addFavorite" data-id="@Model.Id" class="@(Model.IsFavoriteContent ? "active" : "" )">
                                         <i class="fa fa-heart"></i>
@@ -156,47 +157,13 @@
 
                         </div>
                     </div>
-                    @await Component.InvokeAsync("UserPopularItems", new { userId = Model.UserId, count = 8})
+                    @await Component.InvokeAsync("UserPopularItems", new { userId = Model.UserId, count = 8 })
                     <!-- post navigation end-->
                 </div>
                 <!--single post end -->
                 <div class="comments-form ts-grid-box" id="commentArea">
 
-                    <h3 class="comments-counter">@Model.CommentList?.Count Yorum</h3>
-                    <ul class="comments-list">
-                        @foreach (var x in Model.CommentList)
-                        {
-                        <li>
-                            <div class="comment">
-                                <img class="comment-avatar float-left" alt="" src="@(x.ImagePath ?? ((x.GenderId == SCA.Entity.Enums.GenderType.Man) ? "/images/avatar/man.png" : "/images/avatar/woman.png"))">
-                                <div class="comment-body">
-                                    <div class="meta-data">
-                                        <span class="comment-author">@x.UserName</span><span class="comment-date">@x.PostDate.ToShortDateString()</span>
-                                    </div>
-                                    <div class="comment-content">
-                                        <p>@x.Description</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        }
-                        <!-- Comments-list li end-->
-                        @*
-                        <li>
-                            <div class="comment last">
-                                <img class="comment-avatar float-left" alt="" src="~/images/avater/author.png">
-                                <div class="comment-body">
-                                    <div class="meta-data">
-                                        <span class="float-right"><a class="comment-reply" href="#"><i class="fa fa-mail-reply-all"></i> Reply</a></span>
-                                        <span class="comment-author">Demon Lion</span><span class="comment-date">October 31, 2018</span>
-                                    </div>
-                                    <div class="comment-content">
-                                        <p>Cras lectus sed arcus volutpat tincidun met diam placerat.Vis solum numquam. That’s why Attentive help sales teams </p>
-                                    </div>
-                                </div>
-                            </div><!-- Comments last end-->
-                        </li>*@
-                    </ul>
+                    @await Component.InvokeAsync("Comment", new { articleId = Model.Id })
                     <!-- Comments-list ul end-->
 
                     <h3 class="comment-reply-title">Yorum Yap</h3>
@@ -212,15 +179,15 @@
                         <!-- Form row end -->
                         <div class="clearfix">
                             @if (Context.GetSessionData<SCA.Entity.DTO.UserSession>
-                                ("userInfo")?.Id > 0)
-                                {
+                             ("userInfo")?.Id > 0)
+                            {
                                 <input class="hidden" type="hidden" name="ArticleId" value="@Model.Id" />
                                 <button class="comments-btn btn btn-primary" type="submit">Yorum Yap</button>
-                                }
-                                else
-                                {
+                            }
+                            else
+                            {
                                 <button class="comments-btn btn btn-primary openLoginMagnific" type="button">Yorum Yap</button>
-                                }
+                            }
                         </div>
                     </form>
                     <!-- Form end -->
@@ -245,5 +212,8 @@
 <!-- single post end-->
 
 @section Scripts{
+    <script>
+        const articleId = @Model.Id;
+    </script>
     <script src="~/Scripts/PViews/Blog/index.js"></script>
 }
