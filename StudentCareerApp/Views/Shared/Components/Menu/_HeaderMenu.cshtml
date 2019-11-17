@@ -8,7 +8,7 @@
     @foreach (var x in Model.Where(y => y.ParentId == null))
     {
         <li>
-            <a href="#">@x.Description</a>
+            <a href="@Url.Action("Index", "Category", new { id = x.Id, seoUrl = x.Description.FriendlyUrl()})">@x.Description</a>
             <div class="megamenu-panel ts-mega-menu">
                 <div class="megamenu-lists">
                     <ul class="megamenu-list list-col-2">
