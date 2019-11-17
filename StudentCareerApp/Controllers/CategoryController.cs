@@ -23,10 +23,25 @@ namespace SCA.UI.Controllers
         {
             var @params = new
             {
-                categoryId = id
+                categoryId = id,
+                count = 20,
+                pageNumber = 0
             };
+            ViewBag.CategoryId = id;
             var res = await _contentService.SPQueryAsync<object, GetCategoryContents>(@params);
             return View(res);
+        }
+
+        public async Task<IActionResult> GetNewsWith3ColumnsData(string id, int count, int offset)
+        {
+            var @params = new
+            {
+                categoryId = id,
+                count,
+                pageNumber = offset
+            };
+            var res = await _contentService.SPQueryAsync<object, GetCategoryContents>(@params);
+            return View("~/Views/Shared/Components/NewsWith3Columns/_NewsWith3Columns.cshtml", res.Data);
         }
     }
 }

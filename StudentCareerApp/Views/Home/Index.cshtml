@@ -40,11 +40,17 @@
 <!-- post wraper end-->
 @await Component.InvokeAsync("NewsWithSlider", new { count = 10 })
 <!-- post wraper end-->
-<section class="block-wrapper mt-15 xs-mb-30">
+<section class="block-wrapper mt-15 xs-mb-30" id="secondPart">
     <div class="container">
         <div class="row">
             <div class="col-lg-9">
-                @await Component.InvokeAsync("NewsWith2Columns", new { count = 20 })
+                @* NEWS WITH 2 COLUMNS *@
+                <div class="ts-grid-box clearfix ts-category-title">
+                    <h2 class="ts-title float-left">Günün Haberleri</h2>
+                </div>
+                <div class="row post-col-list-item" id="content-items">
+                    @await Component.InvokeAsync("NewsWith2Columns", new { count = 20 })
+                </div>
             </div>
             <div class="col-lg-3">
                 <div class="right-sidebar">
@@ -60,3 +66,29 @@
     <!-- container end-->
 </section>
 <!-- Block wraper end-->
+@section Scripts{
+
+<script>
+    $(document).ready(function () {
+        var isActive = true;
+        var offset = 1;
+        window.addEventListener('scroll', function (e) {
+            var scrollPercentage = window.scrollY / (document.documentElement.scrollHeight - document.documentElement.clientHeight);
+            if (scrollPercentage > 0.9 && isActive) {
+                isActive = false;
+                $.ajax({
+                    url: '/Home/GetNewsWith2ColumnsData',
+                    data: { count: 20, offset: offset },
+                    type: 'get',
+                    success: function (res) {
+                        $("#content-items").append(res);
+                        isActive = true;
+                        offset++;
+                    }
+                })
+            }
+        })
+    })
+
+</script>
+}

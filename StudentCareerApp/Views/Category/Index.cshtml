@@ -10,47 +10,10 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-9">
-                <!-- ts-populer-post-box end-->
-                @await Component.InvokeAsync("NewsWith3Columns", Model.Data as List<SCA.Entity.SPModels.SPResult.GetCategoryContents>)
-                <!-- row-->
-                <!-- pagination-->
-                <div class="ts-pagination text-center mb-20">
-                    <ul class="pagination">
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-angle-double-left"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-angle-left"></i>
-                            </a>
-                        </li>
-                        <li class="active">
-                            <a href="#">1</a>
-                        </li>
-                        <li>
-                            <a href="#">2</a>
-                        </li>
-                        <li>
-                            <a href="#">3</a>
-                        </li>
-                        <li>
-                            <a href="#">4</a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-angle-double-right"></i>
-                            </a>
-                        </li>
-                    </ul>
+                <div class="row" id="category-content-items">
+                    <!-- ts-populer-post-box end-->
+                    @await Component.InvokeAsync("NewsWith3Columns", Model.Data as List<SCA.Entity.SPModels.SPResult.GetCategoryContents>)
                 </div>
-                <!-- pagination end-->
             </div>
             <!-- col end-->
             <div class="col-lg-3">
@@ -69,3 +32,30 @@
     <!-- container end-->
 </section>
 <!-- post wraper end-->
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            var isActive = true;
+            var offset = 1;
+            var id = '@ViewBag.CategoryId';
+            window.addEventListener('scroll', function (e) {
+                var scrollPercentage = window.scrollY / (document.documentElement.scrollHeight - document.documentElement.clientHeight);
+                if (scrollPercentage > 0.9 && isActive) {
+                    isActive = false;
+                    $.ajax({
+                        url: '/Category/GetNewsWith3ColumnsData',
+                        data: { id: id, count: 20, offset: offset },
+                        type: 'get',
+                        success: function (res) {
+                            $("#category-content-items").append(res);
+                            isActive = true;
+                            offset++;
+                        }
+                    })
+                }
+            })
+        })
+    </script>
+}
+
