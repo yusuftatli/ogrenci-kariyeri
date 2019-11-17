@@ -30,6 +30,7 @@ namespace SCA.UI.Controllers
             var ip = HttpContext.Connection.RemoteIpAddress.ToString();
             var guidBrowserId = HttpContext.Request.Cookies["okgdy"].ToString();
             var res = await _contentManager.GetContentUI(seoUrl, HttpContext.GetSessionData<UserSession>("userInfo")?.Id, ip: guidBrowserId);
+            HttpContext.Session.SetString("ContentID", res.Id.ToString());
             return View(res);
         }
 

@@ -1,4 +1,4 @@
-﻿$(document).ready(function(){
+﻿$(document).ready(function () {
     CKEDITOR.replace('ckeditorForAssayContent');
 
     $("#publishHour").clockpicker({
@@ -86,11 +86,39 @@ app.controller("assayController", function ($scope, $http, $filter) {
     $scope.searchModel = {};
 
 
+    $scope.showComment = function (x) {
+        getAllComments(x);
+    };
+
+    function getAllComments(x) {
+        $.ajax({
+            url: _link + "/Content/comment-GetAllCommentsPendingApprovalByContentId",
+            type: "GET", async: true,
+            dataType: Json_,
+            data: { contentId: x },
+            contentType: ContentType_,
+            success: function (e) {
+                if (e.resultCode === 200) {
+                    if (e.data.length > 0) {
+                        $scope.commentList = {};
+                        $scope.commentList = e.data;
+                        $scope.$apply();
+                    } else {
+                        $scope.commentList = {};
+                        $scope.$apply();
+                    }
+                } else {
+                    shortMessage(e.message, "e");
+                }
+            }
+        });
+    }
+
     $scope.onClickDashboard = function () {
         $("#AssayCreate").hide();
         $("#home").show();
         getContentShortList();
-       
+
     };
 
     $scope.onClickContent = function () {
@@ -127,7 +155,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
                         // } else {
                         $scope.showSaveLoading = true;
                         postAssay();
-                       
+
                         // }
                     } else {
                         shortMessage("İçerik Girilmek Zorundadır", "e");

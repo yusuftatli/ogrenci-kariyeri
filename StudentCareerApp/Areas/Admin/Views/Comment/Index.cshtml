@@ -183,8 +183,8 @@
                                                     <tbody>
                                                         <tr ng-repeat="x in commentList| filter:search | startFrom:currentPage*pageSize | limitTo:pageSize" )">
                                                             <td ng-show="false" ng-bind="x.id"></td>
-                                                            <td ng-bind="x.comment"></td>
                                                             <td ng-bind="x.userName"></td>
+                                                            <td ng-bind="x.comment"></td>
                                                             <td ng-bind="x.postDate | date:'MM/dd/yyyy HH:mm:ss'"></td>
                                                             <td>
                                                                 <button ng-click="ApproveComment(x.id)" type="button" class="btn btn-rounded btn-{{x.buttonClass}}">{{x.buttonName}}&nbsp;<span ng-hide="aprrpveComment"><i class="fa fa-spinner fa-spin"></i></span></button>

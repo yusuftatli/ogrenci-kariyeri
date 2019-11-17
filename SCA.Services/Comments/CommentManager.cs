@@ -72,6 +72,48 @@ namespace SCA.Services
         /// onayda beykeleyn bütün yorumları çeker
         /// </summary>
         /// <returns></returns>
+        public async Task<ServiceResult> GetAllCommentsPendingApprovalByContentId(long contentId)
+        {
+            ServiceResult res = new ServiceResult();
+            try
+            {
+                string query = $"select * from List_Comments where ArticleId = {contentId} or SycnId = {contentId}";
+
+                var resultData = await _db.QueryAsync<CommentsDto>(query) as List<CommentsDto>;
+                res = Result.ReturnAsSuccess(data: resultData);
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, 0, "CreateComments ", Entity.Enums.PlatformType.Web);
+                res = Result.ReturnAsFail();
+            }
+            return res;
+        }
+
+        public async Task<bool> UpsadeContentLog(ContentLogDto dto)
+        {
+            try
+            {
+                string query = string.Empty;
+                query = "update UserContentReadLog set ReadEndData = now() where UserId = @UserId and ReadStartDate = @ReadStartDate;";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("UserId", dto.UserId);
+                filter.Add("ReadStartDate", dto.ReadStartDate);
+
+                await _db.ExecuteAsync(query);
+
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, 0, "UpsadeContentLog ", Entity.Enums.PlatformType.Web);
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// onayda beykeleyn bütün yorumları çeker
+        /// </summary>
+        /// <returns></returns>
         public async Task<ServiceResult> GetAllCommentsPendingApproval(int readType)
         {
             ServiceResult res = new ServiceResult();

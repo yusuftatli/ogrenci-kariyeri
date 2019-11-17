@@ -1,4 +1,4 @@
-﻿var prodType = "p";//d,p
+﻿var prodType = "d";//d,p
 var _link = '';
 var _domain = "";
 
@@ -295,7 +295,7 @@ function openCustomRoxy2(id) {
     $(id).dialog({ modal: true, width: 875, height: 600 });
 }
 function closeCustomRoxy2(id) {
-    if($(id).length > 0)
+    if ($(id).length > 0)
         $(id).dialog('close');
 }
 
