@@ -516,12 +516,12 @@ namespace SCA.Services
             return res;
         }
 
-        public async Task<List<ContentForHomePageDTO>> GetContentForHomePage(HitTypes hitTypes, int count)
+        public async Task<List<ContentForHomePageDTO>> GetContentForHomePage(HitTypes hitTypes, int count, int offset = 0)
         {
             List<ContentForHomePageDTO> listData = new List<ContentForHomePageDTO>();
             try
             {
-                listData = await _db.QueryAsync<ContentForHomePageDTO>("Content_ListAll", new { hitType = 1, count = count }, commandType: CommandType.StoredProcedure) as List<ContentForHomePageDTO>;
+                listData = await _db.QueryAsync<ContentForHomePageDTO>("Content_ListAll", new { hitType = 1, count = count, pageNumber = offset }, commandType: CommandType.StoredProcedure) as List<ContentForHomePageDTO>;
             }
             catch (Exception ex)
             {
