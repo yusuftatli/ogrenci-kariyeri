@@ -54,9 +54,11 @@ app.controller('userListController', function ($scope, $http, $filter) {
             if (res.data.resultCode === 200) {
                 shortMessage(res.data.message, "s");
                 $("#userProcessModal").modal('hide');
+                $scope.showSaveLoading = false;
                 getUserList();
             } else {
                 shortMessage(res.data.message, "e");
+                $scope.showSaveLoading = false;
             }
             $scope.showSaveLoading = false;
         });

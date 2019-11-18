@@ -610,7 +610,7 @@ namespace SCA.Services
                 filter.Add("Id", dto.userId);
 
                 var data = _db.ExecuteAsync(query, filter);
-                res = Result.ReturnAsSuccess(message: resultMessage);
+                res = Result.ReturnAsSuccess(message: "Rol atama işlemi başarılı");
             }
             else
             {
