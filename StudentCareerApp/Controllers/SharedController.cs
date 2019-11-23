@@ -60,6 +60,7 @@ namespace SCA.UI.Controllers
                 var result = JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo"));
                 HttpContext.Session.SetString("NameSurname", result.Name + " " + result.Surname);
                 HttpContext.Session.SetString("RoleTypeId", result.RoleTypeId.ToString());
+
                 return Json(res);
             }
             else

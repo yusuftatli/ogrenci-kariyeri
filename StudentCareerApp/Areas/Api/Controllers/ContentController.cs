@@ -149,6 +149,16 @@ namespace StudentCareerApp.Areas.Api.Controller
             return await _commentManager.Dashboard();
         }
 
+        [HttpGet("comment-GetAllCommentsPendingApprovalByContentId")]
+        public async Task<ServiceResult> GetAllCommentsPendingApprovalByContentId(long contentId)
+        {
+            return await _commentManager.GetAllCommentsPendingApprovalByContentId(contentId);
+        }
 
+        [HttpPost("ogrencikariyeri")]
+        public async Task<bool> UpsadeContentLog(ContentLogDto dto)
+        {
+            return await _commentManager.UpsadeContentLog(dto);
+        }
     }
 }

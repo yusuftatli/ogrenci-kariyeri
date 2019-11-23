@@ -119,7 +119,7 @@ app.controller('comapanyController', function ($scope, $http, $filter) {
     };
 
     $scope.deleteCompany = function(id) {
-        var company = $scope.companyList.find(x=>x.id == id);
+        var company = $scope.companyList.find(x=>x.id === id);
         
         swal.fire({
             title: company.shortName + ' şirketi deaktif edilecek!',

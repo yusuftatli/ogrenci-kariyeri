@@ -235,7 +235,7 @@ namespace SCA.Services
                 filter.Add("Surname", dto.Surname);
                 filter.Add("EmailAddress", dto.EmailAddress);
                 filter.Add("PhoneNumber", dto.PhoneNumber);
-                filter.Add("Password", dto.Password);
+                filter.Add("Password", MD5Hash(dto.Password));
                 filter.Add("ImagePath", "");//SaveImage(dto.ImaageData));
                 filter.Add("RoleTypeId", dto.RoleTypeId);
                 filter.Add("RoleExpiresDate", dto.RoleExpiresDate);
@@ -610,7 +610,7 @@ namespace SCA.Services
                 filter.Add("Id", dto.userId);
 
                 var data = _db.ExecuteAsync(query, filter);
-                res = Result.ReturnAsSuccess(message: resultMessage);
+                res = Result.ReturnAsSuccess(message: "Rol atama işlemi başarılı");
             }
             else
             {

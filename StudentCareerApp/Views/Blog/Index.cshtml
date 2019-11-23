@@ -103,7 +103,7 @@
 
                             <li class="heart-box">
                                 @if (Context.GetSessionData<SCA.Entity.DTO.UserSession>
-                                ("userInfo")?.Id > 0)
+                               ("userInfo")?.Id > 0)
                                 {
                                     <a id="addFavorite" data-id="@Model.Id" class="@(Model.IsFavoriteContent ? "active" : "" )">
                                         <i class="fa fa-heart"></i>
@@ -179,7 +179,7 @@
                         <!-- Form row end -->
                         <div class="clearfix">
                             @if (Context.GetSessionData<SCA.Entity.DTO.UserSession>
-                             ("userInfo")?.Id > 0)
+                            ("userInfo")?.Id > 0)
                             {
                                 <input class="hidden" type="hidden" name="ArticleId" value="@Model.Id" />
                                 <button class="comments-btn btn btn-primary" type="submit">Yorum Yap</button>
@@ -217,3 +217,10 @@
     </script>
     <script src="~/Scripts/PViews/Blog/index.js"></script>
 }
+
+<script>
+    window.addEventListener('beforeunload', (e) => {
+       e.preventDefault();
+  e.returnValue = `Are you sure you want to leave?`;
+});
+</script>

@@ -8,21 +8,21 @@
 
 
 
-    <head>
-        <link href="~/Template/dist/css/style.min.css" rel="stylesheet">
+<head>
+    <link href="~/Template/dist/css/style.min.css" rel="stylesheet">
 
-        <link href="~/Template/AngularComponents/treeselect/vue-treeselect.css" rel="stylesheet" />
-        <link href="~/Template/assets/node_modules/switchery/dist/switchery.css" rel="stylesheet" />
-        <script src="~/Template/AngularComponents/treeselect/vue.js"></script>
-        <script src="~/Template/AngularComponents/treeselect/vue-treeselect.js"></script>
-        <script src="~/Template/AngularComponents/treeselect/index.js"></script>
-        <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
-        <script src="~/ScriptController/assayController.js"></script>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <script src="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.js"></script>
-        <link href="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.css" rel="stylesheet" />
-    </head>
+    <link href="~/Template/AngularComponents/treeselect/vue-treeselect.css" rel="stylesheet" />
+    <link href="~/Template/assets/node_modules/switchery/dist/switchery.css" rel="stylesheet" />
+    <script src="~/Template/AngularComponents/treeselect/vue.js"></script>
+    <script src="~/Template/AngularComponents/treeselect/vue-treeselect.js"></script>
+    <script src="~/Template/AngularComponents/treeselect/index.js"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
+    <script src="~/ScriptController/assayController.js"></script>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <script src="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.js"></script>
+    <link href="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.css" rel="stylesheet" />
+</head>
 
 <body ng-app="MyApp" ng-controller="assayController">
     <aside class="left-sidebar">
@@ -32,15 +32,15 @@
             <nav class="sidebar-nav">
                 <ul id="sidebarnav">
                     @*<li class="user-pro">
-                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><img src="~/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"><span class="hide-menu">@HttpContextAccessor.HttpContext.Session.GetString("NameSurname")</span></a>
-                        <ul aria-expanded="false" class="collapse">
-                            <li><a href="/Admin/User/Profile"><i class="ti-user"></i> Profil</a></li>
-                            <li><a href="javascript:void(0)"><i class="ti-wallet"></i> My Balance</a></li>
-                            <li><a href="javascript:void(0)"><i class="ti-email"></i> Inbox</a></li>
-                            <li><a href="javascript:void(0)"><i class="ti-settings"></i> Ayarlar</a></li>
-                            <li><a href="javascript:void(0)"><i class="fa fa-power-off"></i> Çıkış</a></li>
-                        </ul>
-                    </li>*@
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><img src="~/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"><span class="hide-menu">@HttpContextAccessor.HttpContext.Session.GetString("NameSurname")</span></a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="/Admin/User/Profile"><i class="ti-user"></i> Profil</a></li>
+                                <li><a href="javascript:void(0)"><i class="ti-wallet"></i> My Balance</a></li>
+                                <li><a href="javascript:void(0)"><i class="ti-email"></i> Inbox</a></li>
+                                <li><a href="javascript:void(0)"><i class="ti-settings"></i> Ayarlar</a></li>
+                                <li><a href="javascript:void(0)"><i class="fa fa-power-off"></i> Çıkış</a></li>
+                            </ul>
+                        </li>*@
                     <li ng-repeat="x in menuList">
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="{{x.Icon }}"></i><span class="hide-menu" ng-bind="x.Name"> </span></a>
                         <ul aria-expanded="false" class="collapse">
@@ -60,7 +60,7 @@
     </aside>
 
 
-    <div class="page-wrapper" >
+    <div class="page-wrapper">
         <!-- ============================================================== -->
         <!-- Container fluid  -->
         <!-- ============================================================== -->
@@ -246,9 +246,10 @@
                                                                     <th>Oluşturma Tarihi</th>
                                                                     <th>Yayınlanma Tarihi</th>
                                                                     <th>Detay</th>
+                                                                    <th>Yorumlar</th>
                                                                     @if (ViewBag.showColumn == 1 || ViewBag.showColumn == 2 || ViewBag.showColumn == 4)
                                                                     {
-                                                                    <th>İşlem</th>
+                                                                        <th>İşlem</th>
                                                                     }
 
                                                                 </tr>
@@ -266,11 +267,14 @@
                                                                     <td>
                                                                         <button ng-click="showContentDetail(x.id)" type="button" class="btn btn-rounded btn-success">Aç</button>
                                                                     </td>
+                                                                    <td>
+                                                                        <button ng-click="showComment(x.id)" type="button" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#commentModal">Aç</button>
+                                                                    </td>
                                                                     @if (ViewBag.showColumn == 1 || ViewBag.showColumn == 2 || ViewBag.showColumn == 4)
                                                                     {
-                                                                    <td>
-                                                                        <button ng-click="onClikckProcess(x)" type="button" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#contentProcessModal">İşlem</button>
-                                                                    </td>
+                                                                        <td>
+                                                                            <button ng-click="onClikckProcess(x)" type="button" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#contentProcessModal">İşlem</button>
+                                                                        </td>
                                                                     }
 
                                                                 </tr>
@@ -284,13 +288,49 @@
 
                                 </div>
 
+                                <div class="modal fade bs-example-modal-lg" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModal">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" id="exampleModalLabel1">Yorumlar</h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="table-responsive">
+
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Kullanıcı Adı</th>
+                                                                <th>Yorum</th>
+                                                                <th>Tarih</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr ng-repeat="x in commentList| filter:search | startFrom:currentPage*pageSize | limitTo:pageSize" )">
+                                                                <td ng-show="false" ng-bind="x.id"></td>
+                                                                <td ng-bind="x.userName"></td>
+                                                                <td ng-bind="x.comment"></td>
+                                                                <td ng-bind="x.postDate | date:'MM/dd/yyyy HH:mm:ss'"></td>
+                                                                <td>
+                                                                    <button ng-click="ApproveComment(x.id)" type="button" class="btn btn-rounded btn-{{x.buttonClass}}">{{x.buttonName}}</button>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
 
 
                                 <div class="modal fade" id="contentProcessModal" tabindex="-1" role="dialog" aria-labelledby="contentProcessModal">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h4 class="modal-title" id="exampleModalLabel1">Platform Türü:{{contentProcess.platformTypeDes}} - Makale Adı{{contentProcess.header}} </h4>
+                                                <h4 class="modal-title" id="exampleModalLabel1">Yorumlar </h4>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                             </div>
                                             <div class="modal-body">
@@ -311,6 +351,8 @@
                                         </div>
                                     </div>
                                 </div>
+
+
 
 
                                 <div ng-disabled="showSaveLoading" class="tab-pane  p-20" id="AssayCreate" role="tabpanel">
