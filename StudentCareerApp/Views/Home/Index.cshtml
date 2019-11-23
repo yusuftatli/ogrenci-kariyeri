@@ -51,6 +51,10 @@
                 <div class="row post-col-list-item" id="content-items">
                     @await Component.InvokeAsync("NewsWith2Columns", new { count = 20 })
                 </div>
+                <div class="col-md-12 text-center">
+                    <button class="btn btn-primary hidden" id="load-more-button" onclick="moreContentButton()">Daha fazla...</button>
+                    <i id="spinner-load-content" class="fa fa-spinner fa-pulse fa-3x hidden"></i>
+                </div>
             </div>
             <div class="col-lg-3">
                 <div class="right-sidebar">
@@ -69,26 +73,44 @@
 @section Scripts{
 
 <script>
+    var offset = 1;
+    var isActive = true;
     $(document).ready(function () {
-        var isActive = true;
-        var offset = 1;
         window.addEventListener('scroll', function (e) {
-            var scrollPercentage = window.scrollY / (document.documentElement.scrollHeight - document.documentElement.clientHeight);
-            if (scrollPercentage > 0.9 && isActive) {
-                isActive = false;
-                $.ajax({
-                    url: '/Home/GetNewsWith2ColumnsData',
-                    data: { count: 20, offset: offset },
-                    type: 'get',
-                    success: function (res) {
-                        $("#content-items").append(res);
-                        isActive = true;
-                        offset++;
-                    }
-                })
-            }
+            loadMoreContents();
+            console.log(offset, isActive);
+            
         })
     })
+
+    function loadMoreContents() {
+        var scrollPercentage = window.scrollY / (document.documentElement.scrollHeight - document.documentElement.clientHeight);
+        if (scrollPercentage > 0.9 && isActive) {
+            $("#spinner-load-content").removeClass("hidden");
+            isActive = false;
+            $.ajax({
+                url: '/Home/GetNewsWith2ColumnsData',
+                data: { count: 20, offset: offset },
+                type: 'get',
+                success: function (res) {
+                    $("#content-items").append(res);
+                    isActive = true;
+                    offset++;
+                    if (offset % 5 == 0) {
+                        isActive = false;
+                        $("#load-more-button").removeClass("hidden");
+                        $("#spinner-load-content").addClass("hidden");
+                    }
+                }
+            })
+        }
+    }
+
+    function moreContentButton() {
+        $('#load-more-button').addClass('hidden');
+        isActive = true;
+        loadMoreContents()
+    }
 
 </script>
 }
