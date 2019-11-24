@@ -6,24 +6,25 @@
 @using Microsoft.AspNetCore.Http
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
-<head>
-    <link href="~/Template/dist/css/style.min.css" rel="stylesheet">
-    <link href="~/Template/AngularComponents/treeselect/vue-treeselect.css" rel="stylesheet" />
-    <link href="~/Template/assets/node_modules/switchery/dist/switchery.css" rel="stylesheet" />
-    <script src="~/Template/AngularComponents/treeselect/vue.js"></script>
-    <script src="~/Template/AngularComponents/treeselect/vue-treeselect.js"></script>
-    <script src="~/Template/AngularComponents/treeselect/index.js"></script>
-    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
-    <script src="~/ScriptController/pagesController.js"></script>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <script src="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.js"></script>
-    <link href="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.css" rel="stylesheet" />
-</head>
+    <head>
+        <link href="~/Template/dist/css/style.min.css" rel="stylesheet">
+        <link href="~/Template/AngularComponents/treeselect/vue-treeselect.css" rel="stylesheet" />
+        <link href="~/Template/assets/node_modules/switchery/dist/switchery.css" rel="stylesheet" />
+        <script src="~/Template/AngularComponents/treeselect/vue.js"></script>
+        <script src="~/Template/AngularComponents/treeselect/vue-treeselect.js"></script>
+        <script src="~/Template/AngularComponents/treeselect/index.js"></script>
+        <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
+        <script src="~/ScriptController/pagesController.js"></script>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <script src="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.js"></script>
+        <link href="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.css" rel="stylesheet" />
+        <script src="~/js/MTBootstrapLazyLoad.js"></script>
+    </head>
 
 <body>
 
-    <div class="page-wrapper">
+    <div class="page-wrapper" id="vue-basic-page">
         <!-- ============================================================== -->
         <!-- Container fluid  -->
         <!-- ============================================================== -->
@@ -58,14 +59,14 @@
                             <div class="tab-pane active" id="home" role="tabpanel">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h4 class="card-title">Sayfa Listesi</h4>
-                                        <h6 class="card-subtitle">Sayfa Sayısı : <code><span ng-bind="assayList.length"></span></code></h6>
-                                        <h4><input type="text" class="form-control" name="site-search" id="getData" ng-model="search" ng-keypress="getData($event)" placeholder="Ara..."></h4>
-                                        
+                                        <h4 class="card-title">Sayfa Listesi <button id="popupModal" class="btn btn-default pull-right lazyload showModal" data-size="modal-xl" data-url="/Admin/Pages/AddOrUpdateBasicPage" data-header="<i class='fa fa-plus'></i> Yeni Sayfa"><i class="fa fa-plus"></i> Yeni</button></h4>
+                                        <h6 class="card-subtitle">Sayfa Sayısı : <code><span>{{pageList.length}}</span></code></h6>
+                                        <h4><input type="text" class="form-control" name="site-search" id="getData" v-model="search" v-on:keydown="filterData()" placeholder="Ara..."></h4>
                                         <div class="table-responsive">
                                             <table class="table">
                                                 <thead>
                                                     <tr>
+                                                        <th>Sıra</th>
                                                         <th>SeoUrl</th>
                                                         <th>Başlık</th>
                                                         <th>Aktif/Pasif</th>
@@ -74,11 +75,13 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr v-for="x in pageList">
+                                                        <td>{{x.orderNo}}</td>
                                                         <td>{{x.seoUrl}}</td>
                                                         <td>{{x.title}}</td>
                                                         <td></td>
                                                         <td>
-                                                            <button ng-click="showDetailPages(x.id)" type="button" class="btn btn-rounded btn-success">Aç</button>
+                                                            <button id="popupModal" class="btn btn-default lazyload showModal" data-size="modal-xl" :data-url="'/Admin/Pages/AddOrUpdateBasicPage?id='+x.id" data-header="<i class='fa fa-plus'></i> Sayfa Düzenle"> Aç</button>
+                                                            @*<button ng-click="showDetailPages(x.id)" type="button" class="btn btn-rounded btn-success">Aç</button>*@
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -99,5 +102,6 @@
         </div>
     </div>
 
-    </div>
 </body>
+
+<script src="~/Template/PViews/BasicPages/index.js"></script>
