@@ -58,9 +58,6 @@ namespace SCA.DapperRepository.Generic
             var expBody = "";
             if (predicate != null)
             {
-                try
-                {
-
                 expBody = new CustomVisitor().Visit(predicate.Body).ToString()
                     .Replace("AndAlso", "AND")
                     .Replace("OrElse", "OR")
@@ -68,9 +65,8 @@ namespace SCA.DapperRepository.Generic
                     .Replace("Convert(", "")
                     .Replace(", Int32)", "")
                     .Replace("= null", "is null")
-                    .Replace(", Nullable`1)", "");
-                }
-                catch(Exception ex) { }
+                    .Replace(", Nullable`1)", "")
+                    .Replace("\"", "'");
                 if (!string.IsNullOrEmpty(expBody))
                     expBody = "WHERE " + expBody.Replace(predicate.Parameters[0].Name + ".", "");
             }

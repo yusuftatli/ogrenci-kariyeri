@@ -1,0 +1,45 @@
+﻿@model SCA.Entity.Model.BasicPageVM
+
+@{
+    ViewData["Title"] = "BasicPage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- post wraper start-->
+<section class="block-wrapper mt-15">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="ts-grid-box">
+                    <div class="author-box-item">
+                        <div class="author-info">
+                            <div class="text-center">
+                                <h4>@Model.Title</h4>
+                            </div>
+
+                            <hr/>
+                            <div class="clearfix"></div>
+                            @Html.Raw(Model.Description)
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- col end-->
+            <div class="col-lg-3">
+                <div class="right-sidebar">
+                    @await Component.InvokeAsync("PopularContents", new { count = 5 })
+                    @await Component.InvokeAsync("Companies")
+                    @await Component.InvokeAsync("PopularCategories")
+                </div>
+                <!-- right sidebar end-->
+            </div>
+            <!-- col end-->
+        </div>
+        <!-- row end-->
+    </div>
+    <!-- container end-->
+</section>
+<!-- post wraper end-->
