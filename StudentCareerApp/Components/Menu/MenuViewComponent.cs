@@ -13,13 +13,11 @@ namespace StudentCareerApp.Components.Menu
     {
         private readonly ICategoryService<Category> _categoryService;
 
-        public MenuViewComponent(ICategoryService<Category> categoryService)
-        {
-            _categoryService = categoryService;
-        }
+        public MenuViewComponent(ICategoryService<Category> categoryService) => _categoryService = categoryService;
+
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var res = _categoryService.GetByWhereParams<MainCategoryDto>(x => x.IsActive == true).Result;
+            var res = await _categoryService.GetByWhereParams<MainCategoryDto>(x => x.IsActive == true);
             return View("_HeaderMenu", res.Data as List<MainCategoryDto>);
         }
     }

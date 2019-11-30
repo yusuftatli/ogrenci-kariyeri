@@ -53,6 +53,10 @@
     .featured-slider-item {
         cursor: pointer;
     }
+    #side-news-slider ::before{
+        border-radius:0px 0px 12px 0px;
+    }
+    
 </style>
 
 <div class="col-lg-8 pr-0">
@@ -88,11 +92,11 @@
     <!-- ts overlay end-->
 </div>
 <!-- col end-->
-<div class="col-lg-4 ts-grid-style-3 featured-post p-1">
+<div class="col-lg-4 ts-grid-style-3 featured-post p-1" id="side-news-slider">
     @if (Model.TopContent != null)
     {
         <div class="ts-overlay-style">
-            <div class="item" style="background-image: url(@Model.TopContent.ImagePath); cursor: pointer;" id="hrefContent" onclick="window.location.href = '@Url.Action("Index", "Blog", new { seoUrl = Model.TopContent.SeoUrl})'">
+            <div class="item" style="background-image: url(@Model.TopContent.ImagePath); cursor: pointer; border-radius:0px 12px 0px 0px;" id="hrefContent" onclick="window.location.href = '@Url.Action("Index", "Blog", new { seoUrl = Model.TopContent.SeoUrl})'">
                 @if (!string.IsNullOrEmpty(Model.TopContent.Category))
                 {
                     <a class="post-cat ts-pink-bg" href="@Url.Action("Index", "Category", new { id = Model.TopContent.Category.Split(',')[0].ToString(), seoUrl = Model.TopContent.CategoryName.FriendlyUrl()})">@Model.TopContent.CategoryName</a>
@@ -120,7 +124,7 @@
     {
         <!-- ts overly end-->
         <div class="ts-overlay-style">
-            <div class="item" style="background-image: url(@Model.BottomContent.ImagePath); cursor: pointer;" onclick="window.location.href = '@Url.Action("Index", "Blog", new { seoUrl = Model.BottomContent.SeoUrl})'">
+            <div class="item" style="background-image: url(@Model.BottomContent.ImagePath); cursor: pointer; border-radius:0px 0px 12px 0px;" onclick="window.location.href = '@Url.Action("Index", "Blog", new { seoUrl = Model.BottomContent.SeoUrl})'">
                 @if (!string.IsNullOrEmpty(Model.BottomContent.Category))
                 {
                     <a class="post-cat ts-green-bg" href="@Url.Action("Index", "Category", new { id = Model.BottomContent.Category.Split(',')[0].ToString(), seoUrl = Model.BottomContent.CategoryName.FriendlyUrl()})">@Model.BottomContent.CategoryName</a>

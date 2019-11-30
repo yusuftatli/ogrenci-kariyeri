@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SCA.Entity.Model
+namespace SCA.Entity.Model.BasicPages
 {
     public class BasicPages : BaseEntities
     {

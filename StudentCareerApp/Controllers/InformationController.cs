@@ -30,6 +30,7 @@ namespace SCA.UI.Controllers
             return View();
         }
 
+        [Route("bilgi/{basicSeoUrl}")]
         public async Task<IActionResult> BasicPage(string basicSeoUrl)
         {
             var res = await _basicPageService.GetByWhereParams<BasicPageVM>(x => x.SeoUrl == basicSeoUrl);
