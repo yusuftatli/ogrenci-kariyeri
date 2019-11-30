@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SCA.Entity.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -17,6 +18,10 @@ namespace SCA.Entity.Model
         public string Title { get; set; }
 
         public bool IsActive { get; set; }
+
+        public byte OrderNo { get; set; }
+
+        public PageType TypeOfPage { get; set; }
 
         public long UpdatedUserID { get; set; }
 

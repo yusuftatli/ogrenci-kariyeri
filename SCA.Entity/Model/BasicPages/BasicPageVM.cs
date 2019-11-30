@@ -1,4 +1,6 @@
-﻿namespace SCA.Entity.Model
+﻿using SCA.Entity.Enums;
+
+namespace SCA.Entity.Model
 {
     public class BasicPageVM
     {
@@ -14,5 +16,8 @@
 
         public bool IsActive { get; set; }
 
+        public byte OrderNo { get; set; }
+
+        public PageType TypeOfPage { get; set; }
     }
 }

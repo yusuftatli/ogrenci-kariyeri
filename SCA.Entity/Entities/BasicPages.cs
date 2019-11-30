@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SCA.Entity.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -29,5 +30,9 @@ namespace SCA.Entity.Entities
         public DateTime? DeletedDate { get; set; }
 
         public bool IsDeleted { get; set; }
+        
+        public PageType TypeOfPage { get; set; }
+
+        public byte Order { get; set; }
     }
 }

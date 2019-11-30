@@ -1,0 +1,82 @@
+﻿@using SCA.Entity.Enums;
+@using SCA.Common;
+
+<style>
+    body > div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.ui-draggable.ui-resizable {
+        z-index: 9999 !important;
+    }
+</style>
+
+<link href="~/Template/assets/node_modules/switchery/dist/switchery.css" rel="stylesheet" />
+
+<div id="vue-basic-page-add-or-update">
+    <div class="modal-body">
+        <div class="col-lg-12">
+            <div class="form-body">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Sayfa Adı</label>
+                                <input type="text" id="basicPageTitle" v-model="basicPage.title" class="form-control" placeholder="Sayfa Adı">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Seo Url</label>
+                                <input type="text" id="basicPageSeoUrl" :value="regexSeo(basicPage.title)" class="form-control" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Sayfa Tipi</label>
+                                <select class="form-control" v-model="basicPage.typeOfPage">
+                                    <option value="">Seçim yapınız...</option>
+                                    @foreach (PageType type in (PageType[])Enum.GetValues(typeof(PageType)))
+                                    {
+                                        <option value="@((byte)type)">@type.GetDescription()</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label>Sayfa Header Resmi</label>
+                                <input type="text" class="form-control" id="roxyFieldAnnouncement" onclick="openCustomRoxy2('.roxyFieldAnnouncement')" />
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Aktif mi?</label>
+                                <br/>
+                                <input id="toggleActive" type="checkbox" v-model="basicPage.IsActive" class="js-switch" data-color="#00c292" />
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Sıra</label>
+                                <input type="number" v-model="basicPage.orderNo" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Açıklama</label>
+                                <textarea id="ckeditorForBasicPageDesc"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" v-on:click="addOrUpdateBasicPage()">Kaydet</button>
+    </div>
+</div>
+<span id="page-info-area" class="hidden" data-page-id="@ViewBag.PageId"></span>
+
+<div class="roxyFieldAnnouncement" style="display: none;">
+    <iframe src="/lib/fileman/index.html?integration=custom&txtFieldId=roxyFieldAnnouncement" style="width:100%;height:100%" frameborder="0"></iframe>
+</div>
+
+<script src="~/Template/PViews/BasicPages/addOrUpdateBasicPage.js"></script>

@@ -13,6 +13,7 @@
                 <div class="row" id="category-content-items">
                     <!-- ts-populer-post-box end-->
                     @await Component.InvokeAsync("NewsWith3Columns", Model.Data as List<SCA.Entity.SPModels.SPResult.GetCategoryContents>)
+                    <a class="btn btn-primary" id="load-more-button" onclick="isActive = true; $(this).addClass('hidden'); loadMoreContents()"></a>
                 </div>
             </div>
             <!-- col end-->
@@ -32,15 +33,23 @@
     <!-- container end-->
 </section>
 <!-- post wraper end-->
-
 @section Scripts{
-    <script>
+<script>
+        var offset = 1;
+        var isActive = true;
         $(document).ready(function () {
-            var isActive = true;
-            var offset = 1;
             var id = '@ViewBag.CategoryId';
             window.addEventListener('scroll', function (e) {
-                var scrollPercentage = window.scrollY / (document.documentElement.scrollHeight - document.documentElement.clientHeight);
+                loadMoreContents();
+                if(offset % 5 == 0){
+                    isActive = false;
+                    $("#load-more-button").removeClass("hidden");
+                }
+            })
+        })
+
+        function loadMoreContents() {
+             var scrollPercentage = window.scrollY / (document.documentElement.scrollHeight - document.documentElement.clientHeight);
                 if (scrollPercentage > 0.9 && isActive) {
                     isActive = false;
                     $.ajax({
@@ -54,8 +63,7 @@
                         }
                     })
                 }
-            })
-        })
-    </script>
+        }
+</script>
 }
 

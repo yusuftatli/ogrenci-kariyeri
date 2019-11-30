@@ -4,11 +4,16 @@
         pageList: [],
         search: '',
         urls: {
-            getPageList: '/Pages/GetBasicPageList/'
+            getPageList: '/Admin/Pages/GetBasicPageList/'
+        }
+    },
+    computed: {
+        filteredPageList: function(){
+            return this.pageList.filter(x=>x.title.indexOf(this.search) || x.seoUrl.indexOf(this.search));
         }
     },
     mounted: function(){
-
+        this.getPageList();
     },
     methods: {
         getPageList: function(){
@@ -16,7 +21,8 @@
                 url: this.urls.getPageList,
                 type: 'get',
                 success: ((res) => {
-                    this.pageList = res.data;
+                    if(res.resultCode == 200)
+                        this.pageList = res.data;
                 })
             })
         }

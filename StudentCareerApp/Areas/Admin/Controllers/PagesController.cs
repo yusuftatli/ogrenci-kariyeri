@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace StudentCareerApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Route("[area]/[controller]")]
+    [Route("[area]/[controller]/[action]")]
     public class PagesController : Controller
     {
         private readonly IBasicPagesService<SCA.Entity.Entities.BasicPages> _basicPagesService;
@@ -25,12 +25,25 @@ namespace StudentCareerApp.Areas.Admin.Controllers
             return View();
         }
 
-        public async Task<JsonResult> GetBasicPageList()
+        public ActionResult AddOrUpdateBasicPage(long? id)
         {
-            var res = await _basicPagesService.GetByWhereParams<SCA.Entity.Model.BasicPageList>(x => x.IsDeleted == false);
+            ViewBag.PageId = id;
+            return View();
+        }
+
+        public async Task<JsonResult> GetBasicPageDetails(long id)
+        {
+            var res = await _basicPagesService.GetByIdAsync<BasicPageVM>(id);
             return Json(res);
         }
 
+        public async Task<JsonResult> GetBasicPageList()
+        {
+            var res = await _basicPagesService.GetByWhereParams<SCA.Entity.Model.BasicPageList>(x => x.IsActive == true && x.IsDeleted == false);
+            return Json(res);
+        }
+
+        [HttpPost]
         public async Task<JsonResult> AddOrUpdateBasicPage(SCA.Entity.Model.BasicPageVM model)
         {
             var user = HttpContext.GetSessionData<UserSession>("userInfo");
@@ -45,7 +58,9 @@ namespace StudentCareerApp.Areas.Admin.Controllers
                     ImagePath = model.ImagePath,
                     IsActive = model.IsActive,
                     SeoUrl = model.SeoUrl,
-                    Title = model.Title
+                    Title = model.Title,
+                    TypeOfPage = model.TypeOfPage,
+                    OrderNo = model.OrderNo
                 };
                 var res = await _basicPagesService.InsertAsync(reqModel);
                 return Json(res);
@@ -60,6 +75,8 @@ namespace StudentCareerApp.Areas.Admin.Controllers
                     IsActive = model.IsActive,
                     SeoUrl = model.SeoUrl,
                     Title = model.Title,
+                    TypeOfPage = model.TypeOfPage,
+                    OrderNo = model.OrderNo,
                     UpdatedDate = DateTime.Now,
                     UpdatedUserID = user.Id
                 };
