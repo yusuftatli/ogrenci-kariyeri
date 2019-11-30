@@ -1,5 +1,5 @@
 ﻿
-var app = angular.module("MyApp", ["ui.bootstrap"]);
+var app = angular.module("MyApp", []);
 app.controller('profileController', function ($scope, $http, $filter) {
     "use strict";
 

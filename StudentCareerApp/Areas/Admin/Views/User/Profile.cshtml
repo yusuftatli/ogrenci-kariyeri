@@ -2,20 +2,26 @@
     ViewBag.Title = "Profil";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
+
 @using Microsoft.AspNetCore.Http
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
-
-
-
-<html lang="en">
 
 
 
 <head>
     <link href="~/Template/dist/css/style.min.css" rel="stylesheet">
 
-    <link href="~/Template/dist/css/pages/contact-app-page.css" rel="stylesheet">
-    <script src="~/ScriptController/profileController.js"></script>
+    <link href="~/Template/AngularComponents/treeselect/vue-treeselect.css" rel="stylesheet" />
+    <link href="~/Template/assets/node_modules/switchery/dist/switchery.css" rel="stylesheet" />
+    <script src="~/Template/AngularComponents/treeselect/vue.js"></script>
+    <script src="~/Template/AngularComponents/treeselect/vue-treeselect.js"></script>
+    <script src="~/Template/AngularComponents/treeselect/index.js"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
+
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <script src="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.js"></script>
+    <link href="~/Template/ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror.css" rel="stylesheet" />
 </head>
 
 <body ng-app="MyApp" ng-controller="profileController">
@@ -26,17 +32,17 @@
             <nav class="sidebar-nav">
                 <ul id="sidebarnav">
                     @*<li class="user-pro">
-                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><img src="~/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"><span class="hide-menu">@HttpContextAccessor.HttpContext.Session.GetString("NameSurname")</span></a>
-                        <ul aria-expanded="false" class="collapse">
-                            <li><a href="javascript:void(0)"><i class="ti-user"></i> Profil</a></li>
-                            
-                                <li><a href="javascript:void(0)"><i class="ti-wallet"></i> My Balance</a></li>
-                            
-                                <li><a href="javascript:void(0)"><i class="ti-email"></i> Inbox</a></li>
-                            <li><a href="javascript:void(0)"><i class="ti-settings"></i> Ayarlar</a></li>
-                            <li><a href="javascript:void(0)"><i class="fa fa-power-off"></i> Çıkış</a></li>
-                        </ul>
-                    </li>*@
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><img src="~/Template/assets/images/users/1.jpg" alt="user-img" class="img-circle"><span class="hide-menu">@HttpContextAccessor.HttpContext.Session.GetString("NameSurname")</span></a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="javascript:void(0)"><i class="ti-user"></i> Profil</a></li>
+
+                                    <li><a href="javascript:void(0)"><i class="ti-wallet"></i> My Balance</a></li>
+
+                                    <li><a href="javascript:void(0)"><i class="ti-email"></i> Inbox</a></li>
+                                <li><a href="javascript:void(0)"><i class="ti-settings"></i> Ayarlar</a></li>
+                                <li><a href="javascript:void(0)"><i class="fa fa-power-off"></i> Çıkış</a></li>
+                            </ul>
+                        </li>*@
                     <li ng-repeat="x in menuList">
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="{{x.Icon }}"></i><span class="hide-menu" ng-bind="x.Name"> </span></a>
                         <ul aria-expanded="false" class="collapse">
@@ -54,6 +60,7 @@
         </div>
         <!-- End Sidebar scroll-->
     </aside>
+
 
 
     <div class="page-wrapper">
@@ -361,5 +368,8 @@
         <!-- End Container fluid  -->
         <!-- ============================================================== -->
     </div>
+
 </body>
 
+
+<script src="~/ScriptController/profileController.js"></script>
