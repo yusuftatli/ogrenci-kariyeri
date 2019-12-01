@@ -15,7 +15,7 @@ namespace StudentCareerApp.Components.Menu
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var res = await _basicPageService.GetByWhereParams<SCA.Entity.Model.BasicPages.BasicPageForMenu>(x => x.IsActive == true && x.TypeOfPage == SCA.Entity.Enums.PageType.FooterPage);
+            var res = await _basicPageService.GetByWhereParams<SCA.Entity.Model.BasicPages.BasicPageForMenu>(x => x.IsActive == true && (x.TypeOfPage == SCA.Entity.Enums.PageType.FooterPage || x.TypeOfPage == SCA.Entity.Enums.PageType.BothOfThem));
             return View("_FooterMenu", res.Data as List<SCA.Entity.Model.BasicPages.BasicPageForMenu>);
         }
     }

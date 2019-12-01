@@ -1,0 +1,11 @@
+﻿@model List<SCA.Entity.Model.BasicPages.BasicPageForMenu>
+
+@if (!Model.Equals(null))
+{
+    foreach (var x in Model)
+    {
+        <li>
+            <a href="@Url.Action("BasicPage", "Information", new { basicSeoUrl = x.SeoUrl})">@x.Title</a>
+        </li>
+    }
+}
