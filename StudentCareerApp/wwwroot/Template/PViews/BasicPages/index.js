@@ -5,7 +5,9 @@
         search: '',
         urls: {
             getPageList: '/Admin/Pages/GetBasicPageList/'
-        }
+        },
+        menuList : JSON.parse(localStorage.getItem("menus"))
+
     },
     computed: {
         filteredPageList: function(){
