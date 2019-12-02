@@ -8,6 +8,6 @@ namespace SCA.Entity.DTO
     {
         public string ShortName { get; set; }
         public string Description { get; set; }
-        public string CompanyUserImage { get; set; }
+        public string CompanyProfileImagePath { get; set; }
     }
 }

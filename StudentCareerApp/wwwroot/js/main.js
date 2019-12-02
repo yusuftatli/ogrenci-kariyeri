@@ -124,7 +124,22 @@ $(function ($) {
             responsiveClass: true,
             autoplayTimeout: 5000,
             autoplay:true,
-            autoplayHoverPause: true
+            autoplayHoverPause: true,
+            responsive:{
+                0:{
+                    items: 1,
+                },
+                540: {
+                    items: 2,
+                },
+                780: {
+                    items: 3
+                },
+                1000: {
+                    items: 5
+                }
+
+            }
         })
     }
     /*======================== 
