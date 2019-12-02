@@ -1,4 +1,15 @@
-﻿@model  SCA.Entity.DTO.CompanyClubInformationDto
+﻿@model SCA.Entity.DTO.CompanyClubInformationDto
+
+<style>
+    @@media(max-width:500px) {
+        .author-box-item {
+            padding: 0 !important;
+        }
+        .hidden-xs{
+            display:none;
+        }
+    }
+</style>
 
 <section class="block-wrapper mt-15">
     <div class="container">
@@ -6,7 +17,7 @@
             <div class="col-lg-12">
                 <div class="ts-grid-box">
                     <div class="author-box author-box-item">
-                        <img class="author-img" src="@(!string.IsNullOrEmpty(Model.CompanyUserImage) ? Model.CompanyUserImage : "/images/avatar/man.png")" alt="Öğrenci Kariyeri - Şirket Bilgileri - @Model.ShortName">
+                        <img class="author-img hidden-xs" src="@(!string.IsNullOrEmpty(Model.CompanyProfileImagePath) ? Model.CompanyProfileImagePath : "/images/avatar/man.png")" alt="Öğrenci Kariyeri - Şirket Bilgileri - @Model.ShortName">
                         <div class="author-info">
                             <div class="author-name">
                                 <h4>@Model.ShortName</h4>

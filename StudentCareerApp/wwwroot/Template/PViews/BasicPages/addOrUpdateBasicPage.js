@@ -16,11 +16,7 @@
             öÖ: "o"
         }
     },
-    created: function(){
-        
-    },
     mounted: function(){
-
         CKEDITOR.replace('ckeditorForBasicPageDesc');
         new Switchery($("#toggleActive")[0], $("#toggleActive").data());
         this.$nextTick(() => {
