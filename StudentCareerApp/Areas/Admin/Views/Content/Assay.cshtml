@@ -268,7 +268,7 @@
                                                                         <button ng-click="showContentDetail(x.id)" type="button" class="btn btn-rounded btn-success">Aç</button>
                                                                     </td>
                                                                     <td>
-                                                                        <button ng-click="showComment(x.id)" type="button" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#commentModal">Aç</button>
+                                                                        <button ng-click="showComment(x.id)" type="button" class="btn btn-rounded btn-success" @*data-toggle="modal" data-target="#commentModal"*@>Aç</button>
                                                                     </td>
                                                                     @if (ViewBag.showColumn == 1 || ViewBag.showColumn == 2 || ViewBag.showColumn == 4)
                                                                     {
@@ -304,10 +304,11 @@
                                                                 <th>Kullanıcı Adı</th>
                                                                 <th>Yorum</th>
                                                                 <th>Tarih</th>
+                                                                <th>İşlem</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr ng-repeat="x in commentList| filter:search | startFrom:currentPage*pageSize | limitTo:pageSize" )">
+                                                            <tr ng-repeat="x in commentList )">
                                                                 <td ng-show="false" ng-bind="x.id"></td>
                                                                 <td ng-bind="x.userName"></td>
                                                                 <td ng-bind="x.comment"></td>

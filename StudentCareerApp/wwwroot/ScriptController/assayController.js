@@ -102,10 +102,9 @@ app.controller("assayController", function ($scope, $http, $filter) {
                     if (e.data.length > 0) {
                         $scope.commentList = {};
                         $scope.commentList = e.data;
-                        $scope.$apply();
+                        $("#commentModal").modal('show');
                     } else {
                         $scope.commentList = {};
-                        $scope.$apply();
                     }
                 } else {
                     shortMessage(e.message, "e");

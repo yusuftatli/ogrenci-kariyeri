@@ -1,4 +1,4 @@
-﻿var prodType = "p";//d,p
+﻿var prodType = "d";//d,p
 var _link = '';
 var _domain = "";
 

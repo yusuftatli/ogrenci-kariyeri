@@ -285,6 +285,7 @@ app.controller('DefinitonManagerController', function ($scope, $http, $filter) {
                 if (e.resultCode === 200) {
                     if (e.data.length > 0) {
                         $scope.universityModel.universityList = e.data;
+                        universityPagin();
                     }
                     $scope.$apply();
                     Loading(false);
@@ -314,6 +315,31 @@ app.controller('DefinitonManagerController', function ($scope, $http, $filter) {
             }
         });
     };
+
+    function universityPagin() {
+        $scope.universitycurrentPage = 0;
+        $scope.universitypageSize = 10;
+        $scope.universitydata = [];
+
+        $scope.universitygetData = function () {
+            return $filter('universityfilter')($scope.universityModel.universityList, $scope.universitysearch);
+        };
+
+        $scope.universitynumberOfPages = function () {
+            return Math.ceil($scope.universityModel.universityList.length / $scope.universitypageSize);
+        };
+
+        for (var i = 0; i < 20; i++) {
+            $scope.universitydata.push("Item " + i);
+        };
+
+        $scope.$watch('universitysearch', function (newValue, oldValue) {
+            if (oldValue !== newValue) {
+                $scope.universitycurrentPage = 0;
+            }
+        }, true);
+
+    }
 
     //faculty
     $scope.facultyModel = {};
@@ -371,6 +397,7 @@ app.controller('DefinitonManagerController', function ($scope, $http, $filter) {
                 if (e.resultCode === 200) {
                     if (e.data.length > 0) {
                         $scope.facultyModel.facultyList = e.data;
+                        facultyPagin();
                     } else {
                         $scope.facultyModel.facultyList = {};
                     }
@@ -380,6 +407,31 @@ app.controller('DefinitonManagerController', function ($scope, $http, $filter) {
             }
         });
     };
+
+    function facultyPagin() {
+        $scope.facultycurrentPage = 0;
+        $scope.facultypageSize = 10;
+        $scope.facultydata = [];
+
+        $scope.facultygetData = function () {
+            return $filter('facultyfilter')($scope.facultyModel.facultyList, $scope.facultysearch);
+        };
+
+        $scope.facultynumberOfPages = function () {
+            return Math.ceil($scope.facultyModel.facultyList.length / $scope.facultypageSize);
+        };
+
+        for (var i = 0; i < 20; i++) {
+            $scope.facultydata.push("Item " + i);
+        };
+
+        $scope.$watch('facultysearch', function (newValue, oldValue) {
+            if (oldValue !== newValue) {
+                $scope.universitycurrentPage = 0;
+            }
+        }, true);
+
+    }
 
 
 
@@ -540,3 +592,17 @@ app.controller('DefinitonManagerController', function ($scope, $http, $filter) {
 
 });
 
+
+app.filter('universitystartFrom', function () {
+    return function (input, start) {
+        start = +start;
+        return input.slice(start);
+    };
+});
+
+app.filter('facultystartFrom', function () {
+    return function (input, start) {
+        start = +start;
+        return input.slice(start);
+    };
+});

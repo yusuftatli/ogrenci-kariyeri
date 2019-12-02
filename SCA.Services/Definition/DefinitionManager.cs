@@ -158,9 +158,7 @@ namespace SCA.Services
                 if (dto.Id == 0)
                 {
                     query = $"Insert Into Faculty (Id,Description) values" +
-                        $"({await GetFacultId()}, Description=@Description)";
-                    filter.Add("Description", dto.FacultyName);
-                    resultMessage = "Kayıt işlemi başarılı";
+                        $"(Id={await GetFacultId()}, Description='{dto.FacultyName}')";
                 }
                 else
                 {
@@ -169,7 +167,7 @@ namespace SCA.Services
                     filter.Add("Description", dto.FacultyName);
                     resultMessage = "Güncelleme işlemi başarılı";
                 }
-                var result = _db.Execute(query, filter);
+                var result =await _db.ExecuteAsync(query);
                 res = Result.ReturnAsSuccess(message: resultMessage);
             }
             catch (Exception ex)
@@ -185,8 +183,8 @@ namespace SCA.Services
             long res = 0;
             try
             {
-                var id = await _db.QueryAsync<long>("select Id+1 as Id from Faculty order by Id desc limit 1");
-                res = Convert.ToInt64(id);
+                var value = await _db.QueryAsync<long>("select Id+1 as Id from Faculty order by Id desc limit 1");
+                res = Convert.ToInt64(value.First());
             }
             catch (Exception ex)
             {
