@@ -50,6 +50,7 @@
             this.basicPage.description = CKEDITOR.instances.ckeditorForBasicPageDesc.getData();
             this.basicPage.id = this.pageId;
             this.basicPage.seoUrl = this.regexSeo(this.basicPage.title);
+            this.basicPage.isActive = $("#toggleActive")[0].checked;
             $.ajax({
                 url: this.urls.addOrUpdateBasicPage,
                 data: {model: this.basicPage},

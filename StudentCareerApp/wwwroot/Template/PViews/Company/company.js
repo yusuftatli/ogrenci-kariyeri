@@ -24,19 +24,21 @@
     },
     methods: {
         getCompany: function(){
-            $.ajax({
-                url: this.urls.getCompany,
-                type: 'get',
-                data: {id: this.companyId },
-                success: (res) => {
-                    if(res.resultCode == 200){
-                        this.company = res.data;
-                        $("#roxyFieldAnnouncement").val(res.data.headerImage);
+            if(!!this.companyId){
+                $.ajax({
+                    url: this.urls.getCompany,
+                    type: 'get',
+                    data: {id: this.companyId },
+                    success: (res) => {
+                        if(res.resultCode == 200){
+                            this.company = res.data;
+                            $("#roxyFieldAnnouncement").val(res.data.headerImage);
+                        }
+                        else
+                            toastr["error"]("Şirket bilgileri yüklenemedi.");
                     }
-                    else
-                        toastr["error"]("Şirket bilgileri yüklenemedi.");
-                }
-            })
+                })
+            }
         },
         getSectorTypes: function(){
             $.ajax({
