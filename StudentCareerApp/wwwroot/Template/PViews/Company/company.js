@@ -19,6 +19,7 @@
         }
     },
     mounted: function(){
+        CKEDITOR.replace('ckForCompany');
         this.getCompany();
         this.getSectorTypes();
     },
@@ -33,6 +34,9 @@
                         if(res.resultCode == 200){
                             this.company = res.data;
                             $("#roxyFieldAnnouncement").val(res.data.headerImage);
+                            setTimeout(() => {
+                                CKEDITOR.instances.ckForCompany.setData(res.data.description);
+                            }, 200);
                         }
                         else
                             toastr["error"]("Şirket bilgileri yüklenemedi.");
@@ -56,6 +60,7 @@
             this.company.headerImage = $("#roxyFieldAnnouncement")[0].value;
             this.company.id = this.companyId;
             this.company.seoUrl = this.regexSeo(this.company.shortName);
+            this.company.description = CKEDITOR.instances.ckForCompany.getData();
             $.ajax({
                 url: this.urls.addOrUpdateCompany,
                 type: 'post',
