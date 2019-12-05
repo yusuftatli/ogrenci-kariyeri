@@ -187,6 +187,11 @@ namespace StudentCareerApp
             //    RequestPath = new PathString("/AdminFiles")
             //});
 
+            app.UseCors(x => x
+               .AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader());
+
             app.UseSession();
 
             app.UseMvc(routes =>

@@ -41,7 +41,7 @@
                             @if (!string.IsNullOrEmpty(x.Category))
                             {
                                 <span class="post-tag">
-                                    <a href="@Url.Action("Index", "Category", new { id = x.Category.Split(',')[0].ToString(), seoUrl = x.CategoryName.FriendlyUrl()})" class="green-color">@x.CategoryName</a>
+                                    <a href="@Url.Action("Index", "Category", new { id = x.Category.Split(',')[0].ToString(), seoUrl = x.Category.FriendlyUrl()})" class="green-color">@x.Category</a>
                                 </span>
                             }
                             <h4 class="post-title">
@@ -61,7 +61,7 @@
                             @if (!string.IsNullOrEmpty(x.Category))
                             {
                                 <span class="post-tag">
-                                    <a href="@Url.Action("Index", "Category", new { id = x.Category.Split(',')[0].ToString(), seoUrl = x.CategoryName.FriendlyUrl()})" class="green-color">@x.CategoryName</a>
+                                    <a href="@Url.Action("Index", "Category", new { id = x.Category.Split(',')[0].ToString(), seoUrl = x.Category.FriendlyUrl()})" class="green-color">@x.Category</a>
                                 </span>
                             }
                             <h4 class="post-title">

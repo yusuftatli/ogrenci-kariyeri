@@ -44,7 +44,7 @@ namespace StudentCareerApp.Areas.Api.Controller
         [HttpGet("web-getinfo")]
         public async Task<ServiceResult> GetUserInfo()
         {
-            return await _userManager.GetUserInfo(await HttpContext.GetTokenAsync("access_token"));
+            return await _userManager.GetUserInfo(Convert.ToInt64(JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")).Id));
         }
 
         [HttpGet("web-getallusers")]
@@ -70,6 +70,12 @@ namespace StudentCareerApp.Areas.Api.Controller
         public async Task<ServiceResult> CreateUserByMobil(UserMobilDto dto)
         {
             return await _userManager.CreateUserByMobil(dto);
+        }
+
+        [HttpPost("mobil-UpdateUserByWeb")]
+        public async Task<ServiceResult> UpdateUserByWeb(UserWeblDto dto)
+        {
+            return await _userManager.UpdateUserByWeb(dto);
         }
 
         /// <summary>

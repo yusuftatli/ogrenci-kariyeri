@@ -248,37 +248,58 @@ namespace SCA.Services
                 filter.Add("BirthDate", dto.BirthDate);
 
                 var Id = _db.Execute(query, filter);
-
-                List<SocialMediaDto> listSocial = new List<SocialMediaDto>();
-
-                listSocial.Add(new SocialMediaDto()
-                {
-                    SocialMediaType = SocialMediaType.Facebook,
-                    UserId = saveUserId,
-                    IsActive = true,
-                    Url = dto.Facebook
-                });
-                listSocial.Add(new SocialMediaDto()
-                {
-                    SocialMediaType = SocialMediaType.Instagram,
-                    UserId = saveUserId,
-                    IsActive = true,
-                    Url = dto.Instagram
-                });
-                listSocial.Add(new SocialMediaDto()
-                {
-                    SocialMediaType = SocialMediaType.Linkedin,
-                    UserId = saveUserId,
-                    IsActive = true,
-                    Url = dto.Linkedin
-                });
-
-                await _socialMedia.CreateSocialMedia(listSocial, _userId);
+                await _socialMedia.CreateSocialMedia(dto, _userId);
                 res = Result.ReturnAsSuccess(message: "Kullancı kayıt işlemi başarılı");
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex, 0, "CreateUserByMobil", PlatformType.Mobil);
+                await _errorManagement.SaveError(ex, 0, "CreateUserByMobil", PlatformType.Web);
+                res = Result.ReturnAsFail(message: "Üye kaydı yapılırken hata meydana geldi.+ " + ex.Message);
+            }
+            return res;
+        }
+
+        public async Task<ServiceResult> UpdateUserByWeb(UserWeblDto dto)
+        {
+            ServiceResult res = new ServiceResult();
+            res = Result.ReturnAsSuccess();
+
+            var errror = await _userValidation.ValidateCreateUserByWeb(dto);
+            if (errror.ResultCode != HttpStatusCode.OK)
+            {
+                return errror;
+            }
+
+            try
+            {
+                string query = string.Empty;
+
+                query = "Update Users set  Name = @Name, Surname = @Surname, EmailAddress = @EmailAddress, PhoneNumber = @PhoneNumber, " +
+                    "ImagePath = @ImagePath, GenderId = @GenderId,  BirthDate = @BirthDate, " +
+                    "Biography = @Biography, UpdatedUserId = @UpdatedUserId, UpdatedDate = @UpdatedDate" +
+                    "where Id = @Id";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("Id", "Id");
+                filter.Add("UpdatedUserId", dto.Id);
+                filter.Add("UpdatedDate", DateTime.Now);
+                filter.Add("Name", dto.Name);
+                filter.Add("Surname", dto.Surname);
+                filter.Add("EmailAddress", dto.EmailAddress);
+                filter.Add("PhoneNumber", dto.PhoneNumber);
+                filter.Add("ImagePath", "");//SaveImage(dto.ImaageData));
+                filter.Add("RoleTypeId", dto.RoleTypeId);
+                filter.Add("RoleExpiresDate", dto.RoleExpiresDate);
+                filter.Add("GenderId", dto.GenderId);
+                filter.Add("Biography", dto.Biography);
+                filter.Add("BirthDate", dto.BirthDate);
+
+                var Id = await _db.ExecuteAsync(query, filter);
+                await _socialMedia.CreateSocialMedia(dto, dto.Id);
+                res = Result.ReturnAsSuccess(message: "Bilgileri güncelleme işlemi başarılı");
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, 0, "UpdateUserByWeb", PlatformType.Web);
                 res = Result.ReturnAsFail(message: "Üye kaydı yapılırken hata meydana geldi.+ " + ex.Message);
             }
             return res;
@@ -386,10 +407,9 @@ namespace SCA.Services
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        public async Task<ServiceResult> GetUserInfo(string token)
+        public async Task<ServiceResult> GetUserInfo(long userId)
         {
             ServiceResult _res = new ServiceResult();
-            long _userId = JwtToken.GetUserId(token);
             try
             {
                 string query = @"select 
@@ -412,10 +432,10 @@ namespace SCA.Services
                                 where u.Id = @Id
                                 order by Id desc limit 1 ";
                 DynamicParameters filter = new DynamicParameters();
-                filter.Add("Id", _userId);
+                filter.Add("Id", userId);
                 var data = await _db.QueryFirstAsync<UsersDTO>(query, filter);
-
-                List<SocialMediaDto> socialListData = await _socialMedia.GetSocialMedia(_userId);
+                data.socialList = await _socialMedia.GetSocialMedia(userId);
+                List<SocialMediaDto> socialListData = await _socialMedia.GetSocialMedia(userId);
                 if (socialListData.Count > 0)
                 {
                     foreach (SocialMediaDto item in socialListData)

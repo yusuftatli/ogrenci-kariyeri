@@ -8,11 +8,11 @@
 
 
 
-<head>
-    <link href="~/Template/dist/css/style.min.css" rel="stylesheet">
+    <head>
 
-   
-</head>
+        <link href="~/Template/dist/css/style.min.css" rel="stylesheet">
+        <script src="~/ScriptController/profileController.js"></script>
+    </head>
 
 <body ng-app="MyApp" ng-controller="profileController">
     <aside class="left-sidebar">
@@ -120,7 +120,7 @@
                         <ul class="nav nav-tabs profile-tab" role="tablist">
                             <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home" role="tab">Timeline</a> </li>
                             <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile" role="tab">Profile</a> </li>
-                            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#settings" role="tab">Settings</a> </li>
+                            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#settings" role="tab">Profil Ayarları</a> </li>
                         </ul>
                         <!-- Tab panes -->
                         <div class="tab-content">
@@ -238,50 +238,125 @@
                                 <div class="card-body">
                                     <form class="form-horizontal form-material">
                                         <div class="form-group">
-                                            <label class="col-md-12">Full Name</label>
-                                            <div class="col-md-12">
-                                                <input type="text" placeholder="Johnathan Doe" class="form-control form-control-line">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label">&nbsp;&nbsp;Ad</label>
+                                                        <input type="text" id="Name" ng-model="userModel.name" class="form-control" placeholder="&nbsp;&nbsp;Ad">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Soyad</label>
+                                                        <input type="text" id="Surname" ng-model="userModel.surname" class="form-control" placeholder="Soyad">
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="example-email" class="col-md-12">Email</label>
-                                            <div class="col-md-12">
-                                                <input type="email" placeholder="johnathan@admin.com" class="form-control form-control-line" name="example-email" id="example-email">
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label">&nbsp;&nbsp;Şifre</label>
+                                                        <input type="text" id="Name" ng-model="userModel.password" class="form-control" placeholder="&nbsp;&nbsp;Şifre">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Telefonn Numarası</label>
+                                                        <input type="text" id="PhoneNumber" ng-model="userModel.phoneNumber" class="form-control" placeholder="Telefon Numarası">
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-12">Password</label>
-                                            <div class="col-md-12">
-                                                <input type="password" value="password" class="form-control form-control-line">
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label">&nbsp;&nbsp;Cinsiyet </label>
+                                                        <select id="roletypeid" class="form-control custom-select" ng-model="userModel.genderId" name="roletypeid">
+                                                            <option ng-repeat="x in genderList" value="{{x.GenderId}}">
+                                                                {{x.description}}
+                                                            </option>
+
+                                                        </select>
+
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Doğum Tarihi</label>
+                                                        <input type="date" ng-model="userModel.birthDate" class="form-control">
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-12">Phone No</label>
-                                            <div class="col-md-12">
-                                                <input type="text" placeholder="123 456 7890" class="form-control form-control-line">
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            <button class="btn btn-info fa fa-facebook" type="button"></button>
+                                                        </div>
+                                                        <input type="text" class="form-control" ng-model="userModel.facebook" placeholder="&nbsp;&nbsp;Facebook" aria-label="" aria-describedby="basic-addon1">
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-12">Message</label>
-                                            <div class="col-md-12">
-                                                <textarea rows="5" class="form-control form-control-line"></textarea>
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            <button class="btn btn-info fa fa-twitter" type="button"></button>
+                                                        </div>
+                                                        <input type="text" class="form-control" ng-model="userModel.twitter" placeholder="&nbsp;&nbsp;Twitter" aria-label="" aria-describedby="basic-addon1">
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-12">Select Country</label>
-                                            <div class="col-sm-12">
-                                                <select class="form-control form-control-line">
-                                                    <option>London</option>
-                                                    <option>India</option>
-                                                    <option>Usa</option>
-                                                    <option>Canada</option>
-                                                    <option>Thailand</option>
-                                                </select>
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            <button class="btn btn-info fa fa-linkedin" type="button"></button>
+                                                        </div>
+                                                        <input type="text" class="form-control" ng-model="userModel.linkedin" placeholder="&nbsp;&nbsp;Linkedin" aria-label="" aria-describedby="basic-addon1">
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-sm-12">
-                                                <button class="btn btn-success">Update Profile</button>
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            <button class="btn btn-info fa fa-instagram" type="button"></button>
+                                                        </div>
+                                                        <input type="text" class="form-control" ng-model="userModel.instagram" placeholder="&nbsp;&nbsp;Instagram" aria-label="" aria-describedby="basic-addon1">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            <button class="btn btn-info fa fa-youtube" type="button"></button>
+                                                        </div>
+                                                        <input type="text" class="form-control" ng-model="userModel.youtube" placeholder="&nbsp;&nbsp;Youtube" aria-label="" aria-describedby="basic-addon1">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="form-group">
+                                                <label class="col-md-12">Biografi</label>
+                                                <div class="col-md-12">
+                                                    <textarea rows="5" ng-model="userModel.biography" class="form-control form-control-line"></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+                                                    <button class="btn btn-success">Profil Güncellle</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </form>
@@ -362,4 +437,3 @@
 </body>
 
 
-<script src="~/ScriptController/profileController.js"></script>

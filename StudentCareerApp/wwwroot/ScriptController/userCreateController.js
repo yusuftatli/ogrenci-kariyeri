@@ -7,7 +7,7 @@ app.controller('userCreateController', function ($scope, $http, $filter) {
     $scope.userModel = {};
     $scope.showHigSchoolType = false;
     $scope.showSaveLoading = false;
-    $scope.genderList = [{ id: 1, description: 'Bay' }, { id: 2, description: 'Bayan' }];
+    $scope.genderList = [{ id: 0, description: 'Seçiniz' },{ id: 1, description: 'Bay' }, { id: 2, description: 'Bayan' }];
 
     loadForm();
 

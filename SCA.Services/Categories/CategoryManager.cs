@@ -44,8 +44,38 @@ namespace SCA.Services
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex, 0, "MainCategoryList "+id, Entity.Enums.PlatformType.Web);
+                await _errorManagement.SaveError(ex, 0, "MainCategoryList " + id, Entity.Enums.PlatformType.Web);
             }
+            return res;
+        }
+
+        public async Task<List<CategoriesDto>> GetCategoryById(List<long> contentList)
+        {
+            List<CategoriesDto> res = new List<CategoriesDto>();
+            string ids = string.Empty;
+            try
+            {
+                for (int i = 0; i < contentList.Count; i++)
+                {
+                    if (i + 1 == contentList.Count)
+                    {
+                        ids += contentList[i].ToString();
+                    }
+                    else
+                    {
+                        ids += contentList[i] + ",";
+                    }
+                }
+               
+                string query = $"select r.TagContentId as Id, c.Description from  CategoryRelation r left join Category c on r.CategoryId = c.Id where r.TagContentId in({ids})";
+                var lisData = await _db.QueryAsync<CategoriesDto>(query) as List<CategoriesDto>;
+                res = lisData;
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, null, "GetCategoryById", PlatformType.Web);
+            }
+
             return res;
         }
         /// <summary>
@@ -117,7 +147,7 @@ namespace SCA.Services
             }
             return res;
         }
-        
+
         /// <summary>
         /// Kategori durumunu aktif pasif yapar
         /// </summary>
@@ -180,9 +210,10 @@ namespace SCA.Services
             return query;
         }
 
-        public async Task<ServiceResult> CreateCategoryRelation(string data, long Id, ReadType readType, UserSession session)
+        public async Task<string> CreateCategoryRelation(string data, long Id, ReadType readType, UserSession session)
         {
-            ServiceResult res = new ServiceResult();
+            List<long> idList = new List<long>();
+            string res = string.Empty;
             try
             {
                 string[] data_ = data.Replace("[", "").Replace("]", "").Replace("\"", "").Replace("\"", "").Split(',');
@@ -195,14 +226,17 @@ namespace SCA.Services
                         ReadType = readType
                     };
                     string query = GetCategoryRelationQuery(CrudType.Insert, relationData, session);
-                    var result = _db.Execute(query);
+                    var result = await _db.ExecuteAsync(query);
+                    idList.Add(result);
                 }
-                res = Result.ReturnAsSuccess();
+                foreach (long item in idList)
+                {
+                    res += item.ToString();
+                }
             }
             catch (Exception ex)
             {
                 await _errorManagement.SaveError(ex, 0, "MainCategoryStatusUpdate ", Entity.Enums.PlatformType.Web);
-                res = Result.ReturnAsFail();
             }
             return res;
         }

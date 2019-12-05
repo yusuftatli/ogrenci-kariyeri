@@ -23,17 +23,65 @@ namespace SCA.Services
         }
 
 
-        public async Task<ServiceResult> CreateSocialMedia(List<SocialMediaDto> dto, long userId)
+        public async Task<ServiceResult> CreateSocialMedia(UserWeblDto dto, long userId)
         {
             ServiceResult res = new ServiceResult();
 
             DynamicParameters filter = new DynamicParameters();
             try
             {
+                List<SocialMediaDto> listSocial = new List<SocialMediaDto>();
+
+                listSocial.Add(new SocialMediaDto()
+                {
+                    SocialMediaType = SocialMediaType.Facebook,
+                    UserId = dto.Id,
+                    IsActive = true,
+                    Url = dto.Facebook
+                });
+                listSocial.Add(new SocialMediaDto()
+                {
+                    SocialMediaType = SocialMediaType.Instagram,
+                    UserId = dto.Id,
+                    IsActive = true,
+                    Url = dto.Instagram
+                });
+                listSocial.Add(new SocialMediaDto()
+                {
+                    SocialMediaType = SocialMediaType.Linkedin,
+                    UserId = dto.Id,
+                    IsActive = true,
+                    Url = dto.Linkedin
+                });
+
+                listSocial.Add(new SocialMediaDto()
+                {
+                    SocialMediaType = SocialMediaType.Linkedin,
+                    UserId = dto.Id,
+                    IsActive = true,
+                    Url = dto.Youtube
+                });
+
+                listSocial.Add(new SocialMediaDto()
+                {
+                    SocialMediaType = SocialMediaType.Linkedin,
+                    UserId = dto.Id,
+                    IsActive = true,
+                    Url = dto.Twitter
+                });
+
+                listSocial.Add(new SocialMediaDto()
+                {
+                    SocialMediaType = SocialMediaType.Linkedin,
+                    UserId = dto.Id,
+                    IsActive = true,
+                    Url = dto.GooglePlus
+                });
+
                 string query = string.Empty;
                 string deleteQuery = string.Empty;
                 string em = string.Empty;
-                foreach (SocialMediaDto item in dto)
+                foreach (SocialMediaDto item in listSocial)
                 {
                     if (item.Id == 0)
                     {

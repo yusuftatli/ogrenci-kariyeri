@@ -22,7 +22,7 @@ namespace SCA.Services
         private readonly IErrorManagement _errorManagement;
         private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
 
-        public TagManager( IErrorManagement errorManager)
+        public TagManager(IErrorManagement errorManager)
         {
             _errorManagement = errorManager;
         }
@@ -38,6 +38,25 @@ namespace SCA.Services
             catch (Exception ex)
             {
                 await _errorManagement.SaveError(ex, null, "GetTags", PlatformType.Web);
+            }
+
+            return res;
+        }
+
+        public async Task<string> GetTagById(long contentId)
+        {
+            string res = string.Empty;
+            try
+            {
+                var lisData = await _db.QueryAsync<TagDto>(" select t.Description from TagRelation r inner join Tags t on r.TagId = t.Id where r.TagContentId = 5929") as List<TagDto>;
+                foreach (TagDto item in lisData)
+                {
+                    res += " " + item.Description;
+                }
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, contentId, "GetTagById", PlatformType.Web);
             }
 
             return res;
@@ -90,9 +109,10 @@ namespace SCA.Services
             return query;
         }
 
-        public async Task<ServiceResult> CreateTag(string tags, long tagContentId, ReadType ReadType, UserSession session)
+        public async Task<string> CreateTag(string tags, long tagContentId, ReadType ReadType, UserSession session)
         {
-            ServiceResult res = new ServiceResult();
+            string res = string.Empty;
+            List<long> idList = new List<long>();
             List<TagRelationDto> tagRelationList = new List<TagRelationDto>();
             try
             {
@@ -111,7 +131,8 @@ namespace SCA.Services
                             ReadType = ReadType
                         };
                         query = GetTagRelationQuery(CrudType.Insert, relationData, session);
-                        var relationId = _db.Query<long>(query).FirstOrDefault();
+                        var relationId = await _db.QueryAsync<long>(query);
+                        idList.Add(relationId.First());
                     }
                     else
                     {
@@ -122,26 +143,32 @@ namespace SCA.Services
                         };
 
                         query = GetTagQuery(CrudType.Insert, data, session);
-                        var tagId = _db.Query<long>(query).FirstOrDefault();
+                        var tagId = await _db.QueryAsync<long>(query);
 
                         var relationData = new TagRelationDto()
                         {
-                            TagId = tagId,
+                            TagId = tagId.First(),
                             TagContentId = tagContentId,
                             ReadType = ReadType
                         };
                         query = GetTagRelationQuery(CrudType.Insert, relationData, session);
-                        var relationId = _db.Execute(query); ;
+                        var relationId = await _db.ExecuteAsync(query);
+                        idList.Add(relationId);
+                    }
+                    foreach (long _id in idList)
+                    {
+                        res += _id.ToString();
                     }
                 }
-                res = Result.ReturnAsSuccess();
+                foreach (long item in idList)
+                {
+                    res += item.ToString();
+                }
             }
             catch (Exception ex)
             {
-                res = Result.ReturnAsFail(message: "Makale bağlı taglar kayıt edilirken hata meydana geldi");
                 await _errorManagement.SaveError(ex, session.Id, "TagCreate;" + tags, PlatformType.Web);
             }
-
             return res;
         }
 

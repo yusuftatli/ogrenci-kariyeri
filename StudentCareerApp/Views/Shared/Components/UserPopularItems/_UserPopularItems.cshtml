@@ -20,7 +20,7 @@
                 <div class="item">
                     @if (!string.IsNullOrEmpty(x.Category))
                     {
-                        <a class="post-cat ts-orange-bg" href="@Url.Action("Index", "Category", new { id = x.Category.Split(',')[0].ToString(), seoUrl = x.CategoryName.FriendlyUrl()})">@x.CategoryName</a>
+                        <a class="post-cat ts-orange-bg" href="@Url.Action("Index", "Category", new { id = x.Category.Split(',')[0].ToString(), seoUrl = x.CategoryName.FriendlyUrl()})">@x.Category</a>
                     }
                     <div class="ts-post-thumb">
                         <a href="@Url.Action("Index", "Blog", new { x.SeoUrl })">

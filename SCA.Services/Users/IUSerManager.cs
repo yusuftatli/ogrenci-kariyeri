@@ -21,7 +21,7 @@ namespace SCA.Services
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        Task<ServiceResult> GetUserInfo(string token);
+        Task<ServiceResult> GetUserInfo(long userId);
 
         /// <summary>
         /// verilen idlere göre kullanıcıları listeler
@@ -48,5 +48,6 @@ namespace SCA.Services
         /// <returns></returns>
         Task<ServiceResult> UpdateUserCategory(long userId, string category);
         Task<ServiceResult> Dashboard(UserSession session);
+        Task<ServiceResult> UpdateUserByWeb(UserWeblDto dto);
     }
 }

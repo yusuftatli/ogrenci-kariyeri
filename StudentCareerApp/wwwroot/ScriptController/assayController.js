@@ -92,7 +92,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
 
     function getAllComments(x) {
         $.ajax({
-            url: _link + "/Content/comment-GetAllCommentsPendingApprovalByContentId",
+            url: _link + "/Content/comment-GetAllCommentapplendingApprovalByContentId",
             type: "GET", async: true,
             dataType: Json_,
             data: { contentId: x },

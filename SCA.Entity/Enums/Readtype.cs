@@ -1,14 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace SCA.Entity.Enums
 {
-    public enum ReadType : int
+    public enum ReadType : byte
     {
-        [Display(Name = "Test")]
-        Test = 1,
-        [Display(Name = "Makale")]
-        Content = 2
+        [Description("Test")]
+        Content = 1,
+        [Description("Makale")]
+        Test = 2
     }
-
 
 }

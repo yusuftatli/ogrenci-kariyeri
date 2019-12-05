@@ -350,16 +350,8 @@ namespace SCA.Services
                 if (_contentId > 0)
                 {
                     res = Result.ReturnAsSuccess(message: resultMessage);
-                    ServiceResult resTag = await _tagManager.CreateTag(dto.Tags, _contentId, ReadType.Content, session);
-                    if (resTag.ResultCode != HttpStatusCode.OK)
-                    {
-                        res = Result.ReturnAsFail("Makale kayıt edildi fakat etiket bilgileri kayıt edilirken hata meydana geldi, lütfen tekrar deneyiniz.");
-                    }
-                    ServiceResult resCategory = await _categoryManager.CreateCategoryRelation(dto.Category, _contentId, ReadType.Content, session);
-                    if (resCategory.ResultCode != HttpStatusCode.OK)
-                    {
-                        res = Result.ReturnAsFail("Makale kayıt edildi fakat categori bilgileri kayıt edilirken hata meydana geldi, lütfen daha sonra tekrar deneyiniz.");
-                    }
+                    string resTag = await _tagManager.CreateTag(dto.Tags, _contentId, ReadType.Content, session);
+                    string resCategory = await _categoryManager.CreateCategoryRelation(dto.Category, _contentId, ReadType.Content, session);
                 }
                 else
                 {
@@ -522,6 +514,38 @@ namespace SCA.Services
             try
             {
                 listData = await _db.QueryAsync<ContentForHomePageDTO>("Content_ListAll", new { hitType = 1, count = count, pageNumber = offset }, commandType: CommandType.StoredProcedure) as List<ContentForHomePageDTO>;
+
+                List<long> ids = new List<long>();
+                foreach (ContentForHomePageDTO item in listData)
+                {
+                    ids.Add(item.Id);
+                }
+                List<CategoriesDto> categoryList = await _categoryManager.GetCategoryById(ids);
+
+                foreach (ContentForHomePageDTO item in listData)
+                {
+                    string value = string.Empty;
+                    var dataList = categoryList.Where(x => x.Id == item.Id).ToList();
+                    if (dataList != null)
+                    {
+                        for (int i = 0; i < dataList.Count; i++)
+                        {
+                            if (i+1 == dataList.Count)
+                            {
+                                value += dataList[i].Description;
+                            }
+                            else
+                            {
+                                value += dataList[i].Description + ", ";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        item.Category = "";
+                    }
+                    item.Category = value;
+                }
             }
             catch (Exception ex)
             {
