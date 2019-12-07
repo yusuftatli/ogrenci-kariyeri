@@ -25,7 +25,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="row">
-                    <div class="col-lg-4 col-md-4 mb-30" v-for="x,index in categories" v-if="x.parentId == 0">
+                    <div class="col-lg-4 col-md-4 mb-30" v-for="x,index in categories" v-if="x.parentId == 0 || x.parentId == null">
                         <div class="item post-content-box">
                             <div class="post-content">
                                 <a class="post-cat orange-color no-bg" href="#">{{x.description}}</a>
