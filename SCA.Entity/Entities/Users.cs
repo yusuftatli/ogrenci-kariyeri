@@ -59,17 +59,17 @@ namespace SCA.Entity.Entities
 
         public long? UpdatedUserId { get; set; }
 
-        public DateTime? UpdatedDate { get; set; }
+        public DateTime UpdatedDate { get; set; }
 
         public long? DeletedUserId { get; set; }
 
-        public DateTime? DeletedDate { get; set; }
+        public DateTime DeletedDate { get; set; }
 
         public bool IsDeleted { get; set; }
 
         public string ForgetAuthorizationKey { get; set; }
 
-        public DateTime? ForgetAuthorizationExpiryDate { get; set; }
+        public DateTime ForgetAuthorizationExpiryDate { get; set; }
 
     }
 }

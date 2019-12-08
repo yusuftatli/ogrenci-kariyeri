@@ -87,7 +87,7 @@ namespace SCA.DapperRepository.Generic
         {
             using (IDbConnection conn = new MySqlConnection(_connString))
             {
-                var query = model.GenerateSelectQuery<T,U>(_tableName);
+                var query = model.GenerateSelectQuery<T, U>(_tableName);
                 var res = await conn.QueryAsync<T>(query) as List<T>;
                 return res;
             }
@@ -98,10 +98,18 @@ namespace SCA.DapperRepository.Generic
         {
             using (IDbConnection conn = new MySqlConnection(_connString))
             {
-                var query = ((T)Activator.CreateInstance(typeof(T), null)).GenerateSelectQuery<T,U>(_tableName);
-                query += " WHERE Id=@Id";
-                var res = await conn.QueryFirstOrDefaultAsync<T>(query, new { Id = id });
-                return res;
+                try
+                {
+
+                    var query = ((T)Activator.CreateInstance(typeof(T), null)).GenerateSelectQuery<T, U>(_tableName);
+                    query += " WHERE Id=@Id";
+                    var res = await conn.QueryFirstOrDefaultAsync<T>(query, new { Id = id });
+                    return res;
+                }
+                catch (Exception ex)
+                {
+                    return null;
+                }
             }
         }
 
@@ -114,10 +122,10 @@ namespace SCA.DapperRepository.Generic
                 try
                 {
 
-                var res = await conn.QueryAsync<TResult>(query) as List<TResult>;
-                return res;
+                    var res = await conn.QueryAsync<TResult>(query) as List<TResult>;
+                    return res;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     return null;
                 }
@@ -143,10 +151,10 @@ namespace SCA.DapperRepository.Generic
                 try
                 {
 
-                var query = model.GenerateUpdateQuery(_tableName);
-                await conn.ExecuteAsync(query, model);
+                    var query = model.GenerateUpdateQuery(_tableName);
+                    await conn.ExecuteAsync(query, model);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
 
                 }
