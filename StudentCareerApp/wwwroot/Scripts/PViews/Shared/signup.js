@@ -34,12 +34,6 @@ function openLoginMagnific() {
       });
     }
   });
-  // $.magnificPopup.open({
-  //   items: {
-  //     src: $("#loginPanel").html(),
-  //     type: "inline"
-  //   }
-  // });
 }
 
 function openRegisterMagnific() {
@@ -59,6 +53,22 @@ function openRegisterMagnific() {
   });
 }
 
+function openForgetMagnific(){
+  $.ajax({
+    url: '/Shared/_ForgetPasswordPage',
+    type: 'get',
+    dataType: 'html',
+    success: function(res) {
+      $.magnificPopup.open({
+        items: {
+          src: res,
+          type: 'inline'
+        }
+      })
+    }
+  });
+}
+
 $(document).on("click", "white-popup", function () {
   $.magnificPopup.close();
 });
@@ -70,6 +80,10 @@ $(document).on("click", ".openLoginMagnific", function () {
 $(document).on("click", ".openRegisterMagnific", function () {
   openRegisterMagnific();
 });
+
+$(document).on('click', '.openForgetMagnific', function(){
+  openForgetMagnific();
+})
 
 $(document).on("click", "#acceptCookie", function () {
   document.cookie =
@@ -100,7 +114,7 @@ $(document).on("submit", ".loginForm", function (e) {
         toastr["success"]("Seni aramızda görmekten çok mutlu olduk :)", res.message);
         setTimeout(() => {
           document.location.reload();
-        }, 2000);
+        }, 500);
       } else toastr["error"](res.message, "Birşeyler hatalı!");
     },
     error: function (res) {
@@ -110,6 +124,46 @@ $(document).on("submit", ".loginForm", function (e) {
   e.preventDefault();
 });
 
+$(document).on('submit', '.forgetForm', function(e){
+  $("#spinner-for-pass").toggle("hidden");
+  var form = $(this).serialize();
+  $("#inputUsernameEmail").attr('disabled', '');  
+  $(".forgetForm button[type='submit']").toggle('hidden');
+  $.ajax({
+    url: '/Shared/ForgetPassword',
+    type: 'post',
+    data: form,
+    success: function(res){
+      if(res.resultCode === 200){
+        $("h4.forgetText").text("Email adresinize bir kurtarma maili gönderdik. Maildeki yönergeleri takip ederek şifrenizi başarıyla değiştirebilirsiniz.");
+        $("#spinner-for-pass").toggle("hidden");
+        toastr["success"]("Email adresinize bir kurtarma maili gönderdik. Maildeki yönergeleri takip ederek şifrenizi başarıyla değiştirebilirsiniz.")
+      }
+    }
+  })
+  e.preventDefault();
+})
+
+$(document).on('submit', '.changePassword', function(e){
+  var form = $(this).serialize();
+  $.ajax({
+    url: '/Shared/ChangeForgottenPassword',
+    type: 'post',
+    data: form,
+    success: function(res){
+      if(res.resultCode === 200){
+        toastr["success"]("Şifre değiştirme işlemi başarılı!");
+        setTimeout(() => {
+          document.location.href=document.location.origin;
+        }, 500);
+      }
+      else
+        toastr["error"](res.message);
+    }
+  })
+  e.preventDefault();
+})
+
 $(document).on("click", "#logoutButton", function (e) {
   $.ajax({
     url: "/Shared/Logout",
@@ -118,7 +172,7 @@ $(document).on("click", "#logoutButton", function (e) {
       toastr["success"](res.message, "Çıkış yaptınız.");
       setTimeout(() => {
         document.location.reload();
-      }, 2000);
+      }, 500);
     }
   });
 });

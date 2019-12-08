@@ -150,6 +150,8 @@ namespace StudentCareerApp
             services.AddTransient<IComment<SCA.Entity.Entities.Comments>, CommentRepository>();
             services.AddTransient<IBasicPages<SCA.Entity.Entities.BasicPages>, BasicPagesRepository>();
             services.AddTransient<IBasicPagesService<SCA.Entity.Entities.BasicPages>, BasicPagesService>();
+            services.AddTransient<IUser<SCA.Entity.Entities.Users>, UserRepository>();
+            services.AddTransient<IUserService<SCA.Entity.Entities.Users>, UserService>();
 
             //generic services
             services.AddSingleton(typeof(IGenericService<>), typeof(GenericService<>));

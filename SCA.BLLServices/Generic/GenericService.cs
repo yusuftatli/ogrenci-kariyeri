@@ -29,28 +29,28 @@ namespace SCA.BLLServices.Generic
             return Result.ReturnAsSuccess(message: "Silme işlemi başarılı!");
         }
 
-        public async Task<ServiceResult> GetAllAsync<T>(T model) where T : class
+        public async Task<ServiceResult<List<T>>> GetAllAsync<T>(T model) where T : class
         {
             var res = await _repository.GetAllAsync<T>(model);
-            return Result.ReturnAsSuccess(data: res);
+            return Result<List<T>>.ReturnAsSuccess(data: res);
         }
 
-        public async Task<ServiceResult> GetByIdAsync<T>(long id) where T : class
+        public async Task<ServiceResult<T>> GetByIdAsync<T>(long id) where T : class
         {
             var res = await _repository.GetByIdAsync<T>(id);
-            return Result.ReturnAsSuccess(data: res);
+            return Result<T>.ReturnAsSuccess(data: res);
         }
 
-        public async Task<ServiceResult> GetByWhereParams<TResult>(Expression<Func<U, bool>> predicate) where TResult : class
+        public async Task<ServiceResult<List<TResult>>> GetByWhereParams<TResult>(Expression<Func<U, bool>> predicate) where TResult : class
         {
             var res = await _repository.GetByWhereParams<TResult>(predicate);
-            return Result.ReturnAsSuccess(data: res);
+            return Result<List<TResult>>.ReturnAsSuccess(data: res);
         }
 
-        public async Task<ServiceResult> InsertAsync<T>(T model) where T : class
+        public async Task<ServiceResult<long>> InsertAsync<T>(T model) where T : class
         {
             var res = await _repository.InsertAsync<T>(model);
-            return Result.ReturnAsSuccess(data: res);
+            return Result<long>.ReturnAsSuccess(data: res);
         }
 
         public async Task<ServiceResult> SPExecuteAsync<T>(T model) where T : class
@@ -59,22 +59,22 @@ namespace SCA.BLLServices.Generic
             return Result.ReturnAsSuccess(message: "İşlem başarılı!");
         }
 
-        public async Task<ServiceResult> SPExecuteScalarAsync<T>(T model) where T : class
+        public async Task<ServiceResult<dynamic>> SPExecuteScalarAsync<T>(T model) where T : class
         {
             var res = await _repository.SPExecuteScalarAsync<T>(model);
-            return Result.ReturnAsSuccess(data: res);
+            return Result<dynamic>.ReturnAsSuccess(data: res);
         }
 
-        public async Task<ServiceResult> SPQueryAsync<TRequest, TResult>(TRequest model, string procedureName = null) where TRequest : class where TResult : class
+        public async Task<ServiceResult<List<TResult>>> SPQueryAsync<TRequest, TResult>(TRequest model, string procedureName = null) where TRequest : class where TResult : class
         {
             var res = await _repository.SPQueryAsync<TRequest, TResult>(model, procedureName);
-            return Result.ReturnAsSuccess(data: res);
+            return Result<List<TResult>>.ReturnAsSuccess(data: res);
         }
 
-        public async Task<ServiceResult> SPQueryFirstOrDefaultAsync<TRequest, TResult>(TRequest model) where TRequest : class where TResult : class
+        public async Task<ServiceResult<List<TResult>>> SPQueryFirstOrDefaultAsync<TRequest, TResult>(TRequest model) where TRequest : class where TResult : class
         {
             var res = await _repository.SPQueryAsync<TRequest, TResult>(model);
-            return Result.ReturnAsSuccess(data: res);
+            return Result<List<TResult>>.ReturnAsSuccess(data: res);
         }
 
         public async Task<ServiceResult> UpdateAsync<T>(T model) where T : class

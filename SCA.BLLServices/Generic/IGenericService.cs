@@ -9,13 +9,13 @@ namespace SCA.BLLServices.Generic
 {
     public interface IGenericService<U> where U : class
     {
-        Task<ServiceResult> GetByIdAsync<T>(long id) where T : class;
+        Task<ServiceResult<T>> GetByIdAsync<T>(long id) where T : class;
 
-        Task<ServiceResult> GetAllAsync<T>(T model) where T : class;
+        Task<ServiceResult<List<T>>> GetAllAsync<T>(T model) where T : class;
 
-        Task<ServiceResult> GetByWhereParams<TResult>(Expression<Func<U, bool>> predicate) where TResult : class;
+        Task<ServiceResult<List<TResult>>> GetByWhereParams<TResult>(Expression<Func<U, bool>> predicate) where TResult : class;
 
-        Task<ServiceResult> InsertAsync<T>(T model) where T : class;
+        Task<ServiceResult<long>> InsertAsync<T>(T model) where T : class;
 
         Task<ServiceResult> UpdateAsync<T>(T model) where T : class;
 
@@ -25,10 +25,10 @@ namespace SCA.BLLServices.Generic
 
         Task<ServiceResult> SPExecuteAsync<T>(T model) where T : class;
 
-        Task<ServiceResult> SPExecuteScalarAsync<T>(T model) where T : class;
+        Task<ServiceResult<dynamic>> SPExecuteScalarAsync<T>(T model) where T : class;
 
-        Task<ServiceResult> SPQueryAsync<TRequest, TResult>(TRequest model, string procedureName = null) where TRequest : class where TResult : class;
+        Task<ServiceResult<List<TResult>>> SPQueryAsync<TRequest, TResult>(TRequest model, string procedureName = null) where TRequest : class where TResult : class;
 
-        Task<ServiceResult> SPQueryFirstOrDefaultAsync<TRequest, TResult>(TRequest model) where TRequest : class where TResult : class;
+        Task<ServiceResult<List<TResult>>> SPQueryFirstOrDefaultAsync<TRequest, TResult>(TRequest model) where TRequest : class where TResult : class;
     }
 }

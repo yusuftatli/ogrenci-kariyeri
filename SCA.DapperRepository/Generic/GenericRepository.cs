@@ -111,8 +111,16 @@ namespace SCA.DapperRepository.Generic
             using (IDbConnection conn = new MySqlConnection(_connString))
             {
                 var query = ((TResult)Activator.CreateInstance(typeof(TResult), null)).GenerateSelectQuery(_tableName, predicate);
+                try
+                {
+
                 var res = await conn.QueryAsync<TResult>(query) as List<TResult>;
                 return res;
+                }
+                catch(Exception ex)
+                {
+                    return null;
+                }
             }
         }
 
@@ -132,8 +140,16 @@ namespace SCA.DapperRepository.Generic
         {
             using (IDbConnection conn = new MySqlConnection(_connString))
             {
+                try
+                {
+
                 var query = model.GenerateUpdateQuery(_tableName);
                 await conn.ExecuteAsync(query, model);
+                }
+                catch(Exception ex)
+                {
+
+                }
             }
         }
     }
