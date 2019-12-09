@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,7 @@ namespace StudentCareerApp.Areas.Api.Controller
 
         // [Authorize()]
         [HttpGet("MainCategoryListWithParents")]
-        public async Task<ServiceResult> MainCategoryListWithParents()
+        public async Task<ServiceResult<List<MainCategoryDto>>> MainCategoryListWithParents()
         {
             var res = await _categoryService.GetByWhereParams<MainCategoryDto>(x => x.IsActive == true);
             return res;
@@ -35,7 +36,7 @@ namespace StudentCareerApp.Areas.Api.Controller
 
         //[Authorize()]
         [HttpGet("MainCategoryList")]
-        public async Task<ServiceResult> MainCategoryList(long? parentId)
+        public async Task<ServiceResult<List<MainCategoryDto>>> MainCategoryList(long? parentId)
         {
             var res = await _categoryService.GetByWhereParams<MainCategoryDto>(x => x.IsActive == true && x.ParentId == parentId.Value);
             return res;
@@ -43,7 +44,7 @@ namespace StudentCareerApp.Areas.Api.Controller
 
         //[Authorize()]
         [HttpPost("MainCategoryCreate")]
-        public async Task<ServiceResult> MainCategoryCreate([FromBody]MainCategoryDto dto)
+        public async Task<ServiceResult<long>> MainCategoryCreate([FromBody]MainCategoryDto dto)
         {
             var user = HttpContext.GetSessionData<UserSession>("userInfo");
             var model = new CategoryInsertModel

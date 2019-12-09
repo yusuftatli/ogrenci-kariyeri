@@ -2,7 +2,7 @@
 
 namespace SCA.DapperRepository
 {
-    public interface IUser<U> : IGenericRepository<U> where U : class
+    public interface IAnnounsment<U> : IGenericRepository<U> where U : class
     {
     }
 }

@@ -1,0 +1,422 @@
+﻿@using SCA.Common;
+@using SCA.Entity.Enums;
+@model SCA.Entity.DTO.UserWithAllUniversityInformationDTO
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .edit-icon {
+        position: absolute;
+        right: 10px;
+        top: 45px;
+    }
+
+    .edit-icon-selected {
+        position: absolute;
+        right: 23px;
+        top: 45px;
+    }
+</style>
+
+<section class="block-wrapper mt-15">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="ts-grid-box">
+                    <div class="author-box author-box-item">
+                        <img class="author-img" src="@(Model.User.ImagePath ?? ((Model.User.GenderId == SCA.Entity.Enums.GenderType.Man) ? "/images/avatar/man.png" : "/images/avatar/woman.png"))" alt="">
+                        <div class="author-info">
+                            <div class="author-name">
+                                <h4>@Model.User.Name @Model.User.Surname</h4>
+                            </div>
+
+                            <div class="authors-social">
+                                <a href="#" class="ts-twitter">
+                                    <i class="fa fa-twitter"></i>
+                                </a>
+                                <a href="#" class="ts-facebook">
+                                    <i class="fa fa-facebook"></i>
+                                </a>
+                                <a href="#" class="ts-google-plus">
+                                    <i class="fa fa-google-plus"></i>
+                                </a>
+                                <a href="#" class="ts-linkedin">
+                                    <i class="fa fa-linkedin"></i>
+                                </a>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    <label>İsim</label>
+                                    <input name="Name" type="text" class="form-control" placeholder="" value="@Model.User.Name" required disabled>
+                                    <i class="fa fa-edit edit-icon"></i>
+                                </div> <!-- form-group end.// -->
+                                <div class="col form-group">
+                                    <label>Soyisim</label>
+                                    <input name="Surname" type="text" class="form-control" placeholder="" value="@Model.User.Surname" required disabled>
+                                    <i class="fa fa-edit edit-icon"></i>
+                                </div> <!-- form-group end.// -->
+                            </div> <!-- form-row end.// -->
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    <label>Şehir</label>
+                                    <select class="form-control" name="CityId" required disabled>
+                                        <option value="">Seçiniz...</option>
+                                        @foreach (var x in Model.Definitions.Cities)
+                                        {
+                                            <option value="@x.CityId">@x.CityName</option>
+                                        }
+                                    </select>
+                                    <i class="fa fa-edit edit-icon-selected"></i>
+                                </div>
+                                <div class="col form-group">
+                                    <label>Email</label>
+                                    <input name="EmailAddress" type="email" class="form-control" placeholder="" required disabled value="@Model.User.EmailAddress">
+                                    <i class="fa fa-edit edit-icon"></i>
+                                </div> <!-- form-group end.// -->
+                                <div class="form-group col">
+                                    <label>Cinsiyet</label>
+                                    <select id="inputState" class="form-control" name="GenderId" required disabled>
+                                        <option value="">Seçim yapınız...</option>
+                                        <option @(Model.User.GenderId == GenderType.Woman ? "selected" : "") value="@GenderType.Woman">@GenderType.Woman.GetDescription()</option>
+                                        <option @(Model.User.GenderId == GenderType.Man ? "selected" : "") value="@GenderType.Man">@GenderType.Man.GetDescription()</option>
+                                    </select>
+                                    <i class="fa fa-edit edit-icon-selected"></i>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <label>Eğitim Durumu</label>
+                                    <select id="educationType" class="form-control" name="EducationType" required disabled>
+                                        <option value="">Seçim yapınız...</option>
+                                        @foreach (EducationType x in (EducationType[])Enum.GetValues(typeof(EducationType)))
+                                        {
+                                            <option @(Model.User.EducationStatusId == x ? "selected" : "") value="@((long)x)">@x.GetDescription()</option>
+                                        }
+                                    </select>
+                                    <i class="fa fa-edit edit-icon-selected"></i>
+                                </div> <!-- form-group end.// -->
+                                <!-- form-group end.// -->
+                            </div> <!-- form-row.// -->
+                            <div class="template-selected-highschool hidden">
+                                <div class="form-row">
+                                    <div class="form-group col">
+                                        <label>Lise</label>
+                                        <select class="form-control" name="HighSchoolTypeId" disabled>
+                                            <option value="">Seçiniz...</option>
+                                            @foreach (var x in Model.Definitions.HighSchools)
+                                            {
+                                                <option @(Model.User.HighSchoolTypeId == x.Id ? "selected" : "") value="@x.Id">@x.SchoolName</option>
+                                            }
+                                            <i class="fa fa-edit edit-icon-selected"></i>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="template-selected-university hidden">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label>Üniversite</label>
+                                        <select class="form-control" name="UniversityId" disabled>
+                                            <option value="">Seçiniz...</option>
+                                            @foreach (var x in Model.Definitions.Universities)
+                                            {
+                                                <option @(Model.User.UniversityId == x.Id ? "selected" : "") value="@x.Id">@x.UniversityName</option>
+                                            }
+                                        </select>
+                                        <i class="fa fa-edit edit-icon-selected"></i>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Fakülte</label>
+                                        <select class="form-control" name="FacultyId" disabled>
+                                            <option value="">Seçiniz...</option>
+                                            @foreach (var x in Model.Definitions.Faculties)
+                                            {
+                                                <option @(Model.User.FacultyId == x.Id ? "selected" : "") value="@x.Id">@x.FacultyName</option>
+                                            }
+                                        </select>
+                                        <i class="fa fa-edit edit-icon-selected"></i>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label>Bölüm</label>
+                                        <select class="form-control" name="DepartmentId" disabled>
+                                            <option value="">Seçiniz...</option>
+                                            @foreach (var x in Model.Definitions.Departments)
+                                            {
+                                                <option @(Model.User.DepartmentId == x.Id ? "selected" : "") value="@x.Id">@x.DepartmentName</option>
+                                            }
+                                        </select>
+                                        <i class="fa fa-edit edit-icon-selected"></i>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="form-row template-still-student hidden">
+                                <div class="form-group col-md-6">
+                                    <label>Hala öğrenci misiniz?</label><br />
+                                    <input name="IsStudent" type="checkbox" id="stillStudent" class="js-switch stillStudent" data-color="#00c292" disabled />
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <div class="showClasses hidden">
+                                        <label>Sınıf</label>
+                                        <select class="form-control" name="ClassId" disabled>
+                                            <option value="">Seçiniz...</option>
+                                            @foreach (var x in Model.Definitions.Classes)
+                                            {
+                                                <option @(Model.User.ClassId == x.Id ? "selected" : "") value="@x.Id">@x.Description</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <label>Doğum Tarihi</label>
+                                    <input type="date" name="BirthDate" class="form-control" required value="@Model.User.BirthDate" disabled />
+                                </div>
+                                <div class="form-group col">
+                                    <label>Referans Kodu</label>
+                                    <input name="ReferanceCode" class="form-control" type="text" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="post-meta-info">
+                            <li>
+                                <a href="">
+                                    8 posts
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    <i class="fa fa-comments"></i>
+                                    5 comments
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- col end-->
+            <div class="col-lg-3">
+                <div class="right-sidebar">
+                    <div class="ts-grid-box widgets">
+                        <h2 class="ts-title">Follow us</h2>
+                        <ul class="ts-social-list">
+                            <li class="ts-facebook">
+                                <a href="#">
+                                    <i class="fa fa-facebook"></i>
+                                </a>
+                                <label>12.5 k </label>
+                                <span>Likes</span>
+                            </li>
+                            <li class="ts-google-plus">
+                                <a href="#">
+                                    <i class="fa fa-google-plus"></i>
+                                </a>
+                                <label>12.5 k </label>
+                                <span>Follwers</span>
+                            </li>
+                            <li class="ts-twitter">
+                                <a href="#">
+                                    <i class="fa fa-twitter"></i>
+                                </a>
+                                <label>12.5 k </label>
+                                <span>Follwers</span>
+                            </li>
+                            <li class="ts-pinterest">
+                                <a href="#">
+                                    <i class="fa fa-pinterest-p"></i>
+                                </a>
+                                <label>12.5 k </label>
+                                <span>Photos</span>
+                            </li>
+                            <li class="ts-linkedin">
+                                <a href="#">
+                                    <i class="fa fa-linkedin"></i>
+                                </a>
+                                <label>12.5 k </label>
+                                <span>Follwers</span>
+                            </li>
+                            <li class="ts-youtube">
+                                <a href="#">
+                                    <i class="fa fa-youtube"></i>
+                                </a>
+                                <label>12.5 k </label>
+                                <span>Follwers</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- widgets end-->
+
+                    <div class="widgets widget-banner">
+                        <a href="#">
+                            <img class="img-fluid" src="images/banner/sidebar-banner2.jpg" alt="">
+                        </a>
+                    </div>
+                    <!-- widgets end-->
+                    <div class="post-list-item widgets">
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation">
+                                <a class="active" href="#home" aria-controls="home" role="tab" data-toggle="tab">
+                                    <i class="fa fa-clock-o"></i>
+                                    Recent
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">
+                                    <i class="fa fa-heart"></i>
+                                    Favorites
+                                </a>
+                            </li>
+                        </ul>
+
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active ts-grid-box post-tab-list" id="home">
+                                <div class="post-content media">
+                                    <img class="d-flex sidebar-img" src="images/news/sports/sports2.jpg" alt="">
+                                    <div class="media-body">
+                                        <span class="post-tag">
+                                            <a href="#" class="green-color"> sports</a>
+                                        </span>
+                                        <h4 class="post-title">
+                                            <a href="">18 month old shoots himself by gun </a>
+                                        </h4>
+                                    </div>
+                                </div>
+                                <!--post-content end-->
+                                <div class="post-content media ">
+                                    <img class="d-flex sidebar-img" src="images/news/tech/tech4.jpg" alt="">
+                                    <div class="media-body">
+                                        <span class="post-tag">
+                                            <a href="#" class="yellow-color"> Technology</a>
+                                        </span>
+                                        <h4 class="post-title">
+                                            <a href="">18 month old shoots himself by gun </a>
+                                        </h4>
+                                    </div>
+                                </div>
+                                <!--post-content end-->
+                                <div class="post-content media">
+                                    <img class="d-flex sidebar-img" src="images/news/sports/sports4.jpg" alt="">
+                                    <div class="media-body">
+                                        <span class="post-tag">
+                                            <a href="#" class="blue-color"> Lifestyle</a>
+                                        </span>
+                                        <h4 class="post-title">
+                                            <a href="">18 month old shoots himself by gun </a>
+                                        </h4>
+                                    </div>
+                                </div>
+                                <!--post-content end-->
+                                <div class="post-content media">
+                                    <img class="d-flex sidebar-img" src="images/news/fashion/fashion4.jpg" alt="">
+                                    <div class="media-body">
+                                        <span class="post-tag">
+                                            <a href="#" class="pink-color"> Fashion</a>
+                                        </span>
+                                        <h4 class="post-title">
+                                            <a href="">18 month old shoots himself by gun </a>
+                                        </h4>
+                                    </div>
+                                </div>
+                                <!--post-content end-->
+                                <div class="post-content  media">
+                                    <img class="d-flex sidebar-img" src="images/news/travel/travel6.jpg" alt="">
+                                    <div class="media-body">
+                                        <span class="post-tag">
+                                            <a href="#" class="yellow-color"> Travel</a>
+                                        </span>
+                                        <h4 class="post-title">
+                                            <a href="">18 month old shoots himself by gun </a>
+                                        </h4>
+                                    </div>
+                                </div>
+                                <!--post-content end-->
+
+                            </div>
+                            <!--ts-grid-box end -->
+
+                            <div role="tabpanel" class="tab-pane ts-grid-box post-tab-list" id="profile">
+                                <div class="post-content media">
+                                    <img class="d-flex sidebar-img" src="images/news/travel/travel6.jpg" alt="">
+                                    <div class="media-body">
+                                        <span class="post-tag">
+                                            <a href="#" class="green-color"> sports</a>
+                                        </span>
+                                        <h4 class="post-title">
+                                            <a href="">18 month old shoots himself by gun </a>
+                                        </h4>
+                                    </div>
+                                </div>
+                                <!--post-content end-->
+                                <div class="post-content media ">
+                                    <img class="d-flex sidebar-img" src="images/news/fashion/fashion4.jpg" alt="">
+                                    <div class="media-body">
+                                        <span class="post-tag">
+                                            <a href="#" class="yellow-color"> Technology</a>
+                                        </span>
+                                        <h4 class="post-title">
+                                            <a href="">18 month old shoots himself by gun </a>
+                                        </h4>
+                                    </div>
+                                </div>
+                                <!--post-content end-->
+                                <div class="post-content media">
+                                    <img class="d-flex sidebar-img" src="images/news/sports/sports4.jpg" alt="">
+                                    <div class="media-body">
+                                        <span class="post-tag">
+                                            <a href="#" class="blue-color"> Lifestyle</a>
+                                        </span>
+                                        <h4 class="post-title">
+                                            <a href="">18 month old shoots himself by gun </a>
+                                        </h4>
+                                    </div>
+                                </div>
+                                <!--post-content end-->
+                                <div class="post-content media">
+                                    <img class="d-flex sidebar-img" src="images/news/sports/sports2.jpg" alt="">
+                                    <div class="media-body">
+                                        <span class="post-tag">
+                                            <a href="#" class="pink-color"> Fashion</a>
+                                        </span>
+                                        <h4 class="post-title">
+                                            <a href="">18 month old shoots himself by gun </a>
+                                        </h4>
+                                    </div>
+                                </div>
+                                <!--post-content end-->
+                                <div class="post-content  media">
+                                    <img class="d-flex sidebar-img" src="images/news/travel/travel6.jpg" alt="">
+                                    <div class="media-body">
+                                        <span class="post-tag">
+                                            <a href="#" class="yellow-color"> Travel</a>
+                                        </span>
+                                        <h4 class="post-title">
+                                            <a href="">18 month old shoots himself by gun </a>
+                                        </h4>
+                                    </div>
+                                </div>
+                                <!--post-content end-->
+                            </div>
+                            <!--ts-grid-box end -->
+                        </div>
+                        <!-- tab content end-->
+                    </div>
+                    <!-- widgets end-->
+
+                </div>
+                <!-- right sidebar end-->
+            </div>
+            <!-- col end-->
+        </div>
+        <!-- row end-->
+    </div>
+    <!-- container end-->
+</section>

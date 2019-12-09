@@ -200,8 +200,10 @@ namespace StudentCareerApp.Areas.Admin.Controllers
         [HttpPost]
         public async Task<JsonResult> AddOrUpdateCompanyAnnouncement(AnouncementDto model)
         {
-            var res = model.Id > 0 ? await _announsmentService.UpdateAsync(model) : await _announsmentService.InsertAsync(model);
-            return Json(res);
+            if (model.Id > 0)
+                return Json(await _announsmentService.UpdateAsync(model));
+            else
+                return Json(await _announsmentService.InsertAsync(model));
         }
 
         [HttpPost]
@@ -229,8 +231,10 @@ namespace StudentCareerApp.Areas.Admin.Controllers
 
         public async Task<JsonResult> AddOrUpdateCompanyYoutubePlaylist(YoutubeVideo model)
         {
-            var res = model.Id > 0 ? await _youtubePlaylistService.UpdateAsync(model) : await _youtubePlaylistService.InsertAsync(model);
-            return Json(res);
+            if (model.Id > 0)
+                return Json(await _youtubePlaylistService.UpdateAsync(model));
+            else
+                return Json(await _youtubePlaylistService.InsertAsync(model));
         }
 
         public async Task<JsonResult> DeleteCompanyYoutubePlaylistItem(long id)
@@ -255,8 +259,10 @@ namespace StudentCareerApp.Areas.Admin.Controllers
 
         public async Task<JsonResult> AddOrUpdateCompanySocialMedia(SocialMediaVM model)
         {
-            var res = model.Id > 0 ? await _socialMediaService.UpdateAsync(model) : await _socialMediaService.InsertAsync(model);
-            return Json(res);
+            if (model.Id > 0)
+                return Json(await _socialMediaService.UpdateAsync(model));
+            else
+                return Json(await _socialMediaService.InsertAsync(model));
         }
 
         public async Task<JsonResult> DeleteSocialMedia(long id)
