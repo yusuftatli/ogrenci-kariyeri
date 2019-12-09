@@ -13,13 +13,15 @@ namespace SCA.UI.Controllers
     {
         #region INTERFACES & CONSTRUCTOR
         private readonly IContentManager _contentManager;
+        private readonly ICompanyClubManager _companyManager;
         private readonly ICommentManager _commentManager;
         private readonly ICommentService<Comments> _commentService;
-        public BlogController(IContentManager contentManager, ICommentManager commentManager, ICommentService<Comments> commentService)
+        public BlogController(IContentManager contentManager, ICommentManager commentManager, ICommentService<Comments> commentService, ICompanyClubManager companyManager)
         {
             _contentManager = contentManager;
             _commentManager = commentManager;
             _commentService = commentService;
+            _companyManager = companyManager;
         }
         #endregion
 
@@ -45,6 +47,19 @@ namespace SCA.UI.Controllers
             }
 
             return Json(new { Status = false, Explanation = "Giriş yapılmadan yorum yapılamaz." });
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> FollowCompany(string seoUrl, string follow)
+        {
+            if (HttpContext.GetSessionData<UserSession>("userInfo")?.Id > 0)
+            {
+                var userid = HttpContext.GetSessionData<UserSession>("userInfo").Id;
+                var res = await _companyManager.FollowCompany(userid, seoUrl, follow == "1" ? "0" : "1");
+                return Json(new { Status = res, Explanation = "Beklenmedik bir hata oluştu." });
+            }
+
+            return Json(new { Status = false, Explanation = "Giriş yapılmadan Şirket takipi yapılamaz." });
         }
 
         [HttpPost]

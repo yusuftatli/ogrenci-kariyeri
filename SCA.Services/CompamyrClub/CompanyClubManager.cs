@@ -182,7 +182,28 @@ namespace SCA.Services
             return res;
         }
 
-        public async Task<ServiceResult> GetCompanyHeader(string seoUrl)
+        public async Task<bool> FollowCompany(long userId, string seoUrl, string follow)
+        {
+            try
+            {
+                string query = "delete from CompanyFollows where UserId = userId and CompanyId = (select Id from CompanyClubs where SeoUrl = @seoUrl);" +
+                                    "insert into CompanyFollows(UserId, CompanyId, Follow) values(@userId, (select Id from CompanyClubs where SeoUrl = @seoUrl), @follow); ";
+
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("seoUrl", seoUrl);
+                filter.Add("userId", userId);
+                filter.Add("follow", follow);
+               await _db.ExecuteAsync(query, filter);
+
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, userId, "GetContentUI", PlatformType.Mobil);
+            }
+            return true;
+        }
+
+        public async Task<ServiceResult> GetCompanyHeader(string seoUrl, long userId)
         {
             try
             {
@@ -192,12 +213,31 @@ namespace SCA.Services
                     companyHeader.SocialMedias = await multi.ReadAsync<SocialMediaDto>() as List<SocialMediaDto>;
                     return Result.ReturnAsSuccess(data: companyHeader);
                 }
+
+                bool result = await CompanyShownLog(seoUrl, userId);
             }
             catch (Exception ex)
             {
                 await _errorManagement.SaveError(ex, 0, "MainCategoryListWithParents ", Entity.Enums.PlatformType.Web);
                 return Result.ReturnAsFail(message: "Hata");
             }
+        }
+
+        public async Task<bool> CompanyShownLog(string seourl, long userId)
+        {
+            try
+            {
+                string query = "insert into CompanyUserLog(CompanyId, UserId) values((select Id from CompanyClubs where SeoUrl = @SeoUrl), @UserId);";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("SeoUrl", seourl);
+                filter.Add("UserId", userId);
+                var result = _db.ExecuteAsync(query, filter);
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, 0, "MainCategoryCreate ", Entity.Enums.PlatformType.Web);
+            }
+            return true;
         }
 
         public async Task<ServiceResult> GetCompanyInformation(string seoUrl)

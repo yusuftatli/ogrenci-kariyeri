@@ -43,6 +43,38 @@ namespace SCA.Services
             return res;
         }
 
+        public async Task<List<TagDto>> GetTagsForUI()
+        {
+            List<TagDto> res = new List<TagDto>();
+            try
+            {
+                res = await _db.QueryAsync<TagDto>("TagListAll", commandType: CommandType.StoredProcedure) as List<TagDto>;
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, null, "TagListAll", PlatformType.Web);
+            }
+
+            return res;
+        }
+        public async Task<List<TagDto>> GetTagListById(long contentId)
+        {
+            List<TagDto> res = new List<TagDto>();
+            try
+            {
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("id", contentId);
+                var lisData = await _db.QueryAsync<TagDto>("select t.Id, t.Description from TagRelation r inner join Tags t on r.TagId = t.Id where r.TagContentId =@Id  ", filter) as List<TagDto>;
+                res = lisData;
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, contentId, "GetTagById", PlatformType.Web);
+            }
+
+            return res;
+        }
+
         public async Task<string> GetTagById(long contentId)
         {
             string res = string.Empty;

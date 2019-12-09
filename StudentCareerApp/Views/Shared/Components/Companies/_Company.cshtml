@@ -15,10 +15,12 @@
         <ul class="category-list">
             @foreach (var x in Model)
             {
-                <li>
+                <li >
                     <a href="@Url.Action("Company", "Author", new { seoUrl = x.SeoUrl})">
-                        @x.ShortName
+                        <img width="60" height="40" src="@x.Icon" />&nbsp;&nbsp;@x.ShortName
+
                     </a>
+                    
                 </li>
             }
 

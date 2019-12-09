@@ -9,6 +9,7 @@ namespace SCA.Entity.Model
         public string ShortName { get; set; }
 
         public string SeoUrl { get; set; }
+        public string Icon { get; set; }
 
     }
 }

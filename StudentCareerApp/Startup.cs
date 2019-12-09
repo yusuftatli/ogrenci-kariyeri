@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Text.Unicode;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -150,7 +151,9 @@ namespace StudentCareerApp
             services.AddTransient<IComment<SCA.Entity.Entities.Comments>, CommentRepository>();
             services.AddTransient<IBasicPages<SCA.Entity.Entities.BasicPages>, BasicPagesRepository>();
             services.AddTransient<IBasicPagesService<SCA.Entity.Entities.BasicPages>, BasicPagesService>();
-
+            services.AddWebEncoders(o => {
+                o.TextEncoderSettings = new System.Text.Encodings.Web.TextEncoderSettings(UnicodeRanges.All);
+            });
             //generic services
             services.AddSingleton(typeof(IGenericService<>), typeof(GenericService<>));
             services.AddSingleton(typeof(IGenericRepository<>), typeof(GenericRepository<>));

@@ -10,13 +10,14 @@ namespace SCA.Services
 {
     public interface ICompanyClubManager
     {
+        Task<bool> FollowCompany(long userId, string seoUrl, string follow);
         Task<ServiceResult> GetAllCompaniesClubs(CompanyClupType companyClupType);
 
         Task<ServiceResult> GetCompanyId(string seourl);
 
         Task<ServiceResult> CreateCompanyClubs(CompanyClubsDto dto, UserSession session);
 
-        Task<ServiceResult> GetCompanyHeader(string seoUrl);
+        Task<ServiceResult> GetCompanyHeader(string seoUrl, long userId);
 
         Task<ServiceResult> GetCompanyInformation(string seoUrl);
 

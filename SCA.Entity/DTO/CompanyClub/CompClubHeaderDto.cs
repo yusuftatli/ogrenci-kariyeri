@@ -8,10 +8,12 @@ namespace SCA.Entity.DTO
     {
         public string HeaderImage { get; set; }
         public string ShortName { get; set; }
+        public string SeoUrl { get; set; }
         public string WebSite { get; set; }
         public string EmailAddress { get; set; }
         public string PhoneNumber { get; set; }
         public string SectorName { get; set; }
+        public string FollowCompany { get; set; }
         public List<SocialMediaDto> SocialMedias { get; set; }
     }
 }

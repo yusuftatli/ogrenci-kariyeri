@@ -65,10 +65,7 @@
                             <span>
                                 @if (!string.IsNullOrEmpty(Model.Category))
                                 {
-                                    foreach (var x in Model.Category.Split(","))
-                                    {
-                                        <a href="@Url.Action(" Index", "Category")" class="post-cat ts-green-bg">@x</a>
-                                    }
+                                    <a href="@Url.Action(" Index", "Category")" class="post-cat ts-green-bg">@Model.Category</a>
                                 }
                             </span>
                         </div>
@@ -76,7 +73,7 @@
                         <ul class="post-meta-info">
                             <li class="author">
                                 <a href="#">
-                                    <img src="@(Model.WriterImagePath ?? ((Model.GenderId == SCA.Entity.Enums.GenderType.Man) ? "/images/avatar/man.png" : "/images/avatar/woman.png"))" alt=""> @Model.Writer
+                                    <img src="@(Model.WriterImagePath ?? ((Model.GenderId == SCA.Entity.Enums.GenderType.Man) ? "/images/avatar/man.png" : "/images/avatar/woman.png"))" alt=""> @Model.Name @Model.Surname
                                 </a>
                             </li>
                             <li>
@@ -103,7 +100,7 @@
 
                             <li class="heart-box">
                                 @if (Context.GetSessionData<SCA.Entity.DTO.UserSession>
-                               ("userInfo")?.Id > 0)
+                           ("userInfo")?.Id > 0)
                                 {
                                     <a id="addFavorite" data-id="@Model.Id" class="@(Model.IsFavoriteContent ? "active" : "" )">
                                         <i class="fa fa-heart"></i>
@@ -131,18 +128,43 @@
                         </div>
                         <!-- entry content end-->
                     </div>
+                    <div class="container">
+                        @foreach (var m in Model.Taglist)
+                        {
+                            <a href="#">
+                                <span width="10px" class="badge badge-pill badge-secondary">@m.Description </span>
+                            </a>
+
+                        }
+
+                    </div>
                     <!-- post content area-->
                     <div class="author-box">
-                        <img class="author-img" src="@(Model.WriterImagePath ?? ((Model.GenderId == SCA.Entity.Enums.GenderType.Man) ? "/images/avatar/man.png" : "/images/avatar/woman.png"))" alt="">
+                        <img class="author-img" src="@(Model.WriterImagePath ?? ((Model.GenderId == SCA.Entity.Enums.GenderType.Man) ? "/images/avatar/man.png" : "/images/avatar/woman.png"))" alt=""> @*@Model.Name @Model.Surname*@
                         <div class="author-info">
-                            <h4 class="author-name">@Model.Writer</h4>
+                            <h4 class="author-name">@Model.Name @Model.Surname</h4>
                             <div class="authors-social">
-                                <a href="#" class="ts-twitter">
+                                <a href="https://twitter.com/share" class="ts-twitter">
                                     <i class="fa fa-twitter"></i>
                                 </a>
+
+                                <script>
+                                    !function (d, s, id) {
+                                        var js, fjs = d.getElementsByTagName(s)[0]; if (!d.getElementById(id)) {
+                                            js = d.createElement(s); js.id = id;
+                                            js.src = "//platform.twitter.com/widgets.js";
+                                            fjs.parentNode.insertBefore(js, fjs);
+                                        }
+                                    }(document, "script", "twitter-wjs");
+                                </script>
+
+
+
                                 <a href="#" class="ts-facebook">
                                     <i class="fa fa-facebook"></i>
                                 </a>
+
+                                z
                                 <a href="#" class="ts-google-plus">
                                     <i class="fa fa-google-plus"></i>
                                 </a>
@@ -176,10 +198,11 @@
                                 </div>
                             </div>
                         </div>
+
                         <!-- Form row end -->
                         <div class="clearfix">
                             @if (Context.GetSessionData<SCA.Entity.DTO.UserSession>
-                            ("userInfo")?.Id > 0)
+                        ("userInfo")?.Id > 0)
                             {
                                 <input class="hidden" type="hidden" name="ArticleId" value="@Model.Id" />
                                 <button class="comments-btn btn btn-primary" type="submit">Yorum Yap</button>
@@ -220,7 +243,7 @@
 
 <script>
     window.addEventListener('beforeunload', (e) => {
-       e.preventDefault();
-  //e.returnValue = `Are you sure you want to leave?`;
-});
+        e.preventDefault();
+        //e.returnValue = `Are you sure you want to leave?`;
+    });
 </script>

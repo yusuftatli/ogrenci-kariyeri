@@ -199,8 +199,11 @@ namespace SCA.Services
             try
             {
                 res = await _db.QueryFirstAsync<ContentDetailForDetailPageDTO>("Content_ListBySeoUrl", new { type = 1, _SeoUrl = seoUrl, _Ip = ip, _UserId = (userId == null) ? 0 : userId, ContentId = 0, count = 10 }, commandType: CommandType.StoredProcedure);
-                res.MostPopularItems = _db.Query<ContentForHomePageDTO>("Content_ListBySeoUrl", new { type = 2, _SeoUrl = seoUrl, _Ip = ip, _UserId = userId, ContentId = res.Id, count = 10 }, commandType: CommandType.StoredProcedure).ToList();
-                res.CommentList = _db.Query<CommentForUIDto>("Content_ListBySeoUrl", new { type = 3, _SeoUrl = seoUrl, _Ip = ip, _UserId = userId, ContentId = res.Id, count = 10 }, commandType: CommandType.StoredProcedure).ToList();
+                res.MostPopularItems = _db.Query<ContentForHomePageDTO>("Content_ListBySeoUrl", new { type = 2, _SeoUrl = seoUrl, _Ip = ip, _UserId = userId, ContentId = res.ContentId, count = 10 }, commandType: CommandType.StoredProcedure).ToList();
+                res.CommentList = _db.Query<CommentForUIDto>("Content_ListBySeoUrl", new { type = 3, _SeoUrl = seoUrl, _Ip = ip, _UserId = userId, ContentId = res.ContentId, count = 10 }, commandType: CommandType.StoredProcedure).ToList();
+
+                res.Category = await _categoryManager.GetCategoryById(res.ContentId);
+                res.Taglist = await _tagManager.GetTagListById(res.ContentId);
             }
             catch (Exception ex)
             {
@@ -326,6 +329,7 @@ namespace SCA.Services
 
                 if (dto.Id == 0)
                 {
+                    dto.UserId = session.Id;
                     dto.ReadCount = 0;
                     dto.Writer = session.Name + " " + session.Surname;
                     dto.PublishStateType = PublishState.Taslak;
@@ -520,7 +524,7 @@ namespace SCA.Services
                 {
                     ids.Add(item.Id);
                 }
-                List<CategoriesDto> categoryList = await _categoryManager.GetCategoryById(ids);
+                List<CategoriesDto> categoryList = await _categoryManager.GetCategoryListById(ids);
 
                 foreach (ContentForHomePageDTO item in listData)
                 {
@@ -530,7 +534,7 @@ namespace SCA.Services
                     {
                         for (int i = 0; i < dataList.Count; i++)
                         {
-                            if (i+1 == dataList.Count)
+                            if (i + 1 == dataList.Count)
                             {
                                 value += dataList[i].Description;
                             }

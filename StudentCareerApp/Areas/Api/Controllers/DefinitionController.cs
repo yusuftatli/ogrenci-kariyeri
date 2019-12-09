@@ -144,5 +144,20 @@ namespace StudentCareerApp.Areas.Api.Controller
         }
         #endregion
 
+        #region Title
+        [HttpGet("getTitles")]
+        public async Task<List<TitleDto>> GetTitle()
+        {
+            return await _definitionManager.GetTitle();
+        }
+
+        [HttpPost("createTitle")]
+        public async Task<ServiceResult> CreateTitle([FromBody]TitleDto dto)
+        {
+            return await _definitionManager.CreateTitle(dto);
+        }
+        #endregion
+
+
     }
 }

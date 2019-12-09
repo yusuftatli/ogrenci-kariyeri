@@ -9,6 +9,10 @@ namespace SCA.Entity.DTO
     {
         public long Id { get; set; }
         public long UserId { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public long ContentId { get; set; }
+        public string SeoUrl { get; set; }
         public string ImagePath { get; set; }
         public string Category { get; set; }
         public string Header { get; set; }
@@ -23,5 +27,6 @@ namespace SCA.Entity.DTO
         public string ContentDescription { get; set; }
         public List<ContentForHomePageDTO> MostPopularItems { get; set; }
         public List<CommentForUIDto> CommentList{ get; set; }
+        public List<TagDto> Taglist{ get; set; }
     }
 }

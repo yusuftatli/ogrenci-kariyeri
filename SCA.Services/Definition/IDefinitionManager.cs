@@ -39,5 +39,10 @@ namespace SCA.Services
         Task<List<SectorDto>> GetAllSectorForUI();
         Task<ServiceResult> CreateSector(SectorDto dto, string token);
 
+
+
+        Task<List<TitleDto>> GetTitle();
+        Task<ServiceResult> CreateTitle(TitleDto dto);
+
     }
 }

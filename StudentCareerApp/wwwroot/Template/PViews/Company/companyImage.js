@@ -42,7 +42,7 @@
                         data: {path: path, id: id},
                         type: 'post',
                         success: function(res){
-                            if (res.resultCode == 200){
+                            if (res.resultCode === 200){
                                 toastr["success"]("Silme işlemi başarılı!");
                                 self.getCompanyImages();
                             }

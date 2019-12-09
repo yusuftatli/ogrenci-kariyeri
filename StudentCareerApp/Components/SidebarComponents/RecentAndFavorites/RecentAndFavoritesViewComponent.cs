@@ -28,54 +28,5 @@ namespace StudentCareerApp.Components.SidebarComponents.RecentAndFavorites
             }
             return View("_RecentAndFavorites", model);
         }
-
-        public RecentAndFavoritesContentForUIDto FakeData()
-        {
-            return new RecentAndFavoritesContentForUIDto
-            {
-                Favorites = null,
-                Recents = new List<ContentForHomePageDTO>
-                {
-                    new ContentForHomePageDTO
-                    {
-                        Category = "Sağlık",
-                        Header = "Bu ülkelere gitme planınız varsa tekrar düşünmenizi gerektirecek bazı durumlar",
-                        ImagePath = "/AdminFiles/CMS/Content/Images/3.jpg",
-                        IsHeadLine = true,
-                        IsManset = true,
-                        PublishDate = new DateTime(2019, 7, 11),
-                        ReadCount = 196,
-                        SeoUrl = "bu-ulkelere-gitme-planiniz-varsa-tekrar-dusunmenizi-gerektirecek-bazi-durumlar",
-                        Writer = "Göksu Deniz"
-                    },
-                    new ContentForHomePageDTO
-                    {
-                        Category = "Biyoloji",
-                        Header = "İstanbul Üniversitesi'nin gece yeşil ışık saçan tavşanları",
-                        ImagePath = "/AdminFiles/CMS/Content/Images/3.jpg",
-                        IsHeadLine = true,
-                        IsManset = true,
-                        PublishDate = new DateTime(2019, 7, 11),
-                        ReadCount = 45,
-                        SeoUrl = "istanbul-universitesinin-gece-yesil-isik-sacan-tavsanlari",
-                        Writer = "Göksu Deniz"
-                    },
-                    new ContentForHomePageDTO
-                    {
-                        Category = "Biyoloji",
-                        Header = "Farelerde bulunan gen tek eşliliğin sırrı olabilir. İşte o genin ne işe yaradığı!",
-                        ImagePath = "/AdminFiles/CMS/Content/Images/3.jpg",
-                        IsHeadLine = true,
-                        IsManset = true,
-                        PublishDate = new DateTime(2019, 7, 11),
-                        ReadCount = 12,
-                        SeoUrl = "farelerde-bulunan-gen-tek-esliligin-sirri-olabilir-iste-o-genin-ne-ise-yaradigi",
-                        Writer = "Göksu Deniz"
-                    }
-                }
-            };
-        }
-
-
     }
 }

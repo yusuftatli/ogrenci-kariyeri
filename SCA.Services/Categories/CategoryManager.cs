@@ -49,7 +49,37 @@ namespace SCA.Services
             return res;
         }
 
-        public async Task<List<CategoriesDto>> GetCategoryById(List<long> contentList)
+        public async Task<string> GetCategoryById(long id)
+        {
+            string res = "";
+            try
+            {
+                string query = $"select r.TagContentId as Id, c.Description from  CategoryRelation r left join Category c on r.CategoryId = c.Id where r.TagContentId = @id";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("id", id);
+
+                var lisData = await _db.QueryAsync<CategoriesDto>(query,filter) as List<CategoriesDto>;
+                for (int i = 0; i < lisData.Count; i++)
+                {
+                    if (i + 1 == lisData.Count)
+                    {
+                        res += lisData[i].Description.ToString();
+                    }
+                    else
+                    {
+                        res += lisData[i].Description.ToString() + ", ";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, null, "GetCategoryById", PlatformType.Web);
+            }
+
+            return res;
+        }
+
+        public async Task<List<CategoriesDto>> GetCategoryListById(List<long> contentList)
         {
             List<CategoriesDto> res = new List<CategoriesDto>();
             string ids = string.Empty;
@@ -66,14 +96,14 @@ namespace SCA.Services
                         ids += contentList[i] + ",";
                     }
                 }
-               
+
                 string query = $"select r.TagContentId as Id, c.Description from  CategoryRelation r left join Category c on r.CategoryId = c.Id where r.TagContentId in({ids})";
                 var lisData = await _db.QueryAsync<CategoriesDto>(query) as List<CategoriesDto>;
                 res = lisData;
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex, null, "GetCategoryById", PlatformType.Web);
+                await _errorManagement.SaveError(ex, null, "GetCategoryListById", PlatformType.Web);
             }
 
             return res;

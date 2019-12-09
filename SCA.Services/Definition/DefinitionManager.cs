@@ -95,6 +95,52 @@ namespace SCA.Services
             return res;
         }
 
+        public async Task<List<TitleDto>> GetTitle()
+        {
+            List<TitleDto> res = new List<TitleDto>();
+            try
+            {
+                string query = "select Id, Description  from titles";
+                res = await _db.QueryAsync<TitleDto>(query) as List<TitleDto>;
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, null, "GetTitle", PlatformType.Web);
+            }
+            return res;
+        }
+        public async Task<ServiceResult> CreateTitle(TitleDto dto)
+        {
+            ServiceResult res = new ServiceResult();
+            string query = "";
+            DynamicParameters filter = new DynamicParameters();
+            string resultMessage = "";
+            try
+            {
+                if (dto.Id == 0)
+                {
+                    query = @"insert into Titles (Description) values (@Description);";
+                    filter.Add("Description", dto.Description);
+                    resultMessage = "Kayıt işlemi başarılı";
+                }
+                else
+                {
+                    query = "update Titles set Description=@Description where Id=@Id";
+                    filter.Add("Id", dto.Id);
+                    filter.Add("Description", dto.Description);
+                    resultMessage = "Güncelleme işlemi başarılı";
+                }
+                var result = _db.Execute(query, filter);
+                res = Result.ReturnAsSuccess(message: resultMessage);
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, null, "CreateDepartment", PlatformType.Web);
+                res = Result.ReturnAsFail(message: "Ünvan bilgisi kayıt işlemi sırasında hata meydana geldi.");
+            }
+            return res;
+        }
+
         public async Task<ServiceResult> UpdateDepartmentIsActive(long Id, bool IsActive)
         {
             ServiceResult res = new ServiceResult();
@@ -167,7 +213,7 @@ namespace SCA.Services
                     filter.Add("Description", dto.FacultyName);
                     resultMessage = "Güncelleme işlemi başarılı";
                 }
-                var result =await _db.ExecuteAsync(query);
+                var result = await _db.ExecuteAsync(query);
                 res = Result.ReturnAsSuccess(message: resultMessage);
             }
             catch (Exception ex)

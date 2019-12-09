@@ -1,5 +1,5 @@
 ﻿@using SCA.Common
-
+<script src="/js/jquery.min.js"></script>
 @model SCA.Entity.DTO.CompClubHeaderDto
 
 @if (!Model.Equals(null))
@@ -32,8 +32,21 @@
                     <a href="mailto:@Model.EmailAddress" class="view-all-link float-right">@Model.EmailAddress</a>
                     <div class="clearfix"></div>
                 }
+                <input hidden id="stxteourl" value="@Model.SeoUrl" />
                 @if (!Model.SocialMedias.Equals(null) && Model.SocialMedias.Count > 0)
                 {
+
+                    <ul>
+                        @if (Context.GetSessionData<SCA.Entity.DTO.UserSession>("userInfo")?.Id > 0)
+                        {
+                            <button id="folloCompanyBtn" class="comments-btn btn btn-success" type="button"><span id="followValue"></span>  </button>
+                        }
+                        else
+                        {
+                            <button id="folloCompanyBtn" class="comments-btn btn btn-success openLoginMagnific" type="button"><span id="followValue"></span></button>
+                        }
+
+                    </ul>
                     <ul>
                         @foreach (var x in Model.SocialMedias)
                         {
@@ -46,9 +59,47 @@
                             </li>
                         }
                     </ul>
+                    <input hidden type="text" id="followdata" value="@Model.FollowCompany" />
                 }
 
             </div>
         </div>
     </section>
 }
+
+
+
+
+<script>
+    if ($("#followdata").val() == "1") {
+        $("#followValue").text("Takip Et");
+        $("#followValue1").text("Takip Et");
+    } else {
+        $("#followValue").text("Takip Ediliyor");
+        $("#followValue1").text("Takip Ediliyor");
+    }
+    $(document).on('click', '#folloCompanyBtn', function (e) {
+        debugger
+        $.ajax({
+            url: '/Blog/FollowCompany',
+            type: 'post',
+            data: { seoUrl: $("#stxteourl").val(), follow: $("#followdata").val() },
+            success: function (res) {
+                if (res.status) {
+                    debugger
+                    toastr["success"](!$("#followdata").val() ? "Haber favorilerinize eklendi." : "Haber favorilerinizden çıkarıldı.");
+                    if ($("#followdata").val() == "0") {
+                        $("#followValue").text("Takip Et");
+                        $("#followValue1").text("Takip Et");
+                    } else {
+                        $("#followValue").text("Takip Ediliyor");
+                        $("#followValue1").text("Takip Ediliyor");
+                    }
+                }
+                else
+                    toastr["error"](res.data.Explanation);
+            }
+        })
+    })
+
+</script>

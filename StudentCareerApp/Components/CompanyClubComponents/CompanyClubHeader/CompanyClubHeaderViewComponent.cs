@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SCA.Common;
 using SCA.Entity.DTO;
 using SCA.Entity.Model;
 using SCA.Services;
@@ -21,8 +22,7 @@ namespace StudentCareerApp.Components.CompanyClubHeaderViewComponent
 
         public async Task<IViewComponentResult> InvokeAsync(string seoUrl, CompClubHeaderDto model = null)
         {
-            var res = await _companyManager.GetCompanyHeader(seoUrl);
-
+            var res = await _companyManager.GetCompanyHeader(seoUrl, Convert.ToInt64(HttpContext.GetSessionData<UserSession>("userInfo")?.Id));
             return View("_CompanyClubHeader", res.Data);
         }
     }
