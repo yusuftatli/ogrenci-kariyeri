@@ -7,412 +7,383 @@
 }
 
 <style>
-    .edit-icon {
-        position: absolute;
-        right: 10px;
-        top: 45px;
+    .edit-icon, .edit-icon-input {
+        cursor: pointer;
+        margin-left: 10px;
+        color: #e91e63;
     }
 
-    .edit-icon-selected {
+    .text-unset{
+        text-transform:unset !important;
+    }
+
+    .green-icon {
+        color: #6cba40;
+    }
+
+    .red-icon {
+        color: #e91e63;
+    }
+
+    .social-media-icon {
+        padding-right: 10px;
+    }
+
+    p > span > br {
+        content: "A" !important;
+        display: block !important;
+        margin-bottom: 10px !important
+    }
+
+    .pointer {
+        cursor: pointer;
+    }
+
+    .ce-block__content {
+        max-width: 100%;
+    }
+
+    .ce-paragraph {
+        margin-right: 30px;
+        text-shadow: unset !important;
+    }
+
+    .codex-editor__redactor {
+        padding-bottom: 10px !important;
+    }
+
+    [contenteditable=true] {
+        text-shadow: 0px 0px 5px 0px grey;
+    }
+
+    .editable-area {
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        padding: 3px 10px;
+    }
+
+    .social-editor {
         position: absolute;
-        right: 23px;
-        top: 45px;
+        max-width: 150px;
+        margin-top: 10px;
     }
 </style>
 
-<section class="block-wrapper mt-15">
+<!-- block wrapper start-->
+<section class="block-wrapper p-0">
     <div class="container">
         <div class="row">
-            <div class="col-lg-9">
-                <div class="ts-grid-box">
-                    <div class="author-box author-box-item">
-                        <img class="author-img" src="@(Model.User.ImagePath ?? ((Model.User.GenderId == SCA.Entity.Enums.GenderType.Man) ? "/images/avatar/man.png" : "/images/avatar/woman.png"))" alt="">
-                        <div class="author-info">
-                            <div class="author-name">
-                                <h4>@Model.User.Name @Model.User.Surname</h4>
-                            </div>
+            <div class="col-lg-12">
+                <div class="featured-tab-item">
 
-                            <div class="authors-social">
-                                <a href="#" class="ts-twitter">
-                                    <i class="fa fa-twitter"></i>
-                                </a>
-                                <a href="#" class="ts-facebook">
-                                    <i class="fa fa-facebook"></i>
-                                </a>
-                                <a href="#" class="ts-google-plus">
-                                    <i class="fa fa-google-plus"></i>
-                                </a>
-                                <a href="#" class="ts-linkedin">
-                                    <i class="fa fa-linkedin"></i>
-                                </a>
-                            </div>
-                            <div class="clearfix"></div>
-                            <div class="form-row">
-                                <div class="col form-group">
-                                    <label>İsim</label>
-                                    <input name="Name" type="text" class="form-control" placeholder="" value="@Model.User.Name" required disabled>
-                                    <i class="fa fa-edit edit-icon"></i>
-                                </div> <!-- form-group end.// -->
-                                <div class="col form-group">
-                                    <label>Soyisim</label>
-                                    <input name="Surname" type="text" class="form-control" placeholder="" value="@Model.User.Surname" required disabled>
-                                    <i class="fa fa-edit edit-icon"></i>
-                                </div> <!-- form-group end.// -->
-                            </div> <!-- form-row end.// -->
-                            <div class="form-row">
-                                <div class="col form-group">
-                                    <label>Şehir</label>
-                                    <select class="form-control" name="CityId" required disabled>
-                                        <option value="">Seçiniz...</option>
-                                        @foreach (var x in Model.Definitions.Cities)
-                                        {
-                                            <option value="@x.CityId">@x.CityName</option>
-                                        }
-                                    </select>
-                                    <i class="fa fa-edit edit-icon-selected"></i>
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs row featured-tab-post" role="tablist">
+                        <li role="presentation" class="col-lg">
+                            <a href="#home" class="active" aria-controls="home" role="tab" data-toggle="tab">
+                                <div class="post-content">
+                                    <h3 class="post-title">
+                                        Profil Bilgileri
+                                    </h3>
+                                    <ul class="post-meta-info">
+                                        <li class="cat-name">
+                                            Sıralama:
+                                        </li>
+                                        <li>
+                                            128
+                                        </li>
+                                    </ul>
                                 </div>
-                                <div class="col form-group">
-                                    <label>Email</label>
-                                    <input name="EmailAddress" type="email" class="form-control" placeholder="" required disabled value="@Model.User.EmailAddress">
-                                    <i class="fa fa-edit edit-icon"></i>
-                                </div> <!-- form-group end.// -->
-                                <div class="form-group col">
-                                    <label>Cinsiyet</label>
-                                    <select id="inputState" class="form-control" name="GenderId" required disabled>
-                                        <option value="">Seçim yapınız...</option>
-                                        <option @(Model.User.GenderId == GenderType.Woman ? "selected" : "") value="@GenderType.Woman">@GenderType.Woman.GetDescription()</option>
-                                        <option @(Model.User.GenderId == GenderType.Man ? "selected" : "") value="@GenderType.Man">@GenderType.Man.GetDescription()</option>
-                                    </select>
-                                    <i class="fa fa-edit edit-icon-selected"></i>
+                            </a>
+                        </li>
+                        <li role="presentation" class="col-lg">
+                            <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">
+                                <div class="post-content">
+                                    <h3 class="post-title">
+                                        İçerikler
+                                    </h3>
+                                    <ul class="post-meta-info">
+                                        <li class="cat-name">
+                                            <i class="fa fa-thumbs-up green-icon"></i>
+                                        </li>
+                                        <li>
+                                            12
+                                        </li>
+                                        <li class="cat-name">
+                                            <i class="fa fa-thumbs-down red-icon"></i>
+                                        </li>
+                                        <li>
+                                            4
+                                        </li>
+                                    </ul>
                                 </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col">
-                                    <label>Eğitim Durumu</label>
-                                    <select id="educationType" class="form-control" name="EducationType" required disabled>
-                                        <option value="">Seçim yapınız...</option>
-                                        @foreach (EducationType x in (EducationType[])Enum.GetValues(typeof(EducationType)))
-                                        {
-                                            <option @(Model.User.EducationStatusId == x ? "selected" : "") value="@((long)x)">@x.GetDescription()</option>
-                                        }
-                                    </select>
-                                    <i class="fa fa-edit edit-icon-selected"></i>
-                                </div> <!-- form-group end.// -->
-                                <!-- form-group end.// -->
-                            </div> <!-- form-row.// -->
-                            <div class="template-selected-highschool hidden">
-                                <div class="form-row">
-                                    <div class="form-group col">
-                                        <label>Lise</label>
-                                        <select class="form-control" name="HighSchoolTypeId" disabled>
-                                            <option value="">Seçiniz...</option>
-                                            @foreach (var x in Model.Definitions.HighSchools)
-                                            {
-                                                <option @(Model.User.HighSchoolTypeId == x.Id ? "selected" : "") value="@x.Id">@x.SchoolName</option>
-                                            }
-                                            <i class="fa fa-edit edit-icon-selected"></i>
-                                        </select>
-                                    </div>
+                            </a>
+                        </li>
+                        <li role="presentation" class="col-lg">
+                            <a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">
+                                <div class="post-content">
+                                    <h3 class="post-title">
+                                        Yorumlar
+                                    </h3>
+                                    <ul class="post-meta-info">
+                                        <li class="cat-name">
+                                            <i class="fa fa-thumbs-up green-icon"></i>
+                                        </li>
+                                        <li>
+                                            12
+                                        </li>
+                                        <li class="cat-name">
+                                            <i class="fa fa-thumbs-down red-icon"></i>
+                                        </li>
+                                        <li>
+                                            4
+                                        </li>
+                                    </ul>
                                 </div>
-                            </div>
-                            <div class="template-selected-university hidden">
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label>Üniversite</label>
-                                        <select class="form-control" name="UniversityId" disabled>
-                                            <option value="">Seçiniz...</option>
-                                            @foreach (var x in Model.Definitions.Universities)
-                                            {
-                                                <option @(Model.User.UniversityId == x.Id ? "selected" : "") value="@x.Id">@x.UniversityName</option>
-                                            }
-                                        </select>
-                                        <i class="fa fa-edit edit-icon-selected"></i>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label>Fakülte</label>
-                                        <select class="form-control" name="FacultyId" disabled>
-                                            <option value="">Seçiniz...</option>
-                                            @foreach (var x in Model.Definitions.Faculties)
-                                            {
-                                                <option @(Model.User.FacultyId == x.Id ? "selected" : "") value="@x.Id">@x.FacultyName</option>
-                                            }
-                                        </select>
-                                        <i class="fa fa-edit edit-icon-selected"></i>
-                                    </div>
+                            </a>
+                        </li>
+                        <li role="presentation" class="col-lg">
+                            <a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">
+                                <div class="post-content">
+                                    <h3 class="post-title">
+                                        Takip
+                                    </h3>
+                                    <ul class="post-meta-info">
+                                        <li class="cat-name">
+                                            <i class="fa fa-handshake"></i>
+                                        </li>
+                                        <li>
+                                            126
+                                        </li>
+                                        <li class="cat-name">
+                                            <i class="fa fa-praying-hands"></i>
+                                        </li>
+                                        <li>
+                                            25
+                                        </li>
+                                    </ul>
                                 </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label>Bölüm</label>
-                                        <select class="form-control" name="DepartmentId" disabled>
-                                            <option value="">Seçiniz...</option>
-                                            @foreach (var x in Model.Definitions.Departments)
-                                            {
-                                                <option @(Model.User.DepartmentId == x.Id ? "selected" : "") value="@x.Id">@x.DepartmentName</option>
-                                            }
-                                        </select>
-                                        <i class="fa fa-edit edit-icon-selected"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade in active" id="home">
+                            <div class="ts-grid-box">
+                                <div class="post-content">
+                                    <h4>
+                                        <a id="user-name">Göksu Deniz</a><i class="fa fa-edit edit-icon" for="user-name"></i>
+                                        <i class="fa fa-save pull-right red-icon" style="cursor:pointer;"></i>
+                                        <i class="fa fa-cogs pull-right social-media-icon red-icon"></i>
+                                        <i class="fa fa-linkedin pull-right social-media-icon"></i>
+                                        <i class="fa fa-twitter pull-right social-media-icon"></i>
+                                        <i class="fa fa-instagram pull-right social-media-icon"></i>
+                                        <i class="fa fa-facebook pull-right social-media-icon"></i>
+                                    </h4>
+                                    <p id="user-description">
+                                    </p>
+                                    <div class="text-center pb-5 pt-3">
+                                        <ul class="footer-social">
+                                            <li class="ts-facebook">
+                                                <a href="https://www.facebook.com/ogrencikariyeri" target="_blank" rel="nofollow">
+                                                    <i class="fa fa-facebook"></i>
+                                                    <a id="user-facebook" class="text-unset">ogrencikariyeri</a>
+                                                </a>
+                                                <i class="fa fa-edit edit-icon" for="user-facebook"></i>
+                                            </li>
+                                            <li class="ts-instagram-gradient">
+                                                <a href="https://www.instagram.com/ogrencikariyeri" target="_blank" rel="nofollow">
+                                                    <i class="fa fa-instagram"></i>
+                                                    <a id="user-instagram" class="text-unset">ogrencikariyeri</a>
+                                                </a>
+                                                <i class="fa fa-edit edit-icon" for="user-instagram"></i>
+                                            </li>
+                                            <li class="ts-twitter">
+                                                <a href="https://www.twitter.com/ogrencikariyeri" target="_blank" rel="nofollow">
+                                                    <i class="fa fa-twitter"></i>
+                                                    <a id="user-twitter" class="text-unset">ogrencikariyeri</a>
+                                                </a>
+                                                <i class="fa fa-edit edit-icon" for="user-twitter"></i>
+                                                @*<input type="text" class="form-control social-editor hidden" id="user-twitter" value="https://www.twitter.com/ogrencikariyeri" />*@
+                                            </li>
+                                            <li class="ts-linkedin">
+                                                <a href="https://www.linkedin.com/company/ogrencikariyeri/" target="_blank" rel="nofollow">
+                                                    <i class="fa fa-linkedin"></i>
+                                                    <a id="user-linkedin" class="text-unset">ogrencikariyeri</a>
+                                                </a>
+                                                <i class="fa fa-edit edit-icon" for="user-linkedin"></i>
+                                            </li>
+                                        </ul>
                                     </div>
 
-                                </div>
-                            </div>
-                            <div class="form-row template-still-student hidden">
-                                <div class="form-group col-md-6">
-                                    <label>Hala öğrenci misiniz?</label><br />
-                                    <input name="IsStudent" type="checkbox" id="stillStudent" class="js-switch stillStudent" data-color="#00c292" disabled />
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <div class="showClasses hidden">
-                                        <label>Sınıf</label>
-                                        <select class="form-control" name="ClassId" disabled>
-                                            <option value="">Seçiniz...</option>
-                                            @foreach (var x in Model.Definitions.Classes)
-                                            {
-                                                <option @(Model.User.ClassId == x.Id ? "selected" : "") value="@x.Id">@x.Description</option>
-                                            }
-                                        </select>
+                                    <div class="row">
+                                        <div class="col-lg">
+                                            <div class="media-left col-md-12 text-center"><i class="fa fa-home fa-3x" style="color:#e91e63;"></i></div>
+                                            <div class="media-body text-center" style="padding-top:10px;">
+                                                <a id="user-address">Kavaklı mah. Gaffar Okkan sok. No: 3 D: 5 <br />Beylikdüzü / İstanbul</a>
+                                                <i class="fa fa-edit edit-icon" for="user-address"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg">
+                                            <div class="media-left col-md-12 text-center"><i class="fa fa-phone fa-3x" style="color:#e91e63;"></i></div>
+                                            <div class="media-body text-center" style="padding-top:10px;">
+                                                <a href="tel:05398522341" style="color:unset !important;" id="user-phone">0539 852 2341</a>
+                                                <i class="fa fa-edit edit-icon" for="user-phone"></i>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg">
+                                            <div class="media-left col-md-12 text-center"><i class="fa fa-envelope fa-3x" style="color:#e91e63;"></i></div>
+                                            <div class="media-body text-center" style="padding-top:10px;">
+                                                <a id="user-mail" href="mailto:goksudnz@gproject.ist" style="color:unset !important;">goksudnz@gproject.ist</a>
+                                                <i class="fa fa-edit edit-icon" for="user-mail"></i>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col">
-                                    <label>Doğum Tarihi</label>
-                                    <input type="date" name="BirthDate" class="form-control" required value="@Model.User.BirthDate" disabled />
-                                </div>
-                                <div class="form-group col">
-                                    <label>Referans Kodu</label>
-                                    <input name="ReferanceCode" class="form-control" type="text" disabled>
                                 </div>
                             </div>
                         </div>
-                        <ul class="post-meta-info">
-                            <li>
-                                <a href="">
-                                    8 posts
-                                </a>
-                            </li>
-                            <li>
-                                <a href="">
-                                    <i class="fa fa-comments"></i>
-                                    5 comments
-                                </a>
-                            </li>
-
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <!-- col end-->
-            <div class="col-lg-3">
-                <div class="right-sidebar">
-                    <div class="ts-grid-box widgets">
-                        <h2 class="ts-title">Follow us</h2>
-                        <ul class="ts-social-list">
-                            <li class="ts-facebook">
-                                <a href="#">
-                                    <i class="fa fa-facebook"></i>
-                                </a>
-                                <label>12.5 k </label>
-                                <span>Likes</span>
-                            </li>
-                            <li class="ts-google-plus">
-                                <a href="#">
-                                    <i class="fa fa-google-plus"></i>
-                                </a>
-                                <label>12.5 k </label>
-                                <span>Follwers</span>
-                            </li>
-                            <li class="ts-twitter">
-                                <a href="#">
-                                    <i class="fa fa-twitter"></i>
-                                </a>
-                                <label>12.5 k </label>
-                                <span>Follwers</span>
-                            </li>
-                            <li class="ts-pinterest">
-                                <a href="#">
-                                    <i class="fa fa-pinterest-p"></i>
-                                </a>
-                                <label>12.5 k </label>
-                                <span>Photos</span>
-                            </li>
-                            <li class="ts-linkedin">
-                                <a href="#">
-                                    <i class="fa fa-linkedin"></i>
-                                </a>
-                                <label>12.5 k </label>
-                                <span>Follwers</span>
-                            </li>
-                            <li class="ts-youtube">
-                                <a href="#">
-                                    <i class="fa fa-youtube"></i>
-                                </a>
-                                <label>12.5 k </label>
-                                <span>Follwers</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <!-- widgets end-->
-
-                    <div class="widgets widget-banner">
-                        <a href="#">
-                            <img class="img-fluid" src="images/banner/sidebar-banner2.jpg" alt="">
-                        </a>
-                    </div>
-                    <!-- widgets end-->
-                    <div class="post-list-item widgets">
-                        <!-- Nav tabs -->
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation">
-                                <a class="active" href="#home" aria-controls="home" role="tab" data-toggle="tab">
-                                    <i class="fa fa-clock-o"></i>
-                                    Recent
-                                </a>
-                            </li>
-                            <li role="presentation">
-                                <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">
-                                    <i class="fa fa-heart"></i>
-                                    Favorites
-                                </a>
-                            </li>
-                        </ul>
-
-                        <!-- Tab panes -->
-                        <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane active ts-grid-box post-tab-list" id="home">
-                                <div class="post-content media">
-                                    <img class="d-flex sidebar-img" src="images/news/sports/sports2.jpg" alt="">
-                                    <div class="media-body">
-                                        <span class="post-tag">
-                                            <a href="#" class="green-color"> sports</a>
-                                        </span>
-                                        <h4 class="post-title">
-                                            <a href="">18 month old shoots himself by gun </a>
-                                        </h4>
-                                    </div>
-                                </div>
-                                <!--post-content end-->
-                                <div class="post-content media ">
-                                    <img class="d-flex sidebar-img" src="images/news/tech/tech4.jpg" alt="">
-                                    <div class="media-body">
-                                        <span class="post-tag">
-                                            <a href="#" class="yellow-color"> Technology</a>
-                                        </span>
-                                        <h4 class="post-title">
-                                            <a href="">18 month old shoots himself by gun </a>
-                                        </h4>
-                                    </div>
-                                </div>
-                                <!--post-content end-->
-                                <div class="post-content media">
-                                    <img class="d-flex sidebar-img" src="images/news/sports/sports4.jpg" alt="">
-                                    <div class="media-body">
-                                        <span class="post-tag">
-                                            <a href="#" class="blue-color"> Lifestyle</a>
-                                        </span>
-                                        <h4 class="post-title">
-                                            <a href="">18 month old shoots himself by gun </a>
-                                        </h4>
-                                    </div>
-                                </div>
-                                <!--post-content end-->
-                                <div class="post-content media">
-                                    <img class="d-flex sidebar-img" src="images/news/fashion/fashion4.jpg" alt="">
-                                    <div class="media-body">
-                                        <span class="post-tag">
-                                            <a href="#" class="pink-color"> Fashion</a>
-                                        </span>
-                                        <h4 class="post-title">
-                                            <a href="">18 month old shoots himself by gun </a>
-                                        </h4>
-                                    </div>
-                                </div>
-                                <!--post-content end-->
-                                <div class="post-content  media">
-                                    <img class="d-flex sidebar-img" src="images/news/travel/travel6.jpg" alt="">
-                                    <div class="media-body">
-                                        <span class="post-tag">
-                                            <a href="#" class="yellow-color"> Travel</a>
-                                        </span>
-                                        <h4 class="post-title">
-                                            <a href="">18 month old shoots himself by gun </a>
-                                        </h4>
-                                    </div>
-                                </div>
-                                <!--post-content end-->
-
+                        <div role="tabpanel" class="fade tab-pane" id="profile">
+                            <div class="ts-grid-box clearfix ts-category-title">
+                                <h2 class="ts-title float-left">Onaylı İçerikler (12)</h2>
+                                <i class="fa fa-chevron-down fa-2x pull-right pointer" for="valid-content-items"></i>
                             </div>
-                            <!--ts-grid-box end -->
-
-                            <div role="tabpanel" class="tab-pane ts-grid-box post-tab-list" id="profile">
-                                <div class="post-content media">
-                                    <img class="d-flex sidebar-img" src="images/news/travel/travel6.jpg" alt="">
-                                    <div class="media-body">
-                                        <span class="post-tag">
-                                            <a href="#" class="green-color"> sports</a>
-                                        </span>
-                                        <h4 class="post-title">
-                                            <a href="">18 month old shoots himself by gun </a>
-                                        </h4>
-                                    </div>
+                            <div class="ts-grid-box" id="valid-content-items" style="display:none">
+                                <div class="row post-col-list-item" id="content-items">
+                                    @await Component.InvokeAsync("NewsWith2Columns", new { count = 12, col = 4 })
                                 </div>
-                                <!--post-content end-->
-                                <div class="post-content media ">
-                                    <img class="d-flex sidebar-img" src="images/news/fashion/fashion4.jpg" alt="">
-                                    <div class="media-body">
-                                        <span class="post-tag">
-                                            <a href="#" class="yellow-color"> Technology</a>
-                                        </span>
-                                        <h4 class="post-title">
-                                            <a href="">18 month old shoots himself by gun </a>
-                                        </h4>
-                                    </div>
-                                </div>
-                                <!--post-content end-->
-                                <div class="post-content media">
-                                    <img class="d-flex sidebar-img" src="images/news/sports/sports4.jpg" alt="">
-                                    <div class="media-body">
-                                        <span class="post-tag">
-                                            <a href="#" class="blue-color"> Lifestyle</a>
-                                        </span>
-                                        <h4 class="post-title">
-                                            <a href="">18 month old shoots himself by gun </a>
-                                        </h4>
-                                    </div>
-                                </div>
-                                <!--post-content end-->
-                                <div class="post-content media">
-                                    <img class="d-flex sidebar-img" src="images/news/sports/sports2.jpg" alt="">
-                                    <div class="media-body">
-                                        <span class="post-tag">
-                                            <a href="#" class="pink-color"> Fashion</a>
-                                        </span>
-                                        <h4 class="post-title">
-                                            <a href="">18 month old shoots himself by gun </a>
-                                        </h4>
-                                    </div>
-                                </div>
-                                <!--post-content end-->
-                                <div class="post-content  media">
-                                    <img class="d-flex sidebar-img" src="images/news/travel/travel6.jpg" alt="">
-                                    <div class="media-body">
-                                        <span class="post-tag">
-                                            <a href="#" class="yellow-color"> Travel</a>
-                                        </span>
-                                        <h4 class="post-title">
-                                            <a href="">18 month old shoots himself by gun </a>
-                                        </h4>
-                                    </div>
-                                </div>
-                                <!--post-content end-->
                             </div>
-                            <!--ts-grid-box end -->
+                            <div class="ts-grid-box clearfix ts-category-title">
+                                <h2 class="ts-title float-left">Onay Bekleyen İçerikler (10)</h2>
+                                <i class="fa fa-chevron-down fa-2x pull-right pointer" for="waiting-content-items"></i>
+                            </div>
+                            <div class="ts-grid-box" id="waiting-content-items" style="display:none">
+                                <div class="row post-col-list-item" id="content-items">
+                                    @await Component.InvokeAsync("NewsWith2Columns", new { count = 10, col = 4 })
+                                </div>
+                            </div>
+                            <div class="ts-grid-box clearfix ts-category-title">
+                                <h2 class="ts-title float-left">Reddedilmiş İçerikler (4)</h2>
+                                <i class="fa fa-chevron-down fa-2x pull-right pointer" for="rejected-content-items"></i>
+                            </div>
+                            <div class="ts-grid-box" id="rejected-content-items" style="display:none">
+                                <div class="row post-col-list-item" id="content-items">
+                                    @await Component.InvokeAsync("NewsWith2Columns", new { count = 4, col = 4 })
+                                </div>
+                            </div>
+
                         </div>
-                        <!-- tab content end-->
-                    </div>
-                    <!-- widgets end-->
+                        <div role="tabpanel" class=" fade tab-pane" id="messages">
+                            <div class="ts-grid-box clearfix ts-category-title">
+                                <h2 class="ts-title float-left">Onaylı Yorumlar (12)</h2>
+                                <i class="fa fa-chevron-up fa-2x pull-right pointer" for="approved-comments"></i>
+                            </div>
+                            <div class="row" id="approved-comments">
+                                @for (int i = 0; i < 9; i++)
+                                {
+                                <div class="col-lg-3 pr-10 pb-5">
+                                    <div class="ts-grid-box ts-col-box">
+                                        <div class="item">
+                                            <a class="post-cat ts-green-bg" href="#">Sports</a>
+                                            <div class="post-content">
+                                                <h3 class="post-title md">
+                                                    <a href="#">Haber</a>
+                                                </h3>
+                                                <span class="post-date-info">
+                                                    <i class="fa fa-clock-o"></i>
+                                                    21.12.2019
+                                                </span>
+                                                <p>
+                                                    @("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras quis nisi porttitor, commodo lectus interdum, ullamcorper quam. Maecenas ligula quam, tempus id blandit sit amet, pretium non nibh. Quisque vulputate laoreet tortor, vitae faucibus ante porta ac. Nullam pharetra scelerisque facilisis. In non semper purus, at venenatis nibh. Phasellus non quam arcu.".Substring(0, 80) + "...")
+                                                </p>
+                                                <ul class="post-meta-info">
+                                                    <li>
+                                                        <i class="fa fa-thumbs-up green-icon"></i>  12
+                                                    </li>
+                                                    <li>
+                                                        <i class="fa fa-thumbs-down red-icon"></i>  4
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <!-- item end-->
+                                    </div>
+                                    <!-- ts-grid-box end-->
+                                </div>
+                                }
+                            </div>
+                            <div class="ts-grid-box clearfix ts-category-title">
+                                <h2 class="ts-title float-left">Onay Bekleyen Yorumlar (12)</h2>
+                                <i class="fa fa-chevron-down fa-2x pull-right pointer" for="waiting-comments"></i>
+                            </div>
+                            <div class="row" id="waiting-comments" style="display:none;">
+                                @for (int i = 0; i < 9; i++)
+                                {
+                                <div class="col-lg-3 pr-10 pb-5">
+                                    <div class="ts-grid-box ts-col-box">
+                                        <div class="item">
+                                            <a class="post-cat ts-green-bg" href="#">Sports</a>
+                                            <div class="post-content">
+                                                <h3 class="post-title md">
+                                                    <a href="#">Haber</a>
+                                                </h3>
+                                                <span class="post-date-info">
+                                                    <i class="fa fa-clock-o"></i>
+                                                    21.12.2019
+                                                </span>
+                                                <p>
+                                                    @("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras quis nisi porttitor, commodo lectus interdum, ullamcorper quam. Maecenas ligula quam, tempus id blandit sit amet, pretium non nibh. Quisque vulputate laoreet tortor, vitae faucibus ante porta ac. Nullam pharetra scelerisque facilisis. In non semper purus, at venenatis nibh. Phasellus non quam arcu.".Substring(0, 80) + "...")
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- item end-->
+                                    </div>
+                                    <!-- ts-grid-box end-->
+                                </div>
+                                }
+                            </div>
 
+                            <div class="ts-grid-box clearfix ts-category-title">
+                                <h2 class="ts-title float-left">Onaylı Yorumlar (12)</h2>
+                                <i class="fa fa-chevron-down fa-2x pull-right pointer" for="rejected-comments"></i>
+                            </div>
+                            <div class="row" id="rejected-comments" style="display:none;">
+                                @for (int i = 0; i < 9; i++)
+                                {
+                                <div class="col-lg-3 pr-10 pb-5">
+                                    <div class="ts-grid-box ts-col-box">
+                                        <div class="item">
+                                            <a class="post-cat ts-green-bg" href="#">Sports</a>
+                                            <div class="post-content">
+                                                <h3 class="post-title md">
+                                                    <a href="#">Haber</a>
+                                                </h3>
+                                                <span class="post-date-info">
+                                                    <i class="fa fa-clock-o"></i>
+                                                    21.12.2019
+                                                </span>
+                                                <p>
+                                                    @("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras quis nisi porttitor, commodo lectus interdum, ullamcorper quam. Maecenas ligula quam, tempus id blandit sit amet, pretium non nibh. Quisque vulputate laoreet tortor, vitae faucibus ante porta ac. Nullam pharetra scelerisque facilisis. In non semper purus, at venenatis nibh. Phasellus non quam arcu.".Substring(0, 80) + "...")
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- item end-->
+                                    </div>
+                                    <!-- ts-grid-box end-->
+                                </div>
+                                }
+                            </div>
+                        </div>
+                        <div role="tabpanel" class=" fade tab-pane" id="settings">
+                            <div class="feauted-tab-img">
+                                <a href="#">
+                                    <img class="img-fluid" src="images/blog/banner_img4.jpg" alt="">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <!-- right sidebar end-->
+                <!-- featured tab item end-->
+
             </div>
             <!-- col end-->
         </div>
@@ -420,3 +391,67 @@
     </div>
     <!-- container end-->
 </section>
+<!-- block wrapper end-->
+@section Scripts{
+<script src="https://cdn.jsdelivr.net/npm/@@editorjs/editorjs@@latest"></script>
+<script>
+    var editorUserDesc = new EditorJS({
+        holderId: 'user-description',
+        placeholder: 'Kendin hakkında birşeyler yaz...',
+        data: {
+            "time": 1550476186479,
+            "blocks": [
+                {
+                    "type": "paragraph",
+                    "data": {
+                        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec libero sem, eleifend sit amet mauris ut, venenatis ultricies lectus. Phasellus mollis sollicitudin neque. Aenean faucibus felis sed tortor consectetur, et pharetra mauris pretium. Vivamus ac orci eu ipsum congue posuere. Nunc dignissim felis vel tellus pharetra sollicitudin. Nunc finibus, arcu sed tempor scelerisque, sapien urna rhoncus nisl, eu consequat leo sem pulvinar quam. Integer at lacus convallis, dictum ante non, dignissim libero. Phasellus varius sapien nunc, quis commodo lectus cursus id. Nullam vel dui tincidunt, convallis tortor vehicula, facilisis magna."
+                    }
+                },
+                {
+                    "type": "paragraph",
+                    "data": {
+                        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec libero sem, eleifend sit amet mauris ut, venenatis ultricies lectus. Phasellus mollis sollicitudin neque. Aenean faucibus felis sed tortor consectetur, et pharetra mauris pretium. Vivamus ac orci eu ipsum congue posuere. Nunc dignissim felis vel tellus pharetra sollicitudin. Nunc finibus, arcu sed tempor scelerisque, sapien urna rhoncus nisl, eu consequat leo sem pulvinar quam. Integer at lacus convallis, dictum ante non, dignissim libero. Phasellus varius sapien nunc, quis commodo lectus cursus id. Nullam vel dui tincidunt, convallis tortor vehicula, facilisis magna."
+                    }
+                }
+            ]
+        }
+    })
+    $(document).on('click', '.pointer', function () {
+        var area = $(this).attr('for');
+        $(this).toggleClass("fa-chevron-up")
+        $(this).toggleClass("fa-chevron-down")
+        $(`#${area}`).toggle(300);
+    })
+    $(document).on('click', '.edit-icon', function () {
+        var area = $(this).attr('for');
+        $(this).toggleClass("fa-edit");
+        $(this).toggleClass("fa-check");
+        $(this).toggleClass("green-icon");
+        $(this).hasClass("fa-edit") ? $(`#${area}`).attr('contenteditable', false) : $(`#${area}`).attr('contenteditable', true);
+        $(`#${area}`).toggleClass('editable-area');
+    })
+    $(document).on('click', '.edit-icon-input', function () {
+        var area = $(this).attr('for');
+        $(this).toggleClass("fa-edit");
+        $(this).toggleClass("fa-check");
+        $(this).toggleClass("green-icon");
+        $(`#${area}`).toggleClass("hidden");
+    })
+    function saveChanges() {
+        var data = {
+            name: $("#user-name").text(),
+            facebook: $("#user-facebook").text(),
+            twitter: $("#user-twitter").text(),
+            instagram: $("#user-instagram").text(),
+            linkedin: $("#user-linkedin").text(),
+            address: $("#user-address").text(),
+            phone: $("#user-phone").text(),
+            mail: $("#user-mail").text(),
+            description: editorUserDesc.save().then(output => {
+                return output;
+            })
+        }
+        console.log(data);
+    }
+</script>
+}

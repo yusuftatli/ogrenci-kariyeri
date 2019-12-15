@@ -5,7 +5,7 @@
 {
     @foreach (var x in Model)
     {
-        <div class="col-lg-6 mb-30">
+        <div class="col-lg-@(ViewBag.Col ?? "6") mb-30">
             <div class="ts-grid-box ts-grid-content">
                 @if (!string.IsNullOrEmpty(x.Category))
                 {
