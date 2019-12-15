@@ -16,6 +16,7 @@ namespace SCA.Entity.DTO
         public PublishState PublishStateType { get; set; }
         public long ReadCount { get; set; }
         public string ImagePath { get; set; }
+        public long Multiplier { get; set; }
         public string SeoUrl { get; set; }
         public string Header { get; set; }
         public string Writer { get; set; }

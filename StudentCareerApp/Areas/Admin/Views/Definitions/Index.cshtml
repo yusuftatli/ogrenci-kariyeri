@@ -92,6 +92,8 @@
                                 <li ng-click="onClickFacultyTab()" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#faculty" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Fakülteler</span></a> </li>
                                 <li ng-click="onClickDepartmentTab()" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#department" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Bölümler</span></a> </li>
                                 <li ng-click="onClicksectorTab()" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#sector" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Sektör</span></a> </li>
+                                <li ng-click="onClickunvanTab()" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#unvan" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Ünvan</span></a> </li>
+                                <li ng-click="onClickContentTab()" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#Content" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Haber/Test</span></a> </li>
 
                             </ul>
                             <div class="tab-content tabcontent-border">
@@ -434,16 +436,16 @@
                                             <div class="modal-body">
                                                 <form>
                                                     @*<div class="form-group">
-                                                            <label id="lbluniversityCityId" class="control-label">İl </label>
+                                <label id="lbluniversityCityId" class="control-label">İl </label>
 
-                                                            <select id="universityCityId" class="form-control" name="universityCityId" required
-                                                                    ng-model="universityModel.cityId"
-                                                                    ng-options="x.cityId as x.cityName for x in cityList| filter:x.cityName"></select>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label id="universityCode" class="control-label">Üniversite Kodu </label>
-                                                            <input type="text" ng-model="universityModel.universitycode" class="form-control" id="universityCode">
-                                                        </div>*@
+                                <select id="universityCityId" class="form-control" name="universityCityId" required
+                                        ng-model="universityModel.cityId"
+                                        ng-options="x.cityId as x.cityName for x in cityList| filter:x.cityName"></select>
+                            </div>
+                            <div class="form-group">
+                                <label id="universityCode" class="control-label">Üniversite Kodu </label>
+                                <input type="text" ng-model="universityModel.universitycode" class="form-control" id="universityCode">
+                            </div>*@
                                                     <div class="form-group">
                                                         <label id="universityname" class="control-label">Üniversite Adı </label>
                                                         <input type="text" ng-model="universityModel.universityname" class="form-control" id="universityname">
@@ -504,10 +506,10 @@
                                                                             </span>
                                                                         </td>
                                                                         @*<td>
-                            <span ng-click="showuniversity(x)" data-toggle="modal" data-target="#universityModal">
-                                <img height="20" width="20" src="~/Template/assets/images/Plus-512.png" />
-                            </span>
-                        </td>*@
+                                                    <span ng-click="showuniversity(x)" data-toggle="modal" data-target="#universityModal">
+                                                        <img height="20" width="20" src="~/Template/assets/images/Plus-512.png" />
+                                                    </span>
+                                                </td>*@
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
@@ -528,9 +530,9 @@
                                             <div class="modal-body">
                                                 <form>
                                                     @*<div class="form-group">
-                                                        <label id="universityCode" class="control-label">Fakülte Kodu </label>
-                                                        <input type="text" ng-model="facultyModel.facultyCode" class="form-control" id="universityCode">
-                                                    </div>*@
+                                <label id="universityCode" class="control-label">Fakülte Kodu </label>
+                                <input type="text" ng-model="facultyModel.facultyCode" class="form-control" id="universityCode">
+                            </div>*@
                                                     <div class="form-group">
                                                         <label id="universityname" class="control-label">Fakülte Adı </label>
                                                         <input type="text" ng-model="facultyModel.facultyName" class="form-control" id="universityname">
@@ -560,9 +562,10 @@
                                                         </div>
                                                         <div class="table-responsive">
                                                             <table class="table color-table primary-table">
+                                                                <span ng-show="showDepartmentLoading"><i class="fa fa-spinner fa-spin"></i></span>
                                                                 <thead>
                                                                     <tr>
-                                                                        <th>Bölüm Kodu</th>
+                                                                        <th>@*Bölüm Kodu*@</th>
                                                                         <th>Bölüm Adı</th>
                                                                         <th>Seç</th>
                                                                     </tr>
@@ -570,7 +573,7 @@
                                                                 <tbody>
                                                                     <tr ng-repeat="x in departmentModel.departmentList|filter:departmentfilter">
                                                                         <td ng-show="false" ng-bind="x.id"></td>
-                                                                        <td ng-bind="x.departmentCode"></td>
+                                                                        @*<td ng-bind="x.departmentCode"></td>*@
                                                                         <td ng-bind="x.departmentName"></td>
                                                                         <td>
                                                                             <span ng-click="showdepartment(x) " data-toggle="modal" data-target="#departmentModal">
@@ -614,38 +617,35 @@
                                     </div>
                                 </div>
 
-                                <div class="tab-pane  p-20" id="sector" role="tabpanel">
+                                <div class="tab-pane  p-20" id="Content" role="tabpanel">
                                     <div class="col-lg-12">
                                         <div class="row">
-                                            <div class="col-lg-4">
+                                            <div class="col-lg-6">
                                                 <div class="card">
                                                     <div class="card-body">
                                                         <div class="row">
-                                                            <h4 class="card-title"><button ng-click="sectorModal()" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#sectorModal">Sektör Ekle</button></h4>
-                                                        </div>
-                                                        <div class="row">
-                                                            <h4 class="card-title"><input type="text" ng-model="sectorfilter" class="form-control" placeholder="Ara" id="sectorfilter"></h4>
-                                                        </div>
-                                                        <div class="table-responsive">
-                                                            <table class="table color-table primary-table">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>Sektör Adı</th>
-                                                                        <th>Seç</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <tr ng-repeat="x in sectorModel.sectorList|filter:sectorfilter">
-                                                                        <td ng-show="false" ng-bind="x.id"></td>
-                                                                        <td ng-bind="x.description"></td>
-                                                                        <td>
-                                                                            <span ng-click="showSector(x) " data-toggle="modal" data-target="#sectorModal">
-                                                                                <img height="20" width="20" src="~/Template/assets/images/chose.png" />
-                                                                            </span>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
+                                                            <div class="col-md-5">
+                                                                <div class="form-group">
+                                                                    <label class="control-label">Okunma Sayısı Çarpan Değeri </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <div class="form-group">
+                                                                    <select id="roletypeid" class="form-control custom-select" ng-model="contentModel.selectedId" name="multipleLisr">
+                                                                        <option ng-repeat="x in contentModel.multipleList" value="{{x.Id}}">
+                                                                            {{x.Description}}
+                                                                        </option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <span ng-show="contentModel.showContentCountLoading"><i class="fa fa-spinner fa-spin"></i></span>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <div class="form-group">
+                                                                    <button type="button" class="btn btn-primary" ng-click="postContent()"> <span>Güncelle <span ng-show="contentModel.showContentCountPostLoading"><i class="fa fa-spinner fa-spin"></i></span></span> </button>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -676,6 +676,113 @@
                                     </div>
                                 </div>
 
+                                <div class="tab-pane  p-20" id="sector" role="tabpanel">
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <h4 class="card-title"><button ng-click="sectorModal()" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#sectorModal">Sektör Ekle</button></h4>
+                                                        </div>
+                                                        <div class="row">
+                                                            <h4 class="card-title"><input type="text" ng-model="sectorfilter" class="form-control" placeholder="Ara" id="sectorfilter"></h4>
+                                                        </div>
+                                                        <div class="table-responsive">
+                                                            <table class="table color-table primary-table">
+                                                                <span ng-show="showSectorLoading"><i class="fa fa-spinner fa-spin"></i></span>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Sektör Adı</th>
+                                                                        <th>Seç</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr ng-repeat="x in sectorModel.sectorList|filter:sectorfilter">
+                                                                        <td ng-show="false" ng-bind="x.id"></td>
+                                                                        <td ng-bind="x.description"></td>
+                                                                        <td>
+                                                                            <span ng-click="showSector(x) " data-toggle="modal" data-target="#sectorModal">
+                                                                                <img height="20" width="20" src="~/Template/assets/images/chose.png" />
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal fade" id="unvanModal" tabindex="-1" role="dialog" aria-labelledby="unvanModal">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form>
+                                                    <div class="form-group">
+                                                        <label id="universityname" class="control-label">Sektör Adı </label>
+                                                        <input type="text" ng-model="unvanModel.description" class="form-control" id="description">
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                                                <button type="button" class="btn btn-primary" ng-click="postunvan()">{{unvanModel.unvanCreateButtonName}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane  p-20" id="unvan" role="tabpanel">
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <h4 class="card-title"><button ng-click="unvanModal()" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#unvanModal">Ünvan Ekle</button></h4>
+                                                        </div>
+                                                        <div class="row">
+                                                            <h4 class="card-title"><input type="text" ng-model="unvanfilter" class="form-control" placeholder="Ara" id="unvanfilter"></h4>
+                                                        </div>
+                                                        <div class="table-responsive">
+                                                            
+                                                            <table class="table color-table primary-table">
+                                                                <span ng-show="showunvanLoading"><i class="fa fa-spinner fa-spin"></i></span>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Ünvan Adı</th>
+                                                                        <th>Seç</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr ng-repeat="x in unvanModel.unvanList|filter:unvanfilter">
+                                                                        <td ng-show="false" ng-bind="x.id"></td>
+                                                                        <td ng-bind="x.description"></td>
+                                                                        <td>
+                                                                            <span ng-click="showunvan(x) " data-toggle="modal" data-target="#unvanModal">
+                                                                                <img height="20" width="20" src="~/Template/assets/images/chose.png" />
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 

@@ -182,8 +182,9 @@ namespace SCA.Services
             return res;
         }
 
-        public async Task<bool> FollowCompany(long userId, string seoUrl, string follow)
+        public async Task<ServiceResult> FollowCompany(long userId, string seoUrl, string follow)
         {
+            ServiceResult res = new ServiceResult();
             try
             {
                 string query = "delete from CompanyFollows where UserId = userId and CompanyId = (select Id from CompanyClubs where SeoUrl = @seoUrl);" +
@@ -193,14 +194,14 @@ namespace SCA.Services
                 filter.Add("seoUrl", seoUrl);
                 filter.Add("userId", userId);
                 filter.Add("follow", follow);
-               await _db.ExecuteAsync(query, filter);
-
+                await _db.ExecuteAsync(query, filter);
+                res = Result.ReturnAsSuccess(data: follow);
             }
             catch (Exception ex)
             {
                 await _errorManagement.SaveError(ex, userId, "GetContentUI", PlatformType.Mobil);
             }
-            return true;
+            return res;
         }
 
         public async Task<ServiceResult> GetCompanyHeader(string seoUrl, long userId)
@@ -219,6 +220,27 @@ namespace SCA.Services
             catch (Exception ex)
             {
                 await _errorManagement.SaveError(ex, 0, "MainCategoryListWithParents ", Entity.Enums.PlatformType.Web);
+                return Result.ReturnAsFail(message: "Hata");
+            }
+        }
+
+        public async Task<ServiceResult> GetCompanyDetail(long id)
+        {
+            CompanyDetailListMobilDto res = new CompanyDetailListMobilDto();
+            try
+            {
+                using (var multi = await _db.QueryMultipleAsync("GetCompanyList_Mobil", new { Id = id }, commandType: CommandType.StoredProcedure))
+                {
+                    res = await multi.ReadFirstOrDefaultAsync<CompanyDetailListMobilDto>();
+                    res.ImageList = await multi.ReadAsync<ImageMediaListDto>() as List<ImageMediaListDto>;
+                    res.SocialMediaList = await multi.ReadAsync<SocialMediaListDto>() as List<SocialMediaListDto>;
+
+                    return Result.ReturnAsSuccess(data: res);
+                }
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, 0, "GetCompanyDetail ", Entity.Enums.PlatformType.Web);
                 return Result.ReturnAsFail(message: "Hata");
             }
         }

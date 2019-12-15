@@ -11,6 +11,7 @@ namespace SCA.Services
     public interface IDefinitionManager
     {
         Task<ServiceResult> GetDepartment(string token);
+        Task<ServiceResult> GetDepartmentForUI1();
         Task<List<DepartmentDto>> GetDepartmentForUI();
         Task<ServiceResult> CreateDepartment(DepartmentDto dto, string token);
         Task<ServiceResult> UpdateDepartmentIsActive(long Id, bool IsActive);
@@ -41,7 +42,7 @@ namespace SCA.Services
 
 
 
-        Task<List<TitleDto>> GetTitle();
+        Task<ServiceResult> GetTitle();
         Task<ServiceResult> CreateTitle(TitleDto dto);
 
     }

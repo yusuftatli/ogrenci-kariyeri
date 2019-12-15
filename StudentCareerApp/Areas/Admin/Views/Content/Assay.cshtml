@@ -259,6 +259,7 @@
                                                                     <td ng-show="false" ng-bind="x.id"></td>
                                                                     <td ng-bind="x.header"></td>
                                                                     <td ng-bind="x.writer"></td>
+                                                                    <td ng-show="false" ng-bind="x.platformType"></td>
                                                                     <td ng-bind="x.publishStateTypeDes"></td>
                                                                     <td ng-bind="x.platformTypeDes"></td>
                                                                     <td ng-bind="x.readCount"></td>
@@ -328,26 +329,71 @@
 
 
                                 <div class="modal fade" id="contentProcessModal" tabindex="-1" role="dialog" aria-labelledby="contentProcessModal">
-                                    <div class="modal-dialog" role="document">
+                                    <div class="modal-dialog modal-lg" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h4 class="modal-title" id="exampleModalLabel1">Yorumlar </h4>
+                                                <h4 class="modal-title" id="exampleModalLabel1">Haber Yönetim -{{contentProcess.header}} </h4>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                             </div>
                                             <div class="modal-body">
-                                                <form>
-                                                    <div class="form-group">
-                                                        <label ng-show="false" class="control-label" ng-model="contentProcess.id"></label>
-                                                        <label class="control-label">Yayın Durumu</label>
-                                                        <select id="roletypeid" class="form-control custom-select" name="publishState" ng-model="contentProcess.publishState">
-                                                            <option ng-repeat="x in confirmType" value="{{x.id}}">{{x.description}}</option>
-                                                        </select>
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label class="control-label">Haber Yayın Durumu </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-5">
+                                                                <div class="form-group">
+                                                                    <select id="roletypeid" class="form-control custom-select" ng-model="contentProcess.publishState" name="multipleLisr">
+                                                                        <option ng-repeat="y in confirmType" value="{{y.Id}}">
+                                                                            {{y.Description}}
+                                                                        </option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <div class="form-group">
+                                                                    <button type="button" class="btn btn-primary" ng-click="postPublishState()"> <span>Güncelle <span ng-show="contentModel.contentPublishStateShowLoading"><i class="fa fa-spinner fa-spin"></i></span></span> </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </form>
+                                                </div>
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-5">
+                                                                <div class="form-group">
+                                                                    <label class="control-label">Okunma Sayısı Çarpan Değeri </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <div class="form-group">
+                                                                    <select id="roletypeid" class="form-control custom-select" ng-model="contentModel.selectedId" name="multipleLisr">
+                                                                        <option ng-repeat="x in contentModel.multipleList" value="{{x.Id}}">
+                                                                            {{x.Description}}
+                                                                        </option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <span ng-show="contentModel.showContentCountLoading"><i class="fa fa-spinner fa-spin"></i></span>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <div class="form-group">
+                                                                    <button type="button" class="btn btn-primary" ng-click="postContent()"> <span>Güncelle <span ng-show="contentModel.showContentCountPostLoading"><i class="fa fa-spinner fa-spin"></i></span></span> </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
-                                                <button type="button" class="btn btn-primary" ng-click="postPublishState()">İşlem Yap <span ng-show="showSaveLoading"><i class="fa fa-spinner fa-spin"></i></span></button>
+                                                @*<button type="button" class="btn btn-primary" ng-click="postPublishState()">İşlem Yap <span ng-show="showSaveLoading"><i class="fa fa-spinner fa-spin"></i></span></button>*@
                                             </div>
                                         </div>
                                     </div>

@@ -468,21 +468,19 @@ app.controller('DefinitonManagerController', function ($scope, $http, $filter) {
     };
 
     $scope.postdepartment = function () {
-        Loading(true);
         $http(departmentPost()).then(function (res) {
             if (res.data.resultCode === 200) {
                 $scope.departmentList();
                 shortMessage(res.data.message, "s");
                 closeModal("departmentModal");
             }
-            Loading(false);
         });
     };
-
+    $scope.showDepartmentLoading = false;
     $scope.departmentList = function (x) {
-        Loading(true);
+        $scope.showDepartmentLoading = true;
         $.ajax({
-            url: _link + "/Definition/education-getdepartment",
+            url: _link + "/Definition/getdepartment",
             type: "GET",
             dataType: Json_,
             contentType: ContentType_,
@@ -493,8 +491,9 @@ app.controller('DefinitonManagerController', function ($scope, $http, $filter) {
                     } else {
                         $scope.departmentModel.departmentList = {};
                     }
+                    $scope.showDepartmentLoading = false;
                     $scope.$apply();
-                    Loading(false);
+                    
                 }
             }
         });
@@ -515,7 +514,7 @@ app.controller('DefinitonManagerController', function ($scope, $http, $filter) {
         focus('sectorModal');
     };
 
-    $scope.showSector= function (x) {
+    $scope.showSector = function (x) {
         $scope.sectorModel.sectorCreateButtonName = "Güncelle";
         $scope.sectorModel.id = x.id;
         $scope.sectorModel.description = x.description;
@@ -531,19 +530,17 @@ app.controller('DefinitonManagerController', function ($scope, $http, $filter) {
     };
 
     $scope.postsector = function () {
-        Loading(true);
         $http(sectorPost()).then(function (res) {
             if (res.data.resultCode === 200) {
                 $scope.sectorList();
                 shortMessage(res.data.message, "s");
                 closeModal("sectorModal");
             }
-            Loading(false);
         });
     };
-
+    $scope.showSectorLoading = false;
     $scope.sectorList = function (x) {
-        Loading(true);
+        $scope.showSectorLoading = true;
         $.ajax({
             url: _link + "/Definition/getallsector",
             type: "GET",
@@ -557,11 +554,154 @@ app.controller('DefinitonManagerController', function ($scope, $http, $filter) {
                         $scope.sectorModel.sectorList = {};
                     }
                     $scope.$apply();
-                    Loading(false);
+                    $scope.showSectorLoading = false;
                 }
             }
         });
     };
+
+
+
+    //Sector 
+    $scope.contentModel = {};
+    $scope.contentModel.showContentCountLoading = false;
+    $scope.contentModel.showContentCountPostLoading = false;
+    $scope.contentModel.multipleList = [{ Id: "0", Description: 'Seçiniz' }, { Id: "1", Description: '1' }, { Id: "2", Description: '2' }, { Id: "3", Description: '3' }, { Id: "4", Description: '4' }, { Id: "5", Description: '5' },
+    { Id: "6", Description: '6' }, { Id: "7", Description: '7' }, { Id: "8", Description: '8' }, { Id: "9", Description: '9' }, { Id: "10", Description: '10' }];
+
+
+
+    var postContentReadCount = function () {
+        return {
+            method: "post",
+            url: _link + "/Settings/settings-setreadcount",
+            headers: Headers,
+            data: {
+                value: parseInt($scope.contentModel.selectedId)
+            }
+        };
+    };
+
+
+
+    $scope.postContent = function () {
+        $scope.contentModel.showContentCountPostLoading = true;
+        if ($scope.contentModel.selectedId === undefined || $scope.contentModel.selectedId === "0") {
+            $scope.contentModel.showContentCountPostLoading = false;
+            shortMessage("Okunma sayısı çarpan değeri boş geçilemez", "e");
+            return;
+        }
+        $http(postContentReadCount()).then(function (e) {
+            if (e.data.resultCode === 200) {
+                $scope.readCountList();
+                shortMessage(e.data.message, "s");
+                $scope.contentModel.showContentCountPostLoading = false;
+            } else {
+                shortMessage(e.data.message, "e");
+                $scope.contentModel.showContentCountPostLoading = false;
+            }
+            $scope.$apply();
+        });
+    };
+
+    function getContentCountIndexById(value) {
+        let res = 0;
+        for (let i = 0; i < $scope.contentModel.multipleList.length; i++) {
+            if ($scope.contentModel.multipleList[i].Description === value) {
+                res = i;
+            }
+        }
+        return res;
+    }
+
+    $scope.onClickContentTab = function () {
+        $scope.readCountList();
+    };
+
+    $scope.readCountList = function () {
+        $scope.contentModel.showContentCountLoading = true;
+        $.ajax({
+            url: _link + "/Settings/settings-multipleReadCount",
+            type: "GET",
+            dataType: Json_,
+            contentType: ContentType_,
+            success: function (e) {
+                if (e.resultCode === 200) {
+                    $scope.contentModel.data = e.data;
+                    $scope.contentModel.selectedId = $scope.contentModel.multipleList[parseInt(parseInt(getContentCountIndexById($scope.contentModel.data.value)))].Description;
+                    $scope.contentModel.showContentCountLoading = false;
+                    $scope.$apply();
+                }
+            }
+        });
+    };
+
+
+
+    //Title
+    $scope.unvanModel = {};
+    $scope.unvanModel.unvanCreateButtonName = "Kaydet";
+
+
+    $scope.onClickunvanTab = function () {
+        $scope.unvanList();
+    };
+
+    $scope.openunvanModal = function () {
+        $scope.unvanModel = {};
+        $scope.unvanModel.unvanCreateButtonName = "Kaydet";
+        focus('unvanModal');
+    };
+
+    $scope.showunvan = function (x) {
+        $scope.unvanModel.unvanCreateButtonName = "Güncelle";
+        $scope.unvanModel.id = x.id;
+        $scope.unvanModel.description = x.description;
+    };
+
+    var unvanPost = function () {
+        return {
+            method: "post",
+            url: _link + "/Definition/createTitle",
+            headers: Headers,
+            data: $scope.unvanModel
+        };
+    };
+
+    $scope.postunvan = function () {
+        Loading(true);
+        $http(unvanPost()).then(function (res) {
+            if (res.data.resultCode === 200) {
+                $scope.unvanList();
+                shortMessage(res.data.message, "s");
+                closeModal("unvanModal");
+            }
+            Loading(false);
+        });
+    };
+    $scope.showunvanLoading = false;
+    $scope.unvanList = function (x) {
+        debugger
+        $scope.showunvanLoading = true;
+        $.ajax({
+            url: _link + "/Definition/getTitles",
+            type: "GET",
+            dataType: Json_,
+            contentType: ContentType_,
+            success: function (e) {
+                if (e.resultCode === 200) {
+                    if (e.data.length > 0) {
+                        $scope.unvanModel.unvanList = e.data;
+                    } else {
+                        $scope.unvanModel.unvanList = {};
+                    }
+                    $scope.showunvanLoading = false;
+                    $scope.$apply();
+                }
+            }
+        });
+    };
+
 
 
     $scope.getCities = function () {
@@ -581,6 +721,7 @@ app.controller('DefinitonManagerController', function ($scope, $http, $filter) {
             }
         });
     };
+
 
     function FieldControl(value) {
         return (value !== undefined && value !== null && value !== 0 && value !== "") ? true : false;

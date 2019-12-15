@@ -36,13 +36,16 @@ app.controller("assayController", function ($scope, $http, $filter) {
 
 
     $scope.assayList = [];
+    $scope.contentModel = {};
     $scope.events = [{ id: 0, description: '-----' }, { id: 1, description: 'Mentor' }, { id: 2, description: 'Kariyer Sohbetleri' }];
     $scope.internList = [{ id: 1, description: '-----' }, { id: 1, description: 'Deneme Staj' }];
     $scope.visibleList = [{ id: 1, description: 'Herkese Açık' }, { id: 1, description: 'Parola Korumalı' }, { id: 1, description: 'Özel' }];
-    $scope.confirmType = [{ id: 0, description: '-----' }, { id: 1, description: 'Taslak' }, { id: 2, description: 'Yayın Aşamasında' }, { id: 3, description: 'Yayında Değil' }, { id: 4, description: 'Yayında' }];
+    $scope.confirmType = [{ Id: "0", description: 'Seçiniz' }, { ID: "1", Description: 'Taslak' }, { ID: "2", Description: 'Yayın Aşamasında' }, { ID: "3", Description: 'Yayında Değil' }, { ID: "4", Description: 'Yayında' }];
     $scope.events = [{ id: 0, description: '-----' }, { id: 1, description: 'Mentor' }, { id: 2, description: 'Kariyer Sohbetleri' }];
     $scope.platformType = [{ id: 0, description: '-----' }, { id: 1, description: 'Mobil' }, { id: 2, description: 'Web' }, { id: 3, description: 'Web/Mobil' }];
     $scope.menuList = JSON.parse(localStorage.getItem("menus"));
+    $scope.contentModel.multipleList = [{ Id: "0", Description: 'Seçiniz' }, { Id: "1", Description: '1' }, { Id: "2", Description: '2' }, { Id: "3", Description: '3' }, { Id: "4", Description: '4' }, { Id: "5", Description: '5' },
+    { Id: "6", Description: '6' }, { Id: "7", Description: '7' }, { Id: "8", Description: '8' }, { Id: "9", Description: '9' }, { Id: "10", Description: '10' }, { Id: "20", Description: '20' }, { Id: "50", Description: '50' }];
 
 
     var trMap = {
@@ -191,16 +194,28 @@ app.controller("assayController", function ($scope, $http, $filter) {
 
 
     $scope.onClikckProcess = function (x) {
+        debugger
         $scope.contentProcess.header = x.header;
         $scope.contentProcess.platformTypeDes = x.platformTypeDes;
         $scope.contentProcess.id = x.id;
+        $scope.contentProcess.publishState = $scope.confirmType[x.platformType].Id;
+
+        $scope.readCountList(x.id);
+        
     };
 
+    function findIndexOfPublishState() {
+
+    }
+
+
+    $scope.contentPublishStateShowLoading = false;
     $scope.postPublishState = function () {
-        $scope.showSaveLoading = true;
+        $scope.contentPublishStateShowLoading = true;
         $http(publishStateReq()).then(function (res) {
             if (res.data.resultCode === 200) {
                 shortMessage(res.data.message, "s");
+                $scope.contentPublishStateShowLoading = false;
                 $("#contentProcessModal").modal('hide');
                 getContentShortList();
             } else {
@@ -408,6 +423,66 @@ app.controller("assayController", function ($scope, $http, $filter) {
             data: $scope.searchModel
         };
     };
+
+    var postContentReadCount = function () {
+        return {
+            method: "post",
+            url: _link + "/Settings/settings-setreadcount-only",
+            headers: Headers,
+            data: {
+                value: parseInt($scope.contentModel.selectedId),
+                Id: $scope.contentProcess.id
+            }
+        };
+    };
+
+    $scope.readCountList = function (x) {
+        $scope.contentModel.showContentCountLoading = true;
+        $.ajax({
+            url: _link + "/Settings/settings-multipleReadCount-only",
+            type: "GET",
+            data: { id: x},
+            dataType: Json_,
+            contentType: ContentType_,
+            success: function (e) {
+                if (e.resultCode === 200) {
+                    $scope.contentModel.data = e.data;
+                    $scope.contentModel.selectedId = $scope.contentModel.multipleList[parseInt(parseInt(getContentCountIndexById($scope.contentModel.data.value)))].Description;
+                    $scope.contentModel.showContentCountLoading = false;
+                    $scope.$apply();
+                }
+            }
+        });
+    };
+
+    $scope.postContent = function () {
+        $scope.contentModel.showContentCountPostLoading = true;
+        if ($scope.contentModel.selectedId === undefined || $scope.contentModel.selectedId === "0") {
+            $scope.contentModel.showContentCountPostLoading = false;
+            shortMessage("Okunma sayısı çarpan değeri boş geçilemez", "e");
+            return;
+        }
+        $http(postContentReadCount()).then(function (e) {
+            if (e.data.resultCode === 200) {
+                shortMessage(e.data.message, "s");
+                $scope.contentModel.showContentCountPostLoading = false;
+            } else {
+                shortMessage(e.data.message, "e");
+                $scope.contentModel.showContentCountPostLoading = false;
+            }
+            $scope.$apply();
+        });
+    };
+
+    function getContentCountIndexById(value) {
+        let res = 0;
+        for (let i = 0; i < $scope.contentModel.multipleList.length; i++) {
+            if ($scope.contentModel.multipleList[i].Description === value) {
+                res = i;
+            }
+        }
+        return res;
+    }
 
     //#endregion
     getContentShortList();
