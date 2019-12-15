@@ -32,7 +32,7 @@ namespace SCA.UI.Controllers
             var ip = HttpContext.Connection.RemoteIpAddress.ToString();
             var guidBrowserId = HttpContext.Request.Cookies["okgdy"].ToString();
             var res = await _contentManager.GetContentUI(seoUrl, HttpContext.GetSessionData<UserSession>("userInfo")?.Id, ip: guidBrowserId);
-            HttpContext.Session.SetString("ContentID", res.Id.ToString());
+            HttpContext.Session.SetString("ContentID", res.ContentId.ToString());
             return View(res);
         }
 
@@ -49,18 +49,7 @@ namespace SCA.UI.Controllers
             return Json(new { Status = false, Explanation = "Giriş yapılmadan yorum yapılamaz." });
         }
 
-        [HttpPost]
-        public async Task<JsonResult> FollowCompany(string seoUrl, string follow)
-        {
-            if (HttpContext.GetSessionData<UserSession>("userInfo")?.Id > 0)
-            {
-                var userid = HttpContext.GetSessionData<UserSession>("userInfo").Id;
-                var res = await _companyManager.FollowCompany(userid, seoUrl, follow == "1" ? "0" : "1");
-                return Json(new { Status = res, Explanation = "Beklenmedik bir hata oluştu." });
-            }
-
-            return Json(new { Status = false, Explanation = "Giriş yapılmadan Şirket takipi yapılamaz." });
-        }
+       
 
         [HttpPost]
         public async Task<JsonResult> PostComment(CommentForUIDto model)

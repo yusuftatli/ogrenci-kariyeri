@@ -46,6 +46,23 @@ namespace SCA.Services
             }
             return res;
         }
+        public async Task<ServiceResult> GetDepartmentForUI1()
+        {
+            ServiceResult res = new ServiceResult();
+            try
+            {
+
+                string query = "select Id, Description as DepartmentName from Departmnet";
+                var result = await _db.QueryAsync<DepartmentDto>(query) as List<DepartmentDto>;
+                res = Result.ReturnAsSuccess(data: result);
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, null, "GetDepartment", PlatformType.Web);
+                res = Result.ReturnAsFail(message: "Departman bilgisi yüklenirken hata meydana geldi");
+            }
+            return res;
+        }
 
         public async Task<List<DepartmentDto>> GetDepartmentForUI()
         {
@@ -95,13 +112,14 @@ namespace SCA.Services
             return res;
         }
 
-        public async Task<List<TitleDto>> GetTitle()
+        public async Task<ServiceResult> GetTitle()
         {
-            List<TitleDto> res = new List<TitleDto>();
+            ServiceResult res = new ServiceResult();
             try
             {
-                string query = "select Id, Description  from titles";
-                res = await _db.QueryAsync<TitleDto>(query) as List<TitleDto>;
+                string query = "select Id, Description from Titles";
+                var dataList = await _db.QueryAsync<TitleDto>(query) as List<TitleDto>;
+                res = Result.ReturnAsSuccess(data: dataList);
             }
             catch (Exception ex)
             {
@@ -548,21 +566,16 @@ namespace SCA.Services
             {
                 if (dto.Id == 0)
                 {
-                    query = @"Insert Into Sector (SectorTypeId, CreatedUserId, CreatedDate, Description) values
-                        (@SectorTypeId, @CreatedUserId, @CreatedDate, @Description)";
-                    filter.Add("SectorTypeId", dto.SectorTypeId);
-                    filter.Add("CreatedUserId", JwtToken.GetUserId(token));
+                    query = @"Insert Into Sector ( CreatedDate, Description) values
+                        ( @CreatedDate, @Description)";
                     filter.Add("CreatedDate", DateTime.Now);
                     filter.Add("Description", dto.Description);
                     resultMessage = "Kayıt işlemi başarılı";
                 }
                 else
                 {
-                    query = "update Sector set SectorTypeId=@SectorTypeId,UpdatedUserId=@UpdatedUserId,UpdatedDate=@UpdatedDate ,Description=@Description where Id=@Id";
+                    query = "update Sector set Description=@Description where Id=@Id";
                     filter.Add("Id", dto.Id);
-                    filter.Add("SectorTypeId", dto.SectorTypeId);
-                    filter.Add("UpdatedDate", JwtToken.GetUserId(token));
-                    filter.Add("CreatedDate", DateTime.Now);
                     filter.Add("Description", dto.Description);
                     resultMessage = "Güncelleme işlemi başarılı";
                 }

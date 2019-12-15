@@ -39,11 +39,11 @@
                     <ul>
                         @if (Context.GetSessionData<SCA.Entity.DTO.UserSession>("userInfo")?.Id > 0)
                         {
-                            <button id="folloCompanyBtn" class="comments-btn btn btn-success" type="button"><span id="followValue"></span>  </button>
+                            <button id="folloCompanyBtn" class="comments-btn btn btn-success" type="button" value="@Model.FollowCompany"><span id="followValue">@(Model.FollowCompany == "0" ? "Takip Et" : "Takipi Bırak")</span>  </button>
                         }
                         else
                         {
-                            <button id="folloCompanyBtn" class="comments-btn btn btn-success openLoginMagnific" type="button"><span id="followValue"></span></button>
+                            <button id="folloCompanyBtn" class="comments-btn btn btn-success openLoginMagnific" type="button"><span id="followValue">@(Model.FollowCompany == "0" ? "Takip Et" : "Takipi Bırak")</span></button>
                         }
 
                     </ul>
@@ -71,33 +71,37 @@
 
 
 <script>
-    if ($("#followdata").val() == "1") {
-        $("#followValue").text("Takip Et");
-        $("#followValue1").text("Takip Et");
-    } else {
-        $("#followValue").text("Takip Ediliyor");
-        $("#followValue1").text("Takip Ediliyor");
-    }
+    //if ($("#followdata").val() == "0") {
+    //    $("#followValue").text("Takip Et");
+    //    $("#followValue1").text("Takip Et");
+    //} else {
+    //    $("#followValue").text("Takip Ediliyor");
+    //    $("#followValue1").text("Takip Ediliyor");
+    //}
     $(document).on('click', '#folloCompanyBtn', function (e) {
         debugger
+        console.log($("#folloCompanyBtn").val());
         $.ajax({
-            url: '/Blog/FollowCompany',
+            url: '/api/CompanyClubs/follow-company',
             type: 'post',
-            data: { seoUrl: $("#stxteourl").val(), follow: $("#followdata").val() },
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            dataType: 'json',
+            data: JSON.stringify({
+                seoUrl: $("#stxteourl").val(), follow: $("#folloCompanyBtn").val()
+            }),
             success: function (res) {
-                if (res.status) {
-                    debugger
-                    toastr["success"](!$("#followdata").val() ? "Haber favorilerinize eklendi." : "Haber favorilerinizden çıkarıldı.");
-                    if ($("#followdata").val() == "0") {
-                        $("#followValue").text("Takip Et");
-                        $("#followValue1").text("Takip Et");
-                    } else {
-                        $("#followValue").text("Takip Ediliyor");
-                        $("#followValue1").text("Takip Ediliyor");
-                    }
+                debugger
+                $("#folloCompanyBtn").val(res.data);
+                if (res.data === "1") {
+                    $("#followValue").text("Takipi Bırak");
+                    $("#followValue1").text("Takipi Bırak");
+                } else {
+                    $("#followValue").text("Takip Et");
+                    $("#followValue1").text("Takip Et");
                 }
-                else
-                    toastr["error"](res.data.Explanation);
             }
         })
     })

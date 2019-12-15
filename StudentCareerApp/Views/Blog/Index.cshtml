@@ -73,7 +73,7 @@
                         <ul class="post-meta-info">
                             <li class="author">
                                 <a href="#">
-                                    <img src="@(Model.WriterImagePath ?? ((Model.GenderId == SCA.Entity.Enums.GenderType.Man) ? "/images/avatar/man.png" : "/images/avatar/woman.png"))" alt=""> @Model.Name @Model.Surname
+                                    <img src="@(Model.WriterImagePath ?? ((Model.GenderId == SCA.Entity.Enums.GenderType.Man) ? "/images/avatar/man.png" : "/images/avatar/woman.png"))" alt=""> @Model.WriterNameSurname
                                 </a>
                             </li>
                             <li>
@@ -102,7 +102,7 @@
                                 @if (Context.GetSessionData<SCA.Entity.DTO.UserSession>
                            ("userInfo")?.Id > 0)
                                 {
-                                    <a id="addFavorite" data-id="@Model.Id" class="@(Model.IsFavoriteContent ? "active" : "" )">
+                                    <a id="addFavorite" data-id="@Model.ContentId" class="@(Model.IsFavoriteContent ? "active" : "" )">
                                         <i class="fa fa-heart"></i>
                                     </a>
                                 }
@@ -142,7 +142,7 @@
                     <div class="author-box">
                         <img class="author-img" src="@(Model.WriterImagePath ?? ((Model.GenderId == SCA.Entity.Enums.GenderType.Man) ? "/images/avatar/man.png" : "/images/avatar/woman.png"))" alt=""> @*@Model.Name @Model.Surname*@
                         <div class="author-info">
-                            <h4 class="author-name">@Model.Name @Model.Surname</h4>
+                            <h4 class="author-name">@Model.WriterNameSurname</h4>
                             <div class="authors-social">
                                 <a href="https://twitter.com/share" class="ts-twitter">
                                     <i class="fa fa-twitter"></i>
@@ -185,7 +185,7 @@
                 <!--single post end -->
                 <div class="comments-form ts-grid-box" id="commentArea">
 
-                    @await Component.InvokeAsync("Comment", new { articleId = Model.Id })
+                    @await Component.InvokeAsync("Comment", new { articleId = Model.ContentId })
                     <!-- Comments-list ul end-->
 
                     <h3 class="comment-reply-title">Yorum Yap</h3>
@@ -204,7 +204,7 @@
                             @if (Context.GetSessionData<SCA.Entity.DTO.UserSession>
                         ("userInfo")?.Id > 0)
                             {
-                                <input class="hidden" type="hidden" name="ArticleId" value="@Model.Id" />
+                                <input class="hidden" type="hidden" name="ArticleId" value="@Model.ContentId" />
                                 <button class="comments-btn btn btn-primary" type="submit">Yorum Yap</button>
                             }
                             else
@@ -236,7 +236,7 @@
 
 @section Scripts{
     <script>
-        const articleId = @Model.Id;
+        const articleId = @Model.ContentId;
     </script>
     <script src="~/Scripts/PViews/Blog/index.js"></script>
 }

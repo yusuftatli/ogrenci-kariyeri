@@ -22,6 +22,7 @@ using SCA.Entity.Entities;
 using SCA.Entity.Model;
 using SCA.Services;
 using SCA.Services.Interface;
+using SCA.Services.Settings;
 
 namespace StudentCareerApp
 {
@@ -132,6 +133,7 @@ namespace StudentCareerApp
             services.AddTransient<IPageManager, PageManager>();
             services.AddTransient<IMenuManager, MenuManager>();
             services.AddTransient<ICommentManager, CommentManager>();
+            services.AddTransient<ISettingsManager, SettingsManager>();
             //services which implements generic service and repository
             services.AddTransient<IAnnounsmentService<Announsment>, AnnounsmentService>();
             services.AddTransient<IAnnounsment<Announsment>, AnnounsmentRepository>();

@@ -37,6 +37,13 @@ namespace StudentCareerApp.Areas.Api.Controller
             return await _definitionManager.GetDepartment(await HttpContext.GetTokenAsync("access_token"));
         }
 
+        [HttpGet("getdepartment")]
+        public async Task<ServiceResult> GetDepartment1()
+        {
+
+            return await _definitionManager.GetDepartmentForUI1();
+        }
+
         [HttpPost("education-cretadepartment")]
         public async Task<ServiceResult> CreateDepartment([FromBody] DepartmentDto dto)
         {
@@ -146,7 +153,7 @@ namespace StudentCareerApp.Areas.Api.Controller
 
         #region Title
         [HttpGet("getTitles")]
-        public async Task<List<TitleDto>> GetTitle()
+        public async Task<ServiceResult> GetTitle()
         {
             return await _definitionManager.GetTitle();
         }
