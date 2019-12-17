@@ -87,7 +87,7 @@
                                 <li ng-click="onClickDashboardTab()" class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">DashBoard</span></a> </li>
                                 <li ng-click="onClickClassTab()" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#ClassType" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Sınıflar</span></a> </li>
                                 @*<li ng-click="onClickEducationTypeTab()" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#EducationType" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Eğitim Durumu</span></a> </li>*@
-                                <li ng-click="onClickhighSchollTab()" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#highSchool" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Okullar</span></a> </li>
+                                <li ng-click="onClickhighSchoolTab()" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#highSchool" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Okullar</span></a> </li>
                                 <li ng-click="onClickuniversityTab()" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#university" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Üniversiteler</span></a> </li>
                                 <li ng-click="onClickFacultyTab()" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#faculty" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Fakülteler</span></a> </li>
                                 <li ng-click="onClickDepartmentTab()" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#department" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Bölümler</span></a> </li>
@@ -290,37 +290,53 @@
                                     </div>
                                 </div>
 
+
+
+
                                 <div class="tab-pane  p-20" id="highSchool" role="tabpanel">
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-12">
                                         <div class="row">
-                                            <div class="col-lg-8">
+                                            <div class="col-lg-4">
                                                 <div class="card">
                                                     <div class="card-body">
                                                         <div class="row">
                                                             <h4 class="card-title"><button ng-click="openhighSchoolModal()" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#highSchoolModal">Okul Ekle</button></h4>
                                                         </div>
                                                         <div class="row">
-                                                            <h4 class="card-title"><input type="text" ng-model="highSchoolfilter" class="form-control" placeholder="Ara" id="highSchoolfilter"></h4>
+                                                            <h4><input type="text" class="form-control" name="site-search" id="getData" ng-model="highSchoolsearch" ng-keypress="highSchoolgetData($event)" placeholder="Ara..."></h4>
                                                         </div>
                                                         <div class="table-responsive">
+                                                            <table>
+                                                                <tr>
+                                                                    <td>
+                                                                        <button class="btn btn-block btn-primary" ng-disabled="highSchoolcurrentPage == 0" ng-click="highSchoolcurrentPage=highSchoolcurrentPage-1">Önceki </button>
+                                                                    </td>
+                                                                    <td>
+                                                                        &nbsp;{{highSchoolcurrentPage+1}}/{{highSchoolnumberOfPages()}}&nbsp;
+                                                                    </td>
+                                                                    <td>
+                                                                        <button class="btn btn-block btn-primary" ng-disabled="highSchoolcurrentPage >= highSchoolgetData().length/highSchoolpageSize - 1" ng-click="highSchoolcurrentPage=highSchoolcurrentPage+1"> Sonraki</button>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
                                                             <table class="table color-table primary-table">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th>Okul Kodu</th>
-                                                                        <th>İl</th>
+                                                                        @*<th>İl</th>*@
+                                                                        <th>@*Üniversite Kodu*@</th>
                                                                         <th>Okul Adı</th>
                                                                         <th>Seç</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    <tr ng-repeat="x in highSchoolModel.highSchoolList |filter:highSchoolfilter">
-                                                                        <td ng-show="false" ng-bind="x.id"></td>
-                                                                        <td ng-bind="x.highSchoolCode"></td>
-                                                                        <td ng-show="false" ng-bind="x.cityId"></td>
-                                                                        <td ng-bind="x.cityName"></td>
+                                                                    <tr ng-repeat="x in highSchoolModel.highSchoolList|filter:highSchoolsearch | highSchoolFrom:highSchoolcurrentPage*highSchoolpageSize | limitTo:highSchoolpageSize">
+                                                                        @*<td ng-show="false" ng-bind="x.id"></td>*@
+                                                                        @*<td ng-bind="x.cityName"></td>*@
+                                                                        @*<td ng-bind="x.highSchoolCode"></td>*@
                                                                         <td ng-bind="x.schoolName"></td>
+                                                                        @*<td ng-show="false" ng-bind="x.cityId"></td>*@
                                                                         <td>
-                                                                            <span ng-click="showHighSchool(x)" data-toggle="modal" data-target="#highSchoolModal">
+                                                                            <span ng-click="showhighSchool(x)" data-toggle="modal" data-target="#highSchoolModal">
                                                                                 <img height="20" width="20" src="~/Template/assets/images/chose.png" />
                                                                             </span>
                                                                         </td>
@@ -331,6 +347,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -338,35 +355,30 @@
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h4 class="modal-title" id="exampleModalLabel1">Okul kod : {{highSchoolModel.highschoolcode}} - Adı: {{highSchoolModel.schoolname}}</h4>
+                                                <h4 class="modal-title" id="exampleModalLabel1"> Adı: {{highSchoolModel.schoolName}}</h4>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                             </div>
                                             <div class="modal-body">
                                                 <form>
                                                     <div class="form-group">
-                                                        <label id="lblhighSchoolCityId" class="control-label">İl </label>
-
-                                                        <select id="product" class="form-control" name="product" required
-                                                                ng-model="highSchoolModel.cityId"
-                                                                ng-options="x.cityId as x.cityName for x in cityList| filter:x.cityName"></select>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label id="schoolCode" class="control-label">Okul Kodu </label>
-                                                        <input type="text" ng-model="highSchoolModel.highSchoolCode" class="form-control" id="schoolCode">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label id="schoolDescription" class="control-label">Okul Adı </label>
-                                                        <input type="text" ng-model="highSchoolModel.schoolName" class="form-control" id="schoolDescription">
+                                                        <label id="highSchoolname" class="control-label">Okul Adı </label>
+                                                        <input type="text" ng-model="highSchoolModel.schoolName" class="form-control" id="highSchoolname">
                                                     </div>
                                                 </form>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
-                                                <button type="button" class="btn btn-primary" ng-click="postHighSchool()">{{highSchoolModel.highSchoolCreateButtonName}}</button>
+                                                <button type="button" class="btn btn-primary" ng-click="posthighSchool()">{{highSchoolModel.highSchoolCreateButtonName}}</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
+
+
+
+
+
 
                                 <div class="tab-pane  p-20" id="university" role="tabpanel">
                                     <div class="col-lg-12">
@@ -435,17 +447,6 @@
                                             </div>
                                             <div class="modal-body">
                                                 <form>
-                                                    @*<div class="form-group">
-                                <label id="lbluniversityCityId" class="control-label">İl </label>
-
-                                <select id="universityCityId" class="form-control" name="universityCityId" required
-                                        ng-model="universityModel.cityId"
-                                        ng-options="x.cityId as x.cityName for x in cityList| filter:x.cityName"></select>
-                            </div>
-                            <div class="form-group">
-                                <label id="universityCode" class="control-label">Üniversite Kodu </label>
-                                <input type="text" ng-model="universityModel.universitycode" class="form-control" id="universityCode">
-                            </div>*@
                                                     <div class="form-group">
                                                         <label id="universityname" class="control-label">Üniversite Adı </label>
                                                         <input type="text" ng-model="universityModel.universityname" class="form-control" id="universityname">
@@ -506,10 +507,10 @@
                                                                             </span>
                                                                         </td>
                                                                         @*<td>
-                                                    <span ng-click="showuniversity(x)" data-toggle="modal" data-target="#universityModal">
-                                                        <img height="20" width="20" src="~/Template/assets/images/Plus-512.png" />
-                                                    </span>
-                                                </td>*@
+                                                                                <span ng-click="showuniversity(x)" data-toggle="modal" data-target="#universityModal">
+                                                                                    <img height="20" width="20" src="~/Template/assets/images/Plus-512.png" />
+                                                                                </span>
+                                                                            </td>*@
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
@@ -530,9 +531,9 @@
                                             <div class="modal-body">
                                                 <form>
                                                     @*<div class="form-group">
-                                <label id="universityCode" class="control-label">Fakülte Kodu </label>
-                                <input type="text" ng-model="facultyModel.facultyCode" class="form-control" id="universityCode">
-                            </div>*@
+                                                            <label id="universityCode" class="control-label">Fakülte Kodu </label>
+                                                            <input type="text" ng-model="facultyModel.facultyCode" class="form-control" id="universityCode">
+                                                        </div>*@
                                                     <div class="form-group">
                                                         <label id="universityname" class="control-label">Fakülte Adı </label>
                                                         <input type="text" ng-model="facultyModel.facultyName" class="form-control" id="universityname">
@@ -753,7 +754,7 @@
                                                             <h4 class="card-title"><input type="text" ng-model="unvanfilter" class="form-control" placeholder="Ara" id="unvanfilter"></h4>
                                                         </div>
                                                         <div class="table-responsive">
-                                                            
+
                                                             <table class="table color-table primary-table">
                                                                 <span ng-show="showunvanLoading"><i class="fa fa-spinner fa-spin"></i></span>
                                                                 <thead>

@@ -135,27 +135,36 @@ app.controller('DefinitonManagerController', function ($scope, $http, $filter) {
         });
     };
 
-    //HighScholl
-    $scope.highSchoolModel = {};
-    $scope.highSchoolModel.highSchollCreateButtonName = "Kaydet";
 
-    $scope.onClickhighSchollTab = function () {
-        $scope.gethighSchollList();
-        $scope.getCities();
+
+
+
+
+
+
+
+
+
+
+    $scope.highSchoolModel = {};
+    $scope.highSchoolModel.highSchoolCreateButtonName = "Kaydet";
+    $scope.selected = {};
+    $scope.showFacultyPage = false;
+
+    $scope.onClickhighSchoolTab = function () {
+        $scope.highSchoolList();
     };
 
     $scope.openhighSchoolModal = function () {
         $scope.highSchoolModel = {};
         $scope.highSchoolModel.highSchoolCreateButtonName = "Kaydet";
-        focus('EducationTypeModal');
+        focus('highSchoolModal');
     };
 
-    $scope.showHighSchool = function (x) {
+    $scope.showhighSchool = function (x) {
         $scope.highSchoolModel.highSchoolCreateButtonName = "Güncelle";
         $scope.highSchoolModel.id = x.id;
-        $scope.highSchoolModel.cityId = x.cityId;
-        $scope.highSchoolModel.schoolname = x.schoolName;
-        $scope.highSchoolModel.highschoolcode = x.highSchoolCode;
+        $scope.highSchoolModel.schoolName = x.schoolName;
     };
 
     var highSchoolPost = function () {
@@ -167,36 +176,21 @@ app.controller('DefinitonManagerController', function ($scope, $http, $filter) {
         };
     };
 
-    $scope.postHighSchool = function () {
-        if (FieldControl($scope.highSchoolModel.cityId)) {
-            // if (FieldControl($scope.highSchoolModel.highSchoolCode)) {
-            if (Number.isInteger(Number.parseInt($scope.highSchoolModel.highSchoolCode))) {
-                if (FieldControl($scope.highSchoolModel.schoolName)) {
-                    Loading(true);
-                    $http(highSchoolPost()).then(function (res) {
-                        if (res.data.resultCode === 200) {
-                            $scope.gethighSchollList();
-                            shortMessage(res.data.message, "s");
-                            closeModal("highSchoolModal");
-                        }
-                        Loading(false);
-                    });
-                } else {
-                    shortMessage("Okul Adı Boş Geçilemez.", "e");
+    $scope.posthighSchool = function () {
+        if (FieldControl($scope.highSchoolModel.highSchoolname)) {
+            $http(highSchoolPost()).then(function (res) {
+                if (res.data.resultCode === 200) {
+                    $scope.highSchoolList();
+                    shortMessage(res.data.message, "s");
+                    closeModal("highSchoolModal");
                 }
-            } else {
-                shortMessage("Okul Kodu rakamlardan oluşmalıdır.", "e");
-            }
-            // } else {
-            //   shortMessage("Okul Kodu Boş Geçilemez.", "e");
-            // }
-
+            });
         } else {
-            shortMessage("Okul ili Boş Geçilemez.", "e");
+            shortMessage("Üniversite Adı Boş Geçilemez.", "e");
         }
     };
 
-    $scope.gethighSchollList = function () {
+    $scope.highSchoolList = function () {
         Loading(true);
         $.ajax({
             url: _link + "/Definition/education-gethighschool",
@@ -207,6 +201,7 @@ app.controller('DefinitonManagerController', function ($scope, $http, $filter) {
                 if (e.resultCode === 200) {
                     if (e.data.length > 0) {
                         $scope.highSchoolModel.highSchoolList = e.data;
+                        highSchoolPagin();
                     }
                     $scope.$apply();
                     Loading(false);
@@ -214,6 +209,69 @@ app.controller('DefinitonManagerController', function ($scope, $http, $filter) {
             }
         });
     };
+
+    var updataStatuhighSchool = function () {
+        return {
+            method: "post",
+            url: _link + "/Definition/education-Update-highSchoolIsActive",
+            headers: Headers,
+            data: {
+                Id: x,
+                IsActive: true
+            }
+        };
+    };
+
+    $scope.onChagehighSchoolIsActive = function (x) {
+        $http(updataStatuhighSchool()).then(function (res) {
+            if (res.data.resultCode === 200) {
+                $scope.highSchoolList();
+                shortMessage(res.data.message, "s");
+                closeModal("highSchoolModal");
+            }
+        });
+    };
+
+    function highSchoolPagin() {
+        $scope.highSchoolcurrentPage = 0;
+        $scope.highSchoolpageSize = 10;
+        $scope.highSchooldata = [];
+
+        $scope.highSchoolgetData = function () {
+            return $filter('highSchoolfilter')($scope.highSchoolModel.highSchoolList, $scope.highSchoolsearch);
+        };
+
+        $scope.highSchoolnumberOfPages = function () {
+            return Math.ceil($scope.highSchoolModel.highSchoolList.length / $scope.highSchoolpageSize);
+        };
+
+        for (var i = 0; i < 20; i++) {
+            $scope.highSchooldata.push("Item " + i);
+        };
+
+        $scope.$watch('highSchoolsearch', function (newValue, oldValue) {
+            if (oldValue !== newValue) {
+                $scope.highSchoolcurrentPage = 0;
+            }
+        }, true);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     //university
@@ -251,26 +309,18 @@ app.controller('DefinitonManagerController', function ($scope, $http, $filter) {
     };
 
     $scope.postuniversity = function () {
-        if (FieldControl($scope.universityModel.cityId)) {
-            if (FieldControl($scope.universityModel.universitycode)) {
-                if (FieldControl($scope.universityModel.universityname)) {
-                    Loading(true);
-                    $http(universityPost()).then(function (res) {
-                        if (res.data.resultCode === 200) {
-                            $scope.universityList();
-                            shortMessage(res.data.message, "s");
-                            closeModal("universityModal");
-                        }
-                        Loading(false);
-                    });
-                } else {
-                    shortMessage("Üniversite Adı Boş Geçilemez.", "e");
+        if (FieldControl($scope.universityModel.universityname)) {
+            Loading(true);
+            $http(universityPost()).then(function (res) {
+                if (res.data.resultCode === 200) {
+                    $scope.universityList();
+                    shortMessage(res.data.message, "s");
+                    closeModal("universityModal");
                 }
-            } else {
-                shortMessage("Üniversite Kodu Boş Geçilemez.", "e");
-            }
+                Loading(false);
+            });
         } else {
-            shortMessage("Üniversite İli Boş Geçilemez.", "e");
+            shortMessage("Üniversite Adı Boş Geçilemez.", "e");
         }
     };
 
@@ -493,7 +543,7 @@ app.controller('DefinitonManagerController', function ($scope, $http, $filter) {
                     }
                     $scope.showDepartmentLoading = false;
                     $scope.$apply();
-                    
+
                 }
             }
         });
@@ -742,6 +792,13 @@ app.filter('universitystartFrom', function () {
 });
 
 app.filter('facultystartFrom', function () {
+    return function (input, start) {
+        start = +start;
+        return input.slice(start);
+    };
+});
+
+app.filter('highSchoolFrom', function () {
     return function (input, start) {
         start = +start;
         return input.slice(start);
