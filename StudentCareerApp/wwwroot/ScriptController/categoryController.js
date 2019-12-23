@@ -143,7 +143,7 @@ app.controller('categoryController', function ($scope, $http, $filter) {
             headers: Header,
             success: function (e) {
                 if (e.resultCode === 200) {
-                    $scope.category.mainCategoryList = e.data;
+                    $scope.category.mainCategoryList = e.data.filter(x=>x.parentId == null);
                     // $scope.switcher(100);
                 }
                 $scope.$apply();
