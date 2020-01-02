@@ -502,7 +502,7 @@
                                             <div class="form-group">
                                                 <label>Haber Kategori</label>
                                                 <input type="hidden" id="categoryIds" />
-                                                <treeselect v-props-options="options" v-props-field="'categoryIds'" v-props-multiple="true" v-props-value="categoryValue" watch-depth="value"></treeselect>
+                                                <treeselect v-props-options="options" v-props-field="'categoryIds'" v-props-multiple="true" v-props-value="categoryValue" watch-depth="categoryValue"></treeselect>
                                             </div>
                                         </div>
                                     </div>
@@ -511,7 +511,7 @@
                                             <div class="form-group">
                                                 <label>Haber Etiket</label>
                                                 <input type="hidden" value="" id="multipleTags" />
-                                                <treeselect v-props-options="tagOptions" v-props-field="'multipleTags'" v-props-is-insertable="true" v-props-multiple="true" v-props-value="value" watch-depth="value"></treeselect>
+                                                <treeselect v-props-options="tagOptions" v-props-field="'multipleTags'" v-props-is-insertable="true" v-props-multiple="true" v-props-value="tagsValue" watch-depth="tagsValue"></treeselect>
                                             </div>
                                         </div>
                                     </div>

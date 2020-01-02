@@ -123,6 +123,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
         $("#home").show();
         $scope.assayHeadrName = "Ekle";
         getContentShortList();
+        clearAll();
 
     };
 
@@ -289,19 +290,20 @@ app.controller("assayController", function ($scope, $http, $filter) {
                     console.log($scope.assayCreate);
                     $scope.assayHeadrName = "Güncelle";
                     $scope.assayCreate.header = e.data.header;
-                    //$scope.categoryValue = "37";// e.data.category !== null ? e.data.category.split(',') : "";
+                    // $scope.categoryValue = "37";// e.data.category !== null ? e.data.category.split(',') : "";
+                    debugger;
                     $scope.tagsValue = e.data.tags !== null ? e.data.tags.split(',') : "";
                     CKEDITOR.instances.ckeditorForAssayContent.setData(e.data.contentDescription);
                     $("#roxyField").val(e.data.imagePath);
                     $("#img_roxyField").attr('src', e.data.imagePath);
                     $("#publishHour").val(moment(e.data.publishDate).format('HH:mm'));
                     $("#publishDateAssay").datepicker("setDate", new Date(moment(e.data.publishDate)));
+                    $scope.categoryValue = eval(e.data.category);
+                    $("#categoryIds").val(e.data.category);
+                    $("#multipleTags").val(e.data.tagsValue);
 
-                    $("#categoryIds").val(37);
-                    $("#multipleTags").val(37);
 
-
-                    $scope.categoryIds = ["37"];
+                    // $scope.categoryIds = ["37"];
 
                     changeSwitchery($("#togglwPublish"), e.data.isHeadLine);
                     changeSwitchery($("#toggleManset"), e.data.isManset);
@@ -333,18 +335,20 @@ app.controller("assayController", function ($scope, $http, $filter) {
         $("#roxyField").val("");
         $("#img_roxyField").attr('src', "");
         $("#publishHour").val("");
-        $("#publishDate").val("");
+        $("#publishDateAssay").val("")
 
 
-        changeSwitchery($("#togglwPublish"), "0");
-        changeSwitchery($("#toggleManset"), "0");
-        changeSwitchery($("#toggleMainMenu"), "0");
-        changeSwitchery($("#toggleisConstantMainMenu"), "0");
+        changeSwitchery($("#togglwPublish"), false);
+        changeSwitchery($("#toggleManset"), false);
+        changeSwitchery($("#toggleMainMenu"), false);
+        changeSwitchery($("#toggleisConstantMainMenu"), false);
 
         $scope.assayCreate.platformTypeId = $scope.platformTypeList[0];
         $scope.assayCreate.visibleId = $scope.visibleList[0];
         $scope.assayCreate.internId = $scope.events[0];
         $scope.assayCreate.eventId = $scope.internList[0];
+        $scope.categoryValue = [];
+        $scope.tagsValue = [];
 
 
         $("#dashboardTab").removeClass("active");
