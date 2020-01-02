@@ -124,6 +124,12 @@ namespace StudentCareerApp.Areas.Api.Controller
             return await _contentManager.GetContent(id);
         }
 
+        [HttpGet("get-dashboard")]
+        public async Task<ServiceResult> Dashboard()
+        {
+            return await _contentManager.Dashboard();
+        }
+
         [HttpGet("GetAllTags")]
         public async Task<ServiceResult> GetAllTags()
         {
@@ -141,12 +147,6 @@ namespace StudentCareerApp.Areas.Api.Controller
         public async Task<ServiceResult> ApproveComment(long id)
         {
             return await _commentManager.ApproveComment(id);
-        }
-
-        [HttpGet("comment-Dashboard")]
-        public async Task<ServiceResult> Dashboard()
-        {
-            return await _commentManager.Dashboard();
         }
 
         [HttpGet("comment-GetAllCommentsPendingApprovalByContentId")]

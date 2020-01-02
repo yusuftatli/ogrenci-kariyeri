@@ -30,24 +30,24 @@ app.controller("assayController", function ($scope, $http, $filter) {
     $scope.testImage = defaultPage;
     $scope.showSaveLoading = false;
     $scope.showTable = true;
-
+    $scope.assayHeadrName = "Ekle";
     $scope.assayCreate = {};
     $scope.contentProcess = {};
-
+    $scope.assayButtonName = "Kaydet";
 
     $scope.assayList = [];
     $scope.contentModel = {};
-    $scope.events = [{ id: 0, description: '-----' }, { id: 1, description: 'Mentor' }, { id: 2, description: 'Kariyer Sohbetleri' }];
-    $scope.internList = [{ id: 1, description: '-----' }, { id: 1, description: 'Deneme Staj' }];
-    $scope.visibleList = [{ id: 1, description: 'Herkese Açık' }, { id: 1, description: 'Parola Korumalı' }, { id: 1, description: 'Özel' }];
-    $scope.confirmType = [{ Id: "0", description: 'Seçiniz' }, { ID: "1", Description: 'Taslak' }, { ID: "2", Description: 'Yayın Aşamasında' }, { ID: "3", Description: 'Yayında Değil' }, { ID: "4", Description: 'Yayında' }];
-    $scope.events = [{ id: 0, description: '-----' }, { id: 1, description: 'Mentor' }, { id: 2, description: 'Kariyer Sohbetleri' }];
-    $scope.platformType = [{ id: 0, description: '-----' }, { id: 1, description: 'Mobil' }, { id: 2, description: 'Web' }, { id: 3, description: 'Web/Mobil' }];
+    $scope.events = [{ Id: 0, Description: 'Seçiniz' }, { Id: 1, Description: 'Mentor' }, { Id: 2, Description: 'Kariyer Sohbetleri' }];
+    $scope.internList = [{ Id: 0, Description: 'Seçiniz' }, { Id: 1, Description: 'Deneme Staj' }, { Id: 2, Description: 'Kariyer Soheti' }];
+    $scope.visibleList = [{ Id: 0, Description: 'Seçiniz' }, { Id: 1, Description: 'Herkese Açık' }, { Id: 1, Description: 'Parola Korumalı' }, { Id: 1, Description: 'Özel' }];
+    $scope.confirmType = [{ Id: "0", Description: 'Seçiniz' }, { Id: "1", Description: 'Taslak' }, { Id: "2", Description: 'Yayın Aşamasında' }, { Id: "3", Description: 'Yayında Değil' }, { Id: "4", Description: 'Yayında' }];
+    $scope.events = [{ Id: 0, Description: 'Seçiniz' }, { Id: 1, Description: 'Mentor' }, { Id: 2, Description: 'Kariyer Sohbetleri' }];
+    $scope.platformTypeList = [{ Id: 0, Description: 'Seçiniz' }, { Id: 1, Description: 'Mobil' }, { Id: 2, Description: 'Web' }, { Id: 3, Description: 'Web/Mobil' }];
     $scope.menuList = JSON.parse(localStorage.getItem("menus"));
     $scope.contentModel.multipleList = [{ Id: "0", Description: 'Seçiniz' }, { Id: "1", Description: '1' }, { Id: "2", Description: '2' }, { Id: "3", Description: '3' }, { Id: "4", Description: '4' }, { Id: "5", Description: '5' },
     { Id: "6", Description: '6' }, { Id: "7", Description: '7' }, { Id: "8", Description: '8' }, { Id: "9", Description: '9' }, { Id: "10", Description: '10' }, { Id: "20", Description: '20' }, { Id: "50", Description: '50' }];
 
-
+    getDashboard();
     var trMap = {
         çÇ: "c",
         ğĞ: "g",
@@ -119,11 +119,19 @@ app.controller("assayController", function ($scope, $http, $filter) {
     $scope.onClickDashboard = function () {
         $("#AssayCreate").hide();
         $("#home").show();
+        $scope.assayHeadrName = "Ekle";
         getContentShortList();
 
     };
 
     $scope.onClickContent = function () {
+        $scope.assayButtonName = "Kaydet";
+        $scope.assayHeadrName = "Ekle";
+        clearAll();
+        $scope.assayCreate.platformTypeId = $scope.platformTypeList[0];
+        $scope.assayCreate.visibleId = $scope.visibleList[0];
+        $scope.assayCreate.internId = $scope.events[0];
+        $scope.assayCreate.eventId = $scope.internList[0];
         $("#AssayCreate").show();
         $("#home").hide();
         getMainCategories();
@@ -192,16 +200,15 @@ app.controller("assayController", function ($scope, $http, $filter) {
         });
     }
 
-
     $scope.onClikckProcess = function (x) {
         debugger
         $scope.contentProcess.header = x.header;
         $scope.contentProcess.platformTypeDes = x.platformTypeDes;
         $scope.contentProcess.id = x.id;
-        $scope.contentProcess.publishState = $scope.confirmType[x.platformType].Id;
+        $scope.contentProcess.publishState = $scope.confirmType[x.publishStateType];
 
         $scope.readCountList(x.id);
-        
+
     };
 
     function findIndexOfPublishState() {
@@ -245,7 +252,13 @@ app.controller("assayController", function ($scope, $http, $filter) {
     }
 
     $scope.showContentDetail = function (x) {
+        debugger;
+       
+        $scope.assayButtonName = "Güncelle";
+        getMainCategories();
+        getTags();
         getContentById(x);
+
     };
 
 
@@ -264,7 +277,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
         $.ajax({
             url: _link + "/Content/getContentbyid",
             type: "GET",
-            data: { id: x },
+            data: { id: x.id },
             dataType: Json_,
             contentType: ContentType_,
             success: function (e) {
@@ -272,26 +285,30 @@ app.controller("assayController", function ($scope, $http, $filter) {
                     getMainCategories();
                     // getTags();
                     console.log($scope.assayCreate);
-
+                    $scope.assayHeadrName = "Güncelle";
                     $scope.assayCreate.header = e.data.header;
-                    $scope.assayCreate.eventId = e.data.eventId;
-                    $scope.assayCreate.internId = e.data.internId;
-                    $scope.assayCreate.visibleId = e.data.visibleId;
-                    $scope.categoryValue = e.data.category !== null ? e.data.category.split(',') : "";
+                    //$scope.categoryValue = "37";// e.data.category !== null ? e.data.category.split(',') : "";
                     $scope.tagsValue = e.data.tags !== null ? e.data.tags.split(',') : "";
                     CKEDITOR.instances.ckeditorForAssayContent.setData(e.data.contentDescription);
                     $("#roxyField").val(e.data.imagePath);
                     $("#img_roxyField").attr('src', e.data.imagePath);
                     $("#publishHour").val(moment(e.data.publishDate).format('HH:mm'));
-                    $("#publishDate").datepicker("setDate", new Date(moment(e.data.publishDate)));
+                    $("#publishDateAssay").datepicker("setDate", new Date(moment(e.data.publishDate)));
+
+                    $("#categoryIds").val(37);
+                    $("#multipleTags").val(37);
+
+
 
                     changeSwitchery($("#togglwPublish"), e.data.isHeadLine);
                     changeSwitchery($("#toggleManset"), e.data.isManset);
                     changeSwitchery($("#toggleMainMenu"), e.data.isMainMenu);
                     changeSwitchery($("#toggleisConstantMainMenu"), e.data.isConstantMainMenu);
-                    $("#publishDate").val(e.data.publishDate);
 
-                    //$scope.assayCreate.eventId = $scope.events[0];
+                    $scope.assayCreate.platformTypeId = $scope.platformTypeList[e.data.platformType];
+                    $scope.assayCreate.visibleId = $scope.visibleList[e.data.visibleId];
+                    $scope.assayCreate.internId = $scope.events[e.data.internId];
+                    $scope.assayCreate.eventId = $scope.internList[e.data.eventId];
 
                     $("#AssayCreate").show();
                     $("#home").hide();
@@ -306,6 +323,43 @@ app.controller("assayController", function ($scope, $http, $filter) {
         });
     }
 
+    function clearAll() {
+        $scope.assayCreate.header = "";
+        $scope.tagsValue = "";
+        CKEDITOR.instances.ckeditorForAssayContent.setData("");
+        $("#roxyField").val("");
+        $("#img_roxyField").attr('src', "");
+        $("#publishHour").val("");
+        $("#publishDate").val("");
+
+
+        changeSwitchery($("#togglwPublish"), "0");
+        changeSwitchery($("#toggleManset"), "0");
+        changeSwitchery($("#toggleMainMenu"), "0");
+        changeSwitchery($("#toggleisConstantMainMenu"), "0");
+
+        $scope.assayCreate.platformTypeId = $scope.platformTypeList[0];
+        $scope.assayCreate.visibleId = $scope.visibleList[0];
+        $scope.assayCreate.internId = $scope.events[0];
+        $scope.assayCreate.eventId = $scope.internList[0];
+
+
+        $("#dashboardTab").removeClass("active");
+        $("#contentTab").addClass("active");
+    }
+    function getDashboard() {
+        $http({
+            method: "get",
+            url: _link + "/Content/get-dashboard",
+            headers: Headers
+        }).then(function (res) {
+            if (res.status === 200) {
+                $scope.DashboardData = res.data.data;
+            } else {
+                shortMessage(res.data.message, "e");
+            }
+        });
+    }
     //post assay
     function postAssay() {
         $http(PostAssayReq()).then(function (res) {
@@ -397,11 +451,12 @@ app.controller("assayController", function ($scope, $http, $filter) {
     };
 
     var publishStateReq = function () {
+        debugger
         return {
             method: "post",
             url: _link + "/Content/UpdateContentPublish",
             headers: Headers,
-            data: { id: $scope.contentProcess.id, publishState: $scope.contentProcess.publishState }
+            data: { id: $scope.contentProcess.id, publishState: $scope.contentProcess.publishState.Id }
         };
     };
     //post assay request object
@@ -441,7 +496,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
         $.ajax({
             url: _link + "/Settings/settings-multipleReadCount-only",
             type: "GET",
-            data: { id: x},
+            data: { id: x },
             dataType: Json_,
             contentType: ContentType_,
             success: function (e) {

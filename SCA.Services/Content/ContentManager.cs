@@ -248,6 +248,72 @@ namespace SCA.Services
             });
             return res;
         }
+
+        public async Task<ServiceResult> Dashboard()
+        {
+            ServiceResult res = new ServiceResult();
+            try
+            {
+                List<ContentDashboardDto> data = new List<ContentDashboardDto>();
+               
+                string query = @"select count(Id) as Count,PublishStateType from Content group by PublishStateType";
+                var result = await _db.QueryAsync<ContentDashboardDto>(query);
+                long total = 0;
+                foreach (var item in result)
+                {
+                    if (item.PublishStateType == 1)
+                    {
+                        data.Add(new ContentDashboardDto()
+                        {
+                            Description = "Taslak",
+                            Count = item.Count
+                        });
+                        total += item.Count;
+                    }
+                    if (item.PublishStateType == 2)
+                    {
+                        data.Add(new ContentDashboardDto()
+                        {
+                            Description = "Yayın Aşamasında",
+                            Count = item.Count
+                        });
+                        total += item.Count;
+                    }
+                    if (item.PublishStateType == 3)
+                    {
+                        data.Add(new ContentDashboardDto()
+                        {
+                            Description = "Yayında Değil",
+                            Count = item.Count
+                        });
+                        total += item.Count;
+                    }
+                    if (item.PublishStateType == 4)
+                    {
+                        data.Add(new ContentDashboardDto()
+                        {
+                            Description = "Yayında",
+                            Count = item.Count
+                        });
+                        total += item.Count;
+                    }
+                }
+                data.Add(new ContentDashboardDto()
+                {
+                    Description = "Toplam",
+                    Count = total
+                });
+
+                res = Result.ReturnAsSuccess(data: data);
+            }
+            catch (Exception ex)
+            {
+                res = res = Result.ReturnAsFail(message: "Kullanıcı dashboard bilgisi yüklenemedi");
+                await _errorManagement.SaveError(ex, null, "User/Dashboard", PlatformType.Web);
+            }
+            return res;
+        }
+
         public async Task<ServiceResult> GetContent(long id)
         {
             ServiceResult res = new ServiceResult();
@@ -258,6 +324,8 @@ namespace SCA.Services
                 filter.Add("Id", id);
 
                 var resultData = await _db.QueryFirstAsync<ContentDto>(query, filter);
+                resultData.CategoryDes =await _categoryManager.GetCategoryById(resultData.Id);
+                resultData.TagDes = await _tagManager.GetTagById(resultData.Id);
 
                 if (resultData != null)
                 {

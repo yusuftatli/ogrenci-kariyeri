@@ -79,5 +79,6 @@ namespace SCA.Services
         Task<ServiceResult> GetSearch(string value);
         Task<List<TagDto>> GetAllTagsUI();
         Task<ServiceResult> GetAllTags();
+        Task<ServiceResult> Dashboard();
     }
 }

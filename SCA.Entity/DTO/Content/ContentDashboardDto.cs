@@ -8,5 +8,7 @@ namespace SCA.Entity.DTO
     {
         public string Description { get; set; }
         public long Count { get; set; }
+        public long PublishStateType { get; set; }
+
     }
 }

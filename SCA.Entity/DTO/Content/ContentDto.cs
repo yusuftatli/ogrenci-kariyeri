@@ -10,8 +10,10 @@ namespace SCA.Entity.DTO
         public long Id { get; set; }
         public long UserId { get; set; }
         public string Tags { get; set; }
+        public string TagDes { get; set; }
         public long SycnId { get; set; }
         public string Category { get; set; }
+        public string CategoryDes { get; set; }
         public PlatformType PlatformType { get; set; }
         public PublishState PublishStateType { get; set; }
         public long ReadCount { get; set; }

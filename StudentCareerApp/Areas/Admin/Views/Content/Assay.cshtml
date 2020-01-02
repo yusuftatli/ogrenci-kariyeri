@@ -94,7 +94,7 @@
                         <div class="card-body">
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item" ng-click="onClickDashboard()"> <a id="dashboardTab" class="nav-link active" data-toggle="tab" href="#home" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">DashBoard</span></a> </li>
-                                <li class="nav-item" ng-click="onClickContent()"> <a id="contentTab" class="nav-link" data-toggle="tab" href="#AssayCreate" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Makale Ekle</span></a> </li>
+                                <li class="nav-item" ng-click="onClickContent()"> <a id="contentTab" class="nav-link" data-toggle="tab" href="#AssayCreate" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Haber {{assayHeadrName}}</span></a> </li>
                             </ul>
                             <div class="tab-content tabcontent-border">
 
@@ -102,20 +102,11 @@
                                     <br />
                                     <div class="row" ng-model="rowdata">
                                         <!-- Column -->
-                                        <div class="col-lg-3 col-md-6">
+                                        <div class="col-md-6 col-lg-3 col-xlg-3">
                                             <div class="card">
-                                                <div class="card-body">
-                                                    <div class="row p-t-10 p-b-10">
-                                                        <!-- Column -->
-                                                        <div class="col p-r-0">
-                                                            <h1 class="font-light" ng-bind="contentDashboard[0].quantity"></h1>
-                                                            <h6 class="text-muted">Tolam Test</h6>
-                                                        </div>
-                                                        <!-- Column -->
-                                                        <div class="col text-right align-self-center">
-                                                            <div data-label="{{contentDashboard[0].percent}}%" class="css-bar m-b-0 css-bar-primary css-bar-20"><i class="mdi mdi-account-circle"></i></div>
-                                                        </div>
-                                                    </div>
+                                                <div class="box bg-info text-center">
+                                                    <h1 class="font-light text-white"> <span ng-hide="DashboardData.length>0"><i class="fa fa-spinner fa-spin fa-spin"></i></span><span ng-show="DashboardData.length>0" ng-bind="DashboardData[0].count+DashboardData[1].count+DashboardData[2].count+DashboardData[3].count"></span></h1>
+                                                    <h6 class="text-white"><span ng-bind="DashboardData[0].description"></span></h6>
                                                 </div>
                                             </div>
                                         </div>
@@ -266,7 +257,7 @@
                                                                     <td ng-bind="x.createdDate | date:'MM/dd/yyyy HH:mm:ss'"></td>
                                                                     <td ng-bind="x.publishDate | date:'MM/dd/yyyy HH:mm:ss'"></td>
                                                                     <td>
-                                                                        <button ng-click="showContentDetail(x.id)" type="button" class="btn btn-rounded btn-success">Aç</button>
+                                                                        <button ng-click="showContentDetail(x)" type="button" class="btn btn-rounded btn-success">Aç</button>
                                                                     </td>
                                                                     <td>
                                                                         <button ng-click="showComment(x.id)" type="button" class="btn btn-rounded btn-success" @*data-toggle="modal" data-target="#commentModal"*@>Aç</button>
@@ -346,11 +337,7 @@
                                                             </div>
                                                             <div class="col-md-5">
                                                                 <div class="form-group">
-                                                                    <select id="roletypeid" class="form-control custom-select" ng-model="contentProcess.publishState" name="multipleLisr">
-                                                                        <option ng-repeat="y in confirmType" value="{{y.Id}}">
-                                                                            {{y.Description}}
-                                                                        </option>
-                                                                    </select>
+                                                                    <select class="form-control custom-select" ng-options="v.Description for v in confirmType track by v.Id" ng-model="contentProcess.publishState"></select>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-2">
@@ -371,11 +358,7 @@
                                                             </div>
                                                             <div class="col-md-2">
                                                                 <div class="form-group">
-                                                                    <select id="roletypeid" class="form-control custom-select" ng-model="contentModel.selectedId" name="multipleLisr">
-                                                                        <option ng-repeat="x in contentModel.multipleList" value="{{x.Id}}">
-                                                                            {{x.Description}}
-                                                                        </option>
-                                                                    </select>
+                                                                    <select class="form-control custom-select" ng-options="v.Description for v in contentModel.multipleList track by v.Id" ng-model="contentModel.selectedId"></select>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-1">
@@ -434,7 +417,7 @@
                                                     <div class="col-md-2">
                                                         <div class="form-group">
                                                             <label>Yayınlanma Tarihi</label>
-                                                            <input id="publishDate" type="text" class="form-control" placeholder="dd.mm.yyyy" />
+                                                            <input id="publishDateAssay" type="text" class="form-control" placeholder="dd.mm.yyyy" />
                                                         </div>
                                                     </div>
                                                     <div class="col-md-2">
@@ -447,7 +430,7 @@
                                                         <div class="form-group">
                                                             <label>Yayınlansın mı?</label>
                                                             <br />
-                                                            <input id="togglwPublish" type="checkbox" ng-checked="{{assayCreate.isHeadLine}}" class="js-switch" data-color="#00c292" />
+                                                            <input id="togglwPublish" type="checkbox" ng-model="assayCreate.isHeadLine" class="js-switch" data-color="#00c292" />
                                                         </div>
                                                     </div>
                                                     <div class="col-md-2">
@@ -483,33 +466,27 @@
                                                     <div class="col-md-2">
                                                         <div class="form-group">
                                                             <label class="control-label">Etkinlikler</label>
-                                                            <select id="roletypeid" class="form-control custom-select" ng-model="assayCreate.eventId" name="eventId">
-                                                                <option ng-repeat="x in events" value="{{x.id}}">{{x.description}}</option>
-                                                            </select>
+                                                            <select class="form-control custom-select" ng-options="v.Description for v in events track by v.Id" ng-model="assayCreate.eventId"></select>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-2">
                                                         <div class="form-group">
                                                             <label class="control-label">Stajlar</label>
-                                                            <select id="roletypeid" class="form-control custom-select" ng-model="assayCreate.internId" name="internId">
-                                                                <option ng-repeat="x in internList" value="{{x.id}}">{{x.description}}</option>
-                                                            </select>
+                                                            <select class="form-control custom-select" ng-options="v.Description for v in internList track by v.Id" ng-model="assayCreate.internId"></select>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-2">
                                                         <div class="form-group">
                                                             <label class="control-label">Görünürlük</label>
-                                                            <select id="roletypeid" class="form-control custom-select" ng-model="assayCreate.visibleId" name="visibleId">
-                                                                <option ng-repeat="x in visibleList" value="{{x.id}}">{{x.description}}</option>
-                                                            </select>
+                                                            <select class="form-control custom-select" ng-options="v.Description for v in visibleList track by v.Id" ng-model="assayCreate.visibleId"></select>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-2">
                                                         <div class="form-group">
                                                             <label class="control-label">Platform Türü</label>
-                                                            <select id="platformId" class="form-control custom-select" ng-model="assayCreate.platformType" name="visibleId">
-                                                                <option ng-repeat="x in platformType" value="{{x.id}}">{{x.description}}</option>
-                                                            </select>
+                                                            <select class="form-control custom-select" ng-options="v.Description for v in platformTypeList track by v.Id" ng-model="assayCreate.platformTypeId"></select>
+
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -550,7 +527,7 @@
                                         <div class="col-md-4">
                                             <button ng-disabled="showSaveLoading" ng-click="postAssay()" class="btn btn-success">
                                                 <span ng-show="showSaveLoading"><i class="fa fa-spinner fa-spin"></i></span>
-                                                Kaydet
+                                                {{assayButtonName}}
                                             </button>
                                         </div>
                                     </div>
