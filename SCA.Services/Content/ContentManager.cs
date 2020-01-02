@@ -578,19 +578,7 @@ namespace SCA.Services
                 {
                     Result.ReturnAsFail(AlertResource.NoChanges, null);
                 }
-                //var data = _contentRepo.Get(x => x.Id.Equals(Id) && x.IsDeleted.Equals(false));
-                //data.PublishStateType = publishState;
-                //_contentRepo.Update(_mapper.Map<Content>(data));
-                //var result = _unitOfWork.SaveChanges();
-                //if (result.ResultCode == HttpStatusCode.OK)
-                //{
-                //    res = Result.ReturnAsSuccess(message: errorMessage);
-                //}
-                //else
-                //{
-                //    errorMessage = "Güncelleme işlemi yapılırken hata meydana geldi.";
-                //    res = Result.ReturnAsFail(message: errorMessage);
-                //}
+               
             });
             return res;
         }
