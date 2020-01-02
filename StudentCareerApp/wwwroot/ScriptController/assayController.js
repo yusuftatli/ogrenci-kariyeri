@@ -88,6 +88,35 @@ app.controller("assayController", function ($scope, $http, $filter) {
     $scope.tagOptions = [];
     $scope.searchModel = {};
 
+    $scope.ApproveComment = function (x) {
+        approveComment(x);
+    }
+    $scope.contentModel.commentShow = false;
+    function approveComment(x) {
+        $scope.contentModel.commentShow = true;
+        $.ajax({
+            url: _link + "/Content/comment-approveForContent",
+            type: "GET", async: true,
+            dataType: Json_,
+            data: { id: x },
+            contentType: ContentType_,
+            success: function (e) {
+                if (e.resultCode === 200) {
+                    shortMessage(e.message, "s");
+                    $scope.commentList = {};
+                    $scope.commentList = e.data;
+                   
+                    $scope.contentModel.commentShow = false;
+                    $scope.$apply();
+
+
+                } else {
+                    $scope.contentModel.commentShow = false;
+                    shortMessage("Yorum onaylanırken hata meydana geldi", "e");
+                }
+            }
+        });
+    }
 
     $scope.showComment = function (x) {
         getAllComments(x);

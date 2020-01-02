@@ -149,6 +149,12 @@ namespace StudentCareerApp.Areas.Api.Controller
             return await _commentManager.ApproveComment(id);
         }
 
+        [HttpGet("comment-approveForContent")]
+        public async Task<ServiceResult> ApproveCommentByContent(long id)
+        {
+            return await _commentManager.ApproveCommentByContent(id);
+        }
+
         [HttpGet("comment-GetAllCommentsPendingApprovalByContentId")]
         public async Task<ServiceResult> GetAllCommentsPendingApprovalByContentId(long contentId)
         {

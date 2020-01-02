@@ -280,7 +280,7 @@
 
                                 </div>
 
-                                <div class="modal fade bs-example-modal-lg" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModal">
+                                <div class="modal fade bs-example-modal-lg"  data-size="modal-lg" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModal">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -306,8 +306,8 @@
                                                                 <td ng-bind="x.comment"></td>
                                                                 <td ng-bind="x.postDate | date:'MM/dd/yyyy HH:mm:ss'"></td>
                                                                 <td>
-                                                                    <button ng-click="ApproveComment(x.id)" type="button" class="btn btn-rounded btn-{{x.buttonClass}}">{{x.buttonName}}</button>
-                                                                </td>
+                                                                    <button type="button" class="btn btn-rounded btn-{{x.buttonClass}}" ng-click="ApproveComment(x.id)"> {{x.buttonName}}<i ng-show="contentModel.commentShow" class="fa fa-spinner fa-spin"></i></button>
+</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>

@@ -42,5 +42,6 @@ namespace SCA.Services
         Task<ServiceResult> ApproveComment(long id);
         Task<ServiceResult> GetAllCommentsPendingApprovalByContentId(long contentId);
         Task<bool> UpsadeContentLog(ContentLogDto dto);
+        Task<ServiceResult> ApproveCommentByContent(long id);
     }
 }

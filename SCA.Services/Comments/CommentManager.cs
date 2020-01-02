@@ -169,6 +169,40 @@ namespace SCA.Services
             return res;
         }
 
+        public async Task<ServiceResult> ApproveCommentByContent(long id)
+        {
+            ServiceResult res = new ServiceResult();
+            try
+            {
+                string message = string.Empty;
+                var data = await _db.QueryFirstAsync<CommentsDto>($"select  * from Comments where Id = {id}");
+
+                bool updateData = !data.Approved;
+
+                string query = $"update Comments set Approved ={updateData} where Id={id}";
+                await _db.ExecuteAsync(query);
+
+                if (updateData)
+                {
+                    message = "Yorum Onaylandı";
+                }
+                else
+                {
+                    message = "Yorum kaldırıldı";
+                }
+
+                ServiceResult _serviceResult = await GetAllCommentsPendingApprovalByContentId(data.ArticleId);
+
+                return Result.ReturnAsSuccess(data: _serviceResult.Data, message: message);
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, 0, "ApproveComment ", Entity.Enums.PlatformType.Web);
+                res = Result.ReturnAsFail();
+            }
+            return res;
+        }
+
 
 
         /// <summary>
