@@ -292,7 +292,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
                     $scope.assayCreate.header = e.data.header;
                     // $scope.categoryValue = "37";// e.data.category !== null ? e.data.category.split(',') : "";
                     debugger;
-                    $scope.tagsValue = e.data.tags !== null ? e.data.tags.split(',') : "";
+                    $scope.tagsValue = e.data.tagIdList;
                     CKEDITOR.instances.ckeditorForAssayContent.setData(e.data.contentDescription);
                     $("#roxyField").val(e.data.imagePath);
                     $("#img_roxyField").attr('src', e.data.imagePath);

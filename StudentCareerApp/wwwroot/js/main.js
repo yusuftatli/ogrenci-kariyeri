@@ -356,7 +356,7 @@ $(function ($) {
         $('#hero-slider .owl-dots').wrap('<div class="container slider-dot-item text-center"><div class="col-lg-12"></div></div>');
         $('#hero-slider .owl-nav').wrap('<div class="container slider-arrow-item"><div class="row"><div class="col-lg-12"></div></div></div>');
         $(".featured-slider-item").on('click', function(){
-            window.location.href = $(this).attr('data-href');
+            window.open($(this).attr('data-href'), '_blank');
         })
         $("#hero-slider .owl-dots .dot-class").hover(function(){
             $(this).click();

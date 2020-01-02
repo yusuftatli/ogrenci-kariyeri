@@ -63,33 +63,36 @@
     <section class="block-wrapper hero-area owl-carousel" id="hero-slider">
         @foreach (var x in Model.SliderContents)
         {
-            <div class="featured-slider-item" data-href="@Url.Action("Index", "Blog", new { seoUrl = x.SeoUrl })" data-dot="<button class='dot-class'>@(Model.SliderContents.IndexOf(x) + 1)</button>" style="background-image: url(@x.ImagePath)">
-                <div class="featured-table">
-                    <div class="table-cell">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-lg-8">
-                                    <div class="hero-content">
-                                        @if (!string.IsNullOrEmpty(x.Category))
-                                        {
-                                            <a target="_blank" href="@Url.Action("Index", "Category", new { id = x.Category.Split(',')[0].ToString(), seoUrl = x.Category.FriendlyUrl() })" class="post-cat">
-                                                @{if (@x.Category != "") {@x.Category }
+                <div class="featured-slider-item" data-href="@Url.Action("Index", "Blog", new { seoUrl = x.SeoUrl })" data-dot="<button class='dot-class'>@(Model.SliderContents.IndexOf(x) + 1)</button>" style="background-image: url(@x.ImagePath)">
+            <a target="_blank" href="@Url.Action("Index", "Blog", new { seoUrl = x.SeoUrl })" style="z-index:9999; position:relative;">
+                    <div class="featured-table">
+                        <div class="table-cell">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <div class="hero-content">
+                                            @if (!string.IsNullOrEmpty(x.Category))
+                                            {
+                                                <a target="_blank" href="@Url.Action("Index", "Category", new { id = x.Category.Split(',')[0].ToString(), seoUrl = x.Category.FriendlyUrl() })" class="post-cat">
+                                                    @{if (@x.Category != "")
+                                                        {@x.Category }
+                                                    }
+                                                </a>
                                             }
-                                        </a>
-                                    }
-                                        <h2>
-                                            @x.Header
-                                        </h2>
+                                            <h2>
+                                                @x.Header
+                                            </h2>
+                                        </div>
                                     </div>
+                                    <!-- col end-->
                                 </div>
-                                <!-- col end-->
+                                <!-- row end-->
                             </div>
-                            <!-- row end-->
+                            <!-- container end-->
                         </div>
-                        <!-- container end-->
                     </div>
+            </a>
                 </div>
-            </div>
         }
     </section>
     <!-- ts overlay end-->
@@ -112,7 +115,7 @@
                         </h3>
                         <span class="post-date-info">
                             <i class="fa fa-clock-o"></i>
-                             @Model.TopContent.PublishDate.ToShortDateString()
+                            @Model.TopContent.PublishDate.ToShortDateString()
                         </span>
                     </div>
                 </div>
@@ -155,6 +158,7 @@
     <script>
         $(document).on('click', 'hrefContent', function () {
             window.location.href = $(this).attr('data-url');
+
         })
     </script>
 }

@@ -5802,7 +5802,7 @@ navbar-standerd
         display: table-cell;
         width: 100%;
         height: 100%;
-        vertical-align: middle;
+        vertical-align: bottom;
     }
 
 .hero-area {
@@ -5845,7 +5845,7 @@ navbar-standerd
 .hero-content {
     position: relative;
     padding: 20px;
-    margin-top: -180px;
+    margin-bottom: 50px;
 }
 
     .hero-content .post-cat {
