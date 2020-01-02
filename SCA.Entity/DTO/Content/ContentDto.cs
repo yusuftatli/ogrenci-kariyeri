@@ -11,6 +11,7 @@ namespace SCA.Entity.DTO
         public long UserId { get; set; }
         public string Tags { get; set; }
         public string TagDes { get; set; }
+        public List<long> TagIdList { get; set; }
         public long SycnId { get; set; }
         public string Category { get; set; }
         public string CategoryDes { get; set; }

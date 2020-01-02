@@ -196,22 +196,6 @@
                         <div class="nav-menus-wrapper clearfix">
                             @if (!user.Id.Equals(0))
                             {
-                                <ul class="right-menu align-to-right">
-                                    <li class="header-search">
-                                        <div class="nav-search">
-                                            <div class="nav-search-button">
-                                                <i class="icon icon-search"></i>
-                                            </div>
-                                            <form>
-                                                <span class="nav-search-close-button" tabindex="0">✕</span>
-                                                <div class="nav-search-inner">
-                                                    <input type="search" name="search" placeholder="Lütfen Arama Yapmak İstediğiniz Kelimeyi Giriniz">
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <!--nav right menu start-->
                                 <ul class="nav-menu align-to-right">
 
                                     <li>
@@ -238,15 +222,7 @@
                                     </li>
 
                                 </ul>
-                            }
-                            else
-                            {
                                 <ul class="right-menu align-to-right">
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-user-circle-o openLoginMagnific"></i>
-                                        </a>
-                                    </li>
                                     <li class="header-search">
                                         <div class="nav-search">
                                             <div class="nav-search-button">
@@ -261,6 +237,32 @@
                                         </div>
                                     </li>
                                 </ul>
+                                <!--nav right menu start-->
+
+                            }
+                            else
+                            {
+                        <ul class="right-menu align-to-right">
+                            <li class="header-search">
+                                <div class="nav-search">
+                                    <div class="nav-search-button">
+                                        <i class="icon icon-search"></i>
+                                    </div>
+                                    <form>
+                                        <span class="nav-search-close-button" tabindex="0">✕</span>
+                                        <div class="nav-search-inner">
+                                            <input type="search" name="search" placeholder="Lütfen Arama Yapmak İstediğiniz Kelimeyi Giriniz">
+                                        </div>
+                                    </form>
+                                </div>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-user-circle-o openLoginMagnific"></i>
+                                </a>
+                            </li>
+
+                        </ul>
                             }
 
                             <!--nav right menu end-->

@@ -94,6 +94,24 @@ namespace SCA.Services
             return res;
         }
 
+        public async Task<List<long>> GetTagIdByContentId(long contentId)
+        {
+            List<long> _res = new List<long>();
+            try
+            {
+                string query = $"select t.Id from TagRelation tr " +
+                    $"left join Tags t on t.Id = tr.TagId where TagContentId = { contentId }";
+                var lisData = await _db.QueryAsync<long>(query) as List<long>;
+                _res = lisData;
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, contentId, "GetTagById", PlatformType.Web);
+            }
+
+            return _res;
+        }
+
         public bool IsInteger(string value)
         {
             bool result = true;

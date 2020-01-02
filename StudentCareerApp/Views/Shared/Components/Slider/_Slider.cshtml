@@ -72,7 +72,7 @@
                                     <div class="hero-content">
                                         @if (!string.IsNullOrEmpty(x.Category))
                                         {
-                                            <a href="@Url.Action("Index", "Category", new { id = x.Category.Split(',')[0].ToString(), seoUrl = x.Category.FriendlyUrl() })" class="post-cat">
+                                            <a target="_blank" href="@Url.Action("Index", "Category", new { id = x.Category.Split(',')[0].ToString(), seoUrl = x.Category.FriendlyUrl() })" class="post-cat">
                                                 @{if (@x.Category != "") {@x.Category }
                                             }
                                         </a>

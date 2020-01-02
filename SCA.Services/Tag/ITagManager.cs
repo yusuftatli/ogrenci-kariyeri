@@ -17,6 +17,7 @@ namespace SCA.Services
         void UpdateTagRelation(List<TagRelationDto> dto);
         Task<string> GetTagById(long contentId);
         Task<List<TagDto>> GetTagListById(long contentId);
+        Task<List<long>> GetTagIdByContentId(long contentId);
     }
 
 }

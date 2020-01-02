@@ -70,13 +70,13 @@
             <!-- ============================================================== -->
             <div class="row page-titles">
                 <div class="col-md-5 align-self-center">
-                    <h4 class="text-themecolor">Makale Yönetimi</h4>
+                    <h4 class="text-themecolor">Haber Yönetimi</h4>
                 </div>
                 <div class="col-md-7 align-self-center text-right">
                     <div class="d-flex justify-content-end align-items-center">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="javascript:void(0)">Makale Yönetimi</a></li>
-                            <li class="breadcrumb-item active">Makale  Yönetimi</li>
+                            <li class="breadcrumb-item"><a href="javascript:void(0)">Haber Yönetimi</a></li>
+                            <li class="breadcrumb-item active">Haber Yönetimi</li>
                         </ol>
                     </div>
                 </div>
@@ -192,7 +192,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>Makale Kategori</label>
+                                                        <label>Haber Kategori</label>
                                                         <input type="hidden" id="searhCategoryIds" />
                                                         <treeselect v-props-options="options" v-props-field="'searhCategoryIds'" v-props-multiple="true" v-props-value="value" watch-depth="value"></treeselect>
                                                     </div>
@@ -208,8 +208,8 @@
                                             <div class="card">
 
                                                 <div class="card-body">
-                                                    <h4 class="card-title">Makaleler Listesi</h4>
-                                                    <h6 class="card-subtitle">Makale Sayısı : <code><span ng-bind="assayList.length"></span></code></h6>
+                                                    <h4 class="card-title">Haber Listesi</h4>
+                                                    <h6 class="card-subtitle">Haber Sayısı : <code><span ng-bind="assayList.length"></span></code></h6>
                                                     <h4><input type="text" class="form-control" name="site-search" id="getData" ng-model="search" ng-keypress="getData($event)" placeholder="Ara..."></h4>
                                                     <table>
                                                         <tr>
@@ -246,7 +246,7 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <tr ng-repeat="x in assayList| filter:search | startFrom:currentPage*pageSize | limitTo:pageSize" )">
+                                                                <tr ng-repeat="x in assayList| filter:search | startFrom:currentPage*pageSize | limitTo:pageSize">
                                                                     <td ng-show="false" ng-bind="x.id"></td>
                                                                     <td ng-bind="x.header"></td>
                                                                     <td ng-bind="x.writer"></td>
@@ -260,7 +260,7 @@
                                                                         <button ng-click="showContentDetail(x)" type="button" class="btn btn-rounded btn-success">Aç</button>
                                                                     </td>
                                                                     <td>
-                                                                        <button ng-click="showComment(x.id)" type="button" class="btn btn-rounded btn-success" @*data-toggle="modal" data-target="#commentModal"*@>Aç</button>
+                                                                        <button ng-click="showComment(x.id)" type="button" class="btn btn-rounded btn-success" data-toggle="modal" data-target="#commentModal">Aç</button>
                                                                     </td>
                                                                     @if (ViewBag.showColumn == 1 || ViewBag.showColumn == 2 || ViewBag.showColumn == 4)
                                                                     {
@@ -300,7 +300,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr ng-repeat="x in commentList )">
+                                                            <tr ng-repeat="x in commentList">
                                                                 <td ng-show="false" ng-bind="x.id"></td>
                                                                 <td ng-bind="x.userName"></td>
                                                                 <td ng-bind="x.comment"></td>
@@ -394,7 +394,7 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label>Makale Başlığı</label>
+                                                            <label>Haber Başlığı</label>
                                                             <input type="text" class="form-control" ng-model="assayCreate.header">
                                                         </div>
                                                     </div>
@@ -408,7 +408,7 @@
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group">
-                                                            <label>Makale Başlık Resim</label>
+                                                            <label>Haber Başlık Resim</label>
                                                             <input type="text" class="form-control" id="roxyField" onclick="openCustomRoxy2('#roxyCustomPanel2')" />
                                                         </div>
                                                     </div>
@@ -500,7 +500,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label>Makale Kategori</label>
+                                                <label>Haber Kategori</label>
                                                 <input type="hidden" id="categoryIds" />
                                                 <treeselect v-props-options="options" v-props-field="'categoryIds'" v-props-multiple="true" v-props-value="categoryValue" watch-depth="value"></treeselect>
                                             </div>
@@ -509,7 +509,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label>Makale Etiket</label>
+                                                <label>Haber Etiket</label>
                                                 <input type="hidden" value="" id="multipleTags" />
                                                 <treeselect v-props-options="tagOptions" v-props-field="'multipleTags'" v-props-is-insertable="true" v-props-multiple="true" v-props-value="value" watch-depth="value"></treeselect>
                                             </div>

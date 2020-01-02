@@ -216,6 +216,7 @@ namespace SCA.Services
                     res.MostPopularItems = await multi.ReadAsync<ContentForHomePageDTO>() as List<ContentForHomePageDTO>;
                     res.CommentList = await multi.ReadAsync<SocialMediaListDto>() as List<CommentForUIDto>;
                     res.Taglist = await multi.ReadAsync<TagDto>() as List<TagDto>;
+                    
                 }
             }
             catch (Exception ex)
@@ -255,7 +256,7 @@ namespace SCA.Services
             try
             {
                 List<ContentDashboardDto> data = new List<ContentDashboardDto>();
-               
+
                 string query = @"select count(Id) as Count,PublishStateType from Content group by PublishStateType";
                 var result = await _db.QueryAsync<ContentDashboardDto>(query);
                 long total = 0;
@@ -324,8 +325,9 @@ namespace SCA.Services
                 filter.Add("Id", id);
 
                 var resultData = await _db.QueryFirstAsync<ContentDto>(query, filter);
-                resultData.CategoryDes =await _categoryManager.GetCategoryById(resultData.Id);
+                resultData.CategoryDes = await _categoryManager.GetCategoryById(resultData.Id);
                 resultData.TagDes = await _tagManager.GetTagById(resultData.Id);
+                resultData.TagIdList = await _tagManager.GetTagIdByContentId(resultData.Id);
 
                 if (resultData != null)
                 {

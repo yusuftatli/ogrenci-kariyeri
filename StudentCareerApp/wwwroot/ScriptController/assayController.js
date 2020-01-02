@@ -95,7 +95,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
 
     function getAllComments(x) {
         $.ajax({
-            url: _link + "/Content/comment-GetAllCommentapplendingApprovalByContentId",
+            url: _link + "/Content/comment-GetAllCommentsPendingApprovalByContentId",
             type: "GET", async: true,
             dataType: Json_,
             data: { contentId: x },
@@ -109,11 +109,13 @@ app.controller("assayController", function ($scope, $http, $filter) {
                     } else {
                         $scope.commentList = {};
                     }
+                    $scope.$apply();
                 } else {
                     shortMessage(e.message, "e");
                 }
             }
         });
+       
     }
 
     $scope.onClickDashboard = function () {
