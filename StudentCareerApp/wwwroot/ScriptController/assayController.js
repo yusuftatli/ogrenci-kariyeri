@@ -299,6 +299,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
                     $("#multipleTags").val(37);
 
 
+                    $scope.categoryIds = ["37"];
 
                     changeSwitchery($("#togglwPublish"), e.data.isHeadLine);
                     changeSwitchery($("#toggleManset"), e.data.isManset);
