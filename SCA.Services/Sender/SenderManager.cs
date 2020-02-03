@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using MySql.Data.MySqlClient;
 using SCA.Common;
+using SCA.Common.Base;
 using SCA.Common.Resource;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
@@ -16,10 +17,10 @@ using System.Threading.Tasks;
 
 namespace SCA.Services
 {
-    public class SenderManager : ISender
+    public class SenderManager : BaseClass,ISender
     {
         IErrorManagement _errorManagement;
-        private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
+        private readonly IDbConnection _db = new MySqlConnection(ConnectionString1);
 
         public SenderManager(IErrorManagement errorManagement)
         {
@@ -70,6 +71,7 @@ namespace SCA.Services
                     }
                 }
             }
+
             catch (Exception ex)
             {
                 await _errorManagement.SaveError(ex, null, "SendEmail", PlatformType.Web);
@@ -133,7 +135,7 @@ namespace SCA.Services
             ServiceResult res = new ServiceResult();
             try
             {
-                 await SendEmail();
+                 
                 string query = $"insert into Emails (UserId, Subject, Body, FromEmail, ToEmail, CcEmail, IsSend, SendDate,  Process) values " +
                     $"('{dto.UserId}', '{dto.Subject}', '{dto.Body}', '{dto.FromEmail}', '{dto.ToEmail}', '{dto.CcEmail}', '0', CURDATE(), '{dto.Process}'); ";
 

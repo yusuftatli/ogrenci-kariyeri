@@ -18,5 +18,6 @@ namespace SCA.Entity.DTO
         public PlatformType PlatformType { get; set; }
         public string PlatformTypeDes { get; set; }
         public string ConfirmUserName { get; set; }
+        public int MenuSide { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using MySql.Data.MySqlClient;
+using SCA.Common.Base;
 using SCA.Entity.DTO;
 using System;
 using System.Collections.Generic;
@@ -9,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace SCA.Services
 {
-  public  class LogManagementManager: ILogManagementManager
+  public  class LogManagementManager: BaseClass,ILogManagementManager
     {
 
         private readonly IErrorManagement _errorManagement;
-        private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
+        private readonly IDbConnection _db = new MySqlConnection(ErrorConnection);
 
 
         public async Task ComoanyUserLog(CompanyLogManagementDto dto)

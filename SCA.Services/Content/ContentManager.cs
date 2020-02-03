@@ -2,6 +2,7 @@
 using MySql.Data.MySqlClient;
 using Npgsql;
 using SCA.Common;
+using SCA.Common.Base;
 using SCA.Common.Resource;
 using SCA.Common.Result;
 using SCA.Entity.Dto;
@@ -19,13 +20,13 @@ using System.Threading.Tasks;
 
 namespace SCA.Services
 {
-    public class ContentManager : IContentManager
+    public class ContentManager : BaseClass, IContentManager
     {
         private readonly ITagManager _tagManager;
         private readonly ICategoryManager _categoryManager;
         private readonly IUserManager _userManager;
         private readonly IErrorManagement _errorManagement;
-        private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
+        private readonly IDbConnection _db = new MySqlConnection(ConnectionString1);
         public ContentManager(ITagManager tagManager, ICategoryManager categoryManager, IUserManager userManager, IErrorManagement errorManagement)
         {
             _tagManager = tagManager;
@@ -96,32 +97,34 @@ namespace SCA.Services
             ServiceResult res = new ServiceResult();
             try
             {
-                string query = "";
+                string categoryIds = dto.searhCategoryIds.Replace('[', ' ').Replace(']', ' ');
                 List<ContentShortListDto> dataList = new List<ContentShortListDto>();
+
                 DateTime startDate = string.IsNullOrEmpty(dto.StartDate) ? DateTime.Now.AddDays(-30) : Convert.ToDateTime(dto.StartDate);
                 DateTime endDate = string.IsNullOrEmpty(dto.EndDate) ? DateTime.Now.AddDays(30) : Convert.ToDateTime(dto.EndDate);
 
                 if (session.RoleTypeId == 1 || session.RoleTypeId == 2)
                 {
-                    dataList = await _db.QueryAsync<ContentShortListDto>("getContentShortListById", new { StartDate = startDate.ToString("yyyy-MM-dd"), PublishEndate = endDate.ToString("yyyy-MM-dd"), userId = 0 }, commandType: CommandType.StoredProcedure) as List<ContentShortListDto>;
+                    dataList = await _db.QueryAsync<ContentShortListDto>("getContentShortListById", new { StartDate = startDate.ToString("yyyy-MM-dd"), PublishEndate = endDate.ToString("yyyy-MM-dd"), userId = 0, category = categoryIds, menuSide = dto.menuSide }, commandType: CommandType.StoredProcedure) as List<ContentShortListDto>;
                 }
                 else
                 {
-                    dataList = await _db.QueryAsync<ContentShortListDto>("getContentShortListById", new { StartDate = startDate.ToString("yyyy-MM-dd"), PublishEndate = endDate.ToString("yyyy-MM-dd"), userId = session.Id }, commandType: CommandType.StoredProcedure) as List<ContentShortListDto>;
+                    dataList = await _db.QueryAsync<ContentShortListDto>("getContentShortListById", new { StartDate = startDate.ToString("yyyy-MM-dd"), PublishEndate = endDate.ToString("yyyy-MM-dd"), userId = session.Id, category = categoryIds, menuSide = dto.menuSide }, commandType: CommandType.StoredProcedure) as List<ContentShortListDto>;
                 }
                 if (dataList.Count > 0)
                 {
                 }
 
-                return Result.ReturnAsSuccess(session.RoleTypeId.ToString(), message: AlertResource.SuccessfulOperation, dataList);
+                res= Result.ReturnAsSuccess(session.RoleTypeId.ToString(), message: AlertResource.SuccessfulOperation, dataList);
             }
             catch (Exception _ex)
             {
-                await _errorManagement.SaveError(_ex, 0, "ContentShortList ", Entity.Enums.PlatformType.Web);
+                //await _errorManagement.SaveError(_ex, 0, "ContentShortList ", Entity.Enums.PlatformType.Web);
                 res = Result.ReturnAsFail(message: "Haberler yüklenirken hata meydana geldi.");
             }
             return res;
         }
+
         /// <summary>
         /// UI için makaleleri short list olarak kullanıcı bilgileri ile birlikte döner 
         /// </summary>
@@ -153,28 +156,28 @@ namespace SCA.Services
 
         public async Task<ServiceResult> GetContentByMobil(ContentDetailMobilDto dto, string token)
         {
-            ServiceResult result = new ServiceResult();
+            ServiceResult res = new ServiceResult();
             if (dto.Equals(null))
             {
-                result = Result.ReturnAsFail(message: "Model boş olamaz.");
-                return result;
+                res = Result.ReturnAsFail(message: "Model boş olamaz.");
+                return res;
             }
 
             if (string.IsNullOrEmpty(dto.seoUrl))
             {
-                result = Result.ReturnAsFail(message: "Seo url boş olamaz.");
-                return result;
+                res = Result.ReturnAsFail(message: "Seo url boş olamaz.");
+                return res;
             }
             long userId = JwtToken.GetUserId(token);
-            ContentDetailForDetailPageDTO res = new ContentDetailForDetailPageDTO();
+            ContentDetailForDetailPageDTO result = new ContentDetailForDetailPageDTO();
             try
             {
                 using (var multi = await _db.QueryMultipleAsync("ContentListBySeoUrl", new { _SeoUrl = dto.seoUrl, _UserId = userId, _Ip = dto.ip }, commandType: CommandType.StoredProcedure))
                 {
-                    res = await multi.ReadFirstOrDefaultAsync<ContentDetailForDetailPageDTO>();
-                    res.MostPopularItems = await multi.ReadAsync<ContentForHomePageDTO>() as List<ContentForHomePageDTO>;
-                    res.CommentList = await multi.ReadAsync<SocialMediaListDto>() as List<CommentForUIDto>;
-                    res.Taglist = await multi.ReadAsync<TagDto>() as List<TagDto>;
+                    result = await multi.ReadFirstOrDefaultAsync<ContentDetailForDetailPageDTO>();
+                    result.MostPopularItems = await multi.ReadAsync<ContentForHomePageDTO>() as List<ContentForHomePageDTO>;
+                    result.CommentList = await multi.ReadAsync<SocialMediaListDto>() as List<CommentForUIDto>;
+                    result.Taglist = await multi.ReadAsync<TagDto>() as List<TagDto>;
 
                     return Result.ReturnAsSuccess(data: res);
                 }
@@ -182,27 +185,9 @@ namespace SCA.Services
             catch (Exception ex)
             {
                 await _errorManagement.SaveError(ex, 0, "GetCompanyDetail ", Entity.Enums.PlatformType.Web);
-                return Result.ReturnAsFail(message: "Hata");
+                res = Result.ReturnAsFail(message: "Hata");
             }
-
-
-            //ContentDetailForDetailPageDTO _model = new ContentDetailForDetailPageDTO();
-
-            //try
-            //{
-
-            //    _model = await _db.QueryFirstAsync<ContentDetailForDetailPageDTO>("Content_ListBySeoUrl", new { type = 1, _SeoUrl = dto.seoUrl, _Ip = dto.ip, _UserId = userId, ContentId = 0, count = dto.count }, commandType: CommandType.StoredProcedure);
-            //    _model.MostPopularItems = _db.Query<ContentForHomePageDTO>("Content_ListBySeoUrl", new { type = 2, _SeoUrl = dto.seoUrl, _Ip = dto.ip, _UserId = userId, ContentId = _model.Id, count = dto.count }, commandType: CommandType.StoredProcedure).ToList();
-            //    _model.CommentList = _db.Query<CommentForUIDto>("Content_ListBySeoUrl", new { type = 3, _SeoUrl = dto.seoUrl, _Ip = dto.ip, _UserId = userId, ContentId = _model.Id, count = dto.count }, commandType: CommandType.StoredProcedure).ToList();
-
-            //    res = Result.ReturnAsSuccess(data: _model);
-            //}
-            //catch (Exception ex)
-            //{
-            //    res = Result.ReturnAsFail(message: "İçerik detayı yüklenirken hata meydana geldi.");
-            //    await _errorManagement.SaveError(ex, userId, "GetContentByMobil", PlatformType.Mobil);
-            //}
-            return result;
+            return res;
         }
 
         public async Task<ContentDetailForDetailPageDTO> GetContentUI(string seoUrl, long? userId = null, string ip = "")
@@ -216,12 +201,12 @@ namespace SCA.Services
                     res.MostPopularItems = await multi.ReadAsync<ContentForHomePageDTO>() as List<ContentForHomePageDTO>;
                     res.CommentList = await multi.ReadAsync<SocialMediaListDto>() as List<CommentForUIDto>;
                     res.Taglist = await multi.ReadAsync<TagDto>() as List<TagDto>;
-                    
+
                 }
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex, 0, "GetContentUI ", Entity.Enums.PlatformType.Web);
+                //await _errorManagement.SaveError(ex, 0, "GetContentUI ", Entity.Enums.PlatformType.Web);
             }
             return res;
         }
@@ -426,6 +411,12 @@ namespace SCA.Services
                 }
                 else
                 {
+                    bool result =await ContentControl(dto.Id);
+                    if (result == true)
+                    {
+                        res = Result.ReturnAsFail(message:"Yayında olan haber güncellemez.");
+                        return res;
+                    }
                     string query = "";
                     DynamicParameters filter = new DynamicParameters();
                     GetContentQuery(CrudType.Update, dto, session, ref query, ref filter);
@@ -449,6 +440,33 @@ namespace SCA.Services
             {
                 await _errorManagement.SaveError(ex, null, "ContentCreate", PlatformType.Mobil);
                 res = Result.ReturnAsFail(message: resultMessage);
+            }
+            return res;
+        }
+
+        public async Task<bool> ContentControl(long id)
+        {
+            bool res = new bool();
+            try
+            {
+                string query = string.Empty;
+                query = "select * from Content where Id =@Id";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("Id", id);
+
+                var data = await _db.QueryFirstAsync<Content>(query, filter);
+                PublishState result = data.PublishStateType;
+                if (result == PublishState.Publish)
+                {
+                    res = true;
+                }
+                else
+                {
+                    res = false;
+                }
+            }
+            catch (Exception ex)
+            {
             }
             return res;
         }
@@ -500,52 +518,71 @@ namespace SCA.Services
                 res = Result.ReturnAsSuccess(); ;
             });
             return res;
-
         }
-
-
 
         public void GetContentQuery(CrudType crudType, ContentDto dto, UserSession session, ref string query, ref DynamicParameters filter)
         {
-            query = @"INSERT INTO Content (UserId, PublishDate, PublishStateType, SycnId, ReadCount,ImagePath, SeoUrl, Header, Writer, ConfirmUserId, ConfirmUserName, Category, ContentDescription, PlatformType, IsHeadLine, IsManset, IsMainMenu, IsConstantMainMenu, EventId, InternId, VisibleId, Multiplier, CreatedUserId, CreatedDate)
-                           VALUES (@UserId, @PublishDate, @PublishStateType, @SycnId, @ReadCount, @ImagePath, @SeoUrl, @Header, @Writer, @ConfirmUserId, @ConfirmUserName, @Category, @ContentDescription, @PlatformType, @IsHeadLine, @IsManset, @IsMainMenu, @IsConstantMainMenu, @EventId, @InternId, @VisibleId, 1,@CreatedUserId, @CreatedDate);";
+            query = @"INSERT INTO Content (UserId, PublishDate, PublishStateType, SycnId, ReadCount,ImagePath, SeoUrl, Header, Writer, ConfirmUserId, ConfirmUserName, Category, ContentDescription, PlatformType, IsHeadLine, IsManset, IsMainMenu, IsConstantMainMenu, EventId, InternId, VisibleId, Multiplier, CreatedUserId, CreatedDate, MenuSide)
+                           VALUES (@UserId, @PublishDate, @PublishStateType, @SycnId, @ReadCount, @ImagePath, @SeoUrl, @Header, @Writer, @ConfirmUserId, @ConfirmUserName, @Category, @ContentDescription, @PlatformType, @IsHeadLine, @IsManset, @IsMainMenu, @IsConstantMainMenu, @EventId, @InternId, @VisibleId, 1,@CreatedUserId, @CreatedDate, 0);";
 
             if (crudType == CrudType.Insert)
             {
                 query += "SELECT LAST_INSERT_ID();";
             }
 
+            query = @"UserId = @UserId, PublishDate = @PublishDate, ImagePath = @ImagePath, SeoUrl = @SeoUrl, 
+                      Header = @Header, Writer = @Writer, ContentDescription = @ContentDescription, PlatformType = @PlatformType,
+                      IsHeadLine = @IsHeadLine, IsManset = @IsManset, IsMainMenu = @IsMainMenu, IsConstantMainMenu = @IsConstantMainMenu,
+                      EventId = @EventId, InternId = @InternId, VisibleId = @VisibleId, Multiplier = @Multiplier, UpdatedUserId = @UpdatedUserId,
+                      CreatedDate = @UpdatedDate";
+
             var _filter = new DynamicParameters();
 
-            _filter.Add("UserId", dto.UserId);
-            _filter.Add("PublishDate", dto.PublishDate);
-            _filter.Add("PublishStateType", dto.PublishStateType);
-            _filter.Add("SycnId", dto.SycnId);
-            _filter.Add("ReadCount", dto.ReadCount);
-            _filter.Add("ImagePath", dto.ImagePath);
-            _filter.Add("SeoUrl", dto.SeoUrl);
-            _filter.Add("Header", dto.Header);
-            _filter.Add("Writer", dto.Writer);
-            _filter.Add("ConfirmUserId", dto.ConfirmUserId);
-            _filter.Add("ConfirmUserName", dto.ConfirmUserName);
-            _filter.Add("Category", dto.Category);
-            _filter.Add("ContentDescription", dto.ContentDescription);
-            _filter.Add("PlatformType", dto.PlatformType);
-            _filter.Add("IsHeadLine", dto.IsHeadLine);
-            _filter.Add("IsManset", dto.IsManset);
-            _filter.Add("IsMainMenu", dto.IsMainMenu);
-            _filter.Add("IsConstantMainMenu", dto.IsConstantMainMenu);
-            _filter.Add("EventId", dto.EventId);
-            _filter.Add("InternId", dto.InternId);
-            _filter.Add("VisibleId", dto.VisibleId);
+            
             if (crudType == CrudType.Insert)
             {
+                _filter.Add("UserId", dto.UserId);
+                _filter.Add("PublishDate", dto.PublishDate);
+                _filter.Add("PublishStateType", dto.PublishStateType);
+                _filter.Add("SycnId", dto.SycnId);
+                _filter.Add("ReadCount", dto.ReadCount);
+                _filter.Add("ImagePath", dto.ImagePath);
+                _filter.Add("SeoUrl", dto.SeoUrl);
+                _filter.Add("Header", dto.Header);
+                _filter.Add("Writer", dto.Writer);
+                _filter.Add("ConfirmUserId", dto.ConfirmUserId);
+                _filter.Add("ConfirmUserName", dto.ConfirmUserName);
+                _filter.Add("Category", dto.Category);
+                _filter.Add("ContentDescription", dto.ContentDescription);
+                _filter.Add("PlatformType", dto.PlatformType);
+                _filter.Add("IsHeadLine", dto.IsHeadLine);
+                _filter.Add("IsManset", dto.IsManset);
+                _filter.Add("IsMainMenu", dto.IsMainMenu);
+                _filter.Add("IsConstantMainMenu", dto.IsConstantMainMenu);
+                _filter.Add("EventId", dto.EventId);
+                _filter.Add("InternId", dto.InternId);
+                _filter.Add("VisibleId", dto.VisibleId);
                 _filter.Add("CreatedUserId", session.Id);
                 _filter.Add("CreatedDate", DateTime.Now);
             }
 
             if (crudType == CrudType.Update)
             {
+                _filter.Add("UserId", dto.UserId);
+                _filter.Add("PublishDate", dto.PublishDate);
+                _filter.Add("ImagePath", dto.ImagePath);
+                _filter.Add("SeoUrl", dto.SeoUrl);
+                _filter.Add("Header", dto.Header);
+                _filter.Add("ContentDescription", dto.ContentDescription);
+                _filter.Add("Writer", dto.Writer);
+                _filter.Add("PlatformType", dto.PlatformType);
+                _filter.Add("IsHeadLine", dto.IsHeadLine);
+                _filter.Add("IsManset", dto.IsManset);
+                _filter.Add("IsMainMenu", dto.IsMainMenu);
+                _filter.Add("IsConstantMainMenu", dto.IsConstantMainMenu);
+                _filter.Add("EventId", dto.EventId);
+                _filter.Add("InternId", dto.InternId);
+                _filter.Add("VisibleId", dto.VisibleId);
                 _filter.Add("UpdatedUserId", session.Id);
                 _filter.Add("UpdatedDate", DateTime.Now);
             }
@@ -578,7 +615,7 @@ namespace SCA.Services
                 {
                     Result.ReturnAsFail(AlertResource.NoChanges, null);
                 }
-               
+
             });
             return res;
         }
@@ -590,37 +627,68 @@ namespace SCA.Services
             {
                 listData = await _db.QueryAsync<ContentForHomePageDTO>("Content_ListAll", new { hitType = 1, count = count, pageNumber = offset }, commandType: CommandType.StoredProcedure) as List<ContentForHomePageDTO>;
 
-                List<long> ids = new List<long>();
-                foreach (ContentForHomePageDTO item in listData)
+                if (listData.Count > 0)
                 {
-                    ids.Add(item.Id);
-                }
-                List<CategoriesDto> categoryList = await _categoryManager.GetCategoryListById(ids);
-
-                foreach (ContentForHomePageDTO item in listData)
-                {
-                    string value = string.Empty;
-                    var dataList = categoryList.Where(x => x.Id == item.Id).ToList();
-                    if (dataList != null)
+                    List<long> ids = new List<long>();
+                    foreach (ContentForHomePageDTO item in listData)
                     {
-                        for (int i = 0; i < dataList.Count; i++)
+                        ids.Add(item.Id);
+                    }
+                    List<CategoriesDto> categoryList = await _categoryManager.GetCategoryListById(ids);
+
+                    foreach (ContentForHomePageDTO item in listData)
+                    {
+                        string value = string.Empty;
+                        var dataList = categoryList.Where(x => x.Id == item.Id).ToList();
+                        if (dataList != null)
                         {
-                            if (i + 1 == dataList.Count)
+                            for (int i = 0; i < dataList.Count; i++)
                             {
-                                value += dataList[i].Description;
-                            }
-                            else
-                            {
-                                value += dataList[i].Description + ", ";
+                                if (i + 1 == dataList.Count)
+                                {
+                                    value += dataList[i].Description;
+                                }
+                                else
+                                {
+                                    value += dataList[i].Description + ", ";
+                                }
                             }
                         }
+                        else
+                        {
+                            item.Category = "";
+                        }
+                        item.Category = value;
                     }
-                    else
-                    {
-                        item.Category = "";
-                    }
-                    item.Category = value;
                 }
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, null, "GetContentForHomePage", PlatformType.Mobil);
+            }
+            return listData;
+        }
+
+        public async Task<List<ContentForHomePageDTO>> GetContentForTopAndBottomSlide()
+        {
+            List<ContentForHomePageDTO> listData = new List<ContentForHomePageDTO>();
+            try
+            {
+                string query = @"select 
+		                            Id,
+                                    SeoUrl,
+                                    ImagePath,
+                                    Header, 		
+                                    PublishDate,
+                                    Category,
+                                    IsHeadLine, 	
+                                    IsManset, 		
+                                    Writer,	
+                                    ReadCount,
+                                    MenuSide 		
+                                    from Content where  MenuSide in (1,2)";
+                listData = await _db.QueryAsync<ContentForHomePageDTO>(query) as List<ContentForHomePageDTO>;
+                return listData;
             }
             catch (Exception ex)
             {
@@ -793,6 +861,64 @@ namespace SCA.Services
             catch (Exception ex)
             {
                 await _errorManagement.SaveError(ex, null, "GetAllTags", PlatformType.Mobil);
+            }
+            return res;
+        }
+
+        public async Task<ServiceResult> UpdateMenuSide(long contentId, int state)
+        {
+            ServiceResult res = new ServiceResult();
+            string query = string.Empty;
+            try
+            {
+
+                query = "Select * from Content where MenuSide = @MenuSide";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("MenuSide", state);
+                var resultData = await _db.QueryAsync<ContentDto>(query, filter) as List<ContentDto>;
+
+                if (resultData != null)
+                {
+                    query = "Update Content set MenuSide = 0 where MenuSide = @MenuSide";
+                    filter = new DynamicParameters();
+                    filter.Add("Id", contentId);
+                    filter.Add("MenuSide", state);
+                    await _db.QueryAsync(query, filter);
+                }
+
+
+                query = "Update Content set MenuSide = @MenuSide where Id = @Id";
+                filter = new DynamicParameters();
+                filter.Add("Id", contentId);
+                filter.Add("MenuSide", state);
+                await _db.QueryAsync(query, filter);
+                res = Result.ReturnAsSuccess(message: "Haber slider başlık pozisyonu güncellendi");
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, null, "UpdateMenuSide", PlatformType.Web);
+            }
+            return res;
+        }
+
+        public async Task<ServiceResult> GetMenuSideState(long contentId)
+        {
+            ServiceResult res = new ServiceResult();
+            string query = string.Empty;
+            try
+            {
+
+                query = "Select * from Content where Id = @Id";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("Id", contentId);
+                var resultData = await _db.QueryFirstAsync<ContentDto>(query, filter);
+
+
+                res = Result.ReturnAsSuccess(data: resultData.MenuSide);
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, null, "UpdateMenuSide", PlatformType.Web);
             }
             return res;
         }

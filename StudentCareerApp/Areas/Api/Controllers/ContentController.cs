@@ -166,5 +166,17 @@ namespace StudentCareerApp.Areas.Api.Controller
         {
             return await _commentManager.UpsadeContentLog(dto);
         }
+
+        [HttpPost("UpdateMenuSide")]
+        public async Task<ServiceResult> UpdateMenuSide(ContentHeaderDto dto)
+        {
+            return await _contentManager.UpdateMenuSide(dto.cotentId, dto.state);
+        }
+
+        [HttpGet("get-contentmenuside")]
+        public async Task<ServiceResult> GetMenuSideState(long contentId)
+        {
+            return await _contentManager.GetMenuSideState(contentId);
+        }
     }
 }

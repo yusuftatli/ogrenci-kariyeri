@@ -3,6 +3,7 @@ using Grpc.Core;
 using Microsoft.AspNetCore.Hosting;
 using MySql.Data.MySqlClient;
 using SCA.Common;
+using SCA.Common.Base;
 using SCA.Common.Resource;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
@@ -21,7 +22,7 @@ using System.Threading.Tasks;
 
 namespace SCA.Services
 {
-    public class UserManager : IUserManager
+    public class UserManager : BaseClass,IUserManager
     {
         private ISender _sender;
         private IPictureManager _pictureManager;
@@ -31,7 +32,7 @@ namespace SCA.Services
         private readonly IErrorManagement _errorManagement;
         private readonly ISocialMediaManager _socialMedia;
         private readonly IRoleManager _roleManager;
-        private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
+        private readonly IDbConnection _db = new MySqlConnection(ConnectionString1);
 
         public UserManager(IRoleManager roleManager,
             IHostingEnvironment env,

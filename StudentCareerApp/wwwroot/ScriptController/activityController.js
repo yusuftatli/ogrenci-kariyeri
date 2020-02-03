@@ -24,7 +24,7 @@
 
 var app = angular.module("MyApp", ["ui.bootstrap", "ngVue"]);
 
-app.controller("assayController", function ($scope, $http, $filter) {
+app.controller("activityController", function ($scope, $http, $filter) {
     "use strict";
 
     $scope.testImage = defaultPage;

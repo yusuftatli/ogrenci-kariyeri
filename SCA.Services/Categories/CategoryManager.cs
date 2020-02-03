@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using MySql.Data.MySqlClient;
+using SCA.Common.Base;
 using SCA.Common.Resource;
 using SCA.Common.Result;
 using SCA.Entity.Dto;
@@ -16,10 +17,10 @@ using System.Threading.Tasks;
 
 namespace SCA.Services
 {
-    public class CategoryManager : ICategoryManager
+    public class CategoryManager : BaseClass, ICategoryManager
     {
         private readonly IErrorManagement _errorManagement;
-        private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
+        private readonly IDbConnection _db = new MySqlConnection(ConnectionString1);
 
 
         public CategoryManager(IErrorManagement errorManagement)
@@ -58,7 +59,7 @@ namespace SCA.Services
                 DynamicParameters filter = new DynamicParameters();
                 filter.Add("id", id);
 
-                var lisData = await _db.QueryAsync<CategoriesDto>(query,filter) as List<CategoriesDto>;
+                var lisData = await _db.QueryAsync<CategoriesDto>(query, filter) as List<CategoriesDto>;
                 for (int i = 0; i < lisData.Count; i++)
                 {
                     if (i + 1 == lisData.Count)
@@ -240,6 +241,22 @@ namespace SCA.Services
             return query;
         }
 
+        private static string GetCategoryRelationQuery(CrudType crudType, CategoryRelationDto dto)
+        {
+            string query = "";
+            if (crudType == CrudType.Insert)
+            {
+                query = $"Insert Into CategoryRelation  (CategoryId,TagContentId,ReadType) Values" +
+                    $"({dto.CategoryId},{dto.TagContentId},'{dto.ReadType}')";
+            }
+
+            if (crudType == CrudType.Update)
+            {
+                query = $"Update CategoryRelation set CategoryId={dto.CategoryId},TagContentId={dto.TagContentId},ReadType={dto.ReadType}";
+            }
+            return query;
+        }
+
         public async Task<string> CreateCategoryRelation(string data, long Id, ReadType readType, UserSession session)
         {
             List<long> idList = new List<long>();
@@ -263,6 +280,21 @@ namespace SCA.Services
                 {
                     res += item.ToString();
                 }
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, 0, "MainCategoryStatusUpdate ", Entity.Enums.PlatformType.Web);
+            }
+            return res;
+        }
+
+        public async Task<string> CreateCategoryRelation(CategoryRelationDto item, long Id, ReadType readType)
+        {
+            string res = string.Empty;
+            try
+            {
+                string query = GetCategoryRelationQuery(CrudType.Insert, item);
+                var result = await _db.ExecuteAsync(query);
             }
             catch (Exception ex)
             {

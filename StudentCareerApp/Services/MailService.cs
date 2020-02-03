@@ -22,8 +22,8 @@ namespace StudentCareerApp
             while (!cToken.IsCancellationRequested)
             {
                 Debug.WriteLine($"{DateTime.Now.ToString(CultureInfo.InvariantCulture)} Mail Gönderiliyor...");
-                //await _sender.SendEmail();
-                await Task.Delay(TimeSpan.FromMinutes(1), cToken);
+                await _sender.SendEmail();
+                await Task.Delay(TimeSpan.FromMinutes(10), cToken);
             }
         }
     }

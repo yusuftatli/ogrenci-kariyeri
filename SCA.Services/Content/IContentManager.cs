@@ -80,5 +80,8 @@ namespace SCA.Services
         Task<List<TagDto>> GetAllTagsUI();
         Task<ServiceResult> GetAllTags();
         Task<ServiceResult> Dashboard();
+        Task<ServiceResult> UpdateMenuSide(long contentId, int state);
+        Task<ServiceResult> GetMenuSideState(long contentId);
+        Task<List<ContentForHomePageDTO>> GetContentForTopAndBottomSlide();
     }
 }

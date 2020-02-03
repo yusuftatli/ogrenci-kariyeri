@@ -29,7 +29,8 @@ namespace SCA.UI.Controllers
             };
             ViewBag.CategoryId = id;
             var res = await _contentService.SPQueryAsync<object, GetCategoryContents>(@params);
-            return View(res);
+            var res2 = res.Data as List<GetCategoryContents>;
+            return View(res2);
         }
 
         public async Task<IActionResult> GetNewsWith3ColumnsData(string id, int count, int offset)

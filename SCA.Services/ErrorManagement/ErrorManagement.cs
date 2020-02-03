@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
+using SCA.Common.Base;
 using SCA.Entity.DTO;
 using SCA.Entity.Enums;
 using SCA.Entity.Model;
@@ -13,9 +14,9 @@ using System.Threading.Tasks;
 
 namespace SCA.Services
 {
-    public class ErrorManagement : IErrorManagement
+    public class ErrorManagement : BaseClass,IErrorManagement
     {
-        private readonly IDbConnection _db = new MySqlConnection("Server = 167.71.46.71; Database = ErrorDbTest; Uid = ogrencikariyeri; Pwd = dXog323!s.?;");
+        private readonly IDbConnection _db = new MySqlConnection(ConnectionString1);
 
 
         public ErrorManagement()

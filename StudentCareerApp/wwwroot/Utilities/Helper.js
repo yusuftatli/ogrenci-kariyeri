@@ -32,38 +32,57 @@ function errorData(value, type) {
 }
 
 function shortMessage(value, type) {
-    if (type === "s") {
-        toastr.success(value, "Başarılı!", {
-            "fadeIn": 100,
-            "fadeOut": 100,
-            "timeOut": 3000,
-            "extendedTimeOut": 1000
-        });
+
+    if (type==="s") {
+        swal("Sonuç", value, "success");
     }
-    else if (type === "w") {
-        toastr.warning(value, "Uyarı", {
-            "fadeIn": 100,
-            "fadeOut": 100,
-            "timeOut": 3000,
-            "extendedTimeOut": 1000
-        });
+
+    if (type === "e") {
+        swal("Hata", value, "error");
     }
-    else if (type === "i") {
-        toastr.info(value, "Bilgi", {
-            "fadeIn": 100,
-            "fadeOut": 100,
-            "timeOut": 3000,
-            "extendedTimeOut": 1000
-        });
+
+    if (type === "i") {
+        swal("Bilgi", value, "info");
     }
-    else if (type === "e") {
-        toastr.error(value, "Hata", {
-            "fadeIn": 100,
-            "fadeOut": 100,
-            "timeOut": 3000,
-            "extendedTimeOut": 1000
-        });
+
+    if (type === "w") {
+        swal("Bilgi", value, "warning");
     }
+    
+
+
+    //if (type === "s") {
+    //    toastr.success(value, "Başarılı!", {
+    //        "fadeIn": 100,
+    //        "fadeOut": 100,
+    //        "timeOut": 3000,
+    //        "extendedTimeOut": 1000
+    //    });
+    //}
+    //else if (type === "w") {
+    //    toastr.warning(value, "Uyarı", {
+    //        "fadeIn": 100,
+    //        "fadeOut": 100,
+    //        "timeOut": 3000,
+    //        "extendedTimeOut": 1000
+    //    });
+    //}
+    //else if (type === "i") {
+    //    toastr.info(value, "Bilgi", {
+    //        "fadeIn": 100,
+    //        "fadeOut": 100,
+    //        "timeOut": 3000,
+    //        "extendedTimeOut": 1000
+    //    });
+    //}
+    //else if (type === "e") {
+    //    toastr.error(value, "Hata", {
+    //        "fadeIn": 100,
+    //        "fadeOut": 100,
+    //        "timeOut": 3000,
+    //        "extendedTimeOut": 1000
+    //    });
+    //}
 }
 
 function canNotBeEmpty(value, type) {

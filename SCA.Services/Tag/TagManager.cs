@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
+using SCA.Common.Base;
 using SCA.Common.Resource;
 using SCA.Common.Result;
 using SCA.DataAccess.Context;
@@ -17,10 +18,10 @@ using System.Threading.Tasks;
 
 namespace SCA.Services
 {
-    public class TagManager : ITagManager
+    public class TagManager : BaseClass,ITagManager
     {
         private readonly IErrorManagement _errorManagement;
-        private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
+        private readonly IDbConnection _db = new MySqlConnection(ConnectionString1);
 
         public TagManager(IErrorManagement errorManager)
         {

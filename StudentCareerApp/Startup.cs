@@ -126,6 +126,7 @@ namespace StudentCareerApp
             services.AddTransient<IUserValidation, UserValidation>();
             services.AddTransient<ISyncManager, SyncManager>();
             services.AddTransient<IApiManager, ApiManager>();
+            services.AddTransient<IActivityManager, ActiviyManager>();
             services.AddTransient<ICompanyClubManager, CompanyClubManager>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IErrorManagement, ErrorManagement>();

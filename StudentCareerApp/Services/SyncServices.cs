@@ -23,8 +23,8 @@ namespace StudentCareerApp
         {
             while (!cToken.IsCancellationRequested)
             {
-              //  await _syncManager.SyncAssay();
-                //await Task.Delay(TimeSpan.FromDays(1), cToken);
+               await _syncManager.SyncAssay();
+                await Task.Delay(TimeSpan.FromDays(1), cToken);
             }
         }
     }

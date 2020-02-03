@@ -21,9 +21,10 @@ namespace StudentCareerApp.Components.Slider
         {
             var res = new SliderContentDto();
             res.SliderContents = await _contentManager.GetContentForHomePage(SCA.Entity.Enums.HitTypes.HeadLine, count);
-            res.BottomContent = res.SliderContents.OrderByDescending(x => x.ReadCount).FirstOrDefault();
-            res.TopContent = res.SliderContents.OrderByDescending(x => x.PublishDate).FirstOrDefault();
-            
+            var dataList = await _contentManager.GetContentForTopAndBottomSlide();
+            res.BottomContent = dataList.Where(x => x.MenuSide == 2).FirstOrDefault();
+            res.TopContent = dataList.Where(x => x.MenuSide == 1).FirstOrDefault();
+
             return View("_Slider", res);
         }
     }

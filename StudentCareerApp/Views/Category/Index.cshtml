@@ -1,4 +1,4 @@
-﻿@model SCA.Common.Result.ServiceResult
+﻿@model List<SCA.Entity.SPModels.SPResult.GetCategoryContents>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -12,7 +12,7 @@
             <div class="col-lg-9">
                 <div class="row" id="category-content-items">
                     <!-- ts-populer-post-box end-->
-                    @await Component.InvokeAsync("NewsWith3Columns", Model.Data as List<SCA.Entity.SPModels.SPResult.GetCategoryContents>)
+                    @await Component.InvokeAsync("NewsWith3Columns", Model)
                     <a class="btn btn-primary" id="load-more-button" onclick="isActive = true; $(this).addClass('hidden'); loadMoreContents()"></a>
                 </div>
             </div>

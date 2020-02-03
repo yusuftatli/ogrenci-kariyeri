@@ -50,8 +50,8 @@
                         </ul>
                     </li>
                     @*<li> <a class="waves-effect waves-dark" href="../documentation/documentation.html" aria-expanded="false"><i class="far fa-circle text-danger"></i><span class="hide-menu">Documentation</span></a></li>
-                    <li> <a class="waves-effect waves-dark" href="pages-login.html" aria-expanded="false"><i class="far fa-circle text-success"></i><span class="hide-menu">Log Out</span></a></li>
-                    <li> <a class="waves-effect waves-dark" href="pages-faq.html" aria-expanded="false"><i class="far fa-circle text-info"></i><span class="hide-menu">FAQs</span></a></li>*@
+                        <li> <a class="waves-effect waves-dark" href="pages-login.html" aria-expanded="false"><i class="far fa-circle text-success"></i><span class="hide-menu">Log Out</span></a></li>
+                        <li> <a class="waves-effect waves-dark" href="pages-faq.html" aria-expanded="false"><i class="far fa-circle text-info"></i><span class="hide-menu">FAQs</span></a></li>*@
                 </ul>
             </nav>
             <!-- End Sidebar navigation -->
@@ -70,13 +70,13 @@
             <!-- ============================================================== -->
             <div class="row page-titles">
                 <div class="col-md-5 align-self-center">
-                    <h4 class="text-themecolor">Haber Yönetimi</h4>
+                    <h4 class="text-themecolor">Etkinlik Yönetimi</h4>
                 </div>
                 <div class="col-md-7 align-self-center text-right">
                     <div class="d-flex justify-content-end align-items-center">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="javascript:void(0)">Haber Yönetimi</a></li>
-                            <li class="breadcrumb-item active">Haber Yönetimi</li>
+                            <li class="breadcrumb-item"><a href="javascript:void(0)">Etkinlik Yönetimi</a></li>
+                            <li class="breadcrumb-item active">Etkinlik Yönetimi</li>
                         </ol>
                     </div>
                 </div>
@@ -94,7 +94,7 @@
                         <div class="card-body">
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item" ng-click="onClickDashboard()"> <a id="dashboardTab" class="nav-link active" data-toggle="tab" href="#home" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">DashBoard</span></a> </li>
-                                <li class="nav-item" ng-click="onClickContent()"> <a id="contentTab" class="nav-link" data-toggle="tab" href="#AssayCreate" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Haber {{assayHeadrName}}</span></a> </li>
+                                <li class="nav-item" ng-click="onClickContent()"> <a id="contentTab" class="nav-link" data-toggle="tab" href="#AssayCreate" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Etkinlik {{assayHeadrName}}</span></a> </li>
                             </ul>
                             <div class="tab-content tabcontent-border">
                                 <div class="center" ng-show="showTable">
@@ -124,7 +124,7 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label>Haber Kategori</label>
+                                                                <label>Etkinlik Kategori</label>
                                                                 <input type="hidden" id="searhCategoryIds" />
                                                                 <treeselect v-props-options="options" v-props-field="'searhCategoryIds'" v-props-multiple="true" v-props-value="value" watch-depth="value"></treeselect>
                                                             </div>
@@ -150,7 +150,7 @@
                                             <div class="card">
 
                                                 <div class="card-body">
-                                                    <h6 class="card-subtitle">Haber Sayısı : <code><span ng-bind="assayList.length"></span></code></h6>
+                                                    <h6 class="card-subtitle">Etkinlik Sayısı : <code><span ng-bind="assayList.length"></span></code></h6>
                                                     <h4><input type="text" class="form-control" name="site-search" id="getData" ng-model="search" ng-keypress="getData($event)" placeholder="Ara..."></h4>
                                                     <table>
                                                         <tr>
@@ -170,7 +170,7 @@
                                                         <table id="tablecss" class="table">
                                                             <thead>
                                                                 <tr>
-                                                                    <th >Başlık</th>
+                                                                    <th>Başlık</th>
                                                                     <th>Yazar</th>
                                                                     <th>Yayınlanma Durumu</th>
                                                                     <th>Platform</th>
@@ -264,7 +264,7 @@
                                     <div class="modal-dialog modal-lg" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h4 class="modal-title" id="exampleModalLabel1">Haber Yönetim -{{contentProcess.header}} </h4>
+                                                <h4 class="modal-title" id="exampleModalLabel1">Etkinlik Yönetim -{{contentProcess.header}} </h4>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                             </div>
                                             <div class="modal-body">
@@ -273,7 +273,7 @@
                                                         <div class="row">
                                                             <div class="col-md-3">
                                                                 <div class="form-group">
-                                                                    <label class="control-label">Haber Yayın Durumu </label>
+                                                                    <label class="control-label">Etkinlik Yayın Durumu </label>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-5">
@@ -356,7 +356,7 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label>Haber Başlığı</label>
+                                                            <label>Etkinlik Başlığı</label>
                                                             <input type="text" class="form-control" ng-model="assayCreate.header">
                                                         </div>
                                                     </div>
@@ -370,7 +370,7 @@
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group">
-                                                            <label>Haber Başlık Resim</label>
+                                                            <label>Etkinlik Başlık Resim</label>
                                                             <input type="text" class="form-control" id="roxyField" onclick="openCustomRoxy2('#roxyCustomPanel2')" />
                                                         </div>
                                                     </div>
@@ -461,7 +461,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label>Haber Kategori</label>
+                                                <label>Etkinlik Kategori</label>
                                                 <input type="hidden" id="categoryIds" />
                                                 <treeselect v-props-options="options" v-props-field="'categoryIds'" v-props-multiple="true" v-props-value="categoryValue" watch-depth="categoryValue"></treeselect>
                                             </div>
@@ -470,7 +470,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label>Haber Etiket</label>
+                                                <label>Etkinlik Etiket</label>
                                                 <input type="hidden" value="" id="multipleTags" />
                                                 <treeselect v-props-options="tagOptions" v-props-field="'multipleTags'" v-props-is-insertable="true" v-props-multiple="true" v-props-value="tagsValue" watch-depth="tagsValue"></treeselect>
                                             </div>

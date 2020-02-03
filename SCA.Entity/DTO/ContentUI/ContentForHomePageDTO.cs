@@ -18,6 +18,7 @@ namespace SCA.Entity.DTO
         public string Writer { get; set; }
         public string WriterImage { get; set; }
         public long ReadCount { get; set; }
+        public int MenuSide { get; set; }
     }
 
 

@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using MySql.Data.MySqlClient;
 using SCA.Common;
+using SCA.Common.Base;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
 using SCA.Entity.Enums;
@@ -13,10 +14,10 @@ using System.Threading.Tasks;
 
 namespace SCA.Services
 {
-    public class CommentManager : ICommentManager
+    public class CommentManager :BaseClass, ICommentManager
     {
         private readonly IErrorManagement _errorManagement;
-        private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;");
+        private readonly IDbConnection _db = new MySqlConnection(ConnectionString1);
 
         public CommentManager(IErrorManagement errorManagement)
         {

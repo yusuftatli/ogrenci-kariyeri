@@ -9,6 +9,7 @@ namespace SCA.Entity.DTO
         public string StartDate { get; set; }
         public string EndDate { get; set; }
         public string searhCategoryIds { get; set; }
-      
+        public string menuSide { get; set; }
+
     }
 }

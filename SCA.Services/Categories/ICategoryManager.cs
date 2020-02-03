@@ -51,5 +51,6 @@ namespace SCA.Services
         Task<string> CreateCategoryRelation(string data, long Id, ReadType readType, UserSession session);
         Task<List<CategoriesDto>> GetCategoryListById(List<long> contentList);
         Task<string> GetCategoryById(long id);
+        Task<string> CreateCategoryRelation(CategoryRelationDto item, long Id, ReadType readType);
     }
 }

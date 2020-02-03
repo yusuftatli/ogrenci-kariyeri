@@ -32,11 +32,16 @@ namespace SCA.Entity.DTO
         public bool IsConstantMainMenu { get; set; }
         public bool IsSendConfirm { get; set; }
         public int EventId { get; set; }
+        public int MenuSide { get; set; }
         public int InternId { get; set; }
         public int VisibleId { get; set; }
         public DateTime PublishDate { get; set; }
         public string PlatformTypeDes { get; set; }
         public DateTime CreatedDate { get; set; }
         public long CreatedUserId { get; set; }
+        public byte IsActivicty { get; set; }
+        public byte IsSownInSlider { get; set; }
+        public DateTime ActiviyStartDate  { get; set; }
+        public DateTime ActivityEndDate { get; set; }
     }
 }

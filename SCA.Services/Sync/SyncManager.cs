@@ -2,6 +2,7 @@
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using SCA.Common;
+using SCA.Common.Base;
 using SCA.Common.Result;
 using SCA.Entity.DTO;
 using SCA.Entity.DTO.Sync;
@@ -20,14 +21,16 @@ using System.Threading.Tasks;
 
 namespace SCA.Services
 {
-    public class SyncManager : ISyncManager
+    public class SyncManager : BaseClass, ISyncManager
     {
         private readonly IApiManager _apiService;
-        private readonly IDbConnection _db = new MySqlConnection("Server=167.71.46.71;Database=StudentDbTest;Uid=ogrencikariyeri;Pwd=dXog323!s.?;Convert Zero Datetime=True");
+        private readonly IDbConnection _db = new MySqlConnection(ConnectionString1);
+        private readonly ICategoryManager _categoryManager;
 
-        public SyncManager(IApiManager apiService)
+        public SyncManager(IApiManager apiService, ICategoryManager categoryManager)
         {
             _apiService = apiService;
+            _categoryManager = categoryManager;
         }
 
         public async Task<ServiceResult> SyncUser()
@@ -170,6 +173,7 @@ namespace SCA.Services
         public async Task<ServiceResult> CreateContentSyncData(ContentDto dto)
         {
             ServiceResult res = new ServiceResult();
+            long _contentId = 0;
             try
             {
                 UserSession session = new UserSession()
@@ -181,7 +185,17 @@ namespace SCA.Services
                 DynamicParameters filter = new DynamicParameters();
                 GetContentQuery(CrudType.Insert, dto, session, ref query, ref filter);
 
-                var result = _db.Execute(query, filter);
+                _contentId = _db.Query<long>(query, filter).FirstOrDefault();
+
+                var item = new CategoryRelationDto()
+                {
+                    CategoryId = RandomNumber(1, 67),
+                    TagContentId = _contentId,
+                    ReadType = ReadType.Content
+                };
+
+                string value = await _categoryManager.CreateCategoryRelation(item, _contentId, ReadType.Content);
+
             }
             catch (Exception ex)
             {
@@ -189,6 +203,12 @@ namespace SCA.Services
                 res = Result.ReturnAsFail(message: ex.ToString());
             }
             return res;
+        }
+
+        public int RandomNumber(int min, int max)
+        {
+            Random random = new Random();
+            return random.Next(min, max);
         }
 
 
@@ -211,8 +231,8 @@ namespace SCA.Services
 
         public void GetContentQuery(CrudType crudType, ContentDto dto, UserSession session, ref string query, ref DynamicParameters filter)
         {
-            query = @"INSERT INTO Content (UserId, PublishStateType, SycnId, ReadCount,ImagePath, SeoUrl, Header, Writer, ConfirmUserId, PublishDate, ConfirmUserName, Category, ContentDescription, PlatformType, IsHeadLine, IsManset, IsMainMenu, IsConstantMainMenu, EventId, InternId, VisibleId, CreatedUserId, CreatedDate, UpdatedUserId, UpdatedDate, Multiplier, DeletedDate, DeletedUserId)
-                           VALUES (@UserId, @PublishStateType, @SycnId, @ReadCount, @ImagePath, @SeoUrl, @Header, @Writer, @ConfirmUserId,@PublishDate, @ConfirmUserName, @Category, @ContentDescription, @PlatformType, @IsHeadLine, @IsManset, @IsMainMenu, @IsConstantMainMenu, @EventId, @InternId, @VisibleId, @CreatedUserId, @CreatedDate, @UpdatedUserId, @UpdatedDate, 1, @DeletedDate, @DeletedUserId);";
+            query = @"INSERT INTO Content (UserId, PublishStateType, SycnId, ReadCount,ImagePath, SeoUrl, Header, Writer, ConfirmUserId, PublishDate, ConfirmUserName, Category, ContentDescription, PlatformType, IsHeadLine, IsManset, IsMainMenu, IsConstantMainMenu, EventId, InternId, VisibleId, CreatedUserId, CreatedDate, UpdatedUserId, UpdatedDate, Multiplier, DeletedDate, DeletedUserId, MenuSide)
+                           VALUES (@UserId, @PublishStateType, @SycnId, @ReadCount, @ImagePath, @SeoUrl, @Header, @Writer, @ConfirmUserId,@PublishDate, @ConfirmUserName, @Category, @ContentDescription, @PlatformType, @IsHeadLine, @IsManset, @IsMainMenu, @IsConstantMainMenu, @EventId, @InternId, @VisibleId, @CreatedUserId, @CreatedDate, @UpdatedUserId, @UpdatedDate, 1, @DeletedDate, @DeletedUserId, 0);";
 
             if (crudType == CrudType.Insert)
             {
