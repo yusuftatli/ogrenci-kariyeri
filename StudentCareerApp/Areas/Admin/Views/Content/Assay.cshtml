@@ -335,6 +335,28 @@
                                                     </div>
                                                 </div>
 
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label class="control-label">Platform Türü </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-5">
+                                                                <div class="form-group">
+                                                                    <select class="form-control custom-select" ng-options="v.Description for v in platformTypeList track by v.Id" ng-model="contentProcess.platformType"></select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <div class="form-group">
+                                                                    <button type="button" class="btn btn-primary" ng-click="postPlatformType()"> <span>Güncelle <span ng-show="contentModel.showPlatformLoading"><i class="fa fa-spinner fa-spin"></i></span></span> </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>

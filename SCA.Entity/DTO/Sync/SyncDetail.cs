@@ -19,7 +19,8 @@ namespace SCA.Entity.DTO
         public string foto { get; set; }
         public string app { get; set; }
         public bool favori { get; set; }
-        public string kategori { get; set; }
+        public List<kategorilerDto> kategoriler { get; set; }
+
 
     }
 }

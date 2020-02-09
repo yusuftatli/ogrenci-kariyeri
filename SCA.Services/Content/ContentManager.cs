@@ -115,7 +115,7 @@ namespace SCA.Services
                 {
                 }
 
-                res= Result.ReturnAsSuccess(session.RoleTypeId.ToString(), message: AlertResource.SuccessfulOperation, dataList);
+                res = Result.ReturnAsSuccess(session.RoleTypeId.ToString(), message: AlertResource.SuccessfulOperation, dataList);
             }
             catch (Exception _ex)
             {
@@ -411,10 +411,10 @@ namespace SCA.Services
                 }
                 else
                 {
-                    bool result =await ContentControl(dto.Id);
+                    bool result = await ContentControl(dto.Id);
                     if (result == true)
                     {
-                        res = Result.ReturnAsFail(message:"Yayında olan haber güncellemez.");
+                        res = Result.ReturnAsFail(message: "Yayında olan haber güncellemez.");
                         return res;
                     }
                     string query = "";
@@ -538,7 +538,7 @@ namespace SCA.Services
 
             var _filter = new DynamicParameters();
 
-            
+
             if (crudType == CrudType.Insert)
             {
                 _filter.Add("UserId", dto.UserId);
@@ -893,6 +893,28 @@ namespace SCA.Services
                 filter.Add("MenuSide", state);
                 await _db.QueryAsync(query, filter);
                 res = Result.ReturnAsSuccess(message: "Haber slider başlık pozisyonu güncellendi");
+            }
+            catch (Exception ex)
+            {
+                await _errorManagement.SaveError(ex, null, "UpdateMenuSide", PlatformType.Web);
+            }
+            return res;
+        }
+
+        public async Task<ServiceResult> UpdatePlatformType(long contentId, int type)
+        {
+            ServiceResult res = new ServiceResult();
+            string query = string.Empty;
+            try
+            {
+
+                query = "update Content set  PlatformType = @PlatformType where Id = @Id";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("Id", contentId);
+                filter.Add("PlatformType", type);
+                await _db.QueryAsync(query, filter);
+
+                res = Result.ReturnAsSuccess(message: "Haber Platform türü başarıyla güncellendi");
             }
             catch (Exception ex)
             {

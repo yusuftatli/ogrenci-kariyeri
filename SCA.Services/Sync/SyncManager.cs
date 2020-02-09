@@ -58,6 +58,7 @@ namespace SCA.Services
             {
                 string urlId = @"http://ogrencikariyeri.com/panel/yusuf.php?act=haberler";
 
+
                 HttpClient clientId = new HttpClient();
                 var resId = await clientId.GetAsync(urlId);
                 var idcon = await resId.Content.ReadAsStringAsync();
@@ -88,7 +89,6 @@ namespace SCA.Services
                             dto.Header = assayDetail.post_title;
                             dto.ContentDescription = assayDetail.post_content;
                             dto.UserId = Convert.ToInt64(assayDetail.post_author);
-                            dto.Category = assayDetail.kategori;
                             dto.SeoUrl = assayDetail.post_title.FriendlyUrl();
                             if (!string.IsNullOrEmpty(assayDetail.appStaj))
                             {
@@ -138,7 +138,7 @@ namespace SCA.Services
                             {
                                 dto.PlatformType = PlatformType.WebMobil;
                             }
-                            await CreateContentSyncData(dto);
+                            await CreateContentSyncData(dto, assayDetail.kategoriler);
                         }
                         _res = Result.ReturnAsSuccess();
                     }
@@ -170,7 +170,7 @@ namespace SCA.Services
             return Result.ReturnAsSuccess(null, message: " Adet Makalenin Seknronizasyon İşlemi Tamamlanmıştır.", assayDetail);
         }
 
-        public async Task<ServiceResult> CreateContentSyncData(ContentDto dto)
+        public async Task<ServiceResult> CreateContentSyncData(ContentDto dto, List<kategorilerDto> kategoriler)
         {
             ServiceResult res = new ServiceResult();
             long _contentId = 0;
@@ -187,15 +187,20 @@ namespace SCA.Services
 
                 _contentId = _db.Query<long>(query, filter).FirstOrDefault();
 
-                var item = new CategoryRelationDto()
-                {
-                    CategoryId = CategoryMapping(12),
-                    TagContentId = _contentId,
-                    ReadType = ReadType.Content
-                };
-
-                string value = await _categoryManager.CreateCategoryRelation(item, _contentId, ReadType.Content);
-
+                //foreach (kategorilerDto _x in kategoriler)
+                //{
+                    int catId = CategoryMapping(kategoriler[0].id);
+                    if (catId != 0)
+                    {
+                        var item = new CategoryRelationDto()
+                        {
+                            CategoryId = CategoryMapping(catId),
+                            TagContentId = _contentId,
+                            ReadType = ReadType.Content
+                        };
+                        string value = await _categoryManager.CreateCategoryRelation(item, _contentId, ReadType.Content);
+                    }
+                //}
             }
             catch (Exception ex)
             {
@@ -214,11 +219,24 @@ namespace SCA.Services
         public int CategoryMapping(long id)
         {
             int res = 0;
-            if (id == 5610 || id == 5646)
+            if (id == 3093 || id == 2189 || id == 1821 || id == 1822 || id == 1823 || id == 1825 || id == 1826 || id == 1827 || id == 1835 || id == 1829 || id == 22 || id == 20 || id == 23 || id == 24 || id == 25 || id == 12 || id == 11 || id == 19 || id == 5610 || id == 5646 || id == 1)
             {
                 res = 5;
             }
-            else if (id == 26 || id == 27 || id == 10 || id == 50 || id == 1820 || id == 233 || id == 439 || id == 1819 || id == 1833 || id == 2805 || id == 3065 || id == 3065 || id == 1834)
+            if (id == 3)
+            {
+                res = 23;
+            }
+            if (id == 4)
+            {
+                res = 11;
+            }
+            if (id == 17)
+            {
+                res = 7;
+            }
+            //kişisel gelişim
+            else if (id == 18 || id == 2 || id == 26 || id == 27 || id == 10 || id == 50 || id == 1820 || id == 233 || id == 439 || id == 1819 || id == 1833 || id == 2805 || id == 3065 || id == 3065 || id == 1834)
             {
                 res = 6;
             }
@@ -226,7 +244,7 @@ namespace SCA.Services
             {
                 res = 8;
             }
-            else if (id == 30 || id == 29 || id == 31 || id == 33 || id == 2156 || id == 5919 || id == 6745 || id == 7920)
+            else if (id == 6319 || id == 1310 || id == 30 || id == 29 || id == 31 || id == 33 || id == 2156 || id == 5919 || id == 6745 || id == 7920)
             {
                 res = 9;
             }
@@ -234,25 +252,29 @@ namespace SCA.Services
             {
                 res = 13;
             }
-            else if (id == 1927)
+            else if (id == 1927 || id == 5)
             {
                 res = 14;
             }
-            else if (id == 1821 || id == 1822 || id == 1823 || id == 1825 || id == 1826 || id == 1827 || id == 1835 || id == 1829 || id == 6522)
+            else if (id == 6522)
             {
                 res = 15;
             }
-            else if (id == 1824)
+            else if (id == 1824 || id == 8 || id == 21)
             {
                 res = 16;
             }
-            else if (id == 1832)
+            else if (id == 1832 || id == 7)
             {
                 res = 17;
             }
-            else if (id == 39)
+            else if (id == 39 || id == 6)
             {
                 res = 4;
+            }
+            else if (id == 9 || id == 16)
+            {
+                res = 18;
             }
             return res;
         }

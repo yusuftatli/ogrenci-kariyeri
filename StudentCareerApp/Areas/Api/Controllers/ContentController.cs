@@ -173,6 +173,12 @@ namespace StudentCareerApp.Areas.Api.Controller
             return await _contentManager.UpdateMenuSide(dto.cotentId, dto.state);
         }
 
+        [HttpPost("UpdatePlatformType")]
+        public async Task<ServiceResult> UpdatePlatformType(ContentHeaderDto dto)
+        {
+            return await _contentManager.UpdatePlatformType(dto.cotentId, dto.type);
+        }
+
         [HttpGet("get-contentmenuside")]
         public async Task<ServiceResult> GetMenuSideState(long contentId)
         {

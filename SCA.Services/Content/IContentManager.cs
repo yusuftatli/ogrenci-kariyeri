@@ -83,5 +83,13 @@ namespace SCA.Services
         Task<ServiceResult> UpdateMenuSide(long contentId, int state);
         Task<ServiceResult> GetMenuSideState(long contentId);
         Task<List<ContentForHomePageDTO>> GetContentForTopAndBottomSlide();
+
+        /// <summary>
+        /// haberlerin platform türü ayarı yapılır.
+        /// </summary>
+        /// <param name="contentId"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        Task<ServiceResult> UpdatePlatformType(long contentId, int type);
     }
 }

@@ -148,8 +148,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
                     shortMessage(e.message, "e");
                 }
             }
-        });
-       
+        });       
     }
 
     $scope.onClickDashboard = function () {
@@ -249,6 +248,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
         $scope.contentProcess.id = x.id;
         $scope.contentProcess.publishState = $scope.confirmType[x.publishStateType];
         $scope.contentProcess.menuSide = $scope.menuSides[x.menuSide];
+        $scope.contentProcess.platformType = $scope.platformTypeList[x.platformType];
 
         $scope.readCountList(x.id);
 
@@ -609,6 +609,41 @@ app.controller("assayController", function ($scope, $http, $filter) {
             $scope.$apply();
         });
     };
+
+
+
+    var postPlatformType = function () {
+        return {
+            method: "post",
+            url: _link + "/Content/UpdatePlatformType",
+            headers: Headers,
+            data: {
+                cotentId: parseInt($scope.contentProcess.id),
+                type: $scope.contentProcess.platformType.Id
+            }
+        };
+    };
+
+    $scope.postPlatformType = function () {
+        $scope.contentModel.showPlatformLoading = true;
+        if ($scope.contentProcess.platformType === undefined || $scope.contentProcess.platformType === "0") {
+            $scope.contentModel.showPlatformLoading = false;
+            shortMessage("Platform türü boş geçilemez", "e");
+            return;
+        }
+        $http(postPlatformType()).then(function (e) {
+            if (e.data.resultCode === 200) {
+                shortMessage(e.data.message, "s");
+                getContentShortList();
+                $scope.contentModel.showPlatformLoading = false;
+            } else {
+                shortMessage(e.data.message, "e");
+                $scope.contentModel.showPlatformLoading = false;
+            }
+            $scope.$apply();
+        });
+    };
+
 
     function getContentCountIndexById(value) {
         let res = 0;
