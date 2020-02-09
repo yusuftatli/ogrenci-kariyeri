@@ -126,7 +126,7 @@
                                                             <div class="form-group">
                                                                 <label>Haber Kategori</label>
                                                                 <input type="hidden" id="searhCategoryIds" />
-                                                                <treeselect v-props-options="options" v-props-field="'searhCategoryIds'" v-props-multiple="true" v-props-value="value" watch-depth="value"></treeselect>
+                                                                <treeselect v-props-options="options" v-props-field="'searhCategoryIds'" v-props-multiple="true" v-props-value="value" v-props-disable-branch-nodes="true" v-props-show-count="true" watch-depth="value"></treeselect>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-2">
@@ -463,7 +463,7 @@
                                             <div class="form-group">
                                                 <label>Haber Kategori</label>
                                                 <input type="hidden" id="categoryIds" />
-                                                <treeselect v-props-options="options" v-props-field="'categoryIds'" v-props-multiple="true" v-props-value="categoryValue" watch-depth="categoryValue"></treeselect>
+                                                <treeselect v-props-options="options" v-props-field="'categoryIds'" v-props-multiple="true" v-props-value="categoryValue" watch-depth="categoryValue" v-props-disable-branch-nodes="true" v-props-show-count="true"></treeselect>
                                             </div>
                                         </div>
                                     </div>
