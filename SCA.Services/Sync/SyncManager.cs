@@ -189,7 +189,7 @@ namespace SCA.Services
 
                 var item = new CategoryRelationDto()
                 {
-                    CategoryId = RandomNumber(1, 67),
+                    CategoryId = CategoryMapping(12),
                     TagContentId = _contentId,
                     ReadType = ReadType.Content
                 };
@@ -209,6 +209,52 @@ namespace SCA.Services
         {
             Random random = new Random();
             return random.Next(min, max);
+        }
+
+        public int CategoryMapping(long id)
+        {
+            int res = 0;
+            if (id == 5610 || id == 5646)
+            {
+                res = 5;
+            }
+            else if (id == 26 || id == 27 || id == 10 || id == 50 || id == 1820 || id == 233 || id == 439 || id == 1819 || id == 1833 || id == 2805 || id == 3065 || id == 3065 || id == 1834)
+            {
+                res = 6;
+            }
+            else if (id == 32 || id == 2766 || id == 5625 || id == 7809 || id == 7810)
+            {
+                res = 8;
+            }
+            else if (id == 30 || id == 29 || id == 31 || id == 33 || id == 2156 || id == 5919 || id == 6745 || id == 7920)
+            {
+                res = 9;
+            }
+            else if (id == 4312)
+            {
+                res = 13;
+            }
+            else if (id == 1927)
+            {
+                res = 14;
+            }
+            else if (id == 1821 || id == 1822 || id == 1823 || id == 1825 || id == 1826 || id == 1827 || id == 1835 || id == 1829 || id == 6522)
+            {
+                res = 15;
+            }
+            else if (id == 1824)
+            {
+                res = 16;
+            }
+            else if (id == 1832)
+            {
+                res = 17;
+            }
+            else if (id == 39)
+            {
+                res = 4;
+            }
+            return res;
         }
 
 
