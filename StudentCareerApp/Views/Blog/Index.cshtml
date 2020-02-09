@@ -98,12 +98,15 @@
                                     </a>
                                 </li>*@
                             <!-- Go to www.addthis.com/dashboard to customize your tools -->
-                            <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5e293467c8eed171"></script>
+                            <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5e293467c8eed171">
+                                addthis.addEventListener('addthis.menu.share', shareEventHandler);
+                                console.log("addthis",shareEventHandler);
+                            </script>
 
 
                             <li class="heart-box">
                                 @if (Context.GetSessionData<SCA.Entity.DTO.UserSession>
-                          ("userInfo")?.Id > 0)
+                        ("userInfo")?.Id > 0)
                                 {
                                     <a id="addFavorite" data-id="@Model.ContentId" class="@(Model.IsFavoriteContent ? "active" : "" )">
                                         <i class="fa fa-heart"></i>
@@ -205,7 +208,7 @@
                         <!-- Form row end -->
                         <div class="clearfix">
                             @if (Context.GetSessionData<SCA.Entity.DTO.UserSession>
-                       ("userInfo")?.Id > 0)
+                     ("userInfo")?.Id > 0)
                             {
                                 <input class="hidden" type="hidden" name="ArticleId" value="@Model.ContentId" />
                                 <button class="comments-btn btn btn-primary" type="submit">Yorum Yap</button>
