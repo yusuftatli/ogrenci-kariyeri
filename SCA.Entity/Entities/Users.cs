@@ -53,6 +53,8 @@ namespace SCA.Entity.Entities
 
         public DateTime BirthDate { get; set; }
 
+        public string Biography { get; set; }
+
         public long CreatedUserId { get; set; }
 
         public DateTime CreatedDate { get; set; }

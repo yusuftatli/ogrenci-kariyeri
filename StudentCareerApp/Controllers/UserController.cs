@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using SCA.BLLServices;
 using SCA.Common;
 using SCA.Entity.DTO;
+using SCA.Entity.Model;
 using SCA.Services;
 
 namespace StudentCareerApp.Controllers
@@ -42,7 +43,7 @@ namespace StudentCareerApp.Controllers
                     Classes = await _definitionManager.GetStudentClassForUI(),
                     HighSchools = await _definitionManager.GetHighSchoolForUI(),
                     Cities = await _addressManager.CityList()
-                };
+                };  
                 var returnModel = new UserWithAllUniversityInformationDTO
                 {
                     Definitions = model,
