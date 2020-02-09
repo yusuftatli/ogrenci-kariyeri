@@ -66,6 +66,7 @@ namespace SCA.DapperRepository.Generic
                     .Replace("==", "=")
                     .Replace("Convert(", "")
                     .Replace(", Int32)", "")
+                    .Replace(", Int64)", "")
                     .Replace("= null", "is null")
                     .Replace(", Nullable`1)", "")
                     .Replace("\"", "'")

@@ -45,19 +45,56 @@ $(document).on('click', '#user-save', function () {
 })
 
 function saveChanges() {
+    var userId = $("#info-area").data('user');
+    var socialMedias = [
+        {
+            UserId: userId,
+            Url: "https://www.facebook.com/" + $("#user-facebook").text(),
+            SocialMediaType: 1
+        },
+        {
+            UserId: userId,
+            Url: "https://www.twitter.com/" + $("#user-twitter").text(),
+            SocialMediaType: 3
+        },
+        {
+            UserId: userId,
+            Url: "https://www.linkedin.com/" + $("#user-linkedin").text(),
+            SocialMediaType: 5
+        },
+        {
+            UserId: userId,
+            Url: "https://www.instagram.com/" + $("#user-instagram").text(),
+            SocialMediaType: 7
+        }
+    ]
+    var splittedFullName = $("#user-name").text().trim().split(' ');
+    var surname = splittedFullName.pop();
+    var name = splittedFullName.join(' ');
     var data = {
-        name: $("#user-name").text(),
-        facebook: $("#user-facebook").text(),
-        twitter: $("#user-twitter").text(),
-        instagram: $("#user-instagram").text(),
-        linkedin: $("#user-linkedin").text(),
-        address: $("#user-address").text(),
-        phone: $("#user-phone").text(),
-        mail: $("#user-mail").text(),
-        description: ""
+        Id: userId,
+        name: name,
+        surname: surname,
+        phoneNumber: $("#user-phone").text(),
+        emailAddress: $("#user-mail").text(),
+        biography: ""
     }
+
+    var postData = {
+        UserProfile: data,
+        SocialMedias: socialMedias
+    };
     editorUserDesc.save().then((outputData) => {
-        data.description = outputData.blocks;
+        postData.UserProfile.biography = JSON.stringify(outputData.blocks);
+        $.ajax({
+            url: 'https://localhost:44384/user/UpdateUserProfile',
+            type: 'post',
+            data: postData,
+            success: (res) => {
+                console.log(res);
+            }
+        })
     });
-    console.log(data);
+
+    console.log(postData);
 }
