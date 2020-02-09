@@ -29,6 +29,8 @@ namespace SCA.BLLServices.Generic
             return Result.ReturnAsSuccess(message: "Silme işlemi başarılı!");
         }
 
+        
+
         public async Task<ServiceResult<List<T>>> GetAllAsync<T>(T model) where T : class
         {
             var res = await _repository.GetAllAsync<T>(model);
