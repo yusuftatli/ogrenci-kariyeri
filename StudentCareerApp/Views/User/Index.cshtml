@@ -13,8 +13,8 @@
         color: #e91e63;
     }
 
-    .text-unset{
-        text-transform:unset !important;
+    .text-unset {
+        text-transform: unset !important;
     }
 
     .green-icon {
@@ -172,7 +172,7 @@
                                 <div class="post-content">
                                     <h4>
                                         <a id="user-name">@Model.User.Name @Model.User.Surname</a><i class="fa fa-edit edit-icon" for="user-name"></i>
-                                        <i class="fa fa-save pull-right red-icon" style="cursor:pointer;"></i>
+                                        <i id="user-save" class="fa fa-save pull-right red-icon" style="cursor:pointer;"></i>
                                         <i class="fa fa-cogs pull-right social-media-icon red-icon"></i>
                                         <i class="fa fa-linkedin pull-right social-media-icon"></i>
                                         <i class="fa fa-twitter pull-right social-media-icon"></i>
@@ -280,35 +280,35 @@
                             <div class="row" id="approved-comments">
                                 @for (int i = 0; i < 9; i++)
                                 {
-                                <div class="col-lg-3 pr-10 pb-5">
-                                    <div class="ts-grid-box ts-col-box">
-                                        <div class="item">
-                                            <a class="post-cat ts-green-bg" href="#">Sports</a>
-                                            <div class="post-content">
-                                                <h3 class="post-title md">
-                                                    <a href="#">Haber</a>
-                                                </h3>
-                                                <span class="post-date-info">
-                                                    <i class="fa fa-clock-o"></i>
-                                                    21.12.2019
-                                                </span>
-                                                <p>
-                                                    @("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras quis nisi porttitor, commodo lectus interdum, ullamcorper quam. Maecenas ligula quam, tempus id blandit sit amet, pretium non nibh. Quisque vulputate laoreet tortor, vitae faucibus ante porta ac. Nullam pharetra scelerisque facilisis. In non semper purus, at venenatis nibh. Phasellus non quam arcu.".Substring(0, 80) + "...")
-                                                </p>
-                                                <ul class="post-meta-info">
-                                                    <li>
-                                                        <i class="fa fa-thumbs-up green-icon"></i>  12
-                                                    </li>
-                                                    <li>
-                                                        <i class="fa fa-thumbs-down red-icon"></i>  4
-                                                    </li>
-                                                </ul>
+                                    <div class="col-lg-3 pr-10 pb-5">
+                                        <div class="ts-grid-box ts-col-box">
+                                            <div class="item">
+                                                <a class="post-cat ts-green-bg" href="#">Sports</a>
+                                                <div class="post-content">
+                                                    <h3 class="post-title md">
+                                                        <a href="#">Haber</a>
+                                                    </h3>
+                                                    <span class="post-date-info">
+                                                        <i class="fa fa-clock-o"></i>
+                                                        21.12.2019
+                                                    </span>
+                                                    <p>
+                                                        @("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras quis nisi porttitor, commodo lectus interdum, ullamcorper quam. Maecenas ligula quam, tempus id blandit sit amet, pretium non nibh. Quisque vulputate laoreet tortor, vitae faucibus ante porta ac. Nullam pharetra scelerisque facilisis. In non semper purus, at venenatis nibh. Phasellus non quam arcu.".Substring(0, 80) + "...")
+                                                    </p>
+                                                    <ul class="post-meta-info">
+                                                        <li>
+                                                            <i class="fa fa-thumbs-up green-icon"></i>  12
+                                                        </li>
+                                                        <li>
+                                                            <i class="fa fa-thumbs-down red-icon"></i>  4
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
+                                            <!-- item end-->
                                         </div>
-                                        <!-- item end-->
+                                        <!-- ts-grid-box end-->
                                     </div>
-                                    <!-- ts-grid-box end-->
-                                </div>
                                 }
                             </div>
                             <div class="ts-grid-box clearfix ts-category-title">
@@ -318,27 +318,27 @@
                             <div class="row" id="waiting-comments" style="display:none;">
                                 @for (int i = 0; i < 9; i++)
                                 {
-                                <div class="col-lg-3 pr-10 pb-5">
-                                    <div class="ts-grid-box ts-col-box">
-                                        <div class="item">
-                                            <a class="post-cat ts-green-bg" href="#">Sports</a>
-                                            <div class="post-content">
-                                                <h3 class="post-title md">
-                                                    <a href="#">Haber</a>
-                                                </h3>
-                                                <span class="post-date-info">
-                                                    <i class="fa fa-clock-o"></i>
-                                                    21.12.2019
-                                                </span>
-                                                <p>
-                                                    @("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras quis nisi porttitor, commodo lectus interdum, ullamcorper quam. Maecenas ligula quam, tempus id blandit sit amet, pretium non nibh. Quisque vulputate laoreet tortor, vitae faucibus ante porta ac. Nullam pharetra scelerisque facilisis. In non semper purus, at venenatis nibh. Phasellus non quam arcu.".Substring(0, 80) + "...")
-                                                </p>
+                                    <div class="col-lg-3 pr-10 pb-5">
+                                        <div class="ts-grid-box ts-col-box">
+                                            <div class="item">
+                                                <a class="post-cat ts-green-bg" href="#">Sports</a>
+                                                <div class="post-content">
+                                                    <h3 class="post-title md">
+                                                        <a href="#">Haber</a>
+                                                    </h3>
+                                                    <span class="post-date-info">
+                                                        <i class="fa fa-clock-o"></i>
+                                                        21.12.2019
+                                                    </span>
+                                                    <p>
+                                                        @("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras quis nisi porttitor, commodo lectus interdum, ullamcorper quam. Maecenas ligula quam, tempus id blandit sit amet, pretium non nibh. Quisque vulputate laoreet tortor, vitae faucibus ante porta ac. Nullam pharetra scelerisque facilisis. In non semper purus, at venenatis nibh. Phasellus non quam arcu.".Substring(0, 80) + "...")
+                                                    </p>
+                                                </div>
                                             </div>
+                                            <!-- item end-->
                                         </div>
-                                        <!-- item end-->
+                                        <!-- ts-grid-box end-->
                                     </div>
-                                    <!-- ts-grid-box end-->
-                                </div>
                                 }
                             </div>
 
@@ -349,27 +349,27 @@
                             <div class="row" id="rejected-comments" style="display:none;">
                                 @for (int i = 0; i < 9; i++)
                                 {
-                                <div class="col-lg-3 pr-10 pb-5">
-                                    <div class="ts-grid-box ts-col-box">
-                                        <div class="item">
-                                            <a class="post-cat ts-green-bg" href="#">Sports</a>
-                                            <div class="post-content">
-                                                <h3 class="post-title md">
-                                                    <a href="#">Haber</a>
-                                                </h3>
-                                                <span class="post-date-info">
-                                                    <i class="fa fa-clock-o"></i>
-                                                    21.12.2019
-                                                </span>
-                                                <p>
-                                                    @("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras quis nisi porttitor, commodo lectus interdum, ullamcorper quam. Maecenas ligula quam, tempus id blandit sit amet, pretium non nibh. Quisque vulputate laoreet tortor, vitae faucibus ante porta ac. Nullam pharetra scelerisque facilisis. In non semper purus, at venenatis nibh. Phasellus non quam arcu.".Substring(0, 80) + "...")
-                                                </p>
+                                    <div class="col-lg-3 pr-10 pb-5">
+                                        <div class="ts-grid-box ts-col-box">
+                                            <div class="item">
+                                                <a class="post-cat ts-green-bg" href="#">Sports</a>
+                                                <div class="post-content">
+                                                    <h3 class="post-title md">
+                                                        <a href="#">Haber</a>
+                                                    </h3>
+                                                    <span class="post-date-info">
+                                                        <i class="fa fa-clock-o"></i>
+                                                        21.12.2019
+                                                    </span>
+                                                    <p>
+                                                        @("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras quis nisi porttitor, commodo lectus interdum, ullamcorper quam. Maecenas ligula quam, tempus id blandit sit amet, pretium non nibh. Quisque vulputate laoreet tortor, vitae faucibus ante porta ac. Nullam pharetra scelerisque facilisis. In non semper purus, at venenatis nibh. Phasellus non quam arcu.".Substring(0, 80) + "...")
+                                                    </p>
+                                                </div>
                                             </div>
+                                            <!-- item end-->
                                         </div>
-                                        <!-- item end-->
+                                        <!-- ts-grid-box end-->
                                     </div>
-                                    <!-- ts-grid-box end-->
-                                </div>
                                 }
                             </div>
                         </div>
@@ -393,65 +393,6 @@
 </section>
 <!-- block wrapper end-->
 @section Scripts{
-<script src="https://cdn.jsdelivr.net/npm/@@editorjs/editorjs@@latest"></script>
-<script>
-    var editorUserDesc = new EditorJS({
-        holderId: 'user-description',
-        placeholder: 'Kendin hakkında birşeyler yaz...',
-        data: {
-            "time": 1550476186479,
-            "blocks": [
-                {
-                    "type": "paragraph",
-                    "data": {
-                        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec libero sem, eleifend sit amet mauris ut, venenatis ultricies lectus. Phasellus mollis sollicitudin neque. Aenean faucibus felis sed tortor consectetur, et pharetra mauris pretium. Vivamus ac orci eu ipsum congue posuere. Nunc dignissim felis vel tellus pharetra sollicitudin. Nunc finibus, arcu sed tempor scelerisque, sapien urna rhoncus nisl, eu consequat leo sem pulvinar quam. Integer at lacus convallis, dictum ante non, dignissim libero. Phasellus varius sapien nunc, quis commodo lectus cursus id. Nullam vel dui tincidunt, convallis tortor vehicula, facilisis magna."
-                    }
-                },
-                {
-                    "type": "paragraph",
-                    "data": {
-                        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec libero sem, eleifend sit amet mauris ut, venenatis ultricies lectus. Phasellus mollis sollicitudin neque. Aenean faucibus felis sed tortor consectetur, et pharetra mauris pretium. Vivamus ac orci eu ipsum congue posuere. Nunc dignissim felis vel tellus pharetra sollicitudin. Nunc finibus, arcu sed tempor scelerisque, sapien urna rhoncus nisl, eu consequat leo sem pulvinar quam. Integer at lacus convallis, dictum ante non, dignissim libero. Phasellus varius sapien nunc, quis commodo lectus cursus id. Nullam vel dui tincidunt, convallis tortor vehicula, facilisis magna."
-                    }
-                }
-            ]
-        }
-    })
-    $(document).on('click', '.pointer', function () {
-        var area = $(this).attr('for');
-        $(this).toggleClass("fa-chevron-up")
-        $(this).toggleClass("fa-chevron-down")
-        $(`#${area}`).toggle(300);
-    })
-    $(document).on('click', '.edit-icon', function () {
-        var area = $(this).attr('for');
-        $(this).toggleClass("fa-edit");
-        $(this).toggleClass("fa-check");
-        $(this).toggleClass("green-icon");
-        $(this).hasClass("fa-edit") ? $(`#${area}`).attr('contenteditable', false) : $(`#${area}`).attr('contenteditable', true);
-        $(`#${area}`).toggleClass('editable-area');
-    })
-    $(document).on('click', '.edit-icon-input', function () {
-        var area = $(this).attr('for');
-        $(this).toggleClass("fa-edit");
-        $(this).toggleClass("fa-check");
-        $(this).toggleClass("green-icon");
-        $(`#${area}`).toggleClass("hidden");
-    })
-    function saveChanges() {
-        var data = {
-            name: $("#user-name").text(),
-            facebook: $("#user-facebook").text(),
-            twitter: $("#user-twitter").text(),
-            instagram: $("#user-instagram").text(),
-            linkedin: $("#user-linkedin").text(),
-            address: $("#user-address").text(),
-            phone: $("#user-phone").text(),
-            mail: $("#user-mail").text(),
-            description: editorUserDesc.save().then(output => {
-                return output;
-            })
-        }
-        console.log(data);
-    }
-</script>
+    <script src="https://cdn.jsdelivr.net/npm/@@editorjs/editorjs@@latest"></script>
+    <script src="~/Template/PViews/User/index.js"></script>
 }
