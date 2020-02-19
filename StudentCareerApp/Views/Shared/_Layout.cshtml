@@ -152,32 +152,33 @@
             <!-- end row -->
         </div>
     </section>
-    <section class="header-middle v2">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 align-self-center">
-                    <div class="header-logo">
-                        <a href="@Url.Action("Index", "Home")">
-                            <img style="height:50px;" src="~/images/logo/logo-white.png" alt="Öğrenci Kariyeri">
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-8 align-self-center">
-                    <div class="banner-img">
-                        <a href="index.html">
-                            <img class="img-fluid" src="~/images/banner/banner4.jpg" alt="">
-                        </a>
-                    </div>
-                </div>
-                <!-- col end -->
-            </div>
-            <!-- row  end -->
-        </div>
-        <!-- container end -->
-    </section>
 
     <!-- header nav start-->
-    <header class="navbar-standerd nav-item">
+    <header class="navbar-standerd nav-item ts-menu-sticky navigation-landscape sticky fade_down_effect">
+        <section class="header-middle v2">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 align-self-center">
+                        <div class="header-logo">
+                            <a href="@Url.Action("Index", "Home")">
+                                <img style="height:50px;" src="~/images/logo/logo-white.png" alt="Öğrenci Kariyeri">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-8 align-self-center">
+                        <div class="banner-img">
+                            <a href="index.html">
+                                <img class="img-fluid" src="~/images/banner/banner4.jpg" alt="">
+                            </a>
+                        </div>
+                    </div>
+                    <!-- col end -->
+                </div>
+                <!-- row  end -->
+            </div>
+            <!-- container end -->
+        </section>
+
         <div class="container">
             <div class="row">
 
@@ -204,7 +205,7 @@
                                         </a>
                                         <ul class="nav-dropdown">
                                             <li>
-                                                <a href="#">Profil</a>
+                                                <a href="@Url.Action("Index", "User")">Profil</a>
                                             </li>
                                             @if (!user.RoleTypeId.Equals(3))
                                             {
@@ -213,7 +214,7 @@
                                                 </li>
                                             }
                                             <li>
-                                                <a href="@Url.Action("SetCategories", "User")">Kaynaklar</a>
+                                                <a href="@Url.Action("SetCategories", "User")">İlgi Alanları</a>
                                             </li>
                                             <li>
                                                 <a href="#" id="logoutButton">Çıkış Yap</a>
@@ -242,27 +243,27 @@
                             }
                             else
                             {
-                        <ul class="right-menu align-to-right">
-                            <li class="header-search">
-                                <div class="nav-search">
-                                    <div class="nav-search-button">
-                                        <i class="icon icon-search"></i>
-                                    </div>
-                                    <form>
-                                        <span class="nav-search-close-button" tabindex="0">✕</span>
-                                        <div class="nav-search-inner">
-                                            <input type="search" name="search" placeholder="Lütfen Arama Yapmak İstediğiniz Kelimeyi Giriniz">
+                                <ul class="right-menu align-to-right">
+                                    <li class="header-search">
+                                        <div class="nav-search">
+                                            <div class="nav-search-button">
+                                                <i class="icon icon-search"></i>
+                                            </div>
+                                            <form>
+                                                <span class="nav-search-close-button" tabindex="0">✕</span>
+                                                <div class="nav-search-inner">
+                                                    <input type="search" name="search" placeholder="Lütfen Arama Yapmak İstediğiniz Kelimeyi Giriniz">
+                                                </div>
+                                            </form>
                                         </div>
-                                    </form>
-                                </div>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="fa fa-user-circle-o openLoginMagnific"></i>
-                                </a>
-                            </li>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-user-circle-o openLoginMagnific"></i>
+                                        </a>
+                                    </li>
 
-                        </ul>
+                                </ul>
                             }
 
                             <!--nav right menu end-->

@@ -37,7 +37,8 @@ namespace StudentCareerApp.Controllers
             var userId = HttpContext.GetSessionData<UserSession>("userInfo")?.Id;
             if (userId.HasValue)
             {
-                var user = await _userService.GetByIdAsync<SCA.Entity.Entities.Users>(userId.Value);
+                var user = await _userService.GetByIdAsync<UserProfile>(userId.Value);
+                var socialMedia = await _socialMediaService.GetByWhereParams<SocialMediaDto>(x => x.UserId == userId.Value);
                 var model = new AllUniversityInformationDto
                 {
                     Universities = await _definitionManager.GetUniversityForUI(),
@@ -50,7 +51,8 @@ namespace StudentCareerApp.Controllers
                 var returnModel = new UserWithAllUniversityInformationDTO
                 {
                     Definitions = model,
-                    User = user.Data
+                    User = user.Data,
+                    SocialMedias = socialMedia.Data
                 };
                 return View(returnModel);
             }
