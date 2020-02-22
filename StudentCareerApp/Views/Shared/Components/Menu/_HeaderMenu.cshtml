@@ -9,26 +9,29 @@
     {
         <li>
             <a href="@Url.Action("Index", "Category", new { id = x.Id, seoUrl = x.Description.FriendlyUrl()})">@x.Description</a>
-            <div class="megamenu-panel ts-mega-menu">
-                <div class="megamenu-lists">
-                    <ul class="megamenu-list list-col-2">
-                        @foreach (var y in Model.Where(y=>y.ParentId == x.Id).Take(Model.Where(y=>y.ParentId == x.Id).Count() / 2))
-                        {
-                        <li>
-                            <a href="@Url.Action("Index", "Category", new { id = y.Id, seoUrl = y.Description.FriendlyUrl()})">@y.Description</a>
-                        </li>
-                        }
-                    </ul>
-                    <ul class="megamenu-list list-col-2" data-count="">
-                        @foreach (var y in Model.Where(y=>y.ParentId == x.Id).Skip(Model.Where(y=>y.ParentId == x.Id).Count() / 2))
-                        {
-                            <li>
-                                <a href="@Url.Action("Index", "Category", new { id = y.Id, seoUrl = y.Description.FriendlyUrl()})">@y.Description</a>
-                            </li>
-                        }
-                    </ul>
+            @if (Model.Any(y => y.ParentId == x.Id))
+            {
+                <div class="megamenu-panel ts-mega-menu">
+                    <div class="megamenu-lists">
+                        <ul class="megamenu-list list-col-2">
+                            @foreach (var y in Model.Where(y => y.ParentId == x.Id).Take(Model.Where(y => y.ParentId == x.Id).Count() / 2))
+                            {
+                                <li>
+                                    <a href="@Url.Action("Index", "Category", new { id = y.Id, seoUrl = y.Description.FriendlyUrl()})">@y.Description</a>
+                                </li>
+                            }
+                        </ul>
+                        <ul class="megamenu-list list-col-2" data-count="">
+                            @foreach (var y in Model.Where(y => y.ParentId == x.Id).Skip(Model.Where(y => y.ParentId == x.Id).Count() / 2))
+                            {
+                                <li>
+                                    <a href="@Url.Action("Index", "Category", new { id = y.Id, seoUrl = y.Description.FriendlyUrl()})">@y.Description</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
                 </div>
-            </div>
+            }
         </li>
     }
     <li>

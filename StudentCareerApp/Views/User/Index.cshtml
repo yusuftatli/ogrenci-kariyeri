@@ -4,6 +4,10 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var facebook = Model.SocialMedias.Find(x => x.SocialMediaType == SocialMediaType.Facebook)?.Url.Split("/").Last();
+    var instagram = Model.SocialMedias.Find(x => x.SocialMediaType == SocialMediaType.Instagram)?.Url.Split("/").Last();
+    var twitter = Model.SocialMedias.Find(x => x.SocialMediaType == SocialMediaType.Twitter)?.Url.Split("/").Last();
+    var linkedin = Model.SocialMedias.Find(x => x.SocialMediaType == SocialMediaType.Linkedin)?.Url.Split("/").Last();
 }
 
 <style>
@@ -60,6 +64,7 @@
         border: 1px solid #ced4da;
         border-radius: .25rem;
         padding: 3px 10px;
+        display: inherit;
     }
 
     .social-editor {
@@ -84,14 +89,6 @@
                                     <h3 class="post-title">
                                         Profil Bilgileri
                                     </h3>
-                                    <ul class="post-meta-info">
-                                        <li class="cat-name">
-                                            Sıralama:
-                                        </li>
-                                        <li>
-                                            128
-                                        </li>
-                                    </ul>
                                 </div>
                             </a>
                         </li>
@@ -99,22 +96,8 @@
                             <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">
                                 <div class="post-content">
                                     <h3 class="post-title">
-                                        İçerikler
+                                        Eğitim Bilgileri
                                     </h3>
-                                    <ul class="post-meta-info">
-                                        <li class="cat-name">
-                                            <i class="fa fa-thumbs-up green-icon"></i>
-                                        </li>
-                                        <li>
-                                            12
-                                        </li>
-                                        <li class="cat-name">
-                                            <i class="fa fa-thumbs-down red-icon"></i>
-                                        </li>
-                                        <li>
-                                            4
-                                        </li>
-                                    </ul>
                                 </div>
                             </a>
                         </li>
@@ -184,31 +167,31 @@
                                     <div class="text-center pb-5 pt-3">
                                         <ul class="footer-social">
                                             <li class="ts-facebook">
-                                                <a href="https://www.facebook.com/ogrencikariyeri" target="_blank" rel="nofollow">
+                                                <a href="https://www.facebook.com/@facebook" target="_blank" rel="nofollow">
                                                     <i class="fa fa-facebook"></i>
-                                                    <a id="user-facebook" class="text-unset">ogrencikariyeri</a>
+                                                    <a id="user-facebook" class="text-unset">@facebook</a>
                                                 </a>
                                                 <i class="fa fa-edit edit-icon" for="user-facebook"></i>
                                             </li>
                                             <li class="ts-instagram-gradient">
-                                                <a href="https://www.instagram.com/ogrencikariyeri" target="_blank" rel="nofollow">
+                                                <a href="https://www.instagram.com/@instagram" target="_blank" rel="nofollow">
                                                     <i class="fa fa-instagram"></i>
-                                                    <a id="user-instagram" class="text-unset">ogrencikariyeri</a>
+                                                    <a id="user-instagram" class="text-unset">@instagram</a>
                                                 </a>
                                                 <i class="fa fa-edit edit-icon" for="user-instagram"></i>
                                             </li>
                                             <li class="ts-twitter">
-                                                <a href="https://www.twitter.com/ogrencikariyeri" target="_blank" rel="nofollow">
+                                                <a href="https://www.twitter.com/@twitter" target="_blank" rel="nofollow">
                                                     <i class="fa fa-twitter"></i>
-                                                    <a id="user-twitter" class="text-unset">ogrencikariyeri</a>
+                                                    <a id="user-twitter" class="text-unset">@twitter</a>
                                                 </a>
                                                 <i class="fa fa-edit edit-icon" for="user-twitter"></i>
                                                 @*<input type="text" class="form-control social-editor hidden" id="user-twitter" value="https://www.twitter.com/ogrencikariyeri" />*@
                                             </li>
                                             <li class="ts-linkedin">
-                                                <a href="https://www.linkedin.com/company/ogrencikariyeri/" target="_blank" rel="nofollow">
+                                                <a href="https://www.linkedin.com/company/@linkedin" target="_blank" rel="nofollow">
                                                     <i class="fa fa-linkedin"></i>
-                                                    <a id="user-linkedin" class="text-unset">ogrencikariyeri</a>
+                                                    <a id="user-linkedin" class="text-unset">@linkedin</a>
                                                 </a>
                                                 <i class="fa fa-edit edit-icon" for="user-linkedin"></i>
                                             </li>
@@ -219,14 +202,14 @@
                                         <div class="col-lg">
                                             <div class="media-left col-md-12 text-center"><i class="fa fa-home fa-3x" style="color:#e91e63;"></i></div>
                                             <div class="media-body text-center" style="padding-top:10px;">
-                                                <a id="user-address">Kavaklı mah. Gaffar Okkan sok. No: 3 D: 5 <br />Beylikdüzü / İstanbul</a>
+                                                <a id="user-address"></a>
                                                 <i class="fa fa-edit edit-icon" for="user-address"></i>
                                             </div>
                                         </div>
                                         <div class="col-lg">
                                             <div class="media-left col-md-12 text-center"><i class="fa fa-phone fa-3x" style="color:#e91e63;"></i></div>
                                             <div class="media-body text-center" style="padding-top:10px;">
-                                                <a href="tel:05398522341" style="color:unset !important;" id="user-phone">0539 852 2341</a>
+                                                <a href="tel:@Model.User.PhoneNumber" style="color:unset !important;" id="user-phone">@Model.User.PhoneNumber</a>
                                                 <i class="fa fa-edit edit-icon" for="user-phone"></i>
                                             </div>
 
@@ -234,7 +217,7 @@
                                         <div class="col-lg">
                                             <div class="media-left col-md-12 text-center"><i class="fa fa-envelope fa-3x" style="color:#e91e63;"></i></div>
                                             <div class="media-body text-center" style="padding-top:10px;">
-                                                <a id="user-mail" href="mailto:goksudnz@gproject.ist" style="color:unset !important;">goksudnz@gproject.ist</a>
+                                                <a id="user-mail" href="mailto:@Model.User.EmailAddress" style="color:unset !important;">@Model.User.EmailAddress</a>
                                                 <i class="fa fa-edit edit-icon" for="user-mail"></i>
                                             </div>
                                         </div>
@@ -242,35 +225,110 @@
                                 </div>
                             </div>
                         </div>
-                        <div role="tabpanel" class="fade tab-pane" id="profile">
-                            <div class="ts-grid-box clearfix ts-category-title">
-                                <h2 class="ts-title float-left">Onaylı İçerikler (12)</h2>
-                                <i class="fa fa-chevron-down fa-2x pull-right pointer" for="valid-content-items"></i>
-                            </div>
-                            <div class="ts-grid-box" id="valid-content-items" style="display:none">
-                                <div class="row post-col-list-item" id="content-items">
-                                    @await Component.InvokeAsync("NewsWith2Columns", new { count = 12, col = 4 })
-                                </div>
-                            </div>
-                            <div class="ts-grid-box clearfix ts-category-title">
-                                <h2 class="ts-title float-left">Onay Bekleyen İçerikler (10)</h2>
-                                <i class="fa fa-chevron-down fa-2x pull-right pointer" for="waiting-content-items"></i>
-                            </div>
-                            <div class="ts-grid-box" id="waiting-content-items" style="display:none">
-                                <div class="row post-col-list-item" id="content-items">
-                                    @await Component.InvokeAsync("NewsWith2Columns", new { count = 10, col = 4 })
-                                </div>
-                            </div>
-                            <div class="ts-grid-box clearfix ts-category-title">
-                                <h2 class="ts-title float-left">Reddedilmiş İçerikler (4)</h2>
-                                <i class="fa fa-chevron-down fa-2x pull-right pointer" for="rejected-content-items"></i>
-                            </div>
-                            <div class="ts-grid-box" id="rejected-content-items" style="display:none">
-                                <div class="row post-col-list-item" id="content-items">
-                                    @await Component.InvokeAsync("NewsWith2Columns", new { count = 4, col = 4 })
-                                </div>
-                            </div>
+                        <div role="tabpanel" class="tab-pane fade" id="profile">
+                            <div class="ts-grid-box">
+                                <div class="post-content">
+                                    <h4>
+                                        <i id="user-save" class="fa fa-save pull-right red-icon" style="cursor:pointer;"></i>
+                                        <i class="fa fa-cogs pull-right social-media-icon red-icon"></i>
+                                        <i class="fa fa-linkedin pull-right social-media-icon"></i>
+                                        <i class="fa fa-twitter pull-right social-media-icon"></i>
+                                        <i class="fa fa-instagram pull-right social-media-icon"></i>
+                                        <i class="fa fa-facebook pull-right social-media-icon"></i>
+                                    </h4>
 
+                                    @using (Html.BeginForm("Register", "Shared", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                    {
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col">
+                                                <label>Eğitim Durumu</label>
+                                                <select id="educationType" class="form-control" name="EducationType" required>
+                                                    <option value="">Seçim yapınız...</option>
+                                                    @foreach (EducationType x in (EducationType[])Enum.GetValues(typeof(EducationType)))
+                                                    {
+                                                        <option value="@((long)x)">@x.GetDescription()</option>
+                                                    }
+                                                </select>
+                                            </div> <!-- form-group end.// -->
+                                            <!-- form-group end.// -->
+                                        </div> <!-- form-row.// -->
+                                        <div class="template-selected-highschool hidden">
+                                            <div class="form-row">
+                                                <div class="form-group col">
+                                                    <label>Lise</label>
+                                                    <select class="form-control" name="HighSchoolTypeId">
+                                                        <option value="">Seçiniz...</option>
+                                                        @foreach (var x in Model.Definitions.HighSchools)
+                                                        {
+                                                            <option value="@x.Id">@x.SchoolName</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="template-selected-university hidden">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-6">
+                                                    <label>Üniversite</label>
+                                                    <select class="form-control" name="UniversityId">
+                                                        <option value="">Seçiniz...</option>
+                                                        @foreach (var x in Model.Definitions.Universities)
+                                                        {
+                                                            <option value="@x.Id">@x.UniversityName</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label>Fakülte</label>
+                                                    <select class="form-control" name="FacultyId">
+                                                        <option value="">Seçiniz...</option>
+                                                        @foreach (var x in Model.Definitions.Faculties)
+                                                        {
+                                                            <option value="@x.Id">@x.FacultyName</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-6">
+                                                    <label>Bölüm</label>
+                                                    <select class="form-control" name="DepartmentId">
+                                                        <option value="">Seçiniz...</option>
+                                                        @foreach (var x in Model.Definitions.Departments)
+                                                        {
+                                                            <option value="@x.Id">@x.DepartmentName</option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="form-row template-still-student hidden">
+                                            <div class="form-group col-md-6">
+                                                <label>Hala öğrenci misiniz?</label><br />
+                                                <input name="IsStudent" type="checkbox" id="stillStudent" class="js-switch stillStudent" data-color="#00c292" />
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <div class="showClasses hidden">
+                                                    <label>Sınıf</label>
+                                                    <select class="form-control" name="ClassId">
+                                                        <option value="">Seçiniz...</option>
+                                                        @foreach (var x in Model.Definitions.Classes)
+                                                        {
+                                                            <option value="@x.Id">@x.Description</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                </div>
+                            </div>
                         </div>
                         <div role="tabpanel" class=" fade tab-pane" id="messages">
                             <div class="ts-grid-box clearfix ts-category-title">
@@ -391,7 +449,7 @@
     </div>
     <!-- container end-->
 </section>
-<span id="info-area" data-user="@Model.User.Id" class="hidden" hidden></span>
+<span id="info-area" data-user="@Model.User.Id" data-biography="@Model.User.Biography" class="hidden" hidden></span>
 <!-- block wrapper end-->
 @section Scripts{
     <script src="https://cdn.jsdelivr.net/npm/@@editorjs/editorjs@@latest"></script>

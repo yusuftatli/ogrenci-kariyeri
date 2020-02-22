@@ -1045,7 +1045,7 @@ blockquote {
         left: 0;
         right: 0;
         margin: auto;
-        max-width: 930px;
+        max-width: 100%;
     }
 
         .ts-menu-sticky.sticky.fade_down_effect {
@@ -1062,7 +1062,7 @@ blockquote {
 
 @media (min-width: 1200px) {
     .ts-menu-sticky.sticky {
-        max-width: 1110px;
+        max-width: 100%;
     }
 }
 
@@ -5346,7 +5346,6 @@ navbar-standerd
 ---------------------------*/
 .navbar-standerd {
     background: #fff;
-    border-top: 1px solid #ddd;
     -webkit-box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.08);
     box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.08);
 }

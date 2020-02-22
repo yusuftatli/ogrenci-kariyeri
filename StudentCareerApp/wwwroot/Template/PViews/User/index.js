@@ -3,20 +3,7 @@
     placeholder: 'Kendin hakkında birşeyler yaz...',
     data: {
         "time": 1550476186479,
-        "blocks": [
-            {
-                "type": "paragraph",
-                "data": {
-                    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec libero sem, eleifend sit amet mauris ut, venenatis ultricies lectus. Phasellus mollis sollicitudin neque. Aenean faucibus felis sed tortor consectetur, et pharetra mauris pretium. Vivamus ac orci eu ipsum congue posuere. Nunc dignissim felis vel tellus pharetra sollicitudin. Nunc finibus, arcu sed tempor scelerisque, sapien urna rhoncus nisl, eu consequat leo sem pulvinar quam. Integer at lacus convallis, dictum ante non, dignissim libero. Phasellus varius sapien nunc, quis commodo lectus cursus id. Nullam vel dui tincidunt, convallis tortor vehicula, facilisis magna."
-                }
-            },
-            {
-                "type": "paragraph",
-                "data": {
-                    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec libero sem, eleifend sit amet mauris ut, venenatis ultricies lectus. Phasellus mollis sollicitudin neque. Aenean faucibus felis sed tortor consectetur, et pharetra mauris pretium. Vivamus ac orci eu ipsum congue posuere. Nunc dignissim felis vel tellus pharetra sollicitudin. Nunc finibus, arcu sed tempor scelerisque, sapien urna rhoncus nisl, eu consequat leo sem pulvinar quam. Integer at lacus convallis, dictum ante non, dignissim libero. Phasellus varius sapien nunc, quis commodo lectus cursus id. Nullam vel dui tincidunt, convallis tortor vehicula, facilisis magna."
-                }
-            }
-        ]
+        "blocks": $("#info-area").data().biography
     }
 })
 $(document).on('click', '.pointer', function () {
