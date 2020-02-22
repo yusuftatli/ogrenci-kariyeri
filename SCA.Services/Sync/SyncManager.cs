@@ -123,20 +123,20 @@ namespace SCA.Services
                             dto.PublishDate = Convert.ToDateTime(assayDetail.post_date);
                             dto.Writer = assayDetail.yazar;
                             dto.ReadCount = 0;
-                            dto.PublishStateType = PublishState.Publish;
+                            dto.PublishStateType = 4;
                             dto.SycnId = Convert.ToInt64(item.ID);
 
                             if (assayDetail.app == "1")
                             {
-                                dto.PlatformType = PlatformType.Mobil;
+                                dto.PlatformType = 1;
                             }
                             else if (assayDetail.app == "0")
                             {
-                                dto.PlatformType = PlatformType.Web;
+                                dto.PlatformType = 2;
                             }
                             else
                             {
-                                dto.PlatformType = PlatformType.WebMobil;
+                                dto.PlatformType = 3;
                             }
                             await CreateContentSyncData(dto, assayDetail.kategoriler);
                         }

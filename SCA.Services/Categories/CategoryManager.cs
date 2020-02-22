@@ -230,7 +230,7 @@ namespace SCA.Services
             string query = "";
             if (crudType == CrudType.Insert)
             {
-                query = $"Insert Into CategoryRelation  (CategoryId,TagContentId,ReadType) Values" +
+                query = $"delete from TagRelation where TagContentId={dto.TagContentId}; Insert Into CategoryRelation  (CategoryId,TagContentId,ReadType) Values" +
                     $"({dto.CategoryId},{dto.TagContentId},'{dto.ReadType}')";
             }
 

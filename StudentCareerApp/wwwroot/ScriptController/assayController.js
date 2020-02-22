@@ -164,6 +164,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
         $scope.assayButtonName = "Kaydet";
         $scope.assayHeadrName = "Ekle";
         clearAll();
+        $scope.assayId = 0;
         $scope.assayCreate.platformTypeId = $scope.platformTypeList[0];
         $scope.assayCreate.visibleId = $scope.visibleList[0];
         $scope.assayCreate.internId = $scope.events[0];
@@ -180,32 +181,48 @@ app.controller("assayController", function ($scope, $http, $filter) {
    
     //post assay
     $scope.postAssay = function () {
-        $scope.assayCreate.ContentDescription = CKEDITOR.instances.ckeditorForAssayContent.getData();
-        $scope.assayCreate.isHeadLine = $("#togglwPublish")[0].checked;
-        $scope.assayCreate.isManset = $("#toggleManset")[0].checked;
-        $scope.assayCreate.isMainMenu = $("#toggleMainMenu")[0].checked;
-        $scope.assayCreate.isConstantMainMenu = $("#toggleisConstantMainMenu")[0].checked;
-        $scope.assayCreate.IsSendConfirm = $("#toggleisSendConfirm")[0].checked;
-        $scope.assayCreate.ImagePath = $("#roxyField").val();
-        $scope.assayCreate.SeoUrl = $("#seoUrl").val();
-        $scope.assayCreate.Tags = $("#multipleTags").val();
-        $scope.assayCreate.Category = $("#categoryIds").val();
-        $scope.assayCreate.PublishDate = moment($("#publishDateAssay").val() + " " + $("#publishHour").val(), 'DD.MM.YYYY HH:mm');
-        $scope.assayCreate.platformTypeId = $scope.assayCreate.platformTypeId.Id;
-        $scope.assayCreate.visibleId = $scope.assayCreate.visibleId.Id;
-        $scope.assayCreate.internId = $scope.assayCreate.internId.Id;
-        $scope.assayCreate.eventId = $scope.assayCreate.eventId.Id;
+        debugger;
+        $scope.createModel = {};
+        $scope.createModel.id = $scope.assayId;
+        $scope.createModel.ContentDescription = CKEDITOR.instances.ckeditorForAssayContent.getData();
+        $scope.createModel.isHeadLine = $("#togglwPublish")[0].checked;
+        $scope.createModel.header = $scope.assayCreate.header;
+        $scope.createModel.isManset = $("#toggleManset")[0].checked;
+        $scope.createModel.isMainMenu = $("#toggleMainMenu")[0].checked;
+        $scope.createModel.isConstantMainMenu = $("#toggleisConstantMainMenu")[0].checked;
+        $scope.createModel.IsSendConfirm = $("#toggleisSendConfirm")[0].checked;
+        $scope.createModel.ImagePath = $("#roxyField").val();
+        $scope.createModel.SeoUrl = $("#seoUrl").val();
+        $scope.createModel.Tags = $("#multipleTags").val();
+        $scope.createModel.Category = $("#categoryIds").val();
+        $scope.createModel.PublishDate = moment($("#publishDateAssay").val() + " " + $("#publishHour").val(), 'DD.MM.YYYY HH:mm');
+        $scope.createModel.PlatformType = $scope.assayCreate.platformTypeId.Id;
+        $scope.createModel.visibleId = $scope.assayCreate.visibleId.Id;
+        $scope.createModel.internId = $scope.assayCreate.internId.Id;
+        $scope.createModel.eventId = $scope.assayCreate.eventId.Id;
 
 
-        if ($scope.assayCreate.header !== null && $scope.assayCreate.header !== undefined && $scope.assayCreate.header !== "") {
-            if ($scope.assayCreate.Category !== null && $scope.assayCreate.Category !== undefined && $scope.assayCreate.Category !== "") {
-                if ($scope.assayCreate.Tags !== null && $scope.assayCreate.Tags !== undefined && $scope.assayCreate.Tags !== "") {
-                    if ($scope.assayCreate.ContentDescription !== null && $scope.assayCreate.ContentDescription !== undefined && $scope.assayCreate.ContentDescription !== "") {
+        if ($scope.createModel.header !== null && $scope.createModel.header !== undefined && $scope.createModel.header !== "") {
+            if ($scope.createModel.Category !== null && $scope.createModel.Category !== undefined && $scope.createModel.Category !== "") {
+                if ($scope.createModel.Tags !== null && $scope.createModel.Tags !== undefined && $scope.createModel.Tags !== "") {
+                    if ($scope.createModel.ContentDescription !== null && $scope.createModel.ContentDescription !== undefined && $scope.createModel.ContentDescription !== "") {
                         //if (moment($scope.assayCreate.PublishDate < moment())) {
                         //    shortMessage("İçerik yayınlama tarihi geçmiş tarih olamaz", "e");
                         // } else {
                         $scope.showSaveLoading = true;
-                        postAssay();
+                        debugger
+                        $http(PostAssayReq()).then(function (res) {
+                            if (res.data.resultCode === 200) {
+                                shortMessage(res.data.message, "s");
+                                $scope.assayId = res.data.data;
+                                $scope.assayButtonName = "Güncelle";
+                                $scope.showSaveLoading = false;
+                            } else {
+                                shortMessage(res.data.message, "e");
+                                getContentById($scope.assayCreate.Id);
+                                $scope.showSaveLoading = false;
+                            }
+                        });
 
                         // }
                     } else {
@@ -295,10 +312,9 @@ app.controller("assayController", function ($scope, $http, $filter) {
 
     $scope.showContentDetail = function (x) {
         debugger;
-        $scope.assayCreate.Id = x.id;
+        $scope.assayId= x.id;
         $scope.assayButtonName = "Güncelle";
-        getMainCategories();
-        getTags();
+        
         getContentById(x);
 
     };
@@ -325,7 +341,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
             success: function (e) {
                 if (e.resultCode === 200) {
                     getMainCategories();
-                    // getTags();
+                     getTags();
                     console.log($scope.assayCreate);
                     $scope.assayHeadrName = "Güncelle";
                     $scope.assayCreate.header = e.data.header;
@@ -405,21 +421,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
             }
         });
     }
-    //post assay
-    function postAssay() {
-        $http(PostAssayReq()).then(function (res) {
-            if (res.data.resultCode === 200) {
-                shortMessage(res.data.message, "s");
-                $scope.showSaveLoading = false;
-            } else {
-                shortMessage(res.data.message, "e");
-                getContentById($scope.assayCreate.Id);
-                $scope.showSaveLoading = false;
-            }
-        });
-    }
-
-
+ 
     //#endregion
 
     //#region NORMAL JS FUNCTIONS
@@ -512,7 +514,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
             method: "post",
             url: _link + "/content/contentcreate",
             headers: Headers,
-            data: $scope.assayCreate
+            data: $scope.createModel
         };
     };
 

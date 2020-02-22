@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace SCA.Services
 {
-    public class TagManager : BaseClass,ITagManager
+    public class TagManager : BaseClass, ITagManager
     {
         private readonly IErrorManagement _errorManagement;
         private readonly IDbConnection _db = new MySqlConnection(ConnectionString1);
@@ -148,7 +148,8 @@ namespace SCA.Services
             string query = "";
             if (crudType == CrudType.Insert)
             {
-                query = $" Insert Into TagRelation (TagId,TagContentId,ReadType,CreatedUserId,CreatedDate) VALUES" +
+                query = $"delete from CategoryRelation where TagContentId={dto.TagContentId};" +
+                    $" Insert Into TagRelation (TagId,TagContentId,ReadType,CreatedUserId,CreatedDate) VALUES" +
                     $" ({dto.TagId},{dto.TagContentId},'{dto.ReadType}',{session.Id},'{DateTime.Now}') ; SELECT LAST_INSERT_ID();";
             }
 
@@ -164,7 +165,6 @@ namespace SCA.Services
         {
             string res = string.Empty;
             List<long> idList = new List<long>();
-            List<TagRelationDto> tagRelationList = new List<TagRelationDto>();
             try
             {
                 string query = "";

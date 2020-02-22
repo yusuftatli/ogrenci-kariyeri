@@ -4,6 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+    <script src="https://www.google.com/recaptcha/api.js?render=6Le7ONcUAAAAAAk3OXKKJ2hGBH6mU-PXTauZHsH1"></script>
 
 <!-- post wraper start-->
 <section class="block-wrapper mt-15">
@@ -12,16 +13,7 @@
             <div class="col-lg-9">
                 <div class="contact-box ts-grid-box">
                     <h3>Contact Us</h3>
-                    <p>
-                        Thundercats meditation kogi.
-                        Tilde Pitchfork vegan, gentrify minim elit
-                        semiotics non messenger bag Austin which
-                        roasted Lumbersexual meh sustainable
-                        Thundercats meditation kogi. Tilde Pitchfork vegan,
-                        gentrify minim elit semiotics non messenger bag
-                        Austin which roasted.
-                    </p>
-
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5778.614010401408!2d28.99459077574185!3d41.0580579920667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cab64d9bed1d2f%3A0x27da443625825745!2zw5bEn3JlbmNpS2FyaXllcmk!5e0!3m2!1str!2str!4v1581274233653!5m2!1str!2str" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
                     <div class="widget contact-info">
 
                         <div class="contact-info-box">
@@ -47,7 +39,7 @@
                                 <p>0850 888 22 34</p>
                             </div>
                         </div>
-
+                        <div class="g-recaptcha" data-sitekey="6Le7ONcUAAAAAAk3OXKKJ2hGBH6mU-PXTauZHsH1"></div>
                     </div><!-- Widget end -->
 
                     <h3>İletişim Formu</h3>
@@ -309,3 +301,11 @@
     <!-- container end-->
 </section>
 <!-- post wraper end-->
+
+<script>
+    grecaptcha.ready(function () {
+        grecaptcha.execute('put your site key here', { action: 'homepage' }).then(function (token) {
+            // pass the token to the backend script for verification
+        });
+    });
+</script>

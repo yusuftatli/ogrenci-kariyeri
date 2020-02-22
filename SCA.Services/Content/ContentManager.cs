@@ -392,7 +392,7 @@ namespace SCA.Services
 
                 if (dto.IsSendConfirm == true)
                 {
-                    dto.PublishStateType = (dto.IsSendConfirm == true) ? PublishState.PublishProcess : PublishState.Taslak;
+                    dto.PublishStateType = (dto.IsSendConfirm == true) ? 2 : 1;
                 }
 
                 if (dto.Id == 0)
@@ -400,14 +400,14 @@ namespace SCA.Services
                     dto.UserId = session.Id;
                     dto.ReadCount = 0;
                     dto.Writer = session.Name + " " + session.Surname;
-                    dto.PublishStateType = PublishState.Taslak;
+                    dto.PublishStateType =1;
 
                     string query = "";
                     DynamicParameters filter = new DynamicParameters();
                     GetContentQuery(CrudType.Insert, dto, session, ref query, ref filter);
-                    _contentId = _db.Query<long>(query, filter).FirstOrDefault();
+                    _contentId =await _db.QueryFirstAsync<long>(query, filter);
 
-                    resultMessage = (dto.IsSendConfirm) ? "Makale Yönetici Tarafına Onaya Gönderildi." : "Makale Taslak Olarak Kayıt Edildi.";
+                    resultMessage = (dto.IsSendConfirm) ? "Haber editör Tarafına Onaya Gönderildi." : "Haber başarılı bir şekilde kaydedildi fakat editör onayına gönderilmek üzere beklemede";
                 }
                 else
                 {
@@ -420,14 +420,14 @@ namespace SCA.Services
                     string query = "";
                     DynamicParameters filter = new DynamicParameters();
                     GetContentQuery(CrudType.Update, dto, session, ref query, ref filter);
-                    var contenId = _db.Execute(query, filter);
+                     await _db.ExecuteAsync(query, filter);
 
-                    resultMessage = (dto.IsSendConfirm) ? "Makale Yönetici Tarafına Onaya Gönderildi." : "Makale Taslak Olarak Güncellendi.";
+                    resultMessage = (dto.IsSendConfirm) ? "Haber editör Tarafına Onaya Gönderildi." : "Haber başarılı bir şekilde güncellendi fakat editör onayına gönderilmek üzere beklemede";
                 }
 
                 if (_contentId > 0)
                 {
-                    res = Result.ReturnAsSuccess(message: resultMessage);
+                    res = Result.ReturnAsSuccess(message: resultMessage,data:_contentId);
                     string resTag = await _tagManager.CreateTag(dto.Tags, _contentId, ReadType.Content, session);
                     string resCategory = await _categoryManager.CreateCategoryRelation(dto.Category, _contentId, ReadType.Content, session);
                 }
@@ -522,20 +522,21 @@ namespace SCA.Services
 
         public void GetContentQuery(CrudType crudType, ContentDto dto, UserSession session, ref string query, ref DynamicParameters filter)
         {
-            query = @"INSERT INTO Content (UserId, PublishDate, PublishStateType, SycnId, ReadCount,ImagePath, SeoUrl, Header, Writer, ConfirmUserId, ConfirmUserName, Category, ContentDescription, PlatformType, IsHeadLine, IsManset, IsMainMenu, IsConstantMainMenu, EventId, InternId, VisibleId, Multiplier, CreatedUserId, CreatedDate, MenuSide)
-                           VALUES (@UserId, @PublishDate, @PublishStateType, @SycnId, @ReadCount, @ImagePath, @SeoUrl, @Header, @Writer, @ConfirmUserId, @ConfirmUserName, @Category, @ContentDescription, @PlatformType, @IsHeadLine, @IsManset, @IsMainMenu, @IsConstantMainMenu, @EventId, @InternId, @VisibleId, 1,@CreatedUserId, @CreatedDate, 0);";
-
             if (crudType == CrudType.Insert)
             {
+                query = @"INSERT INTO Content (UserId, PublishDate, PublishStateType, SycnId, ReadCount,ImagePath, SeoUrl, Header, Writer, ConfirmUserId, ConfirmUserName, Category, ContentDescription, PlatformType, IsHeadLine, IsManset, IsMainMenu, IsConstantMainMenu, EventId, InternId, VisibleId, Multiplier, CreatedUserId, CreatedDate, MenuSide)
+                           VALUES (@UserId, @PublishDate, @PublishStateType, @SycnId, @ReadCount, @ImagePath, @SeoUrl, @Header, @Writer, @ConfirmUserId, @ConfirmUserName, @Category, @ContentDescription, @PlatformType, @IsHeadLine, @IsManset, @IsMainMenu, @IsConstantMainMenu, @EventId, @InternId, @VisibleId, 1,@CreatedUserId, @CreatedDate, 0);";
                 query += "SELECT LAST_INSERT_ID();";
             }
 
-            query = @"UserId = @UserId, PublishDate = @PublishDate, ImagePath = @ImagePath, SeoUrl = @SeoUrl, 
+            if (crudType == CrudType.Update)
+            {
+                query = @"update Content set UserId = @UserId, PublishDate = @PublishDate, ImagePath = @ImagePath, SeoUrl = @SeoUrl, 
                       Header = @Header, Writer = @Writer, ContentDescription = @ContentDescription, PlatformType = @PlatformType,
                       IsHeadLine = @IsHeadLine, IsManset = @IsManset, IsMainMenu = @IsMainMenu, IsConstantMainMenu = @IsConstantMainMenu,
-                      EventId = @EventId, InternId = @InternId, VisibleId = @VisibleId, Multiplier = @Multiplier, UpdatedUserId = @UpdatedUserId,
-                      CreatedDate = @UpdatedDate";
-
+                      EventId = @EventId, InternId = @InternId, VisibleId = @VisibleId, Multiplier = 1, UpdatedUserId = @UpdatedUserId,
+                      CreatedDate = @UpdatedDate where Id = @Id";
+            }
             var _filter = new DynamicParameters();
 
 
@@ -568,6 +569,7 @@ namespace SCA.Services
 
             if (crudType == CrudType.Update)
             {
+                _filter.Add("Id", dto.Id);
                 _filter.Add("UserId", dto.UserId);
                 _filter.Add("PublishDate", dto.PublishDate);
                 _filter.Add("ImagePath", dto.ImagePath);
@@ -871,23 +873,19 @@ namespace SCA.Services
             string query = string.Empty;
             try
             {
-
-                query = "Select * from Content where MenuSide = @MenuSide";
+                query = "Select * from Content where Id = @Id";
                 DynamicParameters filter = new DynamicParameters();
-                filter.Add("MenuSide", state);
-                var resultData = await _db.QueryAsync<ContentDto>(query, filter) as List<ContentDto>;
+                filter.Add("Id", contentId);
+                var contentData = await _db.QueryFirstAsync<ContentDto>(query, filter);
 
-                if (resultData != null)
+                if (contentData.PlatformType == 1)
                 {
-                    query = "Update Content set MenuSide = 0 where MenuSide = @MenuSide";
-                    filter = new DynamicParameters();
-                    filter.Add("Id", contentId);
-                    filter.Add("MenuSide", state);
-                    await _db.QueryAsync(query, filter);
+                    res = Result.ReturnAsFail(message: "Haber platform türü mobil dir bu sebeble sabit menü ayarı yapılamaz.");
+                    return res;
                 }
 
-
-                query = "Update Content set MenuSide = @MenuSide where Id = @Id";
+                query = "Update Content set MenuSide = 0 where Id = @Id;" +
+                        "Update Content set MenuSide = @MenuSide where Id = @Id;";
                 filter = new DynamicParameters();
                 filter.Add("Id", contentId);
                 filter.Add("MenuSide", state);

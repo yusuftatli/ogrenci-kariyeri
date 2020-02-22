@@ -90,7 +90,7 @@ namespace SCA.Services
 
                 if (dto.IsSendConfirm == true)
                 {
-                    dto.PublishStateType = (dto.IsSendConfirm == true) ? PublishState.PublishProcess : PublishState.Taslak;
+                    dto.PublishStateType = (dto.IsSendConfirm == true) ? 2 : 1;
                 }
 
                 if (dto.Id == 0)
@@ -98,7 +98,7 @@ namespace SCA.Services
                     dto.UserId = session.Id;
                     dto.ReadCount = 0;
                     dto.Writer = session.Name + " " + session.Surname;
-                    dto.PublishStateType = PublishState.Taslak;
+                    dto.PublishStateType = 1;
 
                     string query = "";
                     DynamicParameters filter = new DynamicParameters();

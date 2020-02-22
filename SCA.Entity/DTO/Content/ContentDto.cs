@@ -15,8 +15,8 @@ namespace SCA.Entity.DTO
         public long SycnId { get; set; }
         public string Category { get; set; }
         public string CategoryDes { get; set; }
-        public PlatformType PlatformType { get; set; }
-        public PublishState PublishStateType { get; set; }
+        public int PlatformType { get; set; }
+        public int PublishStateType { get; set; }
         public long ReadCount { get; set; }
         public string ImagePath { get; set; }
         public long Multiplier { get; set; }
