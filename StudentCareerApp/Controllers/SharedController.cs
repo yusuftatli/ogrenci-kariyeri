@@ -207,7 +207,8 @@ namespace SCA.UI.Controllers
                     MasterGraduated = hasMasterGraduated ? int.Parse(Request.Form["MasterGraduate"].ToString()) : (int?)null,
                     IsStudent = hasClass,
                     ReferanceCode = Request.Form["ReferanceCode"].ToString(),
-                    EnrollPlatformTypeId = Entity.Enums.PlatformType.Web
+                    EnrollPlatformTypeId = Entity.Enums.PlatformType.Web,
+                    RoleTypeId = 3
                 };
 
                 var res = await _userService.InsertAsync(model);

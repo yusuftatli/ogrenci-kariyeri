@@ -29,5 +29,6 @@ namespace SCA.Entity.DTO
         public bool IsStudent { get; set; }
         public string ReferanceCode { get; set; }
         public PlatformType EnrollPlatformTypeId { get; set; }
+        public int RoleTypeId { get; set; }
     }
 }
