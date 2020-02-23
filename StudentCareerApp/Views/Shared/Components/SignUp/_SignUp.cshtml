@@ -3,14 +3,15 @@
 
 @model SCA.Entity.DTO.AllUniversityInformationDto
 
-    <style>
-        input[type='checkbox']{
-            vertical-align:middle;
-        }
-        .m-b-0{
-            margin-bottom:0 !important;
-        }
-    </style>
+<style>
+    input[type='checkbox'] {
+        vertical-align: middle;
+    }
+
+    .m-b-0 {
+        margin-bottom: 0 !important;
+    }
+</style>
 
 <section class="block-wrapper" id="vue-sign-up">
     <div class="container">
@@ -32,25 +33,15 @@
                                     <label>Soyisim</label>
                                     <input name="Surname" type="text" class="form-control" placeholder="" required>
                                 </div> <!-- form-group end.// -->
-                                <div class="col form-group">
-                                    <label>Kullanıcı adı</label>
-                                    <input name="Username" type="text" class="form-control" placeholder="" required />
-                                </div>
                             </div> <!-- form-row end.// -->
                             <div class="form-row">
                                 <div class="col form-group">
-                                    <label>Şehir</label>
-                                    <select class="form-control" name="CityId" required>
-                                        <option value="">Seçiniz...</option>
-                                        @foreach (var x in Model.Cities)
-                                        {
-                                            <option value="@x.CityId">@x.CityName</option>
-                                        }
-                                    </select>
-                                </div>
-                                <div class="col form-group">
                                     <label>Email</label>
                                     <input name="EmailAddress" type="email" class="form-control" placeholder="" required>
+                                </div> <!-- form-group end.// -->
+                                <div class="col form-group">
+                                    <label>Telefon</label>
+                                    <input name="PhoneNumber" type="text" class="form-control" placeholder="" required>
                                 </div> <!-- form-group end.// -->
                                 <div class="form-group col">
                                     <label>Cinsiyet</label>
@@ -61,6 +52,27 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <label>Doğum Tarihi</label>
+                                    <input type="date" name="BirthDate" class="form-control" required />
+                                </div>
+                                <div class="form-group col">
+                                    <label>Referans Kodu</label>
+                                    <input name="ReferanceCode" class="form-control" type="text">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <label>Şifre</label>
+                                    <input name="Password" class="form-control" type="password" required>
+                                </div> <!-- form-group end.// -->
+                                <div class="form-group col">
+                                    <label>Şifreni onayla</label>
+                                    <input name="RetypePassword" class="form-control" type="password" required>
+                                </div> <!-- form-group end.// -->
+                            </div>
+                            <hr />
                             <div class="form-row">
                                 <div class="form-group col">
                                     <label>Eğitim Durumu</label>
@@ -74,8 +86,13 @@
                                 </div> <!-- form-group end.// -->
                                 <!-- form-group end.// -->
                             </div> <!-- form-row.// -->
+
                             <div class="template-selected-highschool hidden">
                                 <div class="form-row">
+                                    <div class="form-group col">
+                                        <label>Lise</label>
+                                        <input name="HighSchoolName" class="form-control" type="text">
+                                    </div>
                                     <div class="form-group col">
                                         <label>Lise</label>
                                         <select class="form-control" name="HighSchoolTypeId">
@@ -101,18 +118,6 @@
                                         </select>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label>Fakülte</label>
-                                        <select class="form-control" name="FacultyId">
-                                            <option value="">Seçiniz...</option>
-                                            @foreach (var x in Model.Faculties)
-                                            {
-                                                <option value="@x.Id">@x.FacultyName</option>
-                                            }
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
                                         <label>Bölüm</label>
                                         <select class="form-control" name="DepartmentId">
                                             <option value="">Seçiniz...</option>
@@ -122,14 +127,41 @@
                                             }
                                         </select>
                                     </div>
-
                                 </div>
                             </div>
-                            <div class="form-row template-still-student hidden">
+                            <div class="form-row showGraduate hidden">
                                 <div class="form-group col-md-6">
-                                    <label>Hala öğrenci misiniz?</label><br />
-                                    <input name="IsStudent" type="checkbox" id="stillStudent" class="js-switch stillStudent" data-color="#00c292" />
+                                    <div class="showGraduate hidden">
+                                        <label>Mezuniyet Yılı</label>
+                                        <input name="GraduateYear" class="form-control" type="number">
+                                    </div>
                                 </div>
+                            </div>
+                            <div class="template-selected-master hidden">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label>Lisansüstü Üniversite</label>
+                                        <select class="form-control" name="MasterId">
+                                            <option value="">Seçiniz...</option>
+                                            @foreach (var x in Model.Universities)
+                                            {
+                                                <option value="@x.Id">@x.UniversityName</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Bölüm</label>
+                                        <select class="form-control" name="MasterDepartment">
+                                            <option value="">Seçiniz...</option>
+                                            @foreach (var x in Model.Departments)
+                                            {
+                                                <option value="@x.Id">@x.DepartmentName</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row showClasses hidden">
                                 <div class="form-group col-md-6">
                                     <div class="showClasses hidden">
                                         <label>Sınıf</label>
@@ -143,25 +175,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-row">
-                                <div class="form-group col">
-                                    <label>Doğum Tarihi</label>
-                                    <input type="date" name="BirthDate" class="form-control" required />
+                            <div class="form-row showMasterGraduate hidden">
+                                <div class="form-group col-md-6">
+                                    <div class="showMasterGraduate hidden">
+                                        <label>Lisansüstü Mezuniyet Yılı</label>
+                                        <input name="MasterGraduate" class="form-control" type="number">
+                                    </div>
                                 </div>
-                                <div class="form-group col">
-                                    <label>Referans Kodu</label>
-                                    <input name="ReferanceCode" class="form-control" type="text">
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col">
-                                    <label>Şifre</label>
-                                    <input name="Password" class="form-control" type="password" required>
-                                </div> <!-- form-group end.// -->
-                                <div class="form-group col">
-                                    <label>Şifreni onayla</label>
-                                    <input name="RetypePassword" class="form-control" type="password" required>
-                                </div> <!-- form-group end.// -->
                             </div>
                             <div class="form-group">
                                 <button type="submit" id="registerSubmit" class="btn btn-primary btn-block">Kayıt Ol</button>

@@ -11,28 +11,23 @@ namespace SCA.Entity.DTO
         public long Id { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
-        public string UserName { get; set; }
         public string EmailAddress { get; set; }
-        public long CityId { get; set; }
+        public string PhoneNumber { get; set; }
         public GenderType GenderId { get; set; }
-        public string Biography { get; set; }
         public EducationType? EducationStatusId { get; set; }
         public DateTime BirthDate { get; set; }
-        public long? HighSchoolTypeId { get; set; }
-        public long? UniversityId { get; set; }
-        public long? FacultyId { get; set; }
-        public long? DepartmentId { get; set; }
-        public long? ClassId { get; set; }
-        public bool IsStudent { get; set; }
         public string Password { get; set; }
-        public string RetypePassword { get; set; }
+        public long? HighSchoolTypeId { get; set; }
+        public string HigSchoolName { get; set; }
+        public long? ClassId { get; set; }
+        public int? NewGraduatedYear { get; set; }
+        public long? UniversityId { get; set; }
+        public long? DepartmentId { get; set; }
+        public int? MasterId { get; set; }
+        public int? MasterDepartment { get; set; }
+        public int? MasterGraduated { get; set; }
+        public bool IsStudent { get; set; }
         public string ReferanceCode { get; set; }
-        public bool IsEmailSend { get; set; }
-        public bool IsPhoneSend { get; set; }
-        public bool IsActive { get; set; }
-        public bool SubscribeNewsletter { get; set; }
-        public string ImageData { get; set; }
-        public int BanCount { get; set; }
         public PlatformType EnrollPlatformTypeId { get; set; }
     }
 }

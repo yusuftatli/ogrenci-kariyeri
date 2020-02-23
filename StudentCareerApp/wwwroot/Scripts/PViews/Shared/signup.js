@@ -92,15 +92,49 @@ $(document).on("click", "#acceptCookie", function () {
 });
 
 $(document).on("change", "#educationType", function (e) {
-  e.target.value === "2" || e.target.value === "3"
-    ? $(".template-selected-university").removeClass("hidden")
-    : $(".template-selected-university").addClass("hidden");
-  e.target.value === "1"
-    ? $(".template-selected-highschool").removeClass("hidden")
-    : $(".template-selected-highschool").addClass("hidden");
-  e.target.value > "0"
-    ? $(".template-still-student").removeClass("hidden")
-    : $(".template-still-student").addClass("hidden");
+  let val = e.target.value;
+  if (val === "1" || val === "4")
+    $(".template-selected-highschool").removeClass("hidden");
+  else
+    $(".template-selected-highschool").addClass("hidden");
+
+  if (val === "2" || val === "3" || val === "8" || val === "9" || val === "5" || val === "6")
+    $(".template-selected-university").removeClass("hidden");
+  else
+    $(".template-selected-university").addClass("hidden");
+
+  if (val === "4" || val === "6" || val === "3" || val === "8" || val === "9")
+    $(".showGraduate").removeClass("hidden");
+  else
+    $(".showGraduate").addClass("hidden");
+
+  if (val === "8" || val === "9")
+    $(".template-selected-master").removeClass("hidden");
+  else
+    $(".template-selected-master").addClass("hidden");
+
+  if (val === "9")
+    $(".showMasterGraduate").removeClass("hidden");
+  else
+    $(".showMasterGraduate").addClass("hidden");
+
+  if (val === "1" || val === "5" || val === "2" || val === "8")
+    $(".showClasses").removeClass("hidden");
+  else
+    $(".showClasses").addClass("hidden");
+
+
+
+
+  // e.target.value === "2" || e.target.value === "3"
+  //   ? $(".template-selected-university").removeClass("hidden")
+  //   : $(".template-selected-university").addClass("hidden");
+  // e.target.value === "1"
+  //   ? $(".template-selected-highschool").removeClass("hidden")
+  //   : $(".template-selected-highschool").addClass("hidden");
+  // e.target.value > "0"
+  //   ? $(".template-still-student").removeClass("hidden")
+  //   : $(".template-still-student").addClass("hidden");
 });
 
 $(document).on("submit", ".loginForm", function (e) {

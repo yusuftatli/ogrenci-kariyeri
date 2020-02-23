@@ -81,5 +81,7 @@ namespace SCA.Services
         Task<ServiceResult> UpdateUserCategory(string categories, string token);
 
         Task<ServiceResult> SaveUserPicture(string value);
+
+        long GetUserId();
     }
 }

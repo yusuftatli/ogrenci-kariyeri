@@ -161,26 +161,58 @@ namespace SCA.UI.Controllers
             if (Request.Form["Password"].ToString() == Request.Form["RetypePassword"])
             {
                 var educationType = (Entity.Enums.EducationType)Enum.Parse(typeof(Entity.Enums.EducationType), Request.Form["EducationType"].ToString());
+
+                var hasHighSchool = educationType == Entity.Enums.EducationType.HighSchoolGraduate || educationType == Entity.Enums.EducationType.HighSchoolStudent;
+
+                var hasClass = educationType == Entity.Enums.EducationType.HighSchoolStudent ||
+                                educationType == Entity.Enums.EducationType.AssociateStudent ||
+                                educationType == Entity.Enums.EducationType.PostGraduateStudent ||
+                                educationType == Entity.Enums.EducationType.UniversityStudent;
+
+                var hasGraduate = educationType == Entity.Enums.EducationType.AssociateGraduate ||
+                                    educationType == Entity.Enums.EducationType.HighSchoolGraduate ||
+                                    educationType == Entity.Enums.EducationType.PostGraduateGraduate ||
+                                    educationType == Entity.Enums.EducationType.UniversityGraduate;
+
+                var hasUniversity = educationType == Entity.Enums.EducationType.AssociateGraduate ||
+                                    educationType == Entity.Enums.EducationType.AssociateStudent ||
+                                    educationType == Entity.Enums.EducationType.UniversityGraduate ||
+                                    educationType == Entity.Enums.EducationType.UniversityStudent ||
+                                    educationType == Entity.Enums.EducationType.PostGraduateGraduate ||
+                                    educationType == Entity.Enums.EducationType.PostGraduateStudent;
+
+                var hasMaster = educationType == Entity.Enums.EducationType.PostGraduateGraduate || educationType == Entity.Enums.EducationType.PostGraduateStudent;
+
+                var hasMasterGraduated = educationType == Entity.Enums.EducationType.PostGraduateGraduate;
+
                 var model = new UserRegisterDto
                 {
-                    BirthDate = Convert.ToDateTime(Request.Form["BirthDate"].ToString()),
-                    ClassId = Request.Form["IsStudent"].ToString() == "on" ? long.Parse(Request.Form["ClassId"].ToString()) : 0,
-                    DepartmentId = (educationType == Entity.Enums.EducationType.University || educationType == Entity.Enums.EducationType.Master) ? long.Parse(Request.Form["DepartmentId"].ToString()) : 0,
-                    EducationStatusId = educationType,
-                    EmailAddress = Request.Form["EmailAddress"].ToString(),
-                    FacultyId = (educationType == Entity.Enums.EducationType.University || educationType == Entity.Enums.EducationType.Master) ? long.Parse(Request.Form["FacultyId"].ToString()) : 0,
-                    GenderId = (Entity.Enums.GenderType)Enum.Parse(typeof(Entity.Enums.GenderType), Request.Form["GenderId"].ToString()),
-                    HighSchoolTypeId = (educationType == Entity.Enums.EducationType.HighSchool) ? long.Parse(Request.Form["HighSchoolTypeId"].ToString()) : 0,
-                    IsStudent = Request.Form["IsStudent"].ToString() == "on",
+                    Id = _userManager.GetUserId(),
                     Name = Request.Form["Name"].ToString(),
-                    Password = Request.Form["Password"].ToString().MD5Hash(),
                     Surname = Request.Form["Surname"].ToString(),
-                    UniversityId = (educationType == Entity.Enums.EducationType.University || educationType == Entity.Enums.EducationType.Master) ? long.Parse(Request.Form["UniversityId"].ToString()) : 0,
-                    UserName = Request.Form["Username"].ToString(),
-                    SubscribeNewsletter = Request.Form["SubscribeNewsletter"].ToString() == "on",
-                    ReferanceCode = Request.Form["ReferanceCode"].ToString()
+                    EmailAddress = Request.Form["EmailAddress"].ToString(),
+                    PhoneNumber = Request.Form["PhoneNumber"].ToString(),
+                    GenderId = (Entity.Enums.GenderType)Enum.Parse(typeof(Entity.Enums.GenderType), Request.Form["GenderId"].ToString()),
+                    EducationStatusId = educationType,
+                    BirthDate = Convert.ToDateTime(Request.Form["BirthDate"].ToString()),
+                    Password = Request.Form["Password"].ToString().MD5Hash(),
+                    HighSchoolTypeId = hasHighSchool ? long.Parse(Request.Form["HighSchoolTypeId"].ToString()) : (long?)null,
+                    HigSchoolName = hasHighSchool ? Request.Form["HighSchoolName"].ToString(): null,
+                    ClassId = hasClass ? long.Parse(Request.Form["ClassId"].ToString()) : (long?)null,
+                    NewGraduatedYear = hasGraduate ? int.Parse(Request.Form["GraduateYear"].ToString()) : (int?)null,
+                    UniversityId = hasUniversity ? long.Parse(Request.Form["UniversityId"].ToString()) : (long?)null,
+                    DepartmentId = hasUniversity ? long.Parse(Request.Form["DepartmentId"].ToString()) : (long?)null,
+                    MasterId = hasMaster ? int.Parse(Request.Form["MasterId"].ToString()) : (int?)null,
+                    MasterDepartment = hasMaster ? int.Parse(Request.Form["MasterDepartment"].ToString()) : (int?)null,
+                    MasterGraduated = hasMasterGraduated ? int.Parse(Request.Form["MasterGraduate"].ToString()) : (int?)null,
+                    IsStudent = hasClass,
+                    ReferanceCode = Request.Form["ReferanceCode"].ToString(),
+                    EnrollPlatformTypeId = Entity.Enums.PlatformType.Web
                 };
-                var res = await _userManager.RegisterUser(model);
+
+                var res = await _userService.InsertAsync(model);
+
+                //var res = await _userManager.RegisterUser(model);
                 if (res.IsSuccess())
                 {
                     var loginRes = await _userManager.CheckUserForLogin(model.EmailAddress, model.Password);
