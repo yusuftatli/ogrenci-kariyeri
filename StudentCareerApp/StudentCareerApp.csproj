@@ -922,6 +922,7 @@
     <Folder Include="UserPicture\" />
     <Folder Include="wwwroot\AdminFiles\CMS\Temp\" />
     <Folder Include="wwwroot\EmailTemplate\" />
+    <Folder Include="wwwroot\lib\fileman\images\" />
   </ItemGroup>
 
   <ItemGroup>

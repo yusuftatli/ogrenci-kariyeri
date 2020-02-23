@@ -9,7 +9,6 @@
   "MAX_IMAGE_WIDTH": "1000",
   "MAX_IMAGE_HEIGHT": "1000",
   "INTEGRATION": "ckeditor",
-  "SETROOTDIRECTORY":  "/admin/RoxyFileman/SETROOTDIRECTORY",
   "DIRLIST": "/admin/RoxyFileman/DIRLIST",
   "CREATEDIR": "/admin/RoxyFileman/CREATEDIR",
   "DELETEDIR": "/admin/RoxyFileman/DELETEDIR",
