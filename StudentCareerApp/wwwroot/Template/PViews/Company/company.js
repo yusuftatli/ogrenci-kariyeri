@@ -25,13 +25,13 @@
     },
     methods: {
         getCompany: function(){
-            if(!!this.companyId){
+            if(!this.companyId){
                 $.ajax({
                     url: this.urls.getCompany,
                     type: 'get',
                     data: {id: this.companyId },
                     success: (res) => {
-                        if(res.resultCode == 200){
+                        if(res.resultCode === 200){
                             this.company = res.data;
                             $("#roxyFieldAnnouncement").val(res.data.headerImage);
                             setTimeout(() => {
@@ -49,7 +49,7 @@
                 url: this.urls.getSectorTypes,
                 type: 'get',
                 success: (res) => {
-                    if (res.resultCode == 200)
+                    if (res.resultCode === 200)
                         this.sectorTypes = res.data;
                     else
                         toastr["error"]("Sektör tipleri yüklenemedi.");
@@ -66,7 +66,7 @@
                 type: 'post',
                 data: {model: this.company},
                 success: (res) => {
-                    if (res.resultCode == 200){
+                    if (res.resultCode === 200){
                         toastr["success"]("Şirket kayıt işlemi başarılı!");
                         $("#popupModal").modal('hide');
                     }

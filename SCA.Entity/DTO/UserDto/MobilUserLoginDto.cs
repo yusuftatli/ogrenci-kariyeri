@@ -8,5 +8,7 @@ namespace SCA.Entity.DTO
     {
         public string username { get; set; }
         public string password { get; set; }
+        public string push { get; set; }
+        public string UserRegisterPlatformId { get; set; }
     }
 }

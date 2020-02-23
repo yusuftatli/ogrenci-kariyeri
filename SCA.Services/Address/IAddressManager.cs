@@ -12,6 +12,10 @@ namespace SCA.Services
         Task<List<CitiesDto>> CityList();
         Task<ServiceResult> GetCities();
         Task<ServiceResult> GetDistrict(int cityId);
-        
+
+
+        Task<ServiceResult> DefaultValues();
+
+
     }
 }

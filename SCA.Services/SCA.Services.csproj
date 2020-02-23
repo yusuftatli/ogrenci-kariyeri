@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Cake.Core" Version="0.37.0" />
+    <PackageReference Include="ChilkatDnCore" Version="9.5.0.80" />
     <PackageReference Include="Dapper" Version="1.60.6" />
     <PackageReference Include="Grpc.Core" Version="2.24.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />

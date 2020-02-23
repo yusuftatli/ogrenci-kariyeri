@@ -21,7 +21,7 @@ namespace SCA.Services
         private readonly IErrorManagement _errorManagement;
         private readonly IDbConnection _db = new MySqlConnection(ConnectionString1);
 
-        public AddressManager( IErrorManagement errorManagement)
+        public AddressManager(IErrorManagement errorManagement)
         {
             _errorManagement = errorManagement;
         }
@@ -42,6 +42,44 @@ namespace SCA.Services
             }
             return res;
         }
+
+
+        public async Task<ServiceResult> DefaultValues()
+        {
+            ServiceResult res = new ServiceResult();
+            try
+            {
+                DefaultDatalarMobilDto resultModel = new DefaultDatalarMobilDto();
+
+                string query1 = "";
+                string query2 = "";
+                string query3 = "";
+                string query4 = "";
+                string query5 = "";
+
+                query1 = "select * from HighSchool";
+                query2 = "select * from Universities order by Description asc";
+                query3 = "select * from Category where IsActive = 1";
+                query4 = "select * from Departmnet  order by Description asc";
+                query5 = "select Id as Id, CityName As Description  from Cities";
+
+                resultModel.HighSchoolList = await _db.QueryAsync<HighSchoolMobilDto>(query1) as List<HighSchoolMobilDto>;
+                resultModel.UniversityList = await _db.QueryAsync<UniverstiyMobilDto>(query2) as List<UniverstiyMobilDto>;
+                resultModel.CategoriesList = await _db.QueryAsync<CategoriesMobilDto>(query3) as List<CategoriesMobilDto>;
+                resultModel.DepartmentList = await _db.QueryAsync<DepartmentMobilDto>(query4) as List<DepartmentMobilDto>;
+                resultModel.CityList = await _db.QueryAsync<CitiesMobilDto>(query5) as List<CitiesMobilDto>;
+
+                res = Result.ReturnAsSuccess(data: resultModel);
+            }
+            catch (Exception ex)
+            {
+                res = Result.ReturnAsFail();
+            }
+            return res;
+        }
+
+
+
 
         public async Task<ServiceResult> GetDistrict(int cityId)
         {
@@ -74,7 +112,7 @@ namespace SCA.Services
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex, 0, "CityList " , Entity.Enums.PlatformType.Web);
+                await _errorManagement.SaveError(ex, 0, "CityList ", Entity.Enums.PlatformType.Web);
             }
             return res;
         }

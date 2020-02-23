@@ -94,7 +94,7 @@ namespace StudentCareerApp.Controllers
             var userId = HttpContext.GetSessionData<UserSession>("userInfo")?.Id;
             if (userId != null)
             {
-                var res = await _userManager.UpdateUserCategory(userId.Value, categories);
+                var res = await _userManager.UpdateUserCategory( categories,"");
                 return Json(res);
             }
             return Json(new { resultCode = 401, message = "Giriş yapılmadan ilgi alanları seçilemez." });

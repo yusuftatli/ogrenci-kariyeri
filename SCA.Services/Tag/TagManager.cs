@@ -167,6 +167,14 @@ namespace SCA.Services
             List<long> idList = new List<long>();
             try
             {
+
+                var tagData = await _db.QueryFirstOrDefaultAsync<TagRelationDto>($"select * from TagRelation where TagContentId = {tagContentId}");
+
+                if (tagData != null)
+                {
+                    await _db.ExecuteAsync($"delete from CategoryRelation where TagContentId ={ tagContentId};");
+                }
+
                 string query = "";
                 string[] _tags = tags.Replace("[", "").Replace("]", "").Replace("\"", "").Replace("\"", "").Split(',');
 
@@ -175,41 +183,23 @@ namespace SCA.Services
                     TagRelation relation = new TagRelation();
                     if (IsInteger(item))
                     {
-                        var relationData = new TagRelationDto()
-                        {
-                            TagId = Convert.ToInt64(item),
-                            TagContentId = tagContentId,
-                            ReadType = ReadType
-                        };
-                        query = GetTagRelationQuery(CrudType.Insert, relationData, session);
-                        var relationId = await _db.QueryAsync<long>(query);
-                        idList.Add(relationId.First());
+                        query = string.Empty;
+                        query = $"Insert Into TagRelation (TagId, TagContentId) VALUES ({Convert.ToInt64(item)},{tagContentId})";
+                        var relationId = await _db.QueryFirstOrDefaultAsync<TagRelationDto>(query);
                     }
                     else
                     {
-                        var data = new Tags()
-                        {
-                            Description = item,
-                            Hit = 1
-                        };
+                      
 
-                        query = GetTagQuery(CrudType.Insert, data, session);
-                        var tagId = await _db.QueryAsync<long>(query);
-
-                        var relationData = new TagRelationDto()
-                        {
-                            TagId = tagId.First(),
-                            TagContentId = tagContentId,
-                            ReadType = ReadType
-                        };
-                        query = GetTagRelationQuery(CrudType.Insert, relationData, session);
-                        var relationId = await _db.ExecuteAsync(query);
-                        idList.Add(relationId);
+                        query = string.Empty;
+                        query = $"Insert Into Tags (Description) values('{item}')";
+                        await _db.ExecuteAsync(query);
+                        query = $"select * from Tags where Description= '{item}'";
+                        var tagD = await _db.QueryFirstAsync<TagDto>(query);
+                        query = $"Insert Into TagRelation (TagId, TagContentId) VALUES ({Convert.ToInt64(tagD.Id)},{tagContentId})";
+                        var relationId = await _db.QueryFirstOrDefaultAsync<TagRelationDto>(query);
                     }
-                    foreach (long _id in idList)
-                    {
-                        res += _id.ToString();
-                    }
+                 
                 }
                 foreach (long item in idList)
                 {

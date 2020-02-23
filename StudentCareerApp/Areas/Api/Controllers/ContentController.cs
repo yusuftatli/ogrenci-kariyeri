@@ -81,10 +81,10 @@ namespace StudentCareerApp.Areas.Api.Controller
         }
 
         [Authorize()]
-        [HttpPost("content-Detail-mobil")]
-        public async Task<ServiceResult> GetContentByMobil(ContentDetailMobilDto dto)
+        [HttpPost("mobil-detail")]
+        public async Task<ServiceResult> GetContentByMobil(long contentId)
         {
-            return await _contentManager.GetContentByMobil(dto, await HttpContext.GetTokenAsync("access_token"));
+            return await _contentManager.GetContentByMobil(contentId, await HttpContext.GetTokenAsync("access_token"));
         }
 
         //[Authorize()]
@@ -183,6 +183,12 @@ namespace StudentCareerApp.Areas.Api.Controller
         public async Task<ServiceResult> GetMenuSideState(long contentId)
         {
             return await _contentManager.GetMenuSideState(contentId);
+        }
+
+        [HttpGet("GetSearchContent")]
+        public async Task<ServiceResult> GetSearch(string seacrh, long count)
+        {
+            return await _contentManager.GetSearch(seacrh, count, await HttpContext.GetTokenAsync("access_token"));
         }
     }
 }

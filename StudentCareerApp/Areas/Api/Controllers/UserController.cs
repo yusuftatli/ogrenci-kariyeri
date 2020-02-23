@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -21,9 +23,11 @@ namespace StudentCareerApp.Areas.Api.Controller
     public class UserController : ControllerBase
     {
         IUserManager _userManager;
-        public UserController(IUserManager userManager)
+        private IHostingEnvironment _hostingEnvironment;
+        public UserController(IUserManager userManager, IHostingEnvironment hostingEnvironment)
         {
             _userManager = userManager;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         [Authorize()]
@@ -65,12 +69,20 @@ namespace StudentCareerApp.Areas.Api.Controller
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [Authorize]
+        [AllowAnonymous]
         [HttpPost("mobil-createuser")]
         public async Task<ServiceResult> CreateUserByMobil(UserMobilDto dto)
         {
             return await _userManager.CreateUserByMobil(dto);
         }
+
+
+        [HttpPost("update-user-categories")]
+        public async Task<ServiceResult> UpdateUserCategoryByMobil(string category)
+        {
+            return await _userManager.UpdateUserCategoryByMobil(category, await HttpContext.GetTokenAsync("access_token"));
+        }
+
 
         [HttpPost("mobil-UpdateUserByWeb")]
         public async Task<ServiceResult> UpdateUserByWeb(UserWeblDto dto)
@@ -97,9 +109,38 @@ namespace StudentCareerApp.Areas.Api.Controller
                 var result = JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo"));
                 HttpContext.Session.SetString("NameSurname", result.Name + " " + result.Surname);
                 HttpContext.Session.SetString("RoleTypeId", result.RoleTypeId.ToString());
+
+                await _userManager.UpdateUserPush(dto, result.Token);
                 return res;
             }
             return res;
+        }
+
+        [Authorize]
+        [HttpPost("update-category")]
+        public async Task<ServiceResult> UpdateUserCategory(CategoryPostDto dto)
+        {
+            return await _userManager.UpdateUserCategory(dto.Categories, await HttpContext.GetTokenAsync("access_token"));
+        }
+
+        [Authorize]
+        [HttpPost("update-password")]
+        public async Task<ServiceResult> UpdateUserPassword(UserForgatPasswordDto dto)
+        {
+            return await _userManager.UpdateUserPassword(dto.oldPassword, dto.newPassword, await HttpContext.GetTokenAsync("access_token"));
+        }
+
+        [HttpPost("push-update")]
+        public async Task<ServiceResult> UpdateUserPush(MobilUserLoginDto dto)
+        {
+            return await _userManager.UpdateUserPush(dto, await HttpContext.GetTokenAsync("access_token"));
+        }
+
+        [Authorize]
+        [HttpGet("get-userprofile")]
+        public async Task<ServiceResult> GetUserProfileInfo()
+        {
+            return await _userManager.GetUserProfileInfo(await HttpContext.GetTokenAsync("access_token"));
         }
 
         [HttpPost("web-updateUserRoleType")]
@@ -119,5 +160,43 @@ namespace StudentCareerApp.Areas.Api.Controller
         {
             return await _userManager.Dashboard(JsonConvert.DeserializeObject<UserSession>(HttpContext.Session.GetString("userInfo")));
         }
+
+
+        //[HttpPost]
+        //public async Task<IActionResult> AddCompanyImage([FromForm]UserPictureModel file)
+        //{
+        //    var serverPath = $"AdminFiles\\CMS\\Content\\Companies\\12345";
+        //    string path = Path.Combine(_hostingEnvironment.WebRootPath, serverPath);
+        //    Directory.CreateDirectory(path);
+
+        //    if (file.Base64Data.Length > 0)
+        //        using (var fileStream = new FileStream(Path.Combine(path, file.Base64Data.FileName), FileMode.Create))
+        //            await file.Base64Data.CopyToAsync(fileStream);
+
+        //   return Ok();
+        //}
+
+        [HttpPost("save-picture")]
+        public async Task<ServiceResult> AddCompanyImage(UserPictureModel file)
+        {
+            ServiceResult res = new ServiceResult();
+            if (file == null)
+            {
+                return Result.ReturnAsFail();
+            }
+            var serverPath = $"AdminFiles\\CMS\\Content\\Companies\\resim343";
+            string path = Path.Combine(_hostingEnvironment.WebRootPath, serverPath);
+            Directory.CreateDirectory(path);
+
+            if (file.Base64Data.Length > 0)
+                using (var fileStream = new FileStream(Path.Combine(path, file.Base64Data.FileName), FileMode.Create))
+                    await file.Base64Data.CopyToAsync(fileStream);
+
+
+            return Result.ReturnAsSuccess();
+        }
+
+
     }
 }
+

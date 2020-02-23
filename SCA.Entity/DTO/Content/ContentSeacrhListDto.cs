@@ -4,9 +4,10 @@ using System.Text;
 
 namespace SCA.Entity.DTO
 {
-    public class TagDto
+    public class ContentSeacrhListDto
     {
         public long Id { get; set; }
-        public string Description { get; set; }
+        public string ImagePath { get; set; }
+        public string Header { get; set; }
     }
 }

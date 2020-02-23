@@ -23,7 +23,7 @@ namespace StudentCareerApp.Areas.Api.Controller
             _addressManager = addressManager;
         }
 
-        [Route("GetCities"),HttpGet]
+        [Route("GetCities"), HttpGet]
         public async Task<ServiceResult> GetCities()
         {
             return await _addressManager.GetCities();
@@ -35,6 +35,11 @@ namespace StudentCareerApp.Areas.Api.Controller
             return await _addressManager.GetDistrict(cityId);
         }
 
-       
+        [HttpGet, Route("GetDefaultValues")]
+        public async Task<ServiceResult> DefaultValues()
+        {
+            return await _addressManager.DefaultValues();
+        }
+
     }
 }

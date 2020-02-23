@@ -904,7 +904,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.jQuery.Unobtrusive.Ajax" Version="3.2.6" />
     <PackageReference Include="Microsoft.jQuery.Unobtrusive.Validation" Version="3.2.11" />
@@ -920,6 +919,7 @@
 
   <ItemGroup>
     <Folder Include="Filters\" />
+    <Folder Include="UserPicture\" />
     <Folder Include="wwwroot\AdminFiles\CMS\Temp\" />
     <Folder Include="wwwroot\EmailTemplate\" />
   </ItemGroup>

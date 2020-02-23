@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SCA.Entity.DTO
 {
-    public class TagDto
+   public class HighSchoolMobilDto
     {
         public long Id { get; set; }
         public string Description { get; set; }

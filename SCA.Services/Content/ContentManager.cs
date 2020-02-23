@@ -35,6 +35,25 @@ namespace SCA.Services
             _errorManagement = errorManagement;
         }
 
+        public async Task<ServiceResult> GetSearch(string seacrh, long count, string token)
+        {
+            ServiceResult res = new ServiceResult();
+            try
+            {
+                
+                string query = string.Empty;
+                query = $"select Id, ImagePath, Header from Content where ContentDescription like '%{seacrh}%' limit {count};";
+                var dataList = await _db.QueryAsync<ContentSeacrhListDto>(query) as List<ContentSeacrhListDto>;
+                res = Result.ReturnAsSuccess(data: dataList);
+            }
+            catch (Exception)
+            {
+
+            }
+            return res;
+        }
+
+
         /// <summary>
         /// makale kısa açıklamalarını listeler
         /// </summary>
@@ -154,25 +173,15 @@ namespace SCA.Services
             return res;
         }
 
-        public async Task<ServiceResult> GetContentByMobil(ContentDetailMobilDto dto, string token)
+        public async Task<ServiceResult> GetContentByMobil(long contentId, string token)
         {
             ServiceResult res = new ServiceResult();
-            if (dto.Equals(null))
-            {
-                res = Result.ReturnAsFail(message: "Model boş olamaz.");
-                return res;
-            }
-
-            if (string.IsNullOrEmpty(dto.seoUrl))
-            {
-                res = Result.ReturnAsFail(message: "Seo url boş olamaz.");
-                return res;
-            }
+          
             long userId = JwtToken.GetUserId(token);
             ContentDetailForDetailPageDTO result = new ContentDetailForDetailPageDTO();
             try
             {
-                using (var multi = await _db.QueryMultipleAsync("ContentListBySeoUrl", new { _SeoUrl = dto.seoUrl, _UserId = userId, _Ip = dto.ip }, commandType: CommandType.StoredProcedure))
+                using (var multi = await _db.QueryMultipleAsync("ContentListByMobil", new { _Id = contentId, _UserId = userId }, commandType: CommandType.StoredProcedure))
                 {
                     result = await multi.ReadFirstOrDefaultAsync<ContentDetailForDetailPageDTO>();
                     result.MostPopularItems = await multi.ReadAsync<ContentForHomePageDTO>() as List<ContentForHomePageDTO>;
@@ -400,12 +409,12 @@ namespace SCA.Services
                     dto.UserId = session.Id;
                     dto.ReadCount = 0;
                     dto.Writer = session.Name + " " + session.Surname;
-                    dto.PublishStateType =1;
+                    dto.PublishStateType = 1;
 
                     string query = "";
                     DynamicParameters filter = new DynamicParameters();
                     GetContentQuery(CrudType.Insert, dto, session, ref query, ref filter);
-                    _contentId =await _db.QueryFirstAsync<long>(query, filter);
+                    _contentId = await _db.QueryFirstAsync<long>(query, filter);
 
                     resultMessage = (dto.IsSendConfirm) ? "Haber editör Tarafına Onaya Gönderildi." : "Haber başarılı bir şekilde kaydedildi fakat editör onayına gönderilmek üzere beklemede";
                 }
@@ -420,21 +429,16 @@ namespace SCA.Services
                     string query = "";
                     DynamicParameters filter = new DynamicParameters();
                     GetContentQuery(CrudType.Update, dto, session, ref query, ref filter);
-                     await _db.ExecuteAsync(query, filter);
+                    await _db.ExecuteAsync(query, filter);
 
                     resultMessage = (dto.IsSendConfirm) ? "Haber editör Tarafına Onaya Gönderildi." : "Haber başarılı bir şekilde güncellendi fakat editör onayına gönderilmek üzere beklemede";
                 }
 
-                if (_contentId > 0)
-                {
-                    res = Result.ReturnAsSuccess(message: resultMessage,data:_contentId);
-                    string resTag = await _tagManager.CreateTag(dto.Tags, _contentId, ReadType.Content, session);
-                    string resCategory = await _categoryManager.CreateCategoryRelation(dto.Category, _contentId, ReadType.Content, session);
-                }
-                else
-                {
-                    res = Result.ReturnAsFail(message: resultMessage);
-                }
+                
+                    res = Result.ReturnAsSuccess(message: resultMessage, data: _contentId> 0?_contentId :dto.Id);
+                    string resTag = await _tagManager.CreateTag(dto.Tags, _contentId > 0 ? _contentId : dto.Id, ReadType.Content, session);
+                    string resCategory = await _categoryManager.CreateCategoryRelation(dto.Category, _contentId > 0 ? _contentId : dto.Id, ReadType.Content, session);
+              
             }
             catch (Exception ex)
             {

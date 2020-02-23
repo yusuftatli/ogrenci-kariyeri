@@ -14,6 +14,7 @@ namespace SCA.Services
         Task CreateUserLog(UserLogDto dto);
         Task<ServiceResult> CheckUserForLogin(string email, string password);
         Task<ServiceResult> RegisterUser(UserRegisterDto dto);
+        Task<ServiceResult> GetUserProfileInfo(string token);
         Task<ServiceResult> CreateUserByMobil(UserMobilDto dto);
         Task<List<UserModelList>> GetUserList();
         /// <summary>
@@ -46,8 +47,39 @@ namespace SCA.Services
         /// <param name="userId">Kullanıcı id</param>
         /// <param name="category">kategori</param>
         /// <returns></returns>
-        Task<ServiceResult> UpdateUserCategory(long userId, string category);
+        //Task<ServiceResult> UpdateUserCategory(long userId, string category);
         Task<ServiceResult> Dashboard(UserSession session);
         Task<ServiceResult> UpdateUserByWeb(UserWeblDto dto);
+
+
+        /// <summary>
+        /// push platform update yapar
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        Task<ServiceResult> UpdateUserPush(MobilUserLoginDto dto, string token);
+
+
+        /// <summary>
+        /// kulanıcı ilgil alanları kayıt
+        /// </summary>
+        /// <param name="category"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        Task<ServiceResult> UpdateUserCategoryByMobil(string category, string token);
+
+        Task<ServiceResult> UpdateUserPassword(string oldPassword, string newPassword, string token);
+
+
+        /// <summary>
+        /// kullanıcı ilgil alanalrı kayıt 
+        /// </summary>
+        /// <param name="categories"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        Task<ServiceResult> UpdateUserCategory(string categories, string token);
+
+        Task<ServiceResult> SaveUserPicture(string value);
     }
 }

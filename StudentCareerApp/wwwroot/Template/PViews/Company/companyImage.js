@@ -19,7 +19,7 @@
                 url: this.urls.getCompanyImages,
                 data: { companyId: this.companyId },
                 success: ((res) => {
-                    if (res.resultCode == 200)
+                    if (res.resultCode === 200)
                         this.images = res.data;
                 })
             })
