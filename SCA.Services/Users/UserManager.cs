@@ -437,7 +437,7 @@ namespace SCA.Services
                 filter.Add("EmailAddress", dto.EmailAddress.ToLower());
                 filter.Add("PhoneNumber", dto.PhoneNumber);
 
-                filter.Add("RoleTypeId", 5);
+                filter.Add("RoleTypeId", 3);
                 filter.Add("GenderId", dto.GenderId);
                 filter.Add("EducationStatusId", dto.EducationStatusId);
                 filter.Add("HighSchoolTypeId", dto.HighSchoolTypeId);
