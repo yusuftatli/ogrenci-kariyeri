@@ -19,94 +19,94 @@
 
   Contact: Lyubomir Arsov, liubo (at) web-lobby.com
 */
-function Directory(fullPath, numDirs, numFiles){
-  if(!fullPath) fullPath = '';
+function Directory(fullPath, numDirs, numFiles) {
+  if (!fullPath) fullPath = '';
   this.fullPath = fullPath;
   this.name = RoxyUtils.GetFilename(fullPath);
-  if(!this.name)
+  if (!this.name)
     this.name = 'My files';
   this.path = RoxyUtils.GetPath(fullPath);
-  this.dirs = (numDirs?numDirs:0);
-  this.files = (numFiles?numFiles:0);
+  this.dirs = (numDirs ? numDirs : 0);
+  this.files = (numFiles ? numFiles : 0);
   this.filesList = new Array();
 
-  this.Show = function(){
+  this.Show = function () {
     var html = this.GetHtml();
     var el = null;
-    el = $('li[data-path="'+this.path+'"]');
-    if(el.length == 0)
+    el = $('li[data-path="' + this.path + '"]');
+    if (el.length == 0)
       el = $('#pnlDirList');
-    else{
-      if(el.children('ul').length == 0)
+    else {
+      if (el.children('ul').length == 0)
         el.append('<ul></ul>');
       el = el.children('ul');
     }
-    if(el){
+    if (el) {
       el.append(html);
       this.SetEvents();
     }
   };
-  this.SetEvents = function(){
+  this.SetEvents = function () {
     var el = this.GetElement();
-    if(RoxyFilemanConf.MOVEDIR){
-      el.draggable({helper:makeDragDir,start:startDragDir,cursorAt: { left: 10 ,top:10},delay:200});
+    if (RoxyFilemanConf.MOVEDIR) {
+      el.draggable({ helper: makeDragDir, start: startDragDir, cursorAt: { left: 10, top: 10 }, delay: 200 });
     }
     el = el.children('div');
-    el.click(function(e){
-       selectDir(this);
+    el.click(function (e) {
+      selectDir(this);
     });
 
-    el.bind('contextmenu', function(e) {
+    el.bind('contextmenu', function (e) {
       e.stopPropagation();
       e.preventDefault();
       closeMenus('file');
       selectDir(this);
       var t = e.pageY - $('#menuDir').height();
-      if(t < 0)
+      if (t < 0)
         t = 0;
       $('#menuDir').css({
-          top: t+'px',
-          left: e.pageX+'px'
+        top: t + 'px',
+        left: e.pageX + 'px'
       }).show();
 
       return false;
     });
 
-    el.droppable({drop:moveObject,over:dragFileOver,out:dragFileOut});
+    el.droppable({ drop: moveObject, over: dragFileOver, out: dragFileOut });
     el = el.children('.dirPlus');
-    el.click(function(e){
+    el.click(function (e) {
       e.stopPropagation();
       var d = Directory.Parse($(this).closest('li').attr('data-path'));
       d.Expand();
     });
   };
-  this.GetHtml = function(){
-     var html = '<li data-path="'+this.fullPath+'" data-dirs="'+this.dirs+'" data-files="'+this.files+'" class="directory">';
-     html += '<div><img src="~/images/'+(this.dirs > 0?'dir-plus.png':'blank.gif')+'" class="dirPlus" width="9" height="9">';
-     html += '<img src="~/images/folder.png" class="dir"><span class="name">'+this.name+' ('+this.files+')</span></div>';
-     html += '</li>';
+  this.GetHtml = function () {
+    var html = '<li data-path="' + this.fullPath + '" data-dirs="' + this.dirs + '" data-files="' + this.files + '" class="directory">';
+    html += '<div><img src="/images/' + (this.dirs > 0 ? 'dir-plus.png' : 'blank.gif') + '" class="dirPlus" width="9" height="9">';
+    html += '<img src="/images/folder.png" class="dir"><span class="name">' + this.name + ' (' + this.files + ')</span></div>';
+    html += '</li>';
 
     return html;
   };
-  this.SetStatusBar = function(){
-    $('#pnlStatus').html(this.files+' '+(this.files == 1?t('file'):t('files')));
+  this.SetStatusBar = function () {
+    $('#pnlStatus').html(this.files + ' ' + (this.files == 1 ? t('file') : t('files')));
   };
-  this.SetSelectedFile = function(path){
-    if(path){
+  this.SetSelectedFile = function (path) {
+    if (path) {
       var f = File.Parse(path);
-      if(f){
-        selectFile(f.GetElement()); 
+      if (f) {
+        selectFile(f.GetElement());
       }
     }
   };
-  this.Select = function(selectedFile){
+  this.Select = function (selectedFile) {
     var el = this.GetElement();
     el.children('div').addClass('selected');
-    $('#pnlDirList li[data-path!="'+this.fullPath+'"] > div').removeClass('selected');
+    $('#pnlDirList li[data-path!="' + this.fullPath + '"] > div').removeClass('selected');
     el.children('img.dir').prop('src', 'images/folder.png');
     this.SetStatusBar();
     var p = this.GetParent();
-    while(p){
+    while (p) {
       p.Expand(true);
       p = p.GetParent();
     }
@@ -114,27 +114,27 @@ function Directory(fullPath, numDirs, numFiles){
     this.ListFiles(true, selectedFile);
     setLastDir(this.fullPath);
   };
-  this.GetElement = function(){
-    return  $('li[data-path="'+this.fullPath+'"]');
+  this.GetElement = function () {
+    return $('li[data-path="' + this.fullPath + '"]');
   };
-  this.IsExpanded = function(){
+  this.IsExpanded = function () {
     var el = this.GetElement().children('ul');
     return (el && el.is(":visible"));
   };
-  this.IsListed = function(){
-    if($('#hdDir').val() == this.fullPath)
+  this.IsListed = function () {
+    if ($('#hdDir').val() == this.fullPath)
       return true;
     return false;
   };
-  this.GetExpanded = function(el){
+  this.GetExpanded = function (el) {
     var ret = new Array();
-    if(!el)
+    if (!el)
       el = $('#pnlDirList');
-    el.children('li').each(function(){
+    el.children('li').each(function () {
       var path = $(this).attr('data-path');
       var d = new Directory(path);
-      if(d){
-        if(d.IsExpanded() && path)
+      if (d) {
+        if (d.IsExpanded() && path)
           ret.push(path);
         ret = ret.concat(d.GetExpanded(d.GetElement().children('ul')));
       }
@@ -142,46 +142,46 @@ function Directory(fullPath, numDirs, numFiles){
 
     return ret;
   };
-  this.RestoreExpanded = function(expandedDirs){
-    for(i = 0; i < expandedDirs.length; i++){
+  this.RestoreExpanded = function (expandedDirs) {
+    for (i = 0; i < expandedDirs.length; i++) {
       var d = Directory.Parse(expandedDirs[i]);
-      if(d)
+      if (d)
         d.Expand(true);
     }
   };
-  this.GetParent = function(){
+  this.GetParent = function () {
     return Directory.Parse(this.path);
   };
-  this.SetOpened = function(){
+  this.SetOpened = function () {
     var li = this.GetElement();
-    if(li.find('li').length < 1)
-        li.children('div').children('.dirPlus').prop('src', 'images/blank.gif');
+    if (li.find('li').length < 1)
+      li.children('div').children('.dirPlus').prop('src', 'images/blank.gif');
 
 
-    else if(this.IsExpanded())
+    else if (this.IsExpanded())
       li.children('div').children('.dirPlus').prop('src', 'images/dir-minus.png');
     else
       li.children('div').children('.dirPlus').prop('src', 'images/dir-plus.png');
   };
-  this.Update = function(newPath){
+  this.Update = function (newPath) {
     var el = this.GetElement();
-    if(newPath){
+    if (newPath) {
       this.fullPath = newPath;
       this.name = RoxyUtils.GetFilename(newPath);
-      if(!this.name)
+      if (!this.name)
         this.name = 'My files';
       this.path = RoxyUtils.GetPath(newPath);
     }
     el.attr('data-path', this.fullPath);
     el.attr('data-dirs', this.dirs);
     el.attr('data-files', this.files);
-    el.children('div').children('.name').html(this.name+' ('+this.files+')');
+    el.children('div').children('.name').html(this.name + ' (' + this.files + ')');
     this.SetOpened();
   };
-  this.LoadAll = function(selectedDir){
+  this.LoadAll = function (selectedDir) {
     var expanded = this.GetExpanded();
     var dirListURL = RoxyFilemanConf.DIRLIST;
-    if(!dirListURL){
+    if (!dirListURL) {
       alert(t('E_ActionDisabled'));
       return;
     }
@@ -191,45 +191,45 @@ function Directory(fullPath, numDirs, numFiles){
 
     var dir = this;
     $.ajax({
-        url: dirListURL,
-        type:'POST',
-        dataType: 'json',
-        async: false,
-        cache: false,
-        success: function(dirs){
-            $('#pnlDirList').children('li').remove();
-            for(i = 0; i < dirs.length; i++){
-              var d = new Directory(dirs[i].p, dirs[i].d, dirs[i].f);
-              d.Show();
-            }
-            $('#pnlLoadingDirs').hide();
-            $('#pnlDirList').show();
-            dir.RestoreExpanded(expanded);
-            var d = Directory.Parse(selectedDir);
-            if(d)
-              d.Select();
-        },
-        error: function(data){
-          $('#pnlLoadingDirs').hide();
-          $('#pnlDirList').show();
-          alert(t('E_LoadingAjax')+' '+RoxyFilemanConf.DIRLIST);
+      url: dirListURL,
+      type: 'POST',
+      dataType: 'json',
+      async: false,
+      cache: false,
+      success: function (dirs) {
+        $('#pnlDirList').children('li').remove();
+        for (i = 0; i < dirs.length; i++) {
+          var d = new Directory(dirs[i].p, dirs[i].d, dirs[i].f);
+          d.Show();
         }
+        $('#pnlLoadingDirs').hide();
+        $('#pnlDirList').show();
+        dir.RestoreExpanded(expanded);
+        var d = Directory.Parse(selectedDir);
+        if (d)
+          d.Select();
+      },
+      error: function (data) {
+        $('#pnlLoadingDirs').hide();
+        $('#pnlDirList').show();
+        alert(t('E_LoadingAjax') + ' ' + RoxyFilemanConf.DIRLIST);
+      }
     });
   };
-  this.Expand = function(show){
+  this.Expand = function (show) {
     var li = this.GetElement();
     var el = li.children('ul');
-    if(this.IsExpanded() && !show)
+    if (this.IsExpanded() && !show)
       el.hide();
     else
       el.show();
 
     this.SetOpened();
   };
-  this.Create = function(newName){
-    if(!newName)
+  this.Create = function (newName) {
+    if (!newName)
       return false;
-    else if(!RoxyFilemanConf.CREATEDIR){
+    else if (!RoxyFilemanConf.CREATEDIR) {
       alert(t('E_ActionDisabled'));
       return;
     }
@@ -238,29 +238,29 @@ function Directory(fullPath, numDirs, numFiles){
     var item = this;
     var ret = false;
     $.ajax({
-        url: url,
-        type: 'POST',
-        data: {d: this.fullPath, n: newName},
-        dataType: 'json',
-        async:false,
-        cache: false,
-        success: function(data){
-            if(data.res.toLowerCase() == 'ok'){
-              item.LoadAll(RoxyUtils.MakePath(item.fullPath, newName));
-              ret = true;
-            }
-            else{
-              alert(data.msg);
-            }
-        },
-        error: function(data){
-            alert(t('E_LoadingAjax')+' '+item.name);
+      url: url,
+      type: 'POST',
+      data: { d: this.fullPath, n: newName },
+      dataType: 'json',
+      async: false,
+      cache: false,
+      success: function (data) {
+        if (data.res.toLowerCase() == 'ok') {
+          item.LoadAll(RoxyUtils.MakePath(item.fullPath, newName));
+          ret = true;
         }
+        else {
+          alert(data.msg);
+        }
+      },
+      error: function (data) {
+        alert(t('E_LoadingAjax') + ' ' + item.name);
+      }
     });
     return ret;
   };
-  this.Delete = function(){
-    if(!RoxyFilemanConf.DELETEDIR){
+  this.Delete = function () {
+    if (!RoxyFilemanConf.DELETEDIR) {
       alert(t('E_ActionDisabled'));
       return;
     }
@@ -268,34 +268,34 @@ function Directory(fullPath, numDirs, numFiles){
     var item = this;
     var ret = false;
     $.ajax({
-        url: url,
-        type: 'POST',
-        data: {d: this.fullPath},
-        dataType: 'json',
-        async:false,
-        cache: false,
-        success: function(data){
-            if(data.res.toLowerCase() == 'ok'){
-              var parent = item.GetParent();
-              parent.dirs--;
-              parent.Update();
-              parent.Select();
-              item.GetElement().remove();
-              ret = true;
-            }
-            if(data.msg)
-              alert(data.msg);
-        },
-        error: function(data){
-            alert(t('E_LoadingAjax')+' '+item.name);
+      url: url,
+      type: 'POST',
+      data: { d: this.fullPath },
+      dataType: 'json',
+      async: false,
+      cache: false,
+      success: function (data) {
+        if (data.res.toLowerCase() == 'ok') {
+          var parent = item.GetParent();
+          parent.dirs--;
+          parent.Update();
+          parent.Select();
+          item.GetElement().remove();
+          ret = true;
         }
+        if (data.msg)
+          alert(data.msg);
+      },
+      error: function (data) {
+        alert(t('E_LoadingAjax') + ' ' + item.name);
+      }
     });
     return ret;
   };
-  this.Rename = function(newName){
-    if(!newName)
+  this.Rename = function (newName) {
+    if (!newName)
       return false;
-    else if(!RoxyFilemanConf.RENAMEDIR){
+    else if (!RoxyFilemanConf.RENAMEDIR) {
       alert(t('E_ActionDisabled'));
       return;
     }
@@ -304,30 +304,30 @@ function Directory(fullPath, numDirs, numFiles){
     var item = this;
     var ret = false;
     $.ajax({
-        url: url,
-        type: 'POST',
-        data: {d: this.fullPath, n: newName},
-        dataType: 'json',
-        async:false,
-        cache: false,
-        success: function(data){
-            if(data.res.toLowerCase() == 'ok'){
-              var newPath = RoxyUtils.MakePath(item.path, newName);
-              item.Update(newPath);
-              item.Select();
-              ret = true;
-            }
-            if(data.msg)
-              alert(data.msg);
-        },
-        error: function(data){
-            alert(t('E_LoadingAjax')+' '+item.name);
+      url: url,
+      type: 'POST',
+      data: { d: this.fullPath, n: newName },
+      dataType: 'json',
+      async: false,
+      cache: false,
+      success: function (data) {
+        if (data.res.toLowerCase() == 'ok') {
+          var newPath = RoxyUtils.MakePath(item.path, newName);
+          item.Update(newPath);
+          item.Select();
+          ret = true;
         }
+        if (data.msg)
+          alert(data.msg);
+      },
+      error: function (data) {
+        alert(t('E_LoadingAjax') + ' ' + item.name);
+      }
     });
     return ret;
   };
-  this.Copy = function(newPath){
-    if(!RoxyFilemanConf.COPYDIR){
+  this.Copy = function (newPath) {
+    if (!RoxyFilemanConf.COPYDIR) {
       alert(t('E_ActionDisabled'));
       return;
     }
@@ -336,33 +336,33 @@ function Directory(fullPath, numDirs, numFiles){
     var item = this;
     var ret = false;
     $.ajax({
-        url: url,
-        type: 'POST',
-        data: {d: this.fullPath, n: newPath},
-        dataType: 'json',
-        async:false,
-        cache: false,
-        success: function(data){
-            if(data.res.toLowerCase() == 'ok'){
-              var d = Directory.Parse(newPath);
-              if(d){
-                d.LoadAll(d.fullPath);
-              }
-              ret = true;
-            }
-            if(data.msg)
-              alert(data.msg);
-        },
-        error: function(data){
-            alert(t('E_LoadingAjax')+' '+url);
+      url: url,
+      type: 'POST',
+      data: { d: this.fullPath, n: newPath },
+      dataType: 'json',
+      async: false,
+      cache: false,
+      success: function (data) {
+        if (data.res.toLowerCase() == 'ok') {
+          var d = Directory.Parse(newPath);
+          if (d) {
+            d.LoadAll(d.fullPath);
+          }
+          ret = true;
         }
+        if (data.msg)
+          alert(data.msg);
+      },
+      error: function (data) {
+        alert(t('E_LoadingAjax') + ' ' + url);
+      }
     });
     return ret;
   };
-  this.Move = function(newPath){
-    if(!newPath)
+  this.Move = function (newPath) {
+    if (!newPath)
       return false;
-    else if(!RoxyFilemanConf.MOVEDIR){
+    else if (!RoxyFilemanConf.MOVEDIR) {
       alert(t('E_ActionDisabled'));
       return;
     }
@@ -371,43 +371,43 @@ function Directory(fullPath, numDirs, numFiles){
     var item = this;
     var ret = false;
     $.ajax({
-        url: url,
-        type: 'POST',
-        data: {d: this.fullPath, n: newPath},
-        dataType: 'json',
-        async:false,
-        cache: false,
-        success: function(data){
-            if(data.res.toLowerCase() == 'ok'){
-              item.LoadAll(RoxyUtils.MakePath(newPath, item.name));
-              ret = true;
-            }
-            if(data.msg)
-              alert(data.msg);
-        },
-        error: function(data){
-            alert(t('E_LoadingAjax')+' '+item.name);
+      url: url,
+      type: 'POST',
+      data: { d: this.fullPath, n: newPath },
+      dataType: 'json',
+      async: false,
+      cache: false,
+      success: function (data) {
+        if (data.res.toLowerCase() == 'ok') {
+          item.LoadAll(RoxyUtils.MakePath(newPath, item.name));
+          ret = true;
         }
+        if (data.msg)
+          alert(data.msg);
+      },
+      error: function (data) {
+        alert(t('E_LoadingAjax') + ' ' + item.name);
+      }
     });
     return ret;
   };
-  this.ListFiles = function(refresh, selectedFile){
+  this.ListFiles = function (refresh, selectedFile) {
     $('#pnlLoading').show();
     $('#pnlEmptyDir').hide();
     $('#pnlFileList').hide();
     $('#pnlSearchNoFiles').hide();
     this.LoadFiles(refresh, selectedFile);
   };
-  this.FilesLoaded = function(filesList, selectedFile){
+  this.FilesLoaded = function (filesList, selectedFile) {
     filesList = this.SortFiles(filesList);
     $('#pnlFileList').html('');
-    for(i = 0; i < filesList.length; i++){
+    for (i = 0; i < filesList.length; i++) {
       var f = filesList[i];
       f.Show();
     }
     $('#hdDir').val(this.fullPath);
     $('#pnlLoading').hide();
-    if($('#pnlFileList').children('li').length == 0)
+    if ($('#pnlFileList').children('li').length == 0)
       $('#pnlEmptyDir').show();
     this.files = $('#pnlFileList').children('li').length;
     this.Update();
@@ -417,8 +417,8 @@ function Directory(fullPath, numDirs, numFiles){
     $('#pnlFileList').show();
     this.SetSelectedFile(selectedFile);
   };
-  this.LoadFiles = function(refresh, selectedFile){
-    if(!RoxyFilemanConf.FILESLIST){
+  this.LoadFiles = function (refresh, selectedFile) {
+    if (!RoxyFilemanConf.FILESLIST) {
       alert(t('E_ActionDisabled'));
       return;
     }
@@ -427,28 +427,28 @@ function Directory(fullPath, numDirs, numFiles){
     fileURL = RoxyUtils.AddParam(fileURL, 'd', this.fullPath);
     fileURL = RoxyUtils.AddParam(fileURL, 'type', RoxyUtils.GetUrlParam('type'));
     var item = this;
-    if(!this.IsListed() || refresh){
+    if (!this.IsListed() || refresh) {
 
       $.ajax({
-          url: fileURL,
-          type: 'POST',
-          data: {d: this.fullPath, type: RoxyUtils.GetUrlParam('type')},
-          dataType: 'json',
-          async:true,
-          cache: false,
-          success: function(files){
-              for(i = 0; i < files.length; i++){
-                ret.push(new File(files[i].p, files[i].s, files[i].t, files[i].w, files[i].h));
-              }
-              item.FilesLoaded(ret, selectedFile);
-          },
-          error: function(data){
-              alert(t('E_LoadingAjax')+' '+fileURL);
+        url: fileURL,
+        type: 'POST',
+        data: { d: this.fullPath, type: RoxyUtils.GetUrlParam('type') },
+        dataType: 'json',
+        async: true,
+        cache: false,
+        success: function (files) {
+          for (i = 0; i < files.length; i++) {
+            ret.push(new File(files[i].p, files[i].s, files[i].t, files[i].w, files[i].h));
           }
+          item.FilesLoaded(ret, selectedFile);
+        },
+        error: function (data) {
+          alert(t('E_LoadingAjax') + ' ' + fileURL);
+        }
       });
     }
-    else{
-      $('#pnlFileList li').each(function(){
+    else {
+      $('#pnlFileList li').each(function () {
         ret.push(new File($(this).attr('data-path'), $(this).attr('data-size'), $(this).attr('data-time'), $(this).attr('data-w'), $(this).attr('data-h')));
       });
       item.FilesLoaded(ret, selectedFile);
@@ -457,72 +457,72 @@ function Directory(fullPath, numDirs, numFiles){
     return ret;
   };
 
-  this.SortByName = function(files, order){
-     files.sort(function(a, b){
-       var x = (order == 'desc'?0:2)
-       a = a.name.toLowerCase();
-       b = b.name.toLowerCase();
-       if(a > b)
-         return -1 + x;
-       else if(a < b)
-         return 1 - x;
-       else
+  this.SortByName = function (files, order) {
+    files.sort(function (a, b) {
+      var x = (order == 'desc' ? 0 : 2)
+      a = a.name.toLowerCase();
+      b = b.name.toLowerCase();
+      if (a > b)
+        return -1 + x;
+      else if (a < b)
+        return 1 - x;
+      else
         return 0;
-     });
+    });
 
-     return files;
+    return files;
   };
-  this.SortBySize = function(files, order){
-     files.sort(function(a, b){
-       var x = (order == 'desc'?0:2)
-       a = parseInt(a.size);
-       b = parseInt(b.size);
-       if(a > b)
-         return -1 + x;
-       else if(a < b)
-         return 1 - x;
-       else
+  this.SortBySize = function (files, order) {
+    files.sort(function (a, b) {
+      var x = (order == 'desc' ? 0 : 2)
+      a = parseInt(a.size);
+      b = parseInt(b.size);
+      if (a > b)
+        return -1 + x;
+      else if (a < b)
+        return 1 - x;
+      else
         return 0;
-     });
+    });
 
-     return files;
+    return files;
   };
-  this.SortByTime = function(files, order){
-     files.sort(function(a, b){
-       var x = (order == 'desc'?0:2)
-       a = parseInt(a.time);
-       b = parseInt(b.time);
-       if(a > b)
-         return -1 + x;
-       else if(a < b)
-         return 1 - x;
-       else
+  this.SortByTime = function (files, order) {
+    files.sort(function (a, b) {
+      var x = (order == 'desc' ? 0 : 2)
+      a = parseInt(a.time);
+      b = parseInt(b.time);
+      if (a > b)
+        return -1 + x;
+      else if (a < b)
+        return 1 - x;
+      else
         return 0;
-     });
+    });
 
-     return files;
+    return files;
   };
-  this.SortFiles = function(files){
+  this.SortFiles = function (files) {
     var order = $('#ddlOrder').val();
-    if(!order)
+    if (!order)
       order = 'name';
 
-    switch(order){
+    switch (order) {
       case 'size':
         files = this.SortBySize(files, 'asc');
-      break;
+        break;
       case 'size_desc':
         files = this.SortBySize(files, 'desc');
-      break;
+        break;
       case 'time':
         files = this.SortByTime(files, 'asc');
-      break;
+        break;
       case 'time_desc':
         files = this.SortByTime(files, 'desc');
-      break;
+        break;
       case 'name_desc':
         files = this.SortByName(files, 'desc');
-      break;
+        break;
       default:
         files = this.SortByName(files, 'asc');
     }
@@ -530,10 +530,10 @@ function Directory(fullPath, numDirs, numFiles){
     return files;
   };
 }
-Directory.Parse = function(path){
+Directory.Parse = function (path) {
   var ret = false;
-  var li = $('#pnlDirList').find('li[data-path="'+path+'"]');
-  if(li.length > 0)
+  var li = $('#pnlDirList').find('li[data-path="' + path + '"]');
+  if (li.length > 0)
     ret = new Directory(li.attr('data-path'), li.attr('data-dirs'), li.attr('data-files'));
 
   return ret;

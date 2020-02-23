@@ -42,8 +42,8 @@ CKEDITOR.editorConfig = function (config) {
     config.extraPlugins = "youtube";
 
     //added for fileman
-    config.filebrowserBrowseUrl = "/fileman/index.html";
-    config.filebrowserImageBrowseUrl = '/fileman/index.html?type=image';
+    config.filebrowserBrowseUrl = "/lib/fileman/index.html";
+    config.filebrowserImageBrowseUrl = '/lib/fileman/index.html?type=image';
     config.removeDialogTabs = "link:upload;image:upload";
 
     // Simplify the dialog windows.
