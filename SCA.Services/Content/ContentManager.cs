@@ -35,12 +35,69 @@ namespace SCA.Services
             _errorManagement = errorManagement;
         }
 
+        public async Task<ServiceResult> GetFavoriteContentList( long count,string token)
+        {
+            ServiceResult res = new ServiceResult();
+            try
+            {
+                string query = string.Empty;
+                query = "select * from Content c left join Favorite f on c.Id = f.ContentId where f.UserId = @UserId limit @count";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("UserId", JwtToken.GetUserId(token)); 
+                filter.Add("count", count);
+
+                var dataList = await _db.QueryAsync<ContentListWithCategoryDto>(query, filter) as List<ContentListWithCategoryDto>;
+
+                res = Result.ReturnAsSuccess(data: dataList);
+            }
+            catch (Exception)
+            {
+
+            }
+            return res;
+        }
+
+        public async Task<ServiceResult> GetContentWithCategories(long cotegoryId, long count)
+        {
+            ServiceResult res = new ServiceResult();
+            try
+            {
+                string query = string.Empty;
+                query = "select * from Content c left join CategoryRelation cr on c.Id = cr.TagContentId where cr.CategoryId = @CategoryId limit @count;";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("CategoryId", cotegoryId);
+                filter.Add("count", count);
+
+                var dataList = await _db.QueryAsync<ContentListWithCategoryDto>(query, filter) as List<ContentListWithCategoryDto>;
+
+                res = Result.ReturnAsSuccess(data: dataList);
+            }
+            catch (Exception)
+            {
+
+            }
+            return res;
+        }
+        public async Task<ServiceResult> GetContentSliderForMobile(long count)
+        {
+            ServiceResult res = new ServiceResult();
+            try
+            {
+                var listData = await _db.QueryAsync<ContentSliderDto>("getContentMobilForSlider", new { count = count }, commandType: CommandType.StoredProcedure) as List<ContentSliderDto>;
+                res = Result.ReturnAsSuccess(data: listData);
+            }
+            catch (Exception)
+            {
+
+            }
+            return res;
+        }
         public async Task<ServiceResult> GetSearch(string seacrh, long count, string token)
         {
             ServiceResult res = new ServiceResult();
             try
             {
-                
+
                 string query = string.Empty;
                 query = $"select Id, ImagePath, Header from Content where ContentDescription like '%{seacrh}%' limit {count};";
                 var dataList = await _db.QueryAsync<ContentSeacrhListDto>(query) as List<ContentSeacrhListDto>;
@@ -176,19 +233,19 @@ namespace SCA.Services
         public async Task<ServiceResult> GetContentByMobil(long contentId, string token)
         {
             ServiceResult res = new ServiceResult();
-          
+
             long userId = JwtToken.GetUserId(token);
-            ContentDetailForDetailPageDTO result = new ContentDetailForDetailPageDTO();
+            ContentDetailForDetailPageMobilDTO result = new ContentDetailForDetailPageMobilDTO();
             try
             {
                 using (var multi = await _db.QueryMultipleAsync("ContentListByMobil", new { _Id = contentId, _UserId = userId }, commandType: CommandType.StoredProcedure))
                 {
-                    result = await multi.ReadFirstOrDefaultAsync<ContentDetailForDetailPageDTO>();
+                    result = await multi.ReadFirstOrDefaultAsync<ContentDetailForDetailPageMobilDTO>();
                     result.MostPopularItems = await multi.ReadAsync<ContentForHomePageDTO>() as List<ContentForHomePageDTO>;
-                    result.CommentList = await multi.ReadAsync<SocialMediaListDto>() as List<CommentForUIDto>;
+                    result.CommentList = await multi.ReadAsync<CommentListDto>() as List<CommentListDto>;
                     result.Taglist = await multi.ReadAsync<TagDto>() as List<TagDto>;
 
-                    return Result.ReturnAsSuccess(data: res);
+                    return Result.ReturnAsSuccess(data: result);
                 }
             }
             catch (Exception ex)
@@ -208,7 +265,7 @@ namespace SCA.Services
                 {
                     res = await multi.ReadFirstOrDefaultAsync<ContentDetailForDetailPageDTO>();
                     res.MostPopularItems = await multi.ReadAsync<ContentForHomePageDTO>() as List<ContentForHomePageDTO>;
-                    res.CommentList = await multi.ReadAsync<SocialMediaListDto>() as List<CommentForUIDto>;
+                    res.CommentList = await multi.ReadAsync<CommentListDto>() as List<CommentListDto>;
                     res.Taglist = await multi.ReadAsync<TagDto>() as List<TagDto>;
 
                 }
@@ -434,11 +491,11 @@ namespace SCA.Services
                     resultMessage = (dto.IsSendConfirm) ? "Haber editör Tarafına Onaya Gönderildi." : "Haber başarılı bir şekilde güncellendi fakat editör onayına gönderilmek üzere beklemede";
                 }
 
-                
-                    res = Result.ReturnAsSuccess(message: resultMessage, data: _contentId> 0?_contentId :dto.Id);
-                    string resTag = await _tagManager.CreateTag(dto.Tags, _contentId > 0 ? _contentId : dto.Id, ReadType.Content, session);
-                    string resCategory = await _categoryManager.CreateCategoryRelation(dto.Category, _contentId > 0 ? _contentId : dto.Id, ReadType.Content, session);
-              
+
+                res = Result.ReturnAsSuccess(message: resultMessage, data: _contentId > 0 ? _contentId : dto.Id);
+                string resTag = await _tagManager.CreateTag(dto.Tags, _contentId > 0 ? _contentId : dto.Id, ReadType.Content, session);
+                string resCategory = await _categoryManager.CreateCategoryRelation(dto.Category, _contentId > 0 ? _contentId : dto.Id, ReadType.Content, session);
+
             }
             catch (Exception ex)
             {
@@ -771,18 +828,21 @@ namespace SCA.Services
             long userId = JwtToken.GetUserId(token);
             try
             {
+                string resultMessage = "";
                 string query = "";
                 if (await FavoriteControl(userId, dto.ContentId) == false)
                 {
-                    query = $"Insert Into Favorite (UserId,ContentId,IsActive) values ({userId},{dto.ContentId},{dto.IsActive})";
+                    resultMessage = "Haber favorilerinize eklendi";
+                    query = $"Insert Into Favorite (UserId, ContentId, IsActive) values ({userId}, {dto.ContentId}, {dto.IsActive})";
                 }
                 else
                 {
-                    query = $"Update Favorite  set IsActive={dto.IsActive} where UserId={userId} and ContentId={dto.ContentId}";
+                    resultMessage =dto.IsActive==true? "Haber favorilerinize eklendi" : "Haber favorilerinizden çıkarıldı";
+                    query = $"Update Favorite  set IsActive = {dto.IsActive} where UserId = {userId} and ContentId = {dto.ContentId}";
                 }
 
                 var result = await _db.ExecuteAsync(query);
-                res = Result.ReturnAsSuccess(message: "Favorilerinize eklendi");
+                res = Result.ReturnAsSuccess(message: resultMessage);
             }
             catch (Exception ex)
             {
