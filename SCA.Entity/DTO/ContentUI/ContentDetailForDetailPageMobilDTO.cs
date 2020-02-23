@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SCA.Entity.DTO
 {
-    public class ContentDetailForDetailPageDTO
+   public class ContentDetailForDetailPageMobilDTO
     {
         public long ContentId { get; set; }
         public long UserId { get; set; }
@@ -21,7 +21,7 @@ namespace SCA.Entity.DTO
         public bool IsFavoriteContent { get; set; }
         public string ContentDescription { get; set; }
         public List<ContentForHomePageDTO> MostPopularItems { get; set; }
-        public List<CommentListDto> CommentList{ get; set; }
-        public List<TagDto> Taglist{ get; set; }
+        public List<CommentListDto> CommentList { get; set; }
+        public List<TagDto> Taglist { get; set; }
     }
 }

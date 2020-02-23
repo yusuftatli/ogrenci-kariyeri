@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace SCA.Services
 {
-    public class CommentManager :BaseClass, ICommentManager
+    public class CommentManager : BaseClass, ICommentManager
     {
         private readonly IErrorManagement _errorManagement;
         private readonly IDbConnection _db = new MySqlConnection(ConnectionString1);
@@ -35,14 +35,22 @@ namespace SCA.Services
             long userId = JwtToken.GetUserId(token);
             try
             {
-                string query = $"Insert into Comments (ReadType,Description,ArticleId,Approv,d,UserID, PostDate) values (2,'{dto.Description}',{dto.ArticleId},0,{userId}, NOW())";
-                var result = await _db.ExecuteAsync(query);
-                res = Result.ReturnAsSuccess();
+                string query = @"Insert into Comments (ReadType, Description, ArticleId, Approved, UserID, PostDate) values
+                               (@ReadType, @Description, @ArticleId, @Approved, @UserID, @PostDate)";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("ReadType", 2);
+                filter.Add("Description", dto.Description);
+                filter.Add("ArticleId", dto.ArticleId);
+                filter.Add("Approved", 0);
+                filter.Add("UserID", userId);
+                filter.Add("PostDate", DateTime.Now);
+                var result = await _db.ExecuteAsync(query,filter);
+                res = Result.ReturnAsSuccess(message:"Yorumunuz başarılı bir şekilde keydedilmiştir, onay sürecinden görüntülenecektir.");
             }
             catch (Exception ex)
             {
                 await _errorManagement.SaveError(ex, userId, "CreateCommentsByMobil ", Entity.Enums.PlatformType.Web);
-                res = Result.ReturnAsFail();
+                res = Result.ReturnAsFail(message:ex.InnerException.ToString());
             }
             return res;
         }

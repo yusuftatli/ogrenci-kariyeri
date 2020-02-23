@@ -93,5 +93,12 @@ namespace SCA.Services
         /// <param name="type"></param>
         /// <returns></returns>
         Task<ServiceResult> UpdatePlatformType(long contentId, int type);
+
+        Task<ServiceResult> GetContentSliderForMobile(long count);
+
+
+        Task<ServiceResult> GetContentWithCategories(long cotegoryId, long count);
+
+        Task<ServiceResult> GetFavoriteContentList(long count, string token);
     }
 }

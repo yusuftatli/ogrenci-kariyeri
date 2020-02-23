@@ -32,7 +32,7 @@ namespace StudentCareerApp.Areas.Api.Controller
         }
 
         [Authorize()]
-        [HttpPost("content-create-comment")]
+        [HttpPost("create-comment")]
         public async Task<ServiceResult> CreateCommentsByMobil(CommentMobilDto dto)
         {
             return await _commentManager.CreateCommentsByMobil(dto, await HttpContext.GetTokenAsync("access_token"));
@@ -81,7 +81,7 @@ namespace StudentCareerApp.Areas.Api.Controller
         }
 
         [Authorize()]
-        [HttpPost("mobil-detail")]
+        [HttpGet("mobil-detail")]
         public async Task<ServiceResult> GetContentByMobil(long contentId)
         {
             return await _contentManager.GetContentByMobil(contentId, await HttpContext.GetTokenAsync("access_token"));
@@ -185,10 +185,33 @@ namespace StudentCareerApp.Areas.Api.Controller
             return await _contentManager.GetMenuSideState(contentId);
         }
 
+        [Authorize()]
         [HttpGet("GetSearchContent")]
         public async Task<ServiceResult> GetSearch(string seacrh, long count)
         {
             return await _contentManager.GetSearch(seacrh, count, await HttpContext.GetTokenAsync("access_token"));
+        }
+
+        [Authorize()]
+        [HttpGet("content-slider")]
+        public async Task<ServiceResult> GetContentSliderForMobile(long count)
+        {
+            return await _contentManager.GetContentSliderForMobile(count);
+        }
+
+        [Authorize()]
+        [Route("content-with-categories"), HttpGet]
+        public async Task<ServiceResult> GetContentWithCategories(long categoryId, long count)
+        {
+            return await _contentManager.GetContentWithCategories(categoryId, count);
+        }
+
+        [Authorize()]
+        [HttpGet("content-favorite-list")]
+        public async Task<ServiceResult> GetFavoriteContentList(long count, string token)
+        {
+            return await _contentManager.GetFavoriteContentList(count, await HttpContext.GetTokenAsync("access_token"));
+
         }
     }
 }
