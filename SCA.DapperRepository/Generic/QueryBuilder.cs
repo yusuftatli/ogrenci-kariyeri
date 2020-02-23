@@ -18,7 +18,11 @@ namespace SCA.DapperRepository.Generic
         public static string GenerateInsertQuery<T>(this T model, string tableName) where T : class
         {
             var propsArray = model.GetPropertiesOfModelAsString<T>().Split(',');
-            var props = string.Join(',', propsArray.Where(x => x != "@Id"));
+            var props = "";
+            if (tableName == "Users")
+                props = string.Join(',', propsArray);
+            else
+                string.Join(',', propsArray.Where(x => x != "@Id"));
             var insertQuery = new StringBuilder($"INSERT INTO {tableName} ({props.Replace('@', ' ')}) VALUES ({props}); " +
                 $"SELECT LAST_INSERT_ID();");
             return insertQuery.ToString();
