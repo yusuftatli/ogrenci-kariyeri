@@ -38,6 +38,13 @@ namespace StudentCareerApp.Areas.Api.Controller
         }
 
         //[Authorize()]
+        //[HttpPost("user-forgetpassword")]
+        //public async Task<ServiceResult> PasswordRenew(string emailAddress)
+        //{
+        //    return await _userManager.PasswordRenew(emailAddress, await HttpContext.GetTokenAsync("access_token"));
+        //}
+
+        //[Authorize()]
         [HttpPost("user-create-web")]
         public async Task<ServiceResult> CreateUserByWeb(UserWeblDto dto)
         {
