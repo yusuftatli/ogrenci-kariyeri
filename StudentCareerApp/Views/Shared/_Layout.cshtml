@@ -4,7 +4,8 @@
     SCA.Entity.DTO.UserSession user = new SCA.Entity.DTO.UserSession();
     if (Context.Session.Keys.Any(x => x.Contains("userInfo")))
     {
-        user = Newtonsoft.Json.JsonConvert.DeserializeObject<SCA.Entity.DTO.UserSession>(Context.Session.GetString("userInfo"));
+        user = Newtonsoft.Json.JsonConvert.DeserializeObject<SCA.Entity.DTO.UserSession>
+    (Context.Session.GetString("userInfo"));
     }
 
 }
@@ -31,7 +32,8 @@
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="~/css/font-awesome.min.css">
-    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">*@
+    @*
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">*@
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="~/css/animate.css">
@@ -102,6 +104,7 @@
 </head>
 
 <body class="body-color">
+
     <section class="top-bar top-bg">
         <div class="container">
             <div class="row">
@@ -160,7 +163,7 @@
                 <div class="row">
                     <div class="col-md-4 align-self-center">
                         <div class="header-logo">
-                            <a href="@Url.Action("Index", "Home")">
+                            <a href="@Url.Action(" Index", "Home" )">
                                 <img style="height:50px;" src="~/images/logo/logo-white.png" alt="Öğrenci Kariyeri">
                             </a>
                         </div>
@@ -205,16 +208,16 @@
                                         </a>
                                         <ul class="nav-dropdown">
                                             <li>
-                                                <a href="@Url.Action("Index", "User")">Profil</a>
+                                                <a href="@Url.Action(" Index", "User" )">Profil</a>
                                             </li>
                                             @if (!user.RoleTypeId.Equals(3))
                                             {
                                                 <li>
-                                                    <a href="@Url.Action("Minimal", "Dashboard", new { area = "Admin"})">Yönetim Paneli</a>
+                                                    <a href="@Url.Action(" Minimal", "Dashboard" , new { area="Admin" })">Yönetim Paneli</a>
                                                 </li>
                                             }
                                             <li>
-                                                <a href="@Url.Action("SetCategories", "User")">İlgi Alanları</a>
+                                                <a href="@Url.Action(" SetCategories", "User" )">İlgi Alanları</a>
                                             </li>
                                             <li>
                                                 <a href="#" id="logoutButton">Çıkış Yap</a>
@@ -239,7 +242,6 @@
                                     </li>
                                 </ul>
                                 <!--nav right menu start-->
-
                             }
                             else
                             {
