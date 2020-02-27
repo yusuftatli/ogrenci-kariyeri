@@ -6044,8 +6044,8 @@ tab-menu-item
     animation: animLeft 1s ease 100ms both;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    -webkit-animation-delay: 500ms;
-    animation-delay: 500ms;
+    -webkit-animation-delay: 100ms;
+    animation-delay: 100ms;
 }
 
 #hero-slider .owl-item.active .hero-content h2 {
@@ -6055,8 +6055,8 @@ tab-menu-item
     animation: animLeft 1s ease 100ms both;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    -webkit-animation-delay: 800ms;
-    animation-delay: 800ms;
+    -webkit-animation-delay: 200ms;
+    animation-delay: 200ms;
 }
 
 #hero-slider .owl-item.active .hero-content p {
@@ -6066,8 +6066,8 @@ tab-menu-item
     animation: animLeft 1s ease 100ms both;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    -webkit-animation-delay: 1200ms;
-    animation-delay: 1200ms;
+    -webkit-animation-delay: 300ms;
+    animation-delay: 300ms;
 }
 
 @-webkit-keyframes animLeft {
