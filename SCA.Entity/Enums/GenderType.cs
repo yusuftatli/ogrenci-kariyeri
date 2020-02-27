@@ -5,9 +5,9 @@ namespace SCA.Entity.Enums
 {
     public enum GenderType : byte
     {
-        [Description("Bay")]
+        [Description("Erkek")]
         Man = 1,
-        [Description("Bayan")]
+        [Description("Kadın")]
         Woman = 2,
     }
 }
