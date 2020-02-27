@@ -22,7 +22,7 @@ namespace SCA.Services
         /// <returns></returns>
         Task<ServiceResult> ContentList();
 
-        Task<ServiceResult> GetSearch(string seacrh, long count, string token);
+        Task<ServiceResult> GetSearch(string seacrh, int start, int limit,string token);
 
         /// <summary>
         /// makale ekler
@@ -75,7 +75,7 @@ namespace SCA.Services
         Task<bool> CreateFavorite(FavoriteDto dto);
         Task<ServiceResult> ContentShortListByMobil(ContentSearchByMoilDto dto, string token);
         Task<ServiceResult> GetContentByMobil(long contentId, string token);
-        Task<ServiceResult> GetFavoriteContents(int count, string token);
+        Task<ServiceResult> GetFavoriteContents(int firstCount, int secondCount, string token);
         Task<ServiceResult> CreateFavorite(FavoriteMobilDto dto, string token);
         Task<ServiceResult> ContentShortListFavoriByMobil(int count, string token);
         Task<ServiceResult> GetSearch(string value);
@@ -97,8 +97,8 @@ namespace SCA.Services
         Task<ServiceResult> GetContentSliderForMobile(long count);
 
 
-        Task<ServiceResult> GetContentWithCategories(long cotegoryId, long count);
+        Task<ServiceResult> GetContentWithCategories(long cotegoryId, int count, int total);
 
-        Task<ServiceResult> GetFavoriteContentList(long count, string token);
+        Task<ServiceResult> GetFavoriteContentList(int start, int limit, string token);
     }
 }

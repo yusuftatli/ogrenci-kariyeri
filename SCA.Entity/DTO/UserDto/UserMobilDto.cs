@@ -49,9 +49,9 @@ namespace SCA.Entity.DTO
 
 
         public string HigSchoolName { get; set; }
-        public int MasterId { get; set; }
-        public int MasterDepartment { get; set; }
-        public int MasterGraduated { get; set; }
+        public long MasterId { get; set; }
+        public string MasterDepartment { get; set; }
+        public long MasterGraduated { get; set; }
 
     }
 }
