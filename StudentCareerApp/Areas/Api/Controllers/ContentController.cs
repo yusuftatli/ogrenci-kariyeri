@@ -41,9 +41,9 @@ namespace StudentCareerApp.Areas.Api.Controller
 
         [Authorize()]
         [HttpGet("content-list-favori")]
-        public async Task<ServiceResult> GetFavoriteContents(int count)
+        public async Task<ServiceResult> GetFavoriteContents(int start, int limit)
         {
-            return await _contentManager.GetFavoriteContents(count, await HttpContext.GetTokenAsync("access_token"));
+            return await _contentManager.GetFavoriteContents(start, limit, await HttpContext.GetTokenAsync("access_token"));
         }
 
 
@@ -187,9 +187,9 @@ namespace StudentCareerApp.Areas.Api.Controller
 
         [Authorize()]
         [HttpGet("GetSearchContent")]
-        public async Task<ServiceResult> GetSearch(string seacrh, long count)
+        public async Task<ServiceResult> GetSearch(string seacrh, int start, int limit)
         {
-            return await _contentManager.GetSearch(seacrh, count, await HttpContext.GetTokenAsync("access_token"));
+            return await _contentManager.GetSearch(seacrh, start,limit, await HttpContext.GetTokenAsync("access_token"));
         }
 
         [Authorize()]
@@ -201,16 +201,16 @@ namespace StudentCareerApp.Areas.Api.Controller
 
         [Authorize()]
         [Route("content-with-categories"), HttpGet]
-        public async Task<ServiceResult> GetContentWithCategories(long categoryId, long count)
+        public async Task<ServiceResult> GetContentWithCategories(long categoryId, int count, int total)
         {
-            return await _contentManager.GetContentWithCategories(categoryId, count);
+            return await _contentManager.GetContentWithCategories(categoryId, count, total);
         }
 
         [Authorize()]
         [HttpGet("content-favorite-list")]
-        public async Task<ServiceResult> GetFavoriteContentList(long count, string token)
+        public async Task<ServiceResult> GetFavoriteContentList(int start, int limit)
         {
-            return await _contentManager.GetFavoriteContentList(count, await HttpContext.GetTokenAsync("access_token"));
+            return await _contentManager.GetFavoriteContentList(start, limit, await HttpContext.GetTokenAsync("access_token"));
 
         }
     }

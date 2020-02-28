@@ -35,16 +35,18 @@ namespace SCA.Services
             _errorManagement = errorManagement;
         }
 
-        public async Task<ServiceResult> GetFavoriteContentList( long count,string token)
+        public async Task<ServiceResult> GetFavoriteContentList(int start, int limit, string token)
         {
             ServiceResult res = new ServiceResult();
             try
             {
+                long userId = JwtToken.GetUserId(token);
                 string query = string.Empty;
-                query = "select * from Content c left join Favorite f on c.Id = f.ContentId where f.UserId = @UserId limit @count";
+                query = "select c.Id, c.ImagePath, c.Header  from Content c left join Favorite f on c.Id = f.ContentId where f.IsActive=1 and f.UserId = @UserId limit @start,@limit";
                 DynamicParameters filter = new DynamicParameters();
-                filter.Add("UserId", JwtToken.GetUserId(token)); 
-                filter.Add("count", count);
+                filter.Add("UserId", userId);
+                filter.Add("start", start);
+                filter.Add("limit", limit);
 
                 var dataList = await _db.QueryAsync<ContentListWithCategoryDto>(query, filter) as List<ContentListWithCategoryDto>;
 
@@ -57,15 +59,16 @@ namespace SCA.Services
             return res;
         }
 
-        public async Task<ServiceResult> GetContentWithCategories(long cotegoryId, long count)
+        public async Task<ServiceResult> GetContentWithCategories(long cotegoryId, int count, int total)
         {
             ServiceResult res = new ServiceResult();
             try
             {
                 string query = string.Empty;
-                query = "select * from Content c left join CategoryRelation cr on c.Id = cr.TagContentId where cr.CategoryId = @CategoryId limit @count;";
+                query = "select c.Id, c.ImagePath, c.Header from Content c left join CategoryRelation cr on c.Id = cr.TagContentId where cr.CategoryId = @CategoryId limit @total,@count;";
                 DynamicParameters filter = new DynamicParameters();
                 filter.Add("CategoryId", cotegoryId);
+                filter.Add("total", total);
                 filter.Add("count", count);
 
                 var dataList = await _db.QueryAsync<ContentListWithCategoryDto>(query, filter) as List<ContentListWithCategoryDto>;
@@ -92,14 +95,14 @@ namespace SCA.Services
             }
             return res;
         }
-        public async Task<ServiceResult> GetSearch(string seacrh, long count, string token)
+        public async Task<ServiceResult> GetSearch(string seacrh, int start, int limit, string token)
         {
             ServiceResult res = new ServiceResult();
             try
             {
 
                 string query = string.Empty;
-                query = $"select Id, ImagePath, Header from Content where ContentDescription like '%{seacrh}%' limit {count};";
+                query = $"select Id, ImagePath, Header from Content where ContentDescription like '%{seacrh}%' limit {start},{limit};";
                 var dataList = await _db.QueryAsync<ContentSeacrhListDto>(query) as List<ContentSeacrhListDto>;
                 res = Result.ReturnAsSuccess(data: dataList);
             }
@@ -796,15 +799,15 @@ namespace SCA.Services
             return (res != -1) ? true : false;
         }
 
-        public async Task<ServiceResult> GetFavoriteContents(int count, string token)
+        public async Task<ServiceResult> GetFavoriteContents(int count, int total, string token)
         {
             ServiceResult res = new ServiceResult();
             long userId = JwtToken.GetUserId(token);
             try
             {
-                int _count = count == 0 ? 10 : count;
-                string query = $"select * from Favorite where UserId=@UserId limit @count";
+                string query = $"select * from Favorite where UserId=@UserId limit @total,@count";
                 DynamicParameters filter = new DynamicParameters();
+                filter.Add("total", total);
                 filter.Add("count", count);
                 filter.Add("UserId", userId);
                 var listData = await _db.QueryAsync<FavoriteDto>(query, filter) as List<FavoriteDto>;
@@ -837,7 +840,7 @@ namespace SCA.Services
                 }
                 else
                 {
-                    resultMessage =dto.IsActive==true? "Haber favorilerinize eklendi" : "Haber favorilerinizden çıkarıldı";
+                    resultMessage = dto.IsActive == true ? "Haber favorilerinize eklendi" : "Haber favorilerinizden çıkarıldı";
                     query = $"Update Favorite  set IsActive = {dto.IsActive} where UserId = {userId} and ContentId = {dto.ContentId}";
                 }
 

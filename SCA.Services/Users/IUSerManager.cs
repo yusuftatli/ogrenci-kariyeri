@@ -9,7 +9,7 @@ namespace SCA.Services
 {
     public interface IUserManager
     {
-        Task<ServiceResult> PasswordRenew(string emailAddress,string token);
+        Task<ServiceResult> PasswordRenew(string emailAddress);
         Task<ServiceResult> CreateUserByWeb(UserWeblDto dto, string token);
         Task CreateUserLog(UserLogDto dto);
         Task<ServiceResult> CheckUserForLogin(string email, string password);
@@ -17,6 +17,8 @@ namespace SCA.Services
         Task<ServiceResult> GetUserProfileInfo(string token);
         Task<ServiceResult> CreateUserByMobil(UserMobilDto dto);
         Task<List<UserModelList>> GetUserList();
+        Task<ServiceResult> CreateUserContact(UserContactDto dto);
+
         /// <summary>
         /// Kullanıcı bilgilerini döner
         /// </summary>

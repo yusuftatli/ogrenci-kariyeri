@@ -46,7 +46,7 @@ namespace SCA.Services
                 issuer: "ogrenciKariyeri1",
                 audience: "ogrenciKariyeri",
                 claims: someClaims,
-                expires: DateTime.Now.AddMinutes(3),
+                expires: DateTime.Now.AddDays(10),
                 signingCredentials: new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256)
             );
 

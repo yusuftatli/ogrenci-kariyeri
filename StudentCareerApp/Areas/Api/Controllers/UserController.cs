@@ -30,12 +30,18 @@ namespace StudentCareerApp.Areas.Api.Controller
             _hostingEnvironment = hostingEnvironment;
         }
 
-        [Authorize()]
         [HttpPost("user-forgetpassword")]
-        public async Task<ServiceResult> PasswordRenew(string emailAddress)
+        public async Task<ServiceResult> PasswordRenew([FromBody]UsersDTO dto)
         {
-            return await _userManager.PasswordRenew(emailAddress, await HttpContext.GetTokenAsync("access_token"));
+            return await _userManager.PasswordRenew(dto.EmailAddress);
         }
+
+        //[Authorize()]
+        //[HttpPost("user-forgetpassword")]
+        //public async Task<ServiceResult> PasswordRenew(string emailAddress)
+        //{
+        //    return await _userManager.PasswordRenew(emailAddress, await HttpContext.GetTokenAsync("access_token"));
+        //}
 
         //[Authorize()]
         [HttpPost("user-create-web")]
@@ -196,6 +202,12 @@ namespace StudentCareerApp.Areas.Api.Controller
             return Result.ReturnAsSuccess();
         }
 
+
+        [HttpPost("create-contact")]
+        public async Task<ServiceResult> CreateUserContact(UserContactDto dto)
+        {
+            return await _userManager.CreateUserContact(dto);
+        }
 
     }
 }

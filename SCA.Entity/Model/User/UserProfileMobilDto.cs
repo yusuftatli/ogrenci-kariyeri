@@ -26,7 +26,7 @@ namespace SCA.Entity.Model
         public long NewGraduatedYear { get; set; }
         public string HigSchoolName { get; set; }
         public int MasterId { get; set; }
-        public int MasterDepartment { get; set; }
+        public string MasterDepartment { get; set; }
         public int MasterGraduated { get; set; }
     }
 }

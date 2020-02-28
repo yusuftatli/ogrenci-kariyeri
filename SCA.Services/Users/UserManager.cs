@@ -55,7 +55,7 @@ namespace SCA.Services
             _socialMedia = socialManager;
         }
 
-        public async Task<ServiceResult> PasswordRenew(string emailAddress, string token)
+        public async Task<ServiceResult> PasswordRenew(string emailAddress)
         {
             ServiceResult res = new ServiceResult();
             try
@@ -68,44 +68,69 @@ namespace SCA.Services
 
                 if (await _userValidation.UserDataControl(emailAddress) == false)
                 {
-                    res = Result.ReturnAsFail(message: "Email Kayıtlı değil");
+                    res = Result.ReturnAsFail(message: "Sistemde kayıtlı olmayan bir email adresi girdiniz");
                     return res;
                 }
 
                 string _pas = RandomPassword();
                 string emailValue = await createEmailBody(_pas);
 
-                string query = "update Users set Password = @Password  where EmailAddress = 'yusufcantatli@hotmail.com'";
+                string query = "update Users set Password = @Password  where EmailAddress = @emailAddress";
                 DynamicParameters filter = new DynamicParameters();
                 filter.Add("Password", MD5Hash(_pas));
+                filter.Add("emailAddress", emailAddress);
 
                 var data = _db.Execute(query, filter);
-                long userId = 5677; //JwtToken.GetUserId(token);
+              
 
-                EmailSettings emailSetting = await _sender.GetEmailSetting("PASSRENEW");
-                EmailsDto emailData = new EmailsDto
-                {
-                    Body = emailValue,
-                    Subject = "Öğrenci Kariyer Şifre Yenileme",
-                    ToEmail = emailAddress,
-                    IsSend = false,
-                    UserId = userId,
-                    SendDate = DateTime.Now,
-                    CcEmail = "",
-                    FromEmail = emailSetting.UsernameEmail,
-                    Process = "Şifre Yenileme"
-                };
 
-                await _sender.SaveEmails(emailData);
+            //     ApiKey = "YOUR-API-KEY";
+
+            //var task = SendEmail("Hello World from Elastic Email!", "fromAddress@exmple.com", "John Tester", new string[] { "toAddress@exmple.com" },
+            //                    "<h1>Hello! This mail was sent by Elastic Email service.<h1>", "Hello! This mail was sent by Elastic Email service.");
+
+            //task.ContinueWith(t =>
+            //{
+            //    if (t.Result == null)
+            //        Console.WriteLine("Something went wrong. Check the logs.");
+            //    else
+            //    {
+            //        Console.WriteLine("MsgID to store locally: " + t.Result.MessageID); // Available only if sent to a single recipient
+            //        Console.WriteLine("TransactionID to store locally: " + t.Result.TransactionID);
+            //    }
+            //});
+
+            //task.Wait();
+
+
+
+
                 res = Result.ReturnAsSuccess(message: "yenileme şifreniz başarıyla email adresinize gönderilmiştir.");
             }
             catch (Exception ex)
             {
-                await _errorManagement.SaveError(ex, JwtToken.GetUserId(token), "CreateSector", PlatformType.Web);
+                await _errorManagement.SaveError(ex, null, "CreateSector", PlatformType.Web);
                 res = Result.ReturnAsFail(message: "Şifre yenileme sırasında hata meydana geldi.");
             }
             return res;
         }
+
+        //public async static Task<ElasticEmailClient.ApiTypes.EmailSend> SendEmail(string subject, string fromEmail, string fromName, string[] msgTo, string html, string text)
+        //{
+        //    try
+        //    {
+        //        return await ElasticEmailClient.Api.Email.SendAsync(subject, fromEmail, fromName, msgTo: msgTo, bodyHtml: html, bodyText: text);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        if (ex is ApplicationException)
+        //            Console.WriteLine("Server didn't accept the request: " + ex.Message);
+        //        else
+        //            Console.WriteLine("Something unexpected happened: " + ex.Message);
+
+        //        return null;
+        //    }
+        //}
 
         private async Task<string> createEmailBody(string password)
         {
@@ -378,6 +403,33 @@ namespace SCA.Services
             return path;
         }
 
+        public async Task<ServiceResult> CreateUserContact(UserContactDto dto)
+        {
+            ServiceResult res = new ServiceResult();
+            try
+            {
+
+                string query = @"insert into UsersContact (Name, SurName, PhoneNumber, Email, Message, Datetime) 
+                                 values (@Name, @SurName, @PhoneNumber, @Email, @Message, @Datetime);";
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("Name", dto.Name);
+                filter.Add("SurName", dto.SurName);
+                filter.Add("PhoneNumber", dto.PhoneNumber);
+                filter.Add("Email", dto.Email);
+                filter.Add("Message", dto.Message);
+                filter.Add("Datetime", DateTime.Now);
+                await _db.ExecuteAsync(query, filter);
+
+                res = Result.ReturnAsSuccess(message: "Mesajınız başarılı bir şekilde kayıt edilmiştir.");
+
+            }
+            catch (Exception)
+            {
+
+            }
+            return res;
+        }
+
         public async Task<ServiceResult> CreateUserByMobil(UserMobilDto dto)
         {
             ServiceResult res = new ServiceResult();
@@ -580,13 +632,13 @@ namespace SCA.Services
                 query = @"select Id, Name, Surname, EmailAddress, PhoneNumber, ImagePath, GenderId, EducationStatusId, HighSchoolTypeId, UniversityId, 
                          push, DepartmentId, ClassId, Biography, CityId, concat('OK',Id) as ReferanceCode, BirthDate, HigSchoolName, MasterId, MasterDepartment, MasterGraduated, NewGraduatedYear from Users where Id = @Id";
                 DynamicParameters filter = new DynamicParameters();
-                filter.Add("Id", JwtToken.GetUserId(token));
+                filter.Add("Id", userId);
 
                 resultModel.ProfileInfo = await _db.QueryFirstOrDefaultAsync<UserProfileMobilDto>(query, filter);
                 resultModel.Categories = await GetUserCategory(userId);
                 res = Result.ReturnAsSuccess(data: resultModel);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
             }
