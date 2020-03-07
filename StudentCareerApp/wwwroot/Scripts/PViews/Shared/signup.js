@@ -1,5 +1,7 @@
 ﻿var isDetailsLoaded = false;
 
+toastr.options = { timeOut: 1500 };
+
 function set4guid() {
   return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
 }
@@ -122,19 +124,6 @@ $(document).on("change", "#educationType", function (e) {
     $(".showClasses").removeClass("hidden");
   else
     $(".showClasses").addClass("hidden");
-
-
-
-
-  // e.target.value === "2" || e.target.value === "3"
-  //   ? $(".template-selected-university").removeClass("hidden")
-  //   : $(".template-selected-university").addClass("hidden");
-  // e.target.value === "1"
-  //   ? $(".template-selected-highschool").removeClass("hidden")
-  //   : $(".template-selected-highschool").addClass("hidden");
-  // e.target.value > "0"
-  //   ? $(".template-still-student").removeClass("hidden")
-  //   : $(".template-still-student").addClass("hidden");
 });
 
 $(document).on("submit", ".loginForm", function (e) {

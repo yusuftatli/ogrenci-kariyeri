@@ -24,7 +24,7 @@ $(function ($) {
 
 
 
-    $(window).on('load', function() {
+    $(window).on('load', function () {
 
         /*==========================================================
                     4. Preloader
@@ -34,30 +34,30 @@ $(function ($) {
         }, 1000);
     });
 
-    $('.preloader-cancel-btn').on('click', function(event) {
-		event.preventDefault();
-		if (!$('#preloader').hasClass('loaded')) {
-			$('#preloader').addClass('loaded');
-		}
-   });
-   
+    $('.preloader-cancel-btn').on('click', function (event) {
+        event.preventDefault();
+        if (!$('#preloader').hasClass('loaded')) {
+            $('#preloader').addClass('loaded');
+        }
+    });
+
 
 
 
     /**-------------------------------------------------
      *Fixed HEader
      *----------------------------------------------------**/
-       $(window).on('scroll', function () {
+    $(window).on('scroll', function () {
 
-            /**Fixed header**/
-            if ($(window).scrollTop() > 250) {
-               $('.ts-menu-sticky').addClass('sticky fade_down_effect');
-            } else {
-               $('.ts-menu-sticky').removeClass('sticky fade_down_effect');
-            }
-      });
+        /**Fixed header**/
+        if ($(window).scrollTop() > 250) {
+            $('.ts-menu-sticky').addClass('sticky fade_down_effect');
+        } else {
+            $('.ts-menu-sticky').removeClass('sticky fade_down_effect');
+        }
+    });
 
-     /* ----------------------------------------------------------- */
+    /* ----------------------------------------------------------- */
 	/*  index search
     /* ----------------------------------------------------------- */
 
@@ -111,11 +111,11 @@ $(function ($) {
             autoplay: true,
             autoplayHoverPause: true,
             mouseDrag: false,
-            touchDrag:false,
+            touchDrag: false,
         })
     }
 
-    if ($("#comp-image-galery").length > 0){
+    if ($("#comp-image-galery").length > 0) {
         $("#comp-image-galery").owlCarousel({
             items: 5,
             loop: false,
@@ -123,10 +123,10 @@ $(function ($) {
             nav: false,
             responsiveClass: true,
             autoplayTimeout: 5000,
-            autoplay:true,
+            autoplay: true,
             autoplayHoverPause: true,
-            responsive:{
-                0:{
+            responsive: {
+                0: {
                     items: 1,
                 },
                 540: {
@@ -156,7 +156,7 @@ $(function ($) {
             animateOut: 'slideOutLeft',
             autoplayHoverPause: true,
             mouseDrag: false,
-            touchDrag:false,
+            touchDrag: false,
             navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"],
             responsiveClass: true,
         });
@@ -171,9 +171,9 @@ $(function ($) {
             dots: true,
             nav: false,
             responsiveClass: true,
-             autoplayHoverPause: true,
+            autoplayHoverPause: true,
             mouseDrag: false,
-            touchDrag:false,
+            touchDrag: false,
             animateOut: 'slideOutLeft',
 
         });
@@ -190,7 +190,7 @@ $(function ($) {
             autoplay: true,
             autoplayHoverPause: true,
             mouseDrag: false,
-            touchDrag:false,
+            touchDrag: false,
             responsiveClass: true,
         });
     }
@@ -207,7 +207,7 @@ $(function ($) {
             responsiveClass: true,
             autoplayHoverPause: true,
             mouseDrag: false,
-            touchDrag:false,
+            touchDrag: false,
             navText: ["<i class='icon-arrow-left'></i>", "<i class='icon-arrow-right'></i>"],
         });
     }
@@ -223,7 +223,7 @@ $(function ($) {
             autoplay: true,
             autoplayHoverPause: true,
             mouseDrag: false,
-            touchDrag:false,
+            touchDrag: false,
             responsiveClass: true,
         });
     }
@@ -236,10 +236,10 @@ $(function ($) {
             dots: false,
             loop: true,
             nav: true,
-            autoplay:true,
+            autoplay: true,
             autoplayHoverPause: true,
             mouseDrag: false,
-            touchDrag:false,
+            touchDrag: false,
             margin: 30,
             navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"],
             responsive: {
@@ -275,7 +275,7 @@ $(function ($) {
             dots: true,
             autoplayHoverPause: true,
             mouseDrag: false,
-            touchDrag:false,
+            touchDrag: false,
             responsive: {
                 // breakpoint from 0 up
                 0: {
@@ -308,9 +308,9 @@ $(function ($) {
             dots: true,
             slideSpeed: 600,
             autoplayHoverPause: true,
-            autoplay:true,
+            autoplay: true,
             mouseDrag: false,
-            touchDrag:false,
+            touchDrag: false,
             responsive: {
                 // breakpoint from 0 up
                 0: {
@@ -333,7 +333,7 @@ $(function ($) {
         });
     }
 
-     /* ----------------------------------------------------------- */
+    /* ----------------------------------------------------------- */
 	/*  hero banner slider on sport index
     /* ----------------------------------------------------------- */
     if ($("#hero-slider").length > 0) {
@@ -341,44 +341,45 @@ $(function ($) {
             margin: 10,
             loop: true,
             dots: true,
-            dotsData:true,
+            dotsData: true,
             nav: false,
             autoplay: true,
             items: 1,
-            center:true,
+            center: true,
             autoplayHoverPause: true,
             mouseDrag: true,
-            touchDrag:false,
+            smartSpeed: 250,
+            touchDrag: false,
             animateOut: 'slideOutLeft',
             navText: ["<i class='icon-arrow-left'></i>", "<i class='icon-arrow-right'></i>"],
         });
-        
+
         $('#hero-slider .owl-dots').wrap('<div class="container slider-dot-item text-center"><div class="col-lg-12"></div></div>');
         $('#hero-slider .owl-nav').wrap('<div class="container slider-arrow-item"><div class="row"><div class="col-lg-12"></div></div></div>');
-        $(".featured-slider-item").on('click', function(){
+        $(".featured-slider-item").on('click', function () {
             window.open($(this).attr('data-href'), '_blank');
         })
-        $("#hero-slider .owl-dots .dot-class").hover(function(){
+        $("#hero-slider .owl-dots .dot-class").hover(function () {
             $(this).click();
-        }, function(){});
+        }, function () { });
     }
     /* ----------------------------------------------------------- */
 	/*  post slider
     /* ----------------------------------------------------------- */
 
     $("#post-slider1").owlCarousel({
-         margin: 10,
-         loop: true,
-         dots: false,
-         nav: true,
-         autoplay: true,
-         autoplaySpeed: 3000,
-         items: 1,
-         autoplayHoverPause: true,
-         mouseDrag: false,
-         touchDrag:false,
-         animateOut: 'fadeOut',
-         navText: ["<i class='icon-arrow-left'></i>", "<i class='icon-arrow-right'></i>"],
+        margin: 10,
+        loop: true,
+        dots: false,
+        nav: true,
+        autoplay: true,
+        autoplaySpeed: 3000,
+        items: 1,
+        autoplayHoverPause: true,
+        mouseDrag: false,
+        touchDrag: false,
+        animateOut: 'fadeOut',
+        navText: ["<i class='icon-arrow-left'></i>", "<i class='icon-arrow-right'></i>"],
     });
 
     /* ----------------------------------------------------------- */
@@ -386,15 +387,15 @@ $(function ($) {
     /* ----------------------------------------------------------- */
 
     $(".blog-post-slider-item").owlCarousel({
-         margin: 10,
-         dots: false,
-         nav: true,
-         items: 1,
-         autoplayHoverPause: true,
-         mouseDrag: false,
-         touchDrag:false,
-         animateOut: 'fadeOut',
-         navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"],
+        margin: 10,
+        dots: false,
+        nav: true,
+        items: 1,
+        autoplayHoverPause: true,
+        mouseDrag: false,
+        touchDrag: false,
+        animateOut: 'fadeOut',
+        navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"],
     });
 
     /* ----------------------------------------------------------- */
@@ -572,22 +573,22 @@ $(function ($) {
 
     $(window).scroll(function () {
         if ($(this).scrollTop() > 50) {
-             $('#back-to-top').fadeIn();
+            $('#back-to-top').fadeIn();
         } else {
-             $('#back-to-top').fadeOut();
+            $('#back-to-top').fadeOut();
         }
     });
 
     // scroll body to 0px on click
     $('#back-to-top').on('click', function () {
-         $('#back-to-top').tooltip('hide');
-         $('body,html').animate({
-              scrollTop: 0
-         }, 800);
-         return false;
+        $('#back-to-top').tooltip('hide');
+        $('body,html').animate({
+            scrollTop: 0
+        }, 800);
+        return false;
     });
-    
+
     $('#back-to-top').tooltip('hide');
-   
+
 
 });
