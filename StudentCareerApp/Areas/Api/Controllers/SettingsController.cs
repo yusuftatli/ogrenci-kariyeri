@@ -31,16 +31,16 @@ namespace StudentCareerApp.Areas.Api.Controller
         }
 
 
-        [HttpGet("settings-multipleReadCount")]
-        public async Task<ServiceResult> GetFavoriteContents()
+        [HttpGet("get-settings")]
+        public async Task<ServiceResult> GetSettingValue()
         {
-            return await _settingsManager.GetContentMultipleCount();
+            return await _settingsManager.GetSettingValue();
         }
 
-        [HttpPost("settings-setreadcount")]
-        public async Task<ServiceResult> CreateCommentsByMobil([FromBody]MultipleCountDto dto)
+        [HttpPost("set-settings")]
+        public async Task<ServiceResult> SetSettingsValue([FromBody]MultipleCountDto dto)
         {
-            return await _settingsManager.SetContentMultipleCount(Convert.ToInt64(dto.Value));
+            return await _settingsManager.SetSettingsValue(dto);
         }
 
         [HttpGet("settings-multipleReadCount-only")]

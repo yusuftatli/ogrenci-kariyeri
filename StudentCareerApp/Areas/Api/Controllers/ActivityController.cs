@@ -44,6 +44,17 @@ namespace StudentCareerApp.Areas.Api.Controller
 
         }
 
+        [HttpPost("create-activity")]
+        public async Task<ServiceResult> CreateActivityMotion(ActivityMotionDto dto)
+        {
+            return await _activityManager.CreateActivityMotion(dto);
+        }
+
+        [HttpGet("v11")]
+        public string PassComplexData()
+        {
+            return _activityManager.PassComplexData();
+        }
 
     }
 }

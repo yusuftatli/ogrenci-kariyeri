@@ -201,9 +201,9 @@ namespace StudentCareerApp.Areas.Api.Controller
 
         [Authorize()]
         [Route("content-with-categories"), HttpGet]
-        public async Task<ServiceResult> GetContentWithCategories(long categoryId, int count, int total)
+        public async Task<ServiceResult> GetContentWithCategories(long categoryId, int start, int limit)
         {
-            return await _contentManager.GetContentWithCategories(categoryId, count, total);
+            return await _contentManager.GetContentWithCategories(categoryId, start, limit);
         }
 
         [Authorize()]

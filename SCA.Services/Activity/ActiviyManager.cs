@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using MySql.Data.MySqlClient;
+using Nancy.Json;
 using SCA.Common;
 using SCA.Common.Base;
 using SCA.Common.Resource;
@@ -10,7 +11,9 @@ using SCA.Entity.Enums;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,6 +34,116 @@ namespace SCA.Services
         }
 
 
+        public async Task<ServiceResult> CreateActivityMotion(ActivityMotionDto dto)
+        {
+            ServiceResult res = new ServiceResult();
+            try
+            {
+                
+                if (await UserControl(dto.Email) == true)
+                {
+                    return Result.ReturnAsFail("Etkinlik kaydınız zaten yapıldı");
+                }
+
+
+                string query = string.Empty;
+                query = @"insert into ActivitiyMotion (NameSurname, Email, PhoneNumber, ScoolName, Department, Class, Message, UniversityId, 
+                          ActivityId, DateTime) values (@NameSurname, @Email, @PhoneNumber, @ScoolName, @Department, @Class, @Message, @UniversityId, 
+                          @ActivityId, @DateTime);";
+
+                DynamicParameters filter = new DynamicParameters();
+                filter.Add("NameSurname", dto.NameSurname);
+                filter.Add("Email", dto.Email);
+                filter.Add("PhoneNumber", dto.PhoneNumber);
+                filter.Add("ScoolName", dto.ScoolName);
+                filter.Add("Department", dto.Department);
+                filter.Add("Class", dto.Class);
+                filter.Add("Message", dto.Message);
+                filter.Add("UniversityId", dto.UniversityId);
+                filter.Add("ActivityId", dto.ActivityId);
+                filter.Add("DateTime", DateTime.Now);
+
+                await _db.ExecuteAsync(query, filter);
+                res = Result.ReturnAsSuccess(message: "Etkinlik kaydınız başarıyla tamamlanmıştır.");
+            }
+            catch (Exception ex)
+            {
+                res = Result.ReturnAsFail(message: ex.Message.ToString());
+            }
+            return res;
+        }
+
+        public async Task<bool> UserControl(string emailAddress)
+        {
+            bool res = false;
+            string query = string.Empty;
+            query = @"select * from ActivitiyMotion where Email = @Email;";
+            DynamicParameters filter = new DynamicParameters();
+            filter.Add("Email", emailAddress);
+
+            var data = await _db.QueryAsync<ActivityMotionDto>(query, filter) as List<ActivityMotionDto>;
+            if (data.Count > 0)
+            {
+                res = true;
+            }
+            return res;
+        }
+
+        public string PassComplexData()
+        {
+
+            string ResponseString = "";
+            HttpWebResponse response = null;
+            try
+            {
+                var request = (HttpWebRequest)WebRequest.Create("http://localhost:44384/api/Activity/create-activity");
+                request.Accept = "application/json"; //"application/xml";
+                request.Method = "POST";
+
+                ActivityMotionDto obj = new ActivityMotionDto()
+                {
+                    NameSurname = "ddsd",
+                    Email = "dee",
+                    PhoneNumber = "234",
+                    ScoolName = "3",
+                    Department = "3434",
+                    Class = "34",
+                    Message = "dewf",
+                    UniversityId = 2,
+                    ActivityId = 1
+                };
+                JavaScriptSerializer jss = new JavaScriptSerializer();
+                // serialize into json string
+                var myContent = jss.Serialize(obj);
+
+                var data = Encoding.ASCII.GetBytes(myContent);
+
+                request.ContentType = "application/json";
+                request.ContentLength = data.Length;
+
+                using (var stream = request.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+
+                response = (HttpWebResponse)request.GetResponse();
+
+                ResponseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
+            }
+            catch (WebException ex)
+            {
+                if (ex.Status == WebExceptionStatus.ProtocolError)
+                {
+                    response = (HttpWebResponse)ex.Response;
+                    ResponseString = "Some error occured: " + response.StatusCode.ToString();
+                }
+                else
+                {
+                    ResponseString = "Some error occured: " + ex.Status.ToString();
+                }
+            }
+            return ResponseString;
+        }
 
 
         public async Task<ServiceResult> ActivityShortList(ContentSearchDto dto, UserSession session)
@@ -56,7 +169,7 @@ namespace SCA.Services
                 {
                 }
 
-                res= Result.ReturnAsSuccess(session.RoleTypeId.ToString(), message: AlertResource.SuccessfulOperation, dataList);
+                res = Result.ReturnAsSuccess(session.RoleTypeId.ToString(), message: AlertResource.SuccessfulOperation, dataList);
             }
             catch (Exception _ex)
             {

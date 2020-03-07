@@ -127,6 +127,7 @@ app.controller("assayController", function ($scope, $http, $filter) {
         getAllComments(x);
     };
 
+
     function getAllComments(x) {
         $.ajax({
             url: _link + "/Content/comment-GetAllCommentsPendingApprovalByContentId",

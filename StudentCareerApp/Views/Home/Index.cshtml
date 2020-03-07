@@ -26,8 +26,8 @@
             <div class="col-lg-3">
                 <div class="right-sidebar">
                     @await Component.InvokeAsync("PopularContents", new { count = 5 })
-                    @await Component.InvokeAsync("Companies")
-                    @await Component.InvokeAsync("PopularCategories")
+                    @*@await Component.InvokeAsync("Companies")*@
+                    @*@await Component.InvokeAsync("PopularCategories")*@
                     @await Component.InvokeAsync("Banner", new { url = "#", imagePath = "/images/banner/sidebar-banner4.jpg" })
                 </div>
             </div>
@@ -60,7 +60,7 @@
                 <div class="right-sidebar">
                     @await Component.InvokeAsync("Banner", new { url = "#", imagePath = "/images/banner/sidebar-banner4.jpg" })
                     @await Component.InvokeAsync("RecentAndFavorites", new { count = 5 })
-                    @await Component.InvokeAsync("Tags")
+                    @*@await Component.InvokeAsync("Tags")*@
                     @await Component.InvokeAsync("Banner", new { url = "#", imagePath = "/images/banner/sidebar-banner1.jpg" })
                 </div>
             </div>

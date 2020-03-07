@@ -618,20 +618,55 @@ app.controller('DefinitonManagerController', function ($scope, $http, $filter) {
     $scope.contentModel.showContentCountPostLoading = false;
     $scope.contentModel.multipleList = [{ Id: "0", Description: 'Seçiniz' }, { Id: "1", Description: '1' }, { Id: "2", Description: '2' }, { Id: "3", Description: '3' }, { Id: "4", Description: '4' }, { Id: "5", Description: '5' },
     { Id: "6", Description: '6' }, { Id: "7", Description: '7' }, { Id: "8", Description: '8' }, { Id: "9", Description: '9' }, { Id: "10", Description: '10' }];
+    $scope.contentModel.SlideList = [{ Id: "0", Description: 'Seçiniz' }, { Id: "1", Description: '1' }, { Id: "2", Description: '2' }, { Id: "3", Description: '3' }, { Id: "4", Description: '4' }, { Id: "5", Description: '5' },
+        { Id: "6", Description: '6' }, { Id: "7", Description: '7' }, { Id: "8", Description: '8' }, { Id: "9", Description: '9' }, { Id: "10", Description: '10' }, { Id: "11", Description: '11' }, { Id: "13", Description: '13' }];
 
 
 
     var postContentReadCount = function () {
         return {
             method: "post",
-            url: _link + "/Settings/settings-setreadcount",
+            url: _link + "/Settings/set-settings",
             headers: Headers,
             data: {
-                value: parseInt($scope.contentModel.selectedId)
+                value: parseInt($scope.contentModel.selectedId),
+                Code: 'HABERCOUNT'
             }
         };
     };
 
+    var postSlideReadCount = function () {
+        return {
+            method: "post",
+            url: _link + "/Settings/set-settings",
+            headers: Headers,
+            data: {
+                value: parseInt($scope.contentModel.selectedSlideId),
+                Code: 'SLIDERCOUNT'
+            }
+        };
+    };
+
+
+    $scope.postSlider = function () {
+        $scope.contentModel.showSlideCountLoading = true;
+        if ($scope.contentModel.selectedSlideId === undefined || $scope.contentModel.selectedSlideId === "0") {
+            $scope.contentModel.showContentCountPostLoading = false;
+            shortMessage("Slayt değeri boş geçilemez", "e");
+            return;
+        }
+        $http(postSlideReadCount()).then(function (e) {
+            if (e.data.resultCode === 200) {
+                $scope.readCountList();
+                shortMessage(e.data.message, "s");
+                $scope.contentModel.showSlideCountLoading = false;
+            } else {
+                shortMessage(e.data.message, "e");
+                $scope.contentModel.showSlideCountLoading = false;
+            }
+            $scope.$apply();
+        });
+    };
 
 
     $scope.postContent = function () {
@@ -664,27 +699,52 @@ app.controller('DefinitonManagerController', function ($scope, $http, $filter) {
         return res;
     }
 
+    function getSlideCountIndexById(value) {
+        let res = 0;
+        for (let i = 0; i < $scope.contentModel.SlideList.length; i++) {
+            if ($scope.contentModel.SlideList[i].Description === value) {
+                res = i;
+            }
+        }
+        return res;
+    }
+
+    function getSettingsValue(data, value) {
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].code === value) {
+                return data[i].value;
+            }
+        }
+    }
+
     $scope.onClickContentTab = function () {
         $scope.readCountList();
+        $scope.readSlideCountList();
     };
 
     $scope.readCountList = function () {
         $scope.contentModel.showContentCountLoading = true;
+        $scope.contentModel.showContentSlideLoading = true;
         $.ajax({
-            url: _link + "/Settings/settings-multipleReadCount",
+            url: _link + "/Settings/get-settings",
             type: "GET",
             dataType: Json_,
             contentType: ContentType_,
             success: function (e) {
                 if (e.resultCode === 200) {
                     $scope.contentModel.data = e.data;
-                    $scope.contentModel.selectedId = $scope.contentModel.multipleList[parseInt(parseInt(getContentCountIndexById($scope.contentModel.data.value)))].Description;
+                    $scope.contentModel.selectedId = $scope.contentModel.multipleList[parseInt(parseInt(getContentCountIndexById(getSettingsValue($scope.contentModel.data, 'HABERCOUNT'))))].Description;
+                    $scope.contentModel.selectedSlideId = $scope.contentModel.SlideList[parseInt(parseInt(getSlideCountIndexById(getSettingsValue($scope.contentModel.data, 'SLIDERCOUNT'))))].Description;
+
                     $scope.contentModel.showContentCountLoading = false;
+                    $scope.contentModel.showSlideCountLoading = false;
                     $scope.$apply();
                 }
             }
         });
     };
+
+
 
 
 

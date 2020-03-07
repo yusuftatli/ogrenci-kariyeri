@@ -4,8 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-    <script src="https://www.google.com/recaptcha/api.js?render=6Le7ONcUAAAAAAk3OXKKJ2hGBH6mU-PXTauZHsH1"></script>
-
+<script src="/js/jquery.min.js"></script>
 <!-- post wraper start-->
 <section class="block-wrapper mt-15">
     <div class="container">
@@ -29,7 +28,7 @@
                         <div class="contact-info-box">
                             <div class="contact-info-box-content">
                                 <h4>E-posta</h4>
-                                <p>info@öğrencikariyeri.com</p>
+                                <p>info@ögrencikariyeri.com</p>
                             </div>
                         </div>
 
@@ -39,45 +38,58 @@
                                 <p>0850 888 22 34</p>
                             </div>
                         </div>
-                        <div class="g-recaptcha" data-sitekey="6Le7ONcUAAAAAAk3OXKKJ2hGBH6mU-PXTauZHsH1"></div>
                     </div><!-- Widget end -->
 
                     <h3>İletişim Formu</h3>
-                    <form id="contact-form" action="contact-form.php" method="post" role="form">
-                        <div class="error-container"></div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>İsim</label>
-                                    <input class="form-control form-control-name" name="name" id="name" placeholder="isim" type="text" required>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>E-Mail</label>
-                                    <input class="form-control form-control-email" name="E-Mail" id="email"
-                                           placeholder="E-Mail" type="email" required>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Konu</label>
-                                    <input class="form-control form-control-subject" name="subject" id="subject"
-                                           placeholder="Konu" required>
-                                </div>
+                    <div class="error-container"></div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>İsim</label>
+                                <input class="form-control form-control-name" name="name" id="name" placeholder="isim" type="text" required>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label>Mesaj</label>
-                            <textarea class="form-control form-control-message" name="message" id="message" placeholder="Mesaj" rows="10" required></textarea>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>E-Mail</label>
+                                <input class="form-control form-control-email" name="E-Mail" id="email"
+                                       placeholder="E-Mail" type="email" required>
+                            </div>
                         </div>
-                        <div class="text-right">
-                            <br>
-                            <button class="btn btn-primary solid blank" type="submit">Gönder</button>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Konu</label>
+                                <input class="form-control form-control-subject" name="subject" id="subject"
+                                       placeholder="Konu" required>
+                            </div>
                         </div>
-                    </form>
+                    </div>
+                    <div class="form-group">
+                        <label>Mesaj</label>
+                        <textarea class="form-control form-control-message" name="message" id="message" placeholder="Mesaj" rows="10" required></textarea>
+                    </div>
+                    <div class="text-right">
+                        <br>
+                        <button class="btn btn-primary solid blank" id="btnPost" type="button">Gönder</button>
+                    </div>
                 </div><!-- grid box end -->
 
+
+                <script>
+                    $("#btnPost").click(function () {
+
+                        $.ajax({
+                            url: '/api/User/create-contact-v1',
+                            type: 'POST',
+                            dataType: 'json',
+                            data: {
+                                Name: $('#name').val(),
+                                Email: $('#email').val(),
+                                Message: $('#message').val()
+                            }
+                        });
+                    });
+                </script>
 
 
             </div>
@@ -302,10 +314,3 @@
 </section>
 <!-- post wraper end-->
 
-<script>
-    grecaptcha.ready(function () {
-        grecaptcha.execute('put your site key here', { action: 'homepage' }).then(function (token) {
-            // pass the token to the backend script for verification
-        });
-    });
-</script>

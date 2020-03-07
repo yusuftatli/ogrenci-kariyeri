@@ -24,7 +24,7 @@ namespace SCA.UI.Controllers
             var @params = new
             {
                 categoryId = id,
-                count = 20,
+                count = 60,
                 pageNumber = 0
             };
             ViewBag.CategoryId = id;

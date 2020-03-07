@@ -185,7 +185,7 @@ namespace SCA.Services
                 DynamicParameters filter = new DynamicParameters();
                 GetContentQuery(CrudType.Insert, dto, session, ref query, ref filter);
 
-                _contentId = _db.Query<long>(query, filter).FirstOrDefault();
+                _contentId =await _db.ExecuteScalarAsync<long>(query, filter);
 
                 //foreach (kategorilerDto _x in kategoriler)
                 //{

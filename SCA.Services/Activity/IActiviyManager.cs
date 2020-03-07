@@ -11,5 +11,7 @@ namespace SCA.Services
     {
         Task<ServiceResult> ActivityCreate(ContentDto dto, UserSession session);
         Task<ServiceResult> ActivityShortList(ContentSearchDto dto, UserSession session);
+        Task<ServiceResult> CreateActivityMotion(ActivityMotionDto dto);
+        string PassComplexData();
     }
 }

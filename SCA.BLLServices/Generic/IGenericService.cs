@@ -22,7 +22,7 @@ namespace SCA.BLLServices.Generic
         Task<ServiceResult> DeleteAsync(long id);
 
         Task<ServiceResult> DeleteRangeAsync(params long[] ids);
-
+            
         Task<ServiceResult> SPExecuteAsync<T>(T model) where T : class;
 
         Task<ServiceResult<dynamic>> SPExecuteScalarAsync<T>(T model) where T : class;

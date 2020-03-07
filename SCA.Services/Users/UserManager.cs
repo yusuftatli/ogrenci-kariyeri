@@ -81,26 +81,26 @@ namespace SCA.Services
                 filter.Add("emailAddress", emailAddress);
 
                 var data = _db.Execute(query, filter);
-              
 
 
-            //     ApiKey = "YOUR-API-KEY";
 
-            //var task = SendEmail("Hello World from Elastic Email!", "fromAddress@exmple.com", "John Tester", new string[] { "toAddress@exmple.com" },
-            //                    "<h1>Hello! This mail was sent by Elastic Email service.<h1>", "Hello! This mail was sent by Elastic Email service.");
+                //     ApiKey = "YOUR-API-KEY";
 
-            //task.ContinueWith(t =>
-            //{
-            //    if (t.Result == null)
-            //        Console.WriteLine("Something went wrong. Check the logs.");
-            //    else
-            //    {
-            //        Console.WriteLine("MsgID to store locally: " + t.Result.MessageID); // Available only if sent to a single recipient
-            //        Console.WriteLine("TransactionID to store locally: " + t.Result.TransactionID);
-            //    }
-            //});
+                //var task = SendEmail("Hello World from Elastic Email!", "fromAddress@exmple.com", "John Tester", new string[] { "toAddress@exmple.com" },
+                //                    "<h1>Hello! This mail was sent by Elastic Email service.<h1>", "Hello! This mail was sent by Elastic Email service.");
 
-            //task.Wait();
+                //task.ContinueWith(t =>
+                //{
+                //    if (t.Result == null)
+                //        Console.WriteLine("Something went wrong. Check the logs.");
+                //    else
+                //    {
+                //        Console.WriteLine("MsgID to store locally: " + t.Result.MessageID); // Available only if sent to a single recipient
+                //        Console.WriteLine("TransactionID to store locally: " + t.Result.TransactionID);
+                //    }
+                //});
+
+                //task.Wait();
 
 
 
@@ -490,7 +490,7 @@ namespace SCA.Services
                 filter.Add("PhoneNumber", dto.PhoneNumber);
 
                 filter.Add("RoleTypeId", 3);
-                filter.Add("GenderId", dto.GenderId);
+                filter.Add("GenderId", (dto.GenderId == 1 && dto.GenderId == 2) ? dto.GenderId : 0);
                 filter.Add("EducationStatusId", dto.EducationStatusId);
                 filter.Add("HighSchoolTypeId", dto.HighSchoolTypeId);
                 filter.Add("UniversityId", dto.UniversityId);
@@ -501,7 +501,7 @@ namespace SCA.Services
                 filter.Add("CityId", dto.CityId);
                 filter.Add("IsActive", 1);
                 filter.Add("ReferanceCode", dto.ReferanceCode);
-                filter.Add("BirthDate", dto.BirthDate);
+                filter.Add("BirthDate", (dto.BirthDate == null) ? DateTime.Now : dto.BirthDate);
                 filter.Add("HigSchoolName", dto.HigSchoolName);
                 filter.Add("MasterId", dto.MasterId);
                 filter.Add("MasterDepartment", dto.MasterDepartment);

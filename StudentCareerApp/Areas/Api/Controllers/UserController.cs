@@ -209,6 +209,12 @@ namespace StudentCareerApp.Areas.Api.Controller
             return await _userManager.CreateUserContact(dto);
         }
 
+        [HttpPost("create-contact-v1")]
+        public async Task<ServiceResult> CreateUserContact1(UserContactDto dto)
+        {
+            return await _userManager.CreateUserContact(dto);
+        }
+
     }
 }
 

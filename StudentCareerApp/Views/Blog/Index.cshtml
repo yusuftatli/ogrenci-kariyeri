@@ -149,7 +149,7 @@
                         <img class="author-img" src="@(Model.WriterImagePath ?? ((Model.GenderId == SCA.Entity.Enums.GenderType.Man) ? "/images/avatar/man.png" : "/images/avatar/woman.png"))" alt=""> @*@Model.Name @Model.Surname*@
                         <div class="author-info">
                             <h4 class="author-name">@Model.WriterNameSurname</h4>
-                            <div class="authors-social">
+                            @*<div class="authors-social">
                                 <a href="https://twitter.com/share" class="ts-twitter">
                                     <i class="fa fa-twitter"></i>
                                 </a>
@@ -177,7 +177,7 @@
                                 <a href="#" class="ts-linkedin">
                                     <i class="fa fa-linkedin"></i>
                                 </a>
-                            </div>
+                            </div>*@
                             <div class="clearfix"></div>
                             <p>
                                 @Model.WriterBiography
@@ -228,7 +228,7 @@
             <div class="col-lg-3">
                 <div class="right-sidebar">
                     @await Component.InvokeAsync("PopularContents", new { count = 5 })
-                    @await Component.InvokeAsync("PopularCategories")
+                    @*@await Component.InvokeAsync("PopularCategories")*@
                 </div>
             </div>
             <!-- right sidebar end-->

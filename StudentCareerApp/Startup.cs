@@ -74,6 +74,7 @@ namespace StudentCareerApp
                  };
              });
 
+
             services.AddMvc(config2 =>
             {
                 // Add XML Content Negotiation

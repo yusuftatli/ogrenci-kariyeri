@@ -9,8 +9,8 @@ namespace SCA.Services
 {
     public interface ISettingsManager
     {
-        Task<ServiceResult> GetContentMultipleCount();
-        Task<ServiceResult> SetContentMultipleCount(long value);
+        Task<ServiceResult> GetSettingValue();
+        Task<ServiceResult> SetSettingsValue(MultipleCountDto dto);
         Task<ServiceResult> GetContentMultipleCountOnly(long id);
         Task<ServiceResult> SetContentMultipleCountOnly(MultipleCountDto dto);
     }

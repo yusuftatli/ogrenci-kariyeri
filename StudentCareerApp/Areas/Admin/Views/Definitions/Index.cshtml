@@ -507,10 +507,10 @@
                                                                             </span>
                                                                         </td>
                                                                         @*<td>
-                                                                                <span ng-click="showuniversity(x)" data-toggle="modal" data-target="#universityModal">
-                                                                                    <img height="20" width="20" src="~/Template/assets/images/Plus-512.png" />
-                                                                                </span>
-                                                                            </td>*@
+                                                    <span ng-click="showuniversity(x)" data-toggle="modal" data-target="#universityModal">
+                                                        <img height="20" width="20" src="~/Template/assets/images/Plus-512.png" />
+                                                    </span>
+                                                </td>*@
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
@@ -531,9 +531,9 @@
                                             <div class="modal-body">
                                                 <form>
                                                     @*<div class="form-group">
-                                                            <label id="universityCode" class="control-label">Fakülte Kodu </label>
-                                                            <input type="text" ng-model="facultyModel.facultyCode" class="form-control" id="universityCode">
-                                                        </div>*@
+                                <label id="universityCode" class="control-label">Fakülte Kodu </label>
+                                <input type="text" ng-model="facultyModel.facultyCode" class="form-control" id="universityCode">
+                            </div>*@
                                                     <div class="form-group">
                                                         <label id="universityname" class="control-label">Fakülte Adı </label>
                                                         <input type="text" ng-model="facultyModel.facultyName" class="form-control" id="universityname">
@@ -653,8 +653,47 @@
                                             </div>
 
                                         </div>
+
+
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-5">
+                                                                <div class="form-group">
+                                                                    <label class="control-label">Slayt Sayısı Değeri </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <div class="form-group">
+                                                                    <select id="roletypeid" class="form-control custom-select" ng-model="contentModel.selectedSlideId" name="multipleLisr">
+                                                                        <option ng-repeat="x in contentModel.SlideList" value="{{x.Id}}">
+                                                                            {{x.Description}}
+                                                                        </option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <span ng-show="contentModel.showSlideCountLoading"><i class="fa fa-spinner fa-spin"></i></span>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <div class="form-group">
+                                                                    <button type="button" class="btn btn-primary" ng-click="postSlider()"> <span>Güncelle <span ng-show="contentModel.showSlideCountLoading"><i class="fa fa-spinner fa-spin"></i></span></span> </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
                                 </div>
+
+
+
+                                
                                 <div class="modal fade" id="sectorModal" tabindex="-1" role="dialog" aria-labelledby="sectorModal">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">

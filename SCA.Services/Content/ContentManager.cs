@@ -59,21 +59,13 @@ namespace SCA.Services
             return res;
         }
 
-        public async Task<ServiceResult> GetContentWithCategories(long cotegoryId, int count, int total)
+        public async Task<ServiceResult> GetContentWithCategories(long cat, int co, int to)
         {
             ServiceResult res = new ServiceResult();
             try
             {
-                string query = string.Empty;
-                query = "select c.Id, c.ImagePath, c.Header from Content c left join CategoryRelation cr on c.Id = cr.TagContentId where cr.CategoryId = @CategoryId limit @total,@count;";
-                DynamicParameters filter = new DynamicParameters();
-                filter.Add("CategoryId", cotegoryId);
-                filter.Add("total", total);
-                filter.Add("count", count);
-
-                var dataList = await _db.QueryAsync<ContentListWithCategoryDto>(query, filter) as List<ContentListWithCategoryDto>;
-
-                res = Result.ReturnAsSuccess(data: dataList);
+                var listData = await _db.QueryAsync<ContentListWithCategoryDto>("GetContentWithCategories", new { categoryId = cat, count = co, total = to }, commandType: CommandType.StoredProcedure) as List<ContentListWithCategoryDto>;
+                res = Result.ReturnAsSuccess(data: listData);
             }
             catch (Exception)
             {
@@ -244,6 +236,11 @@ namespace SCA.Services
                 using (var multi = await _db.QueryMultipleAsync("ContentListByMobil", new { _Id = contentId, _UserId = userId }, commandType: CommandType.StoredProcedure))
                 {
                     result = await multi.ReadFirstOrDefaultAsync<ContentDetailForDetailPageMobilDTO>();
+                    if (result == null)
+                    {
+                        res = Result.ReturnAsFail(message: "Haber bulunamadı");
+                        return res;
+                    }
                     result.MostPopularItems = await multi.ReadAsync<ContentForHomePageDTO>() as List<ContentForHomePageDTO>;
                     result.CommentList = await multi.ReadAsync<CommentListDto>() as List<CommentListDto>;
                     result.Taglist = await multi.ReadAsync<TagDto>() as List<TagDto>;
