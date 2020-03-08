@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -213,6 +214,31 @@ namespace StudentCareerApp.Areas.Api.Controller
         public async Task<ServiceResult> CreateUserContact1(UserContactDto dto)
         {
             return await _userManager.CreateUserContact(dto);
+        }
+
+        [HttpPost("v123")]
+        public void Base64ToImage(UserContactDto dto)
+        {
+
+            try
+            {
+                //string[] spliData = dto.Message.Split("png;base64");
+                string convert = dto.Message.Replace("data:image/png;base64,", String.Empty);
+
+                byte[] bytes = Convert.FromBase64String(convert);
+
+
+                using (MemoryStream ms = new MemoryStream(bytes))
+                {
+                    Image pic = Image.FromStream(ms);
+
+                    pic.Save(@"/wwwroot/UserPicture/");
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
     }

@@ -688,7 +688,7 @@ namespace SCA.Services
             List<ContentForHomePageDTO> listData = new List<ContentForHomePageDTO>();
             try
             {
-                listData = await _db.QueryAsync<ContentForHomePageDTO>("Content_ListAll", new { hitType = 1, count = count, pageNumber = offset }, commandType: CommandType.StoredProcedure) as List<ContentForHomePageDTO>;
+                listData = await _db.QueryAsync<ContentForHomePageDTO>("Content_ListAll", new { hitType = hitTypes, count = count, pageNumber = offset }, commandType: CommandType.StoredProcedure) as List<ContentForHomePageDTO>;
 
                 if (listData.Count > 0)
                 {
