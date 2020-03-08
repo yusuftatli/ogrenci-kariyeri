@@ -490,7 +490,7 @@ namespace SCA.Services
                 filter.Add("PhoneNumber", dto.PhoneNumber);
 
                 filter.Add("RoleTypeId", 3);
-                filter.Add("GenderId", (dto.GenderId == 1 && dto.GenderId == 2) ? dto.GenderId : 0);
+                filter.Add("GenderId", dto.GenderId );
                 filter.Add("EducationStatusId", dto.EducationStatusId);
                 filter.Add("HighSchoolTypeId", dto.HighSchoolTypeId);
                 filter.Add("UniversityId", dto.UniversityId);
