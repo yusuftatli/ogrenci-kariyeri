@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using MySql.Data.MySqlClient;
+using Nancy.Extensions;
 using Newtonsoft.Json;
 using SCA.Common;
 using SCA.Common.Base;
@@ -63,6 +64,8 @@ namespace SCA.Services
                 var resId = await clientId.GetAsync(urlId);
                 var idcon = await resId.Content.ReadAsStringAsync();
                 List<SyncHeader> ids = Newtonsoft.Json.JsonConvert.DeserializeObject<List<SyncHeader>>(idcon);
+
+                List<SyncHeader> idds = ids.DistinctBy(i => i.ID).DistinctBy(i => i.ID).ToList();
 
                 List<ContentDto> listContent = new List<ContentDto>();
                 string query = @"select SycnId as Id from Content;";
@@ -185,11 +188,11 @@ namespace SCA.Services
                 DynamicParameters filter = new DynamicParameters();
                 GetContentQuery(CrudType.Insert, dto, session, ref query, ref filter);
 
-                _contentId =await _db.ExecuteScalarAsync<long>(query, filter);
+                _contentId = await _db.ExecuteScalarAsync<long>(query, filter);
 
-                //foreach (kategorilerDto _x in kategoriler)
-                //{
-                    int catId = CategoryMapping(kategoriler[0].id);
+                foreach (kategorilerDto _x in kategoriler)
+                {
+                    int catId = CategoryMapping(_x.id);
                     if (catId != 0)
                     {
                         var item = new CategoryRelationDto()
@@ -200,7 +203,7 @@ namespace SCA.Services
                         };
                         string value = await _categoryManager.CreateCategoryRelation(item, _contentId, ReadType.Content);
                     }
-                //}
+                }
             }
             catch (Exception ex)
             {

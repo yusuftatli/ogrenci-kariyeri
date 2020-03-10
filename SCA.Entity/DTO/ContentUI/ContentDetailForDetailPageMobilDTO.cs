@@ -13,6 +13,7 @@ namespace SCA.Entity.DTO
         public string ImagePath { get; set; }
         public string Category { get; set; }
         public string Header { get; set; }
+        public string SeoUrl { get; set; }
         public string WriterImagePath { get; set; }
         public string WriterBiography { get; set; }
         public GenderType GenderId { get; set; }
