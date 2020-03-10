@@ -14,15 +14,15 @@ using SCA.Services.Interface;
 namespace StudentCareerApp.Areas.Api.Controller
 {
 
-    [Route("api/auth")]
-    [ApiController]
-    public class AuthController : ControllerBase
-    {
-        IAuthManager _authManager;
-        public AuthController(IAuthManager IauthManager)
-        {
-            _authManager = IauthManager;
-        }
+    //[Route("api/auth")]
+    //[ApiController]
+    //public class AuthController : ControllerBase
+    //{
+    //    IAuthManager _authManager;
+    //    public AuthController(IAuthManager IauthManager)
+    //    {
+    //        _authManager = IauthManager;
+    //    }
 
-    }
+    //}
 }
