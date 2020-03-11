@@ -37,7 +37,7 @@ namespace StudentCareerApp
 
         public void ConfigureServices(IServiceCollection services)
         {
-
+            //.Net Core 3.1 Changes Preparing(2)
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
 
             services.AddAuthentication(options =>
