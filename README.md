@@ -1,0 +1,1 @@
+dünyanın en aptal uygulaması.. 
